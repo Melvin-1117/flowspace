@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'features/dashboard/widgets/calendar_widget.dart';
 
 void main() {
-  runApp(const FlowSpaceApp());
+  runApp(const ProviderScope(child: FlowSpaceApp()));
 }
 
 class AppColors {
@@ -68,11 +70,84 @@ class FlowSpaceApp extends StatelessWidget {
   }
 }
 
-class FlowSpaceDashboardPage extends StatelessWidget {
+class CustomTask {
+  final String id;
+  final String title;
+  final String priority;
+  final Color priorityColor;
+  final List<String> tags;
+  bool isCompleted;
+
+  CustomTask({
+    required this.id,
+    required this.title,
+    required this.priority,
+    required this.priorityColor,
+    required this.tags,
+    this.isCompleted = false,
+  });
+}
+
+class FlowSpaceDashboardPage extends StatefulWidget {
   const FlowSpaceDashboardPage({super.key});
 
   @override
+  State<FlowSpaceDashboardPage> createState() => _FlowSpaceDashboardPageState();
+}
+
+class _FlowSpaceDashboardPageState extends State<FlowSpaceDashboardPage> {
+  int _selectedNavIndex = 0;
+  bool _isFocusActive = false;
+  int _completedMinutes = 360; // 6 hours
+
+  final List<CustomTask> _tasks = [
+    CustomTask(
+      id: '1',
+      title: 'Fix Auth Middleware',
+      priority: 'URGENT',
+      priorityColor: AppColors.cyan,
+      tags: ['TYPESCRIPT', 'BACKEND'],
+    ),
+    CustomTask(
+      id: '2',
+      title: 'Bento Grid UI Component',
+      priority: 'FEATURE',
+      priorityColor: AppColors.primary,
+      tags: ['REACT', 'UI/UX'],
+    ),
+    CustomTask(
+      id: '3',
+      title: 'Refactor Docker Files',
+      priority: 'BACKLOG',
+      priorityColor: const Color(0xFF7B7688),
+      tags: ['DEVOPS'],
+    ),
+  ];
+
+  void _toggleTask(String id) {
+    setState(() {
+      final task = _tasks.firstWhere((t) => t.id == id);
+      task.isCompleted = !task.isCompleted;
+      if (task.isCompleted) {
+        _completedMinutes += 30; // Add 30 mins per task
+      } else {
+        _completedMinutes -= 30;
+      }
+    });
+  }
+
+  void _toggleFocus() {
+    setState(() {
+      _isFocusActive = !_isFocusActive;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final double targetHours = 8.0;
+    final double completedHours = _completedMinutes / 60.0;
+    final double progress = (completedHours / targetHours).clamp(0.0, 1.0);
+
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -98,33 +173,29 @@ class FlowSpaceDashboardPage extends StatelessWidget {
                       const SizedBox(height: 14),
                       const _QuoteStrip(),
                       const SizedBox(height: 14),
-                      const _FocusCard(),
-                      const SizedBox(height: 14),
-                      const _ProgressCard(),
-                      const SizedBox(height: 14),
-                      const _CalendarCard(),
-                      const SizedBox(height: 14),
-                      const _TaskCard(
-                        title: 'Fix Auth Middleware',
-                        priority: 'URGENT',
-                        priorityColor: AppColors.cyan,
-                        tags: ['TYPESCRIPT', 'BACKEND'],
+                      _FocusCard(
+                        isActive: _isFocusActive,
+                        onToggle: _toggleFocus,
                       ),
-                      const SizedBox(height: 10),
-                      const _TaskCard(
-                        title: 'Bento Grid UI Component',
-                        priority: 'FEATURE',
-                        priorityColor: AppColors.primary,
-                        tags: ['REACT', 'UI/UX'],
+                      const SizedBox(height: 14),
+                      _ProgressCard(
+                        progress: progress,
+                        completedHours: completedHours,
+                        isActive: _isFocusActive,
+                        onToggle: _toggleFocus,
                       ),
-                      const SizedBox(height: 10),
-                      const _TaskCard(
-                        title: 'Refactor Docker Files',
-                        priority: 'BACKLOG',
-                        priorityColor: Color(0xFF7B7688),
-                        tags: ['DEVOPS'],
+                      const SizedBox(height: 14),
+                      const DashboardCalendarWidget(),
+                      const SizedBox(height: 14),
+                      ..._tasks.map(
+                        (task) => Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: _TaskCard(
+                            task: task,
+                            onToggle: () => _toggleTask(task.id),
+                          ),
+                        ),
                       ),
-                      const SizedBox(height: 10),
                       const _CreateTaskCard(),
                       const SizedBox(height: 14),
                       const _CodeCard(),
@@ -136,7 +207,14 @@ class FlowSpaceDashboardPage extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: const _BottomNav(),
+      bottomNavigationBar: _BottomNav(
+        selectedIndex: _selectedNavIndex,
+        onTap: (index) {
+          setState(() {
+            _selectedNavIndex = index;
+          });
+        },
+      ),
     );
   }
 }
@@ -320,7 +398,10 @@ class _QuoteStrip extends StatelessWidget {
 }
 
 class _FocusCard extends StatelessWidget {
-  const _FocusCard();
+  const _FocusCard({required this.isActive, required this.onToggle});
+
+  final bool isActive;
+  final VoidCallback onToggle;
 
   @override
   Widget build(BuildContext context) {
@@ -339,7 +420,7 @@ class _FocusCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Text(
-                "TODAY'S FOCUS",
+                isActive ? "FOCUSING..." : "TODAY'S FOCUS",
                 style: GoogleFonts.spaceGrotesk(
                   fontSize: 10,
                   fontWeight: FontWeight.w700,
@@ -403,15 +484,15 @@ class _FocusCard extends StatelessWidget {
             width: double.infinity,
             child: FilledButton(
               style: FilledButton.styleFrom(
-                backgroundColor: AppColors.primary,
+                backgroundColor: isActive ? AppColors.error : AppColors.primary,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
                 padding: const EdgeInsets.symmetric(vertical: 16),
               ),
-              onPressed: () {},
+              onPressed: onToggle,
               child: Text(
-                'EXECUTE FOCUS',
+                isActive ? 'STOP FOCUS SESSION' : 'EXECUTE FOCUS',
                 style: GoogleFonts.spaceGrotesk(
                   color: Colors.white,
                   fontSize: 14,
@@ -427,7 +508,17 @@ class _FocusCard extends StatelessWidget {
 }
 
 class _ProgressCard extends StatelessWidget {
-  const _ProgressCard();
+  const _ProgressCard({
+    required this.progress,
+    required this.completedHours,
+    required this.isActive,
+    required this.onToggle,
+  });
+
+  final double progress;
+  final double completedHours;
+  final bool isActive;
+  final VoidCallback onToggle;
 
   @override
   Widget build(BuildContext context) {
@@ -449,7 +540,7 @@ class _ProgressCard extends StatelessWidget {
                     color: const Color(0xFF332B47),
                   ),
                   CircularProgressIndicator(
-                    value: 0.75,
+                    value: progress,
                     strokeWidth: 12,
                     color: AppColors.primary,
                   ),
@@ -457,7 +548,7 @@ class _ProgressCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        '75%',
+                        '${(progress * 100).toInt()}%',
                         style: GoogleFonts.spaceGrotesk(
                           color: AppColors.textPrimary,
                           fontSize: 34,
@@ -490,7 +581,7 @@ class _ProgressCard extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            'You\'ve completed 6 hours of focused coding today. Keep the momentum going to reach your target.',
+            'You\'ve completed ${completedHours.toStringAsFixed(1)} hours of focused coding today. Keep the momentum going to reach your target.',
             style: GoogleFonts.inter(
               color: AppColors.textPrimary,
               fontSize: 20,
@@ -503,15 +594,17 @@ class _ProgressCard extends StatelessWidget {
               Expanded(
                 child: FilledButton(
                   style: FilledButton.styleFrom(
-                    backgroundColor: AppColors.primary,
+                    backgroundColor: isActive
+                        ? AppColors.error
+                        : AppColors.primary,
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  onPressed: () {},
+                  onPressed: onToggle,
                   child: Text(
-                    'START SESSION',
+                    isActive ? 'STOP SESSION' : 'START SESSION',
                     style: GoogleFonts.spaceGrotesk(
                       fontSize: 12,
                       fontWeight: FontWeight.w700,
@@ -552,144 +645,71 @@ class _ProgressCard extends StatelessWidget {
   }
 }
 
-class _CalendarCard extends StatelessWidget {
-  const _CalendarCard();
+class _TaskCard extends StatelessWidget {
+  const _TaskCard({required this.task, required this.onToggle});
+
+  final CustomTask task;
+  final VoidCallback onToggle;
 
   @override
   Widget build(BuildContext context) {
-    return _GlassCard(
-      borderRadius: 12,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Text(
-                'OCTOBER 2023',
-                style: GoogleFonts.spaceGrotesk(
-                  color: AppColors.textPrimary,
-                  letterSpacing: 1.2,
-                  fontSize: 11,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              const Spacer(),
-              const Icon(
-                Icons.chevron_left,
-                color: AppColors.textMuted,
-                size: 18,
-              ),
-              const SizedBox(width: 8),
-              const Icon(
-                Icons.chevron_right,
-                color: AppColors.textMuted,
-                size: 18,
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          GridView.count(
-            crossAxisCount: 7,
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            childAspectRatio: 1,
-            children: [
-              ...['M', 'T', 'W', 'T', 'F', 'S', 'S'].map(
-                (d) => Center(
-                  child: Text(
-                    d,
-                    style: GoogleFonts.spaceGrotesk(
-                      fontSize: 10,
-                      color: AppColors.textMuted,
-                      fontWeight: FontWeight.w700,
-                    ),
+    return GestureDetector(
+      onTap: onToggle,
+      child: _GlassCard(
+        borderRadius: 10,
+        leftAccent: task.isCompleted ? AppColors.textMuted : task.priorityColor,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Text(
+                  task.isCompleted ? 'COMPLETED' : task.priority,
+                  style: GoogleFonts.spaceGrotesk(
+                    color: task.isCompleted
+                        ? AppColors.textMuted
+                        : task.priorityColor,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 0.8,
                   ),
                 ),
-              ),
-              ...[
-                '28',
-                '29',
-                '30',
-                '1',
-                '2',
-                '3',
-                '4',
-                '5',
-                '6',
-              ].map((day) => _CalendarCell(day: day)),
-              const _CalendarCell(day: '7', isActive: true),
-              ...['8', '9', '10', '11'].map((day) => _CalendarCell(day: day)),
-            ],
-          ),
-          const Divider(color: Color(0x22FFFFFF), height: 28),
-          const _EventDot(
-            label: 'Algo Practice @ 14:00',
-            color: AppColors.cyan,
-          ),
-          const SizedBox(height: 10),
-          const _EventDot(
-            label: 'System Design @ 16:30',
-            color: AppColors.primary,
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _TaskCard extends StatelessWidget {
-  const _TaskCard({
-    required this.title,
-    required this.priority,
-    required this.priorityColor,
-    required this.tags,
-  });
-
-  final String title;
-  final String priority;
-  final Color priorityColor;
-  final List<String> tags;
-
-  @override
-  Widget build(BuildContext context) {
-    return _GlassCard(
-      borderRadius: 10,
-      leftAccent: priorityColor,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Text(
-                priority,
-                style: GoogleFonts.spaceGrotesk(
-                  color: priorityColor,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 0.8,
-                ),
-              ),
-              const Spacer(),
-              const Icon(Icons.more_horiz, color: AppColors.textMuted),
-            ],
-          ),
-          const SizedBox(height: 10),
-          Text(
-            title,
-            style: GoogleFonts.spaceGrotesk(
-              color: Colors.white,
-              fontSize: 28,
-              fontWeight: FontWeight.w600,
-              height: 1.1,
+                const Spacer(),
+                if (task.isCompleted)
+                  const Icon(
+                    Icons.check_circle,
+                    color: AppColors.cyan,
+                    size: 20,
+                  )
+                else
+                  const Icon(
+                    Icons.circle_outlined,
+                    color: AppColors.textMuted,
+                    size: 20,
+                  ),
+              ],
             ),
-          ),
-          const SizedBox(height: 14),
-          Wrap(
-            spacing: 6,
-            runSpacing: 6,
-            children: tags.map((tag) => _TagChip(tag)).toList(),
-          ),
-        ],
+            const SizedBox(height: 10),
+            Text(
+              task.title,
+              style: GoogleFonts.spaceGrotesk(
+                color: task.isCompleted ? AppColors.textMuted : Colors.white,
+                fontSize: 28,
+                fontWeight: FontWeight.w600,
+                height: 1.1,
+                decoration: task.isCompleted
+                    ? TextDecoration.lineThrough
+                    : null,
+              ),
+            ),
+            const SizedBox(height: 14),
+            Wrap(
+              spacing: 6,
+              runSpacing: 6,
+              children: task.tags.map((tag) => _TagChip(tag)).toList(),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -868,7 +888,10 @@ class _CodeCard extends StatelessWidget {
 }
 
 class _BottomNav extends StatelessWidget {
-  const _BottomNav();
+  const _BottomNav({required this.selectedIndex, required this.onTap});
+
+  final int selectedIndex;
+  final ValueChanged<int> onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -882,12 +905,32 @@ class _BottomNav extends StatelessWidget {
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: const [
-          _BottomIcon(icon: Icons.dashboard, selected: true),
-          _BottomIcon(icon: Icons.view_kanban_outlined),
-          _BottomIcon(icon: Icons.schedule),
-          _BottomIcon(icon: Icons.edit_note),
-          _BottomIcon(icon: Icons.equalizer),
+        children: [
+          _BottomIcon(
+            icon: Icons.dashboard,
+            selected: selectedIndex == 0,
+            onTap: () => onTap(0),
+          ),
+          _BottomIcon(
+            icon: Icons.view_kanban_outlined,
+            selected: selectedIndex == 1,
+            onTap: () => onTap(1),
+          ),
+          _BottomIcon(
+            icon: Icons.schedule,
+            selected: selectedIndex == 2,
+            onTap: () => onTap(2),
+          ),
+          _BottomIcon(
+            icon: Icons.edit_note,
+            selected: selectedIndex == 3,
+            onTap: () => onTap(3),
+          ),
+          _BottomIcon(
+            icon: Icons.equalizer,
+            selected: selectedIndex == 4,
+            onTap: () => onTap(4),
+          ),
         ],
       ),
     );
@@ -895,65 +938,34 @@ class _BottomNav extends StatelessWidget {
 }
 
 class _BottomIcon extends StatelessWidget {
-  const _BottomIcon({required this.icon, this.selected = false});
+  const _BottomIcon({
+    required this.icon,
+    this.selected = false,
+    required this.onTap,
+  });
 
   final IconData icon;
   final bool selected;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 38,
-      height: 38,
-      decoration: BoxDecoration(
-        color: selected
-            ? AppColors.primary.withValues(alpha: 0.25)
-            : Colors.transparent,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Icon(
-        icon,
-        size: 20,
-        color: selected ? AppColors.cyan : AppColors.textMuted,
-      ),
-    );
-  }
-}
-
-class _CalendarCell extends StatelessWidget {
-  const _CalendarCell({required this.day, this.isActive = false});
-
-  final String day;
-  final bool isActive;
-
-  @override
-  Widget build(BuildContext context) {
-    if (isActive) {
-      return Center(
-        child: Container(
-          width: 26,
-          height: 26,
-          decoration: const BoxDecoration(
-            color: AppColors.primary,
-            shape: BoxShape.circle,
-          ),
-          alignment: Alignment.center,
-          child: Text(
-            day,
-            style: GoogleFonts.inter(
-              color: Colors.white,
-              fontWeight: FontWeight.w600,
-              fontSize: 12,
-            ),
-          ),
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 38,
+        height: 38,
+        decoration: BoxDecoration(
+          color: selected
+              ? AppColors.primary.withValues(alpha: 0.25)
+              : Colors.transparent,
+          borderRadius: BorderRadius.circular(10),
         ),
-      );
-    }
-
-    return Center(
-      child: Text(
-        day,
-        style: GoogleFonts.inter(color: const Color(0xFFE8DFEE), fontSize: 12),
+        child: Icon(
+          icon,
+          size: 20,
+          color: selected ? AppColors.cyan : AppColors.textMuted,
+        ),
       ),
     );
   }
