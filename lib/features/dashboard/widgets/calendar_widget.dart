@@ -3,10 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import '../../../core/providers/calendar_providers.dart';
 import 'calendar_header.dart';
 import 'calendar_day_cell.dart';
-import 'calendar_bottom_sheet.dart';
+import 'calendar_task_card.dart';
 
 class DashboardCalendarWidget extends ConsumerStatefulWidget {
   const DashboardCalendarWidget({super.key});
@@ -28,20 +30,6 @@ class _DashboardCalendarWidgetState
         _focusedDay = focusedDay;
       });
     }
-
-    _showDayBottomSheet(context, selectedDay);
-  }
-
-  void _showDayBottomSheet(BuildContext context, DateTime selectedDay) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor:
-          Colors.transparent, // Background handled by clip in bottom sheet
-      builder: (context) => CalendarBottomSheet(
-        date: selectedDay,
-      ).animate().slideY(begin: 1, duration: 250.ms, curve: Curves.easeOutQuad),
-    );
   }
 
   void _onTitleTap() {
@@ -172,6 +160,54 @@ class _DashboardCalendarWidgetState
                   end: 0,
                   duration: 300.ms,
                 ), // Example of month transition slide
+
+            const SizedBox(height: 16),
+            const Divider(color: Color(0x33FFFFFF), height: 1),
+            const SizedBox(height: 16),
+
+            Text(
+              'Tasks for ${DateFormat('MMMM d, yyyy').format(selectedDay)}',
+              style: GoogleFonts.inter(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(height: 12),
+
+            ref
+                .watch(tasksByDateProvider(selectedDay))
+                .when(
+                  data: (tasks) {
+                    if (tasks.isEmpty) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 24),
+                        child: Center(
+                          child: Text(
+                            "No tasks scheduled for this day.",
+                            style: GoogleFonts.inter(
+                              color: const Color(0xFF6B7280),
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: tasks.length,
+                      itemBuilder: (context, index) =>
+                          CalendarTaskCard(task: tasks[index]),
+                    );
+                  },
+                  loading: () =>
+                      const Center(child: CircularProgressIndicator()),
+                  error: (e, st) => Text(
+                    'Error: $e',
+                    style: const TextStyle(color: Colors.red),
+                  ),
+                ),
           ],
         ),
       ),

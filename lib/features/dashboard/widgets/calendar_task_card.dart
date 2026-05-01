@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../core/models/task.dart';
+import '../../../core/providers/calendar_providers.dart';
 
-class CalendarTaskCard extends StatelessWidget {
+class CalendarTaskCard extends ConsumerWidget {
   final Task task;
 
   const CalendarTaskCard({super.key, required this.task});
@@ -19,7 +21,7 @@ class CalendarTaskCard extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
       decoration: BoxDecoration(
@@ -39,9 +41,23 @@ class CalendarTaskCard extends StatelessWidget {
               ),
             ),
           ),
+          // Checkbox logic
+          Checkbox(
+            value: task.isCompleted,
+            activeColor: const Color(0xFF7C3AED),
+            checkColor: Colors.white,
+            side: const BorderSide(color: Color(0xFF6B7280)),
+            onChanged: (bool? value) {
+              if (value != null) {
+                ref
+                    .read(taskCompletionProvider.notifier)
+                    .toggleTask(task, value);
+              }
+            },
+          ),
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+              padding: const EdgeInsets.fromLTRB(0, 10, 12, 10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -85,7 +101,9 @@ class CalendarTaskCard extends StatelessWidget {
                   Text(
                     task.title,
                     style: GoogleFonts.inter(
-                      color: Colors.white,
+                      color: task.isCompleted
+                          ? const Color(0xFF6B7280)
+                          : Colors.white,
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
                       decoration: task.isCompleted
