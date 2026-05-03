@@ -65,10 +65,12 @@ class CalendarDayCell extends ConsumerWidget {
       final tasks = tasksAsync.value!;
       final now = DateTime.now();
       for (var t in tasks) {
+        final dueDate = t.dueDate;
+        if (dueDate == null) continue;
         if (!t.isCompleted) {
-          if (t.dueDate.isBefore(now)) {
+          if (dueDate.isBefore(now)) {
             dotColors.add(const Color(0xFFEF4444)); // Overdue context
-          } else if (isSameDay(t.dueDate, now)) {
+          } else if (isSameDay(dueDate, now)) {
             dotColors.add(const Color(0xFF7C3AED)); // Due today
           } else {
             dotColors.add(
