@@ -33,10 +33,36 @@ class _KanbanBoardState extends ConsumerState<KanbanBoard> {
         key: widget.tasks.where((task) => task.status == key).toList(),
     };
 
-    final viewportW =
-        widget.maxWidth ?? MediaQuery.sizeOf(context).width;
+    final viewportW = widget.maxWidth ?? MediaQuery.sizeOf(context).width;
+    final isNarrowViewport = viewportW < 760;
     const listGutterSlack = 48.0;
     final listW = ((viewportW - listGutterSlack) / 3).clamp(220.0, 312.0);
+    final columnHeight = MediaQuery.sizeOf(context).height * 0.66;
+    final mobileColumnHeight = (MediaQuery.sizeOf(context).height * 0.55).clamp(
+      320.0,
+      520.0,
+    );
+
+    if (isNarrowViewport) {
+      return ListView.separated(
+        padding: const EdgeInsets.fromLTRB(8, 0, 8, 12),
+        itemCount: _columns.length,
+        separatorBuilder: (_, __) => const SizedBox(height: 10),
+        itemBuilder: (context, index) {
+          final status = _columns[index];
+          final tasks = grouped[status] ?? <Task>[];
+          return SizedBox(
+            height: mobileColumnHeight,
+            child: KanbanColumn(
+              title: _columnTitles[status] ?? status,
+              dotColor: _statusColor(status),
+              tasks: tasks,
+              onMenuTap: () => _showColumnMenu(status),
+            ),
+          );
+        },
+      );
+    }
 
     return DragAndDropLists(
       axis: Axis.horizontal,
@@ -48,12 +74,13 @@ class _KanbanBoardState extends ConsumerState<KanbanBoard> {
         return DragAndDropList(
           canDrag: false,
           header: SizedBox(
-            height: MediaQuery.sizeOf(context).height * 0.66,
+            height: columnHeight,
             child: KanbanColumn(
               title: _columnTitles[status] ?? status,
               dotColor: _statusColor(status),
               tasks: tasks,
               onMenuTap: () => _showColumnMenu(status),
+              width: listW,
             ),
           ),
           children: [

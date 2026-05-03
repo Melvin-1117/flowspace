@@ -9,18 +9,19 @@ class KanbanColumn extends StatelessWidget {
     required this.dotColor,
     required this.tasks,
     required this.onMenuTap,
+    this.width,
   });
 
   final String title;
   final Color dotColor;
   final List<Task> tasks;
   final VoidCallback onMenuTap;
+  final double? width;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 300,
-      margin: const EdgeInsets.only(right: 12),
+      width: width ?? double.infinity,
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: const Color(0xFF0D0D0D),

@@ -152,14 +152,16 @@ class _TaskBoardScreenState extends ConsumerState<TaskBoardScreen> {
                                     minHeight: 40,
                                   ),
                                   icon: const Icon(Icons.menu_outlined),
-                                  onPressed: () => _scaffoldKey.currentState
-                                      ?.openDrawer(),
+                                  onPressed: () =>
+                                      _scaffoldKey.currentState?.openDrawer(),
                                   tooltip: 'Menu',
                                 ),
                               Expanded(
                                 child: GestureDetector(
-                                  onTap: () =>
-                                      _renameProjectDialog(context, projectName),
+                                  onTap: () => _renameProjectDialog(
+                                    context,
+                                    projectName,
+                                  ),
                                   child: Text(
                                     projectName,
                                     style: const TextStyle(
@@ -252,9 +254,11 @@ class _TaskBoardScreenState extends ConsumerState<TaskBoardScreen> {
                                       icon: Icons.view_kanban_outlined,
                                       title: 'Kanban',
                                       active: viewMode == ViewMode.kanban,
-                                      onTap: () => ref
-                                          .read(viewModeProvider.notifier)
-                                          .state = ViewMode.kanban,
+                                      onTap: () =>
+                                          ref
+                                              .read(viewModeProvider.notifier)
+                                              .state = ViewMode
+                                              .kanban,
                                     ),
                                   ),
                                   const SizedBox(width: 8),
@@ -263,9 +267,11 @@ class _TaskBoardScreenState extends ConsumerState<TaskBoardScreen> {
                                       icon: Icons.format_list_bulleted,
                                       title: 'List',
                                       active: viewMode == ViewMode.list,
-                                      onTap: () => ref
-                                          .read(viewModeProvider.notifier)
-                                          .state = ViewMode.list,
+                                      onTap: () =>
+                                          ref
+                                              .read(viewModeProvider.notifier)
+                                              .state = ViewMode
+                                              .list,
                                     ),
                                   ),
                                 ],
@@ -288,13 +294,12 @@ class _TaskBoardScreenState extends ConsumerState<TaskBoardScreen> {
                                         top: 0,
                                         child: CircleAvatar(
                                           radius: 7,
-                                          backgroundColor:
-                                              const Color(0xFFEF4444),
+                                          backgroundColor: const Color(
+                                            0xFFEF4444,
+                                          ),
                                           child: Text(
                                             filters.activeCount.toString(),
-                                            style: const TextStyle(
-                                              fontSize: 8,
-                                            ),
+                                            style: const TextStyle(fontSize: 8),
                                           ),
                                         ),
                                       ),
@@ -305,6 +310,10 @@ class _TaskBoardScreenState extends ConsumerState<TaskBoardScreen> {
                                 onPressed: () => _openNewTaskSheet(context),
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: const Color(0xFF7C3AED),
+                                  foregroundColor: const Color(0xFFF0F0F0),
+                                  textStyle: const TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                  ),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(14),
                                   ),
@@ -338,12 +347,14 @@ class _TaskBoardScreenState extends ConsumerState<TaskBoardScreen> {
                                           child: _viewToggleButton(
                                             icon: Icons.view_kanban_outlined,
                                             title: 'Kanban',
-                                            active:
-                                                viewMode == ViewMode.kanban,
-                                            onTap: () => ref
-                                                .read(viewModeProvider
-                                                    .notifier)
-                                                .state = ViewMode.kanban,
+                                            active: viewMode == ViewMode.kanban,
+                                            onTap: () =>
+                                                ref
+                                                    .read(
+                                                      viewModeProvider.notifier,
+                                                    )
+                                                    .state = ViewMode
+                                                    .kanban,
                                           ),
                                         ),
                                         const SizedBox(width: 8),
@@ -351,12 +362,14 @@ class _TaskBoardScreenState extends ConsumerState<TaskBoardScreen> {
                                           child: _viewToggleButton(
                                             icon: Icons.format_list_bulleted,
                                             title: 'List',
-                                            active:
-                                                viewMode == ViewMode.list,
-                                            onTap: () => ref
-                                                .read(viewModeProvider
-                                                    .notifier)
-                                                .state = ViewMode.list,
+                                            active: viewMode == ViewMode.list,
+                                            onTap: () =>
+                                                ref
+                                                    .read(
+                                                      viewModeProvider.notifier,
+                                                    )
+                                                    .state = ViewMode
+                                                    .list,
                                           ),
                                         ),
                                       ],
@@ -381,10 +394,9 @@ class _TaskBoardScreenState extends ConsumerState<TaskBoardScreen> {
                         if (viewMode == ViewMode.kanban) {
                           return KanbanBoard(
                             tasks: searchedTasks,
-                            maxWidth:
-                                constraints.hasBoundedWidth
-                                    ? constraints.maxWidth
-                                    : null,
+                            maxWidth: constraints.hasBoundedWidth
+                                ? constraints.maxWidth
+                                : null,
                           );
                         }
                         return TaskListView(tasks: searchedTasks);
@@ -417,50 +429,50 @@ class _TaskBoardScreenState extends ConsumerState<TaskBoardScreen> {
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: [
-                    Text('${selected.length} selected'),
-                    const Spacer(),
-                    TextButton(
-                      onPressed: () async {
-                        final notifier = ref.read(
-                          taskNotifierProvider.notifier,
-                        );
-                        for (final id in selected) {
-                          await notifier.moveTask(id, 'inprogress');
-                        }
-                        ref.read(selectedTasksProvider.notifier).state = [];
-                      },
-                      child: const Text('Move to'),
-                    ),
-                    TextButton(
-                      onPressed: () async {
-                        final notifier = ref.read(
-                          taskNotifierProvider.notifier,
-                        );
-                        for (final id in selected) {
-                          await notifier.updatePriority(id, 'high');
-                        }
-                        ref.read(selectedTasksProvider.notifier).state = [];
-                      },
-                      child: const Text('Priority'),
-                    ),
-                    TextButton(
-                      onPressed: () async {
-                        final notifier = ref.read(
-                          taskNotifierProvider.notifier,
-                        );
-                        for (final id in selected) {
-                          await notifier.deleteTask(id);
-                        }
-                        ref.read(selectedTasksProvider.notifier).state = [];
-                      },
-                      child: const Text('Delete'),
-                    ),
-                    TextButton(
-                      onPressed: () =>
-                          ref.read(selectedTasksProvider.notifier).state = [],
-                      child: const Text('Cancel'),
-                    ),
-                  ],
+                      Text('${selected.length} selected'),
+                      const Spacer(),
+                      TextButton(
+                        onPressed: () async {
+                          final notifier = ref.read(
+                            taskNotifierProvider.notifier,
+                          );
+                          for (final id in selected) {
+                            await notifier.moveTask(id, 'inprogress');
+                          }
+                          ref.read(selectedTasksProvider.notifier).state = [];
+                        },
+                        child: const Text('Move to'),
+                      ),
+                      TextButton(
+                        onPressed: () async {
+                          final notifier = ref.read(
+                            taskNotifierProvider.notifier,
+                          );
+                          for (final id in selected) {
+                            await notifier.updatePriority(id, 'high');
+                          }
+                          ref.read(selectedTasksProvider.notifier).state = [];
+                        },
+                        child: const Text('Priority'),
+                      ),
+                      TextButton(
+                        onPressed: () async {
+                          final notifier = ref.read(
+                            taskNotifierProvider.notifier,
+                          );
+                          for (final id in selected) {
+                            await notifier.deleteTask(id);
+                          }
+                          ref.read(selectedTasksProvider.notifier).state = [];
+                        },
+                        child: const Text('Delete'),
+                      ),
+                      TextButton(
+                        onPressed: () =>
+                            ref.read(selectedTasksProvider.notifier).state = [],
+                        child: const Text('Cancel'),
+                      ),
+                    ],
                   ),
                 ),
               ),
