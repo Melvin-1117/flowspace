@@ -565,8 +565,9 @@ class _TaskBoardScreenState extends ConsumerState<TaskBoardScreen> {
       onTap: (index) {
         if (index == 0) context.go('/focus');
         if (index == 1) context.go('/tasks');
-        if (index == 2) context.go('/planner');
-        if (index == 3) context.go('/settings');
+        if (index == 2) context.go('/pomodoro');
+        if (index == 3) context.go('/planner');
+        if (index == 4) context.go('/settings');
       },
       items: const [
         BottomNavigationBarItem(
@@ -574,6 +575,11 @@ class _TaskBoardScreenState extends ConsumerState<TaskBoardScreen> {
           label: 'Focus',
         ),
         BottomNavigationBarItem(icon: Icon(Icons.check_circle), label: 'Tasks'),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.hourglass_top_rounded),
+          activeIcon: Icon(Icons.hourglass_bottom_rounded),
+          label: 'Pomo',
+        ),
         BottomNavigationBarItem(
           icon: Icon(Icons.calendar_month_outlined),
           label: 'Planner',

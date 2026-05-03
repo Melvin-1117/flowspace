@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'features/pomodoro/pomodoro_page.dart';
 import 'features/tasks/task_board_screen.dart';
 import 'features/tasks/task_detail_screen.dart';
 import 'home_page.dart';
@@ -21,6 +22,7 @@ class FlowSpaceApp extends StatelessWidget {
       routes: [
         GoRoute(path: '/focus', builder: (_, __) => const HomePage()),
         GoRoute(path: '/tasks', builder: (_, __) => const TaskBoardScreen()),
+        GoRoute(path: '/pomodoro', builder: (_, __) => const PomodoroPage()),
         GoRoute(
           path: '/tasks/:taskId',
           builder: (_, state) =>

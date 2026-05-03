@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'features/dashboard/widgets/calendar_widget.dart';
 import 'features/dashboard/widgets/active_focus_session_card.dart';
-import 'features/tasks/tasks_page.dart';
 import 'core/providers/session_timer_provider.dart';
 import 'core/models/pomodoro_session.dart';
 
@@ -15,8 +15,6 @@ class HomePage extends ConsumerStatefulWidget {
 }
 
 class _HomePageState extends ConsumerState<HomePage> {
-  int _currentIndex = 0;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,56 +52,52 @@ class _HomePageState extends ConsumerState<HomePage> {
           ),
         ],
       ),
-      body: _currentIndex == 1
-          ? const TasksPage()
-          : SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16.0,
-                vertical: 8.0,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildReviewBanner(),
-                  const SizedBox(height: 24),
-                  _buildWelcomeText(),
-                  const SizedBox(height: 24),
-                  const ActiveFocusSessionCard(),
-                  const SizedBox(height: 16),
-                  _buildStreakCard(),
-                  const SizedBox(height: 16),
-                  _buildDailyGoalCard(context),
-                  const SizedBox(height: 16),
-                  const DashboardCalendarWidget(),
-                  const SizedBox(height: 16),
-                  _buildQuoteCard(),
-                  const SizedBox(height: 80), // Padding for bottom nav & FAB
-                ],
-              ),
-            ),
-      floatingActionButton: _currentIndex == 1
-          ? null
-          : FloatingActionButton(
-              onPressed: () {
-                // Demo: Start a mock session
-                final mockSession = PomodoroSession()
-                  ..linkedTaskId = "1"
-                  ..linkedTaskTitle = "Complete User Interface Audit"
-                  ..startTime = DateTime.now()
-                  ..totalDurationSeconds = 1500
-                  ..remainingSeconds = 2535
-                  ..isRunning = true
-                  ..isCompleted = false
-                  ..completedSubtasks = 3
-                  ..totalSubtasks = 5;
-                ref.read(sessionTimerProvider.notifier).startTimer(mockSession);
-              },
-              backgroundColor: const Color(0xFF8B5CF6),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: const Icon(Icons.bolt, color: Colors.white, size: 30),
-            ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 16.0,
+          vertical: 8.0,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildReviewBanner(),
+            const SizedBox(height: 24),
+            _buildWelcomeText(),
+            const SizedBox(height: 24),
+            const ActiveFocusSessionCard(),
+            const SizedBox(height: 16),
+            _buildStreakCard(),
+            const SizedBox(height: 16),
+            _buildDailyGoalCard(context),
+            const SizedBox(height: 16),
+            const DashboardCalendarWidget(),
+            const SizedBox(height: 16),
+            _buildQuoteCard(),
+            const SizedBox(height: 80), // Padding for bottom nav & FAB
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Demo: Start a mock session
+          final mockSession = PomodoroSession()
+            ..linkedTaskId = "1"
+            ..linkedTaskTitle = "Complete User Interface Audit"
+            ..startTime = DateTime.now()
+            ..totalDurationSeconds = 1500
+            ..remainingSeconds = 2535
+            ..isRunning = true
+            ..isCompleted = false
+            ..completedSubtasks = 3
+            ..totalSubtasks = 5;
+          ref.read(sessionTimerProvider.notifier).startTimer(mockSession);
+        },
+        backgroundColor: const Color(0xFF8B5CF6),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: const Icon(Icons.bolt, color: Colors.white, size: 30),
+      ),
       bottomNavigationBar: Theme(
         data: Theme.of(context).copyWith(
           splashColor: Colors.transparent,
@@ -114,8 +108,14 @@ class _HomePageState extends ConsumerState<HomePage> {
           type: BottomNavigationBarType.fixed,
           selectedItemColor: const Color(0xFF8B5CF6),
           unselectedItemColor: Colors.grey[600],
-          currentIndex: _currentIndex,
-          onTap: (index) => setState(() => _currentIndex = index),
+          currentIndex: 0,
+          onTap: (index) {
+            if (index == 0) context.go('/focus');
+            if (index == 1) context.go('/tasks');
+            if (index == 2) context.go('/pomodoro');
+            if (index == 3) context.go('/planner');
+            if (index == 4) context.go('/settings');
+          },
           items: const [
             BottomNavigationBarItem(
               icon: Icon(Icons.timer_outlined),
@@ -126,6 +126,11 @@ class _HomePageState extends ConsumerState<HomePage> {
               icon: Icon(Icons.check_circle_outline),
               activeIcon: Icon(Icons.check_circle),
               label: 'TASKS',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.hourglass_top_rounded),
+              activeIcon: Icon(Icons.hourglass_bottom_rounded),
+              label: 'POMO',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.calendar_today_outlined),
