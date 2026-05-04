@@ -49,9 +49,8 @@ class _FlowSpaceAppState extends ConsumerState<FlowSpaceApp> {
       ),
       GoRoute(
         path: '/analytics',
-        builder: (context, state) => AnalyticsScreen(
-          payload: state.extra as AnalyticsPayload?,
-        ),
+        builder: (context, state) =>
+            AnalyticsScreen(payload: state.extra as AnalyticsPayload?),
       ),
       GoRoute(
         path: '/planner',
@@ -74,28 +73,28 @@ class _FlowSpaceAppState extends ConsumerState<FlowSpaceApp> {
     final settings = kIsWeb
         ? PomodoroWebStore.instance.ensureSettings()
         : await (await ref.read(isarProvider.future) as dynamic)
-                .focusGoalSettings
-                .get(1) as FocusGoalSettings?;
+                  .focusGoalSettings
+                  .get(1)
+              as FocusGoalSettings?;
     if (settings != null) {
-      if (settings.lastAmbientSound != null) {
-        await ref
-            .read(ambientSoundProvider.notifier)
-            .restoreSound(settings.lastAmbientSound!);
-      }
-
       if (settings.wasTimerRunning && settings.killTimestamp != null) {
-        final elapsed =
-            DateTime.now().difference(settings.killTimestamp!).inSeconds;
+        final elapsed = DateTime.now()
+            .difference(settings.killTimestamp!)
+            .inSeconds;
         final correctedRemaining = settings.remainingSecondsOnKill - elapsed;
         if (correctedRemaining > 0) {
-          await ref.read(timerNotifierProvider.notifier).restoreSession(
-            remainingSeconds: correctedRemaining,
-            sessionType: SessionTypeFromName.fromName(
-              settings.sessionTypeOnKill,
-            ),
-          );
+          await ref
+              .read(timerNotifierProvider.notifier)
+              .restoreSession(
+                remainingSeconds: correctedRemaining,
+                sessionType: SessionTypeFromName.fromName(
+                  settings.sessionTypeOnKill,
+                ),
+              );
         } else {
-          await ref.read(timerNotifierProvider.notifier).handleExpiredWhileKilled();
+          await ref
+              .read(timerNotifierProvider.notifier)
+              .handleExpiredWhileKilled();
         }
       }
     }

@@ -10,6 +10,4 @@ class PomodoroSession {
   late int actualDurationSeconds;
   late bool isCompleted;
   late bool isAbandoned;
-  String? ambientSound;
-  String? musicTrack;
 }

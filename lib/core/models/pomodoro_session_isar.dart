@@ -19,7 +19,4 @@ class PomodoroSession {
 
   late bool isCompleted;
   late bool isAbandoned;
-
-  String? ambientSound;
-  String? musicTrack;
 }

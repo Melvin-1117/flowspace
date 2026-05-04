@@ -131,9 +131,7 @@ class TimerNotifier extends Notifier<TimerState> {
     final focusDuration = settings.focusDuration;
     final completedToday = kIsWeb
         ? _completedFocusCountWeb()
-        : await _completedFocusCountToday(
-            await ref.read(isarProvider.future),
-          );
+        : await _completedFocusCountToday(await ref.read(isarProvider.future));
     state = state.copyWith(
       sessionType: SessionType.focus,
       totalDurationSeconds: focusDuration,
@@ -144,8 +142,6 @@ class TimerNotifier extends Notifier<TimerState> {
 
     await AudioService.instance.init(
       isTimerRunning: () => ref.read(timerRunningProvider),
-      ambientVolumeReader: () =>
-          ref.read(focusGoalSettingsProvider).value?.ambientVolume ?? 0.4,
       onLowBatteryMode: ForegroundTimerService.enableLowBatteryMode,
     );
     _registerForegroundActions();
@@ -210,10 +206,7 @@ class TimerNotifier extends Notifier<TimerState> {
     return (_elapsedBeforeRun + currentSpan).inSeconds;
   }
 
-  Future<void> start({
-    String? linkedTaskId,
-    String? linkedTaskTitle,
-  }) async {
+  Future<void> start({String? linkedTaskId, String? linkedTaskTitle}) async {
     if (state.isRunning) return;
     final now = DateTime.now();
     _activeSession ??= PomodoroSession()
@@ -225,9 +218,7 @@ class TimerNotifier extends Notifier<TimerState> {
       ..plannedDurationSeconds = state.totalDurationSeconds
       ..actualDurationSeconds = 0
       ..isCompleted = false
-      ..isAbandoned = false
-      ..ambientSound = ref.read(ambientSoundProvider).selected
-      ..musicTrack = ref.read(musicPlayerProvider).currentTrackName;
+      ..isAbandoned = false;
 
     _runStartedAt = DateTime.now();
     state = state.copyWith(
@@ -240,7 +231,6 @@ class TimerNotifier extends Notifier<TimerState> {
     _startTicker();
     await _persistTimerState();
     await _startForegroundNotification();
-    await ref.read(musicPlayerProvider.notifier).play();
   }
 
   Future<void> pause() async {
@@ -257,7 +247,6 @@ class TimerNotifier extends Notifier<TimerState> {
       text: '${_mmss(state.remainingSeconds)} remaining — Paused',
       isRunning: false,
     );
-    await ref.read(musicPlayerProvider.notifier).pause();
   }
 
   Future<void> resume() async {
@@ -267,7 +256,6 @@ class TimerNotifier extends Notifier<TimerState> {
     _startTicker();
     await _persistTimerState();
     await _startForegroundNotification();
-    await ref.read(musicPlayerProvider.notifier).play();
   }
 
   Future<void> togglePauseResume() async {
@@ -303,7 +291,6 @@ class TimerNotifier extends Notifier<TimerState> {
     );
     await _persistTimerState();
     await ForegroundTimerService.stop();
-    await ref.read(musicPlayerProvider.notifier).pause();
   }
 
   Future<void> skip() async {
@@ -362,7 +349,8 @@ class TimerNotifier extends Notifier<TimerState> {
     }
 
     final breakType = _breakTypeForCount(completedFocus);
-    final session = _activeSession ??
+    final session =
+        _activeSession ??
         (PomodoroSession()
           ..uuid = const Uuid().v4()
           ..sessionType = completedType.key
@@ -403,10 +391,6 @@ class TimerNotifier extends Notifier<TimerState> {
     }
 
     await ForegroundTimerService.stop();
-    await ref.read(musicPlayerProvider.notifier).pause();
-    await ref.read(ambientSoundProvider.notifier).setVolume(
-      ref.read(focusGoalSettingsProvider).value?.ambientVolume ?? 0.4,
-    );
 
     final autoStartBreaks =
         ref.read(focusGoalSettingsProvider).value?.autoStartBreaks ?? false;
@@ -555,18 +539,21 @@ class TimerNotifier extends Notifier<TimerState> {
     final settings = kIsWeb
         ? PomodoroWebStore.instance.ensureSettings()
         : await (await ref.read(isarProvider.future) as dynamic)
-                .focusGoalSettings
-                .get(1) as FocusGoalSettings?;
+                  .focusGoalSettings
+                  .get(1)
+              as FocusGoalSettings?;
     final restoredType = SessionTypeFromName.fromName(
       settings?.sessionTypeOnKill ?? 'focus',
     );
     final planned = _getDurationForType(restoredType);
     final now = DateTime.now();
     final killTimestamp = settings?.killTimestamp ?? now;
-    final consumed = math.max(
-      0,
-      math.min(planned, planned - (settings?.remainingSecondsOnKill ?? 0)),
-    ).toInt();
+    final consumed = math
+        .max(
+          0,
+          math.min(planned, planned - (settings?.remainingSecondsOnKill ?? 0)),
+        )
+        .toInt();
     _activeSession = PomodoroSession()
       ..uuid = const Uuid().v4()
       ..sessionType = restoredType.key
@@ -598,9 +585,7 @@ class TimerNotifier extends Notifier<TimerState> {
       ..endTime = now
       ..actualDurationSeconds = now.difference(session.startTime).inSeconds
       ..isCompleted = wasCompleted
-      ..isAbandoned = wasAbandoned
-      ..ambientSound = ref.read(ambientSoundProvider).selected
-      ..musicTrack = ref.read(musicPlayerProvider).currentTrackName;
+      ..isAbandoned = wasAbandoned;
 
     if (kIsWeb) {
       PomodoroWebStore.instance.upsertSession(session);

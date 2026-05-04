@@ -5,8 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/models/focus_goal_settings.dart';
 import '../../../core/models/pomodoro_session.dart';
 import '../../../core/providers/isar_provider.dart';
-import 'ambient_sound_notifier.dart';
-import 'music_player_notifier.dart';
 import 'pomodoro_web_store.dart';
 import 'timer_notifier.dart';
 
@@ -89,7 +87,9 @@ class CompletionOverlayState {
   final int actualDurationSeconds;
 }
 
-final focusGoalSettingsProvider = FutureProvider<FocusGoalSettings>((ref) async {
+final focusGoalSettingsProvider = FutureProvider<FocusGoalSettings>((
+  ref,
+) async {
   if (kIsWeb) {
     return PomodoroWebStore.instance.ensureSettings();
   }
@@ -152,22 +152,25 @@ final allSessionsProvider = FutureProvider<List<PomodoroSession>>((ref) async {
     return sessions;
   }
   final isar = await ref.watch(isarProvider.future);
-  final sessions = await (isar as dynamic).pomodoroSessions.where().findAll()
-      as List<PomodoroSession>;
+  final sessions =
+      await (isar as dynamic).pomodoroSessions.where().findAll()
+          as List<PomodoroSession>;
   sessions.sort((a, b) => b.startTime.compareTo(a.startTime));
   return sessions;
 });
 
-final todaySessionsProvider = FutureProvider<List<PomodoroSession>>((ref) async {
+final todaySessionsProvider = FutureProvider<List<PomodoroSession>>((
+  ref,
+) async {
   final now = DateTime.now();
   final dayStart = DateTime(now.year, now.month, now.day);
   final dayEnd = dayStart.add(const Duration(days: 1));
   final source = kIsWeb
       ? PomodoroWebStore.instance.sessions
-      : await (await ref.watch(isarProvider.future) as dynamic)
-              .pomodoroSessions
-              .where()
-              .findAll() as List<PomodoroSession>;
+      : await (await ref.watch(isarProvider.future) as dynamic).pomodoroSessions
+                .where()
+                .findAll()
+            as List<PomodoroSession>;
   final today = source
       .where(
         (s) => !s.startTime.isBefore(dayStart) && s.startTime.isBefore(dayEnd),
@@ -202,7 +205,7 @@ final weeklyHeatmapProvider = FutureProvider<List<DayHeatmapData>>((ref) async {
     final all = kIsWeb
         ? PomodoroWebStore.instance.sessions
         : await (isar as dynamic).pomodoroSessions.where().findAll()
-            as List<PomodoroSession>;
+              as List<PomodoroSession>;
     final sessions = all
         .where(
           (s) =>
@@ -214,7 +217,8 @@ final weeklyHeatmapProvider = FutureProvider<List<DayHeatmapData>>((ref) async {
         .toList();
     final settings = kIsWeb
         ? PomodoroWebStore.instance.ensureSettings()
-        : await (isar as dynamic).focusGoalSettings.get(1) as FocusGoalSettings?;
+        : await (isar as dynamic).focusGoalSettings.get(1)
+              as FocusGoalSettings?;
     final goal = settings?.dailySessionGoal ?? 4;
     final completed = sessions.length;
 
@@ -224,8 +228,10 @@ final weeklyHeatmapProvider = FutureProvider<List<DayHeatmapData>>((ref) async {
         completedSessions: completed,
         goalSessions: goal,
         goalMet: completed >= goal,
-        totalFocusMinutes:
-            sessions.fold(0, (sum, s) => sum + (s.actualDurationSeconds ~/ 60)),
+        totalFocusMinutes: sessions.fold(
+          0,
+          (sum, s) => sum + (s.actualDurationSeconds ~/ 60),
+        ),
       ),
     );
   }
@@ -242,7 +248,7 @@ final goalStreakProvider = FutureProvider<int>((ref) async {
     final all = kIsWeb
         ? PomodoroWebStore.instance.sessions
         : await (isar as dynamic).pomodoroSessions.where().findAll()
-            as List<PomodoroSession>;
+              as List<PomodoroSession>;
     final sessions = all
         .where(
           (s) =>
@@ -254,7 +260,8 @@ final goalStreakProvider = FutureProvider<int>((ref) async {
         .toList();
     final settings = kIsWeb
         ? PomodoroWebStore.instance.ensureSettings()
-        : await (isar as dynamic).focusGoalSettings.get(1) as FocusGoalSettings?;
+        : await (isar as dynamic).focusGoalSettings.get(1)
+              as FocusGoalSettings?;
     final goal = settings?.dailySessionGoal ?? 4;
     if (sessions.length >= goal) {
       streak++;
@@ -282,7 +289,7 @@ final bestGoalStreakProvider = FutureProvider<int>((ref) async {
     final all = kIsWeb
         ? PomodoroWebStore.instance.sessions
         : await (isar as dynamic).pomodoroSessions.where().findAll()
-            as List<PomodoroSession>;
+              as List<PomodoroSession>;
     final sessions = all
         .where(
           (s) =>
@@ -335,13 +342,4 @@ class FocusGoalSettingsUpdater extends AsyncNotifier<void> {
 final focusGoalSettingsUpdaterProvider =
     AsyncNotifierProvider<FocusGoalSettingsUpdater, void>(
       FocusGoalSettingsUpdater.new,
-    );
-
-final musicPlayerProvider = StateNotifierProvider<MusicPlayerNotifier, MusicState>(
-  MusicPlayerNotifier.new,
-);
-
-final ambientSoundProvider =
-    StateNotifierProvider<AmbientSoundNotifier, AmbientState>(
-      AmbientSoundNotifier.new,
     );
