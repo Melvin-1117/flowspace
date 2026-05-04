@@ -1,48 +1,126 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'dart:async';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'core/models/focus_goal_settings.dart';
+import 'core/providers/isar_provider.dart';
+import 'core/services/foreground_timer_service.dart';
+import 'core/services/notification_service.dart';
+import 'features/analytics/analytics_payload.dart';
+import 'features/analytics/analytics_screen.dart';
 import 'features/pomodoro/pomodoro_page.dart';
+import 'features/pomodoro/providers/pomodoro_providers.dart';
+import 'features/pomodoro/providers/pomodoro_web_store.dart';
 import 'features/tasks/task_board_screen.dart';
 import 'features/tasks/task_detail_screen.dart';
 import 'home_page.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await NotificationService.initialize();
+  await ForegroundTimerService.initialize();
   runApp(const ProviderScope(child: FlowSpaceApp()));
 }
 
-class FlowSpaceApp extends StatelessWidget {
+class FlowSpaceApp extends ConsumerStatefulWidget {
   const FlowSpaceApp({super.key});
 
   @override
+  ConsumerState<FlowSpaceApp> createState() => _FlowSpaceAppState();
+}
+
+class _FlowSpaceAppState extends ConsumerState<FlowSpaceApp> {
+  bool _restored = false;
+
+  late final GoRouter _router = GoRouter(
+    initialLocation: '/tasks',
+    routes: [
+      GoRoute(path: '/focus', builder: (_, __) => const HomePage()),
+      GoRoute(path: '/tasks', builder: (_, __) => const TaskBoardScreen()),
+      GoRoute(path: '/pomodoro', builder: (_, __) => const PomodoroPage()),
+      GoRoute(
+        path: '/tasks/:taskId',
+        builder: (_, state) =>
+            TaskDetailScreen(taskId: state.pathParameters['taskId']!),
+      ),
+      GoRoute(
+        path: '/analytics',
+        builder: (context, state) => AnalyticsScreen(
+          payload: state.extra as AnalyticsPayload?,
+        ),
+      ),
+      GoRoute(
+        path: '/planner',
+        builder: (_, __) => const _PlaceholderScreen(title: 'Planner'),
+      ),
+      GoRoute(
+        path: '/settings',
+        builder: (_, __) => const _PlaceholderScreen(title: 'Settings'),
+      ),
+    ],
+  );
+
+  @override
+  void initState() {
+    super.initState();
+    unawaited(_restoreAppState());
+  }
+
+  Future<void> _restoreAppState() async {
+    final settings = kIsWeb
+        ? PomodoroWebStore.instance.ensureSettings()
+        : await (await ref.read(isarProvider.future) as dynamic)
+                .focusGoalSettings
+                .get(1) as FocusGoalSettings?;
+    if (settings != null) {
+      if (settings.lastAmbientSound != null) {
+        await ref
+            .read(ambientSoundProvider.notifier)
+            .restoreSound(settings.lastAmbientSound!);
+      }
+
+      if (settings.wasTimerRunning && settings.killTimestamp != null) {
+        final elapsed =
+            DateTime.now().difference(settings.killTimestamp!).inSeconds;
+        final correctedRemaining = settings.remainingSecondsOnKill - elapsed;
+        if (correctedRemaining > 0) {
+          await ref.read(timerNotifierProvider.notifier).restoreSession(
+            remainingSeconds: correctedRemaining,
+            sessionType: SessionTypeFromName.fromName(
+              settings.sessionTypeOnKill,
+            ),
+          );
+        } else {
+          await ref.read(timerNotifierProvider.notifier).handleExpiredWhileKilled();
+        }
+      }
+    }
+    if (mounted) {
+      setState(() => _restored = true);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final router = GoRouter(
-      initialLocation: '/tasks',
-      routes: [
-        GoRoute(path: '/focus', builder: (_, __) => const HomePage()),
-        GoRoute(path: '/tasks', builder: (_, __) => const TaskBoardScreen()),
-        GoRoute(path: '/pomodoro', builder: (_, __) => const PomodoroPage()),
-        GoRoute(
-          path: '/tasks/:taskId',
-          builder: (_, state) =>
-              TaskDetailScreen(taskId: state.pathParameters['taskId']!),
+    if (!_restored) {
+      return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData.dark(),
+        home: const Scaffold(
+          backgroundColor: Color(0xFF000000),
+          body: Center(child: CircularProgressIndicator()),
         ),
-        GoRoute(
-          path: '/planner',
-          builder: (_, __) => const _PlaceholderScreen(title: 'Planner'),
-        ),
-        GoRoute(
-          path: '/settings',
-          builder: (_, __) => const _PlaceholderScreen(title: 'Settings'),
-        ),
-      ],
-    );
+      );
+    }
 
     return MaterialApp.router(
       title: 'FlowSpace',
       debugShowCheckedModeBanner: false,
-      routerConfig: router,
+      routerConfig: _router,
       theme: ThemeData(
         brightness: Brightness.dark,
         scaffoldBackgroundColor: const Color(0xFF000000),

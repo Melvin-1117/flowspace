@@ -53,10 +53,7 @@ class _HomePageState extends ConsumerState<HomePage> {
         ],
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 16.0,
-          vertical: 8.0,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -78,24 +75,22 @@ class _HomePageState extends ConsumerState<HomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
+        onPressed: () async {
           // Demo: Start a mock session
           final mockSession = PomodoroSession()
+            ..uuid = ''
+            ..sessionType = 'focus'
             ..linkedTaskId = "1"
             ..linkedTaskTitle = "Complete User Interface Audit"
             ..startTime = DateTime.now()
-            ..totalDurationSeconds = 1500
-            ..remainingSeconds = 2535
-            ..isRunning = true
+            ..plannedDurationSeconds = 0
+            ..actualDurationSeconds = 0
             ..isCompleted = false
-            ..completedSubtasks = 3
-            ..totalSubtasks = 5;
-          ref.read(sessionTimerProvider.notifier).startTimer(mockSession);
+            ..isAbandoned = false;
+          await ref.read(sessionTimerProvider.notifier).startTimer(mockSession);
         },
         backgroundColor: const Color(0xFF8B5CF6),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         child: const Icon(Icons.bolt, color: Colors.white, size: 30),
       ),
       bottomNavigationBar: Theme(

@@ -44,10 +44,16 @@ dependencies:
   isar: ^3.1.0
   isar_flutter_libs: ^3.1.0
   riverpod: 2.5.1
+  shared_preferences: ^2.2.3
+  audioplayers: ^6.0.0
+  flutter_local_notifications: ^17.0.0
+  flutter_foreground_task: ^8.0.0
   drag_and_drop_lists: ^0.4.2
   uuid: ^4.4.0
   fl_chart: ^0.68.0
   path_provider: ^2.1.5
+  audio_session: ^0.1.18
+  battery_plus: ^5.0.0
 
 dev_dependencies:
   flutter_test:
@@ -72,6 +78,15 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  assets:
+    - assets/audio/music/deep_work_beats.mp3
+    - assets/audio/music/lofi_study.mp3
+    - assets/audio/music/focus_flow.mp3
+    - assets/audio/ambient/rain.mp3
+    - assets/audio/ambient/waves.mp3
+    - assets/audio/ambient/forest.mp3
+    - assets/audio/ambient/wind.mp3
+    - assets/audio/sfx/complete.mp3
 
   # To add assets to your application, add an assets section, like this:
   # assets:

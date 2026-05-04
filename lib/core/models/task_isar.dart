@@ -21,6 +21,8 @@ class Task {
   late List<bool> subtaskCompleted;
   late List<String> dependencyIds;
   late String projectId;
+  late int pomodoroCount = 0;
+  late int pomodoroTarget = 4;
 
   // Backward-compatible bridge used by existing calendar code.
   bool get isCompleted => status == 'done';
@@ -43,6 +45,8 @@ class Task {
     List<bool>? subtaskCompleted,
     List<String>? dependencyIds,
     String? projectId,
+    int? pomodoroCount,
+    int? pomodoroTarget,
   }) {
     return Task()
       ..id = id
@@ -62,6 +66,8 @@ class Task {
       ..subtaskCompleted =
           subtaskCompleted ?? List<bool>.from(this.subtaskCompleted)
       ..dependencyIds = dependencyIds ?? List<String>.from(this.dependencyIds)
-      ..projectId = projectId ?? this.projectId;
+      ..projectId = projectId ?? this.projectId
+      ..pomodoroCount = pomodoroCount ?? this.pomodoroCount
+      ..pomodoroTarget = pomodoroTarget ?? this.pomodoroTarget;
   }
 }

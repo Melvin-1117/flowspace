@@ -1,74 +1,74 @@
-import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../features/pomodoro/providers/pomodoro_providers.dart'
+    hide formattedTimeProvider, remainingSecondsProvider;
 import '../models/pomodoro_session.dart';
 
-// Tracks if a session is currently active
-final activeSessionProvider = StateProvider<PomodoroSession?>((ref) => null);
+// Compatibility provider for existing dashboard/task widgets.
+final activeSessionProvider = Provider<PomodoroSession?>((ref) {
+  final timer = ref.watch(timerNotifierProvider);
+  final linkedId = timer.linkedTaskId;
+  final linkedTitle = timer.linkedTaskTitle;
+  if (linkedId == null || linkedTitle == null) return null;
+  return PomodoroSession()
+    ..uuid = ''
+    ..sessionType = timer.sessionType.key
+    ..linkedTaskId = linkedId
+    ..linkedTaskTitle = linkedTitle
+    ..startTime = timer.sessionStartAt ?? DateTime.now()
+    ..plannedDurationSeconds = timer.totalDurationSeconds
+    ..actualDurationSeconds =
+        timer.totalDurationSeconds - timer.remainingSeconds
+    ..isCompleted = false
+    ..isAbandoned = false;
+});
 
-// Tracks running/paused state
-final sessionRunningProvider = StateProvider<bool>((ref) => false);
+final sessionRunningProvider = Provider<bool>((ref) {
+  return ref.watch(timerRunningProvider);
+});
 
-// Tracks remaining seconds (live countdown)
-final remainingSecondsProvider = StateProvider<int>((ref) => 0);
+final remainingSecondsProvider = Provider<int>((ref) {
+  return ref.watch(remainingSecondsProviderFromPomodoro);
+});
 
-// Formatted time string MM:SS
+final remainingSecondsProviderFromPomodoro = Provider<int>((ref) {
+  return ref.watch(timerNotifierProvider).remainingSeconds;
+});
+
 final formattedTimeProvider = Provider<String>((ref) {
-  final seconds = ref.watch(remainingSecondsProvider);
+  final seconds = ref.watch(remainingSecondsProviderFromPomodoro);
   final minutes = seconds ~/ 60;
   final secs = seconds % 60;
   return '${minutes.toString().padLeft(2, '0')}:${secs.toString().padLeft(2, '0')}';
 });
 
-// Timer controller notifier
 class SessionTimerNotifier extends Notifier<void> {
-  Timer? _timer;
-
   @override
   void build() {}
 
-  void startTimer(PomodoroSession session) {
-    ref.read(activeSessionProvider.notifier).state = session;
-    ref.read(remainingSecondsProvider.notifier).state = session.remainingSeconds;
-    ref.read(sessionRunningProvider.notifier).state = true;
-
-    _timer?.cancel();
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      final remaining = ref.read(remainingSecondsProvider) - 1;
-      if (remaining <= 0) {
-        ref.read(remainingSecondsProvider.notifier).state = 0;
-        endTimer();
-      } else {
-        ref.read(remainingSecondsProvider.notifier).state = remaining;
-      }
-    });
+  Future<void> startTimer(PomodoroSession session) async {
+    final timer = ref.read(timerNotifierProvider.notifier);
+    final sessionType = SessionTypeFromName.fromName(session.sessionType);
+    await timer.switchType(sessionType, force: true);
+    await timer.start(
+      linkedTaskId: session.linkedTaskId,
+      linkedTaskTitle: session.linkedTaskTitle,
+    );
   }
 
-  void pauseTimer() {
-    _timer?.cancel();
-    ref.read(sessionRunningProvider.notifier).state = false;
+  Future<void> pauseTimer() async {
+    await ref.read(timerNotifierProvider.notifier).pause();
   }
 
-  void resumeTimer() {
-    ref.read(sessionRunningProvider.notifier).state = true;
-    _timer?.cancel();
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      final remaining = ref.read(remainingSecondsProvider) - 1;
-      if (remaining <= 0) {
-        ref.read(remainingSecondsProvider.notifier).state = 0;
-        endTimer();
-      } else {
-        ref.read(remainingSecondsProvider.notifier).state = remaining;
-      }
-    });
+  Future<void> resumeTimer() async {
+    await ref.read(timerNotifierProvider.notifier).resume();
   }
 
-  void endTimer() {
-    _timer?.cancel();
-    ref.read(sessionRunningProvider.notifier).state = false;
-    ref.read(activeSessionProvider.notifier).state = null;
+  Future<void> endTimer() async {
+    await ref.read(timerNotifierProvider.notifier).reset();
   }
 }
 
-final sessionTimerProvider = NotifierProvider<SessionTimerNotifier, void>(() {
-  return SessionTimerNotifier();
-});
+final sessionTimerProvider = NotifierProvider<SessionTimerNotifier, void>(
+  SessionTimerNotifier.new,
+);

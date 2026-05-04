@@ -118,9 +118,9 @@ class _SessionCardContent extends ConsumerWidget {
 
               // Task Title
               Tooltip(
-                message: session.linkedTaskTitle,
+                message: session.linkedTaskTitle ?? 'Focus Session',
                 child: Text(
-                  session.linkedTaskTitle,
+                  session.linkedTaskTitle ?? 'Focus Session',
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
@@ -163,58 +163,6 @@ class _SessionCardContent extends ConsumerWidget {
                       ),
                     ],
                   ),
-
-                  if (session.totalSubtasks > 0) ...[
-                    const SizedBox(width: 24),
-                    Container(
-                      width: 1,
-                      height: 32,
-                      color: const Color(0xFF262626),
-                    ),
-                    const SizedBox(width: 24),
-
-                    const Icon(
-                      Icons.check_circle_outline,
-                      color: Color(0xFF555555),
-                      size: 16,
-                    ),
-                    const SizedBox(width: 8),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        RichText(
-                          text: TextSpan(
-                            children: [
-                              TextSpan(
-                                text: '${session.completedSubtasks}',
-                                style: const TextStyle(
-                                  color: Color(0xFF7C3AED),
-                                  fontSize: 13,
-                                  fontFamily: 'Inter',
-                                ),
-                              ),
-                              TextSpan(
-                                text: ' of ${session.totalSubtasks}',
-                                style: const TextStyle(
-                                  color: Color(0xFF555555),
-                                  fontSize: 13,
-                                  fontFamily: 'Inter',
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const Text(
-                          'subtasks',
-                          style: TextStyle(
-                            color: Color(0xFF555555),
-                            fontSize: 13,
-                            fontFamily: 'Inter',
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
                 ],
               ),
               const SizedBox(height: 24),
@@ -277,11 +225,7 @@ class _SessionCardContent extends ConsumerWidget {
                       height: 48,
                       child: _ScaleButton(
                         onTap: () {
-                          try {
-                            context.push('/pomodoro');
-                          } catch (
-                            _
-                          ) {} // Avoid crash if routing isn't set up yet
+                          context.push('/pomodoro');
                         },
                         child: Container(
                           decoration: BoxDecoration(
@@ -314,7 +258,7 @@ class _SessionCardContent extends ConsumerWidget {
                         padding: const EdgeInsets.only(top: 12.0),
                         child: Center(
                           child: Text(
-                            'Session paused � resume to continue',
+                            'Session paused — resume to continue',
                             style: TextStyle(
                               color: Colors.red[400],
                               fontSize: 12,

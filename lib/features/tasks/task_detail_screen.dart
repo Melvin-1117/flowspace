@@ -6,6 +6,7 @@ import '../../core/models/task.dart';
 import '../../core/models/task_activity.dart';
 import '../../core/models/pomodoro_session.dart';
 import '../../core/providers/session_timer_provider.dart';
+import '../pomodoro/providers/pomodoro_providers.dart';
 import 'providers/task_providers.dart';
 import 'widgets/dependency_manager.dart';
 import 'widgets/subtask_list.dart';
@@ -122,20 +123,24 @@ class TaskDetailScreen extends ConsumerWidget {
             ListTile(
               title: const Text('Start Focus Session'),
               trailing: const Icon(Icons.play_arrow),
-              onTap: () {
+              onTap: () async {
+                final settings = await ref.read(
+                  focusGoalSettingsProvider.future,
+                );
                 final session = PomodoroSession()
+                  ..uuid = ''
+                  ..sessionType = 'focus'
                   ..linkedTaskId = task.uuid
                   ..linkedTaskTitle = task.title
                   ..startTime = DateTime.now()
-                  ..totalDurationSeconds = 1500
-                  ..remainingSeconds = 1500
-                  ..isRunning = true
+                  ..plannedDurationSeconds = settings.focusDuration
+                  ..actualDurationSeconds = 0
                   ..isCompleted = false
-                  ..completedSubtasks = task.subtaskCompleted
-                      .where((v) => v)
-                      .length
-                  ..totalSubtasks = task.subtasks.length;
-                ref.read(sessionTimerProvider.notifier).startTimer(session);
+                  ..isAbandoned = false;
+                await ref
+                    .read(sessionTimerProvider.notifier)
+                    .startTimer(session);
+                if (!context.mounted) return;
                 context.go('/focus');
               },
             ),
