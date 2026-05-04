@@ -4,9 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'providers/pomodoro_providers.dart';
-import 'widgets/ambient_sound_grid.dart';
 import 'widgets/daily_goal_card.dart';
-import 'widgets/now_playing_card.dart';
 import 'widgets/session_complete_overlay.dart';
 import 'widgets/session_history_card.dart';
 import 'widgets/session_type_toggle.dart';
@@ -135,10 +133,6 @@ class _PomodoroScreenState extends ConsumerState<PomodoroScreen>
                         const SizedBox(height: 18),
                         const DailyGoalCard(),
                         const SizedBox(height: 18),
-                        const NowPlayingCard(),
-                        const SizedBox(height: 14),
-                        const AmbientSoundGrid(),
-                        const SizedBox(height: 14),
                         const SessionHistoryCard(),
                       ],
                     ),
