@@ -494,6 +494,11 @@ class _TaskBoardScreenState extends ConsumerState<TaskBoardScreen> {
             ),
             const Divider(color: Color(0x22FFFFFF)),
             ListTile(
+              leading: const Icon(Icons.analytics_outlined),
+              title: const Text('Analytics'),
+              onTap: () => context.go('/analytics'),
+            ),
+            ListTile(
               leading: const Icon(Icons.settings),
               title: const Text('Settings'),
               onTap: () => context.go('/settings'),

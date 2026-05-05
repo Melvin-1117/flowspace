@@ -15,15 +15,19 @@ class HomePage extends ConsumerStatefulWidget {
 }
 
 class _HomePageState extends ConsumerState<HomePage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
+      drawer: _buildDrawer(context),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.menu, color: Colors.white),
-          onPressed: () {},
+          onPressed: () => _scaffoldKey.currentState?.openDrawer(),
         ),
         title: const Text(
           'FlowSpace',
@@ -136,6 +140,54 @@ class _HomePageState extends ConsumerState<HomePage> {
               icon: Icon(Icons.settings_outlined),
               activeIcon: Icon(Icons.settings),
               label: 'SETTINGS',
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDrawer(BuildContext context) {
+    return Drawer(
+      width: MediaQuery.sizeOf(context).width * 0.75,
+      backgroundColor: const Color(0xFF0D0D0D),
+      child: SafeArea(
+        child: Column(
+          children: [
+            const ListTile(
+              leading: CircleAvatar(child: Text('FS')),
+              title: Text('FlowSpace User'),
+              subtitle: Text('student@flowspace.app'),
+            ),
+            const Divider(color: Color(0x22FFFFFF)),
+            ListTile(
+              leading: const Icon(Icons.analytics_outlined),
+              title: const Text('Analytics'),
+              onTap: () {
+                Navigator.of(context).pop();
+                context.go('/analytics');
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.settings),
+              title: const Text('Settings'),
+              onTap: () {
+                Navigator.of(context).pop();
+                context.go('/settings');
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.logout),
+              title: const Text('Logout'),
+              onTap: () => Navigator.of(context).pop(),
+            ),
+            const Spacer(),
+            const Padding(
+              padding: EdgeInsets.all(16),
+              child: Text(
+                'FlowSpace v1.0.0',
+                style: TextStyle(color: Color(0xFF555555)),
+              ),
             ),
           ],
         ),
