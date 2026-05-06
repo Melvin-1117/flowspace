@@ -5,6 +5,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../widgets/app_drawer.dart';
 import 'analytics_payload.dart';
 import 'providers/analytics_providers.dart';
 import 'widgets/allocation_donut_chart.dart';
@@ -66,7 +67,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: _screenBackground,
-      drawer: _buildDrawer(context),
+      drawer: const AppDrawer(),
       appBar: AppBar(
         backgroundColor: _screenBackground,
         elevation: 0,
@@ -117,7 +118,8 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
           if (showBanner && payload != null) ...[
             AnalyticsBanner(
               payload: payload,
-              onDismiss: () => ref.read(analyticsBannerProvider.notifier).dismiss(),
+              onDismiss: () =>
+                  ref.read(analyticsBannerProvider.notifier).dismiss(),
             ),
           ],
           const SizedBox(height: 16),
@@ -188,65 +190,6 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
               ),
           const SizedBox(height: 24),
         ],
-      ),
-    );
-  }
-
-  Widget _buildDrawer(BuildContext context) {
-    return Drawer(
-      width: MediaQuery.sizeOf(context).width * 0.75,
-      backgroundColor: const Color(0xFF0D0D0D),
-      child: SafeArea(
-        child: Column(
-          children: [
-            const ListTile(
-              leading: CircleAvatar(child: Text('FS')),
-              title: Text('FlowSpace User'),
-              subtitle: Text('student@flowspace.app'),
-            ),
-            const Divider(color: Color(0x22FFFFFF)),
-            ListTile(
-              leading: const Icon(Icons.timer_outlined),
-              title: const Text('Focus'),
-              onTap: () => context.go('/focus'),
-            ),
-            ListTile(
-              leading: const Icon(Icons.check_circle_outline),
-              title: const Text('Tasks'),
-              onTap: () => context.go('/tasks'),
-            ),
-            ListTile(
-              leading: const Icon(Icons.hourglass_top_rounded),
-              title: const Text('Pomodoro'),
-              onTap: () => context.go('/pomodoro'),
-            ),
-            const ListTile(
-              leading: Icon(Icons.analytics_outlined, color: _purple),
-              title: Text(
-                'Analytics',
-                style: TextStyle(color: _purple, fontWeight: FontWeight.w700),
-              ),
-            ),
-            ListTile(
-              leading: const Icon(Icons.settings),
-              title: const Text('Settings'),
-              onTap: () => context.go('/settings'),
-            ),
-            ListTile(
-              leading: const Icon(Icons.logout),
-              title: const Text('Close'),
-              onTap: () => Navigator.of(context).pop(),
-            ),
-            const Spacer(),
-            const Padding(
-              padding: EdgeInsets.all(16),
-              child: Text(
-                'FlowSpace v1.0.0',
-                style: TextStyle(color: _textSecondary),
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

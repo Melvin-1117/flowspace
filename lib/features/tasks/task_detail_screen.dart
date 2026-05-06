@@ -6,15 +6,17 @@ import '../../core/models/task.dart';
 import '../../core/models/task_activity.dart';
 import '../../core/models/pomodoro_session.dart';
 import '../../core/providers/session_timer_provider.dart';
+import '../../widgets/app_drawer.dart';
 import '../pomodoro/providers/pomodoro_providers.dart';
 import 'providers/task_providers.dart';
 import 'widgets/dependency_manager.dart';
 import 'widgets/subtask_list.dart';
 
 class TaskDetailScreen extends ConsumerWidget {
-  const TaskDetailScreen({super.key, required this.taskId});
+  TaskDetailScreen({super.key, required this.taskId});
 
   final String taskId;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -28,9 +30,15 @@ class TaskDetailScreen extends ConsumerWidget {
         ref.watch(taskActivitiesProvider)[taskId] ?? <TaskActivity>[];
 
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: const Color(0xFF000000),
+      drawer: const AppDrawer(),
       appBar: AppBar(
         backgroundColor: const Color(0xFF000000),
+        leading: IconButton(
+          icon: const Icon(Icons.menu, color: Colors.white),
+          onPressed: () => _scaffoldKey.currentState?.openDrawer(),
+        ),
         title: const Text('Task Detail'),
       ),
       body: SafeArea(

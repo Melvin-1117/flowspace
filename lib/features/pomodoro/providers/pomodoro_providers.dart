@@ -5,6 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/models/focus_goal_settings.dart';
 import '../../../core/models/pomodoro_session.dart';
 import '../../../core/providers/isar_provider.dart';
+import 'ambient_sound_notifier.dart';
+import 'music_player_notifier.dart';
 import 'pomodoro_web_store.dart';
 import 'timer_notifier.dart';
 
@@ -342,4 +344,14 @@ class FocusGoalSettingsUpdater extends AsyncNotifier<void> {
 final focusGoalSettingsUpdaterProvider =
     AsyncNotifierProvider<FocusGoalSettingsUpdater, void>(
       FocusGoalSettingsUpdater.new,
+    );
+
+final musicPlayerProvider =
+    StateNotifierProvider<MusicPlayerNotifier, MusicState>(
+      (ref) => MusicPlayerNotifier(),
+    );
+
+final ambientSoundProvider =
+    StateNotifierProvider<AmbientSoundNotifier, AmbientState>(
+      (ref) => AmbientSoundNotifier(),
     );

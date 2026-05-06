@@ -3,8 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../widgets/app_drawer.dart';
 import 'providers/pomodoro_providers.dart';
+import 'widgets/ambient_sound_grid.dart';
 import 'widgets/daily_goal_card.dart';
+import 'widgets/now_playing_card.dart';
 import 'widgets/session_complete_overlay.dart';
 import 'widgets/session_history_card.dart';
 import 'widgets/session_type_toggle.dart';
@@ -21,6 +24,7 @@ class PomodoroScreen extends ConsumerStatefulWidget {
 class _PomodoroScreenState extends ConsumerState<PomodoroScreen>
     with WidgetsBindingObserver {
   bool _showOnboarding = false;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -59,7 +63,9 @@ class _PomodoroScreenState extends ConsumerState<PomodoroScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: const Color(0xFF000000),
+      drawer: const AppDrawer(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
         backgroundColor: const Color(0xFF7C3AED),
@@ -209,7 +215,7 @@ class _PomodoroScreenState extends ConsumerState<PomodoroScreen>
       child: Row(
         children: [
           IconButton(
-            onPressed: () {},
+            onPressed: () => _scaffoldKey.currentState?.openDrawer(),
             icon: const Icon(Icons.menu, color: Color(0xFF7C3AED)),
             splashRadius: 20,
           ),

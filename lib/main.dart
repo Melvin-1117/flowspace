@@ -18,6 +18,7 @@ import 'features/pomodoro/providers/pomodoro_web_store.dart';
 import 'features/tasks/task_board_screen.dart';
 import 'features/tasks/task_detail_screen.dart';
 import 'home_page.dart';
+import 'widgets/app_drawer.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,7 +38,7 @@ class _FlowSpaceAppState extends ConsumerState<FlowSpaceApp> {
   bool _restored = false;
 
   late final GoRouter _router = GoRouter(
-    initialLocation: '/tasks',
+    initialLocation: '/focus',
     routes: [
       GoRoute(path: '/focus', builder: (_, __) => const HomePage()),
       GoRoute(path: '/tasks', builder: (_, __) => const TaskBoardScreen()),
@@ -54,11 +55,11 @@ class _FlowSpaceAppState extends ConsumerState<FlowSpaceApp> {
       ),
       GoRoute(
         path: '/planner',
-        builder: (_, __) => const _PlaceholderScreen(title: 'Planner'),
+        builder: (_, __) => _PlaceholderScreen(title: 'Planner'),
       ),
       GoRoute(
         path: '/settings',
-        builder: (_, __) => const _PlaceholderScreen(title: 'Settings'),
+        builder: (_, __) => _PlaceholderScreen(title: 'Settings'),
       ),
     ],
   );
@@ -136,18 +137,45 @@ class _FlowSpaceAppState extends ConsumerState<FlowSpaceApp> {
 }
 
 class _PlaceholderScreen extends StatelessWidget {
-  const _PlaceholderScreen({required this.title});
+  _PlaceholderScreen({required this.title});
 
   final String title;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
+      backgroundColor: const Color(0xFF000000),
+      drawer: const AppDrawer(),
       appBar: AppBar(
         backgroundColor: const Color(0xFF000000),
-        title: Text(title),
+        leading: IconButton(
+          icon: const Icon(Icons.menu, color: Colors.white),
+          onPressed: () => _scaffoldKey.currentState?.openDrawer(),
+        ),
+        title: Text(title, style: const TextStyle(color: Colors.white)),
       ),
-      body: Center(child: Text('$title screen')),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              '$title screen',
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              'This feature is coming soon!',
+              style: TextStyle(color: Colors.grey, fontSize: 16),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

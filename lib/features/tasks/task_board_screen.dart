@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import '../../core/models/task.dart';
+import '../../widgets/app_drawer.dart';
 import 'providers/task_providers.dart';
 import 'widgets/filter_sheet.dart';
 import 'widgets/kanban_board.dart';
@@ -59,7 +60,7 @@ class _TaskBoardScreenState extends ConsumerState<TaskBoardScreen> {
       child: Scaffold(
         key: _scaffoldKey,
         backgroundColor: const Color(0xFF000000),
-        drawer: _buildDrawer(context),
+        drawer: const AppDrawer(),
         appBar: widget.embedInShell
             ? null
             : AppBar(
@@ -476,48 +477,6 @@ class _TaskBoardScreenState extends ConsumerState<TaskBoardScreen> {
                   ),
                 ),
               ),
-      ),
-    );
-  }
-
-  Widget _buildDrawer(BuildContext context) {
-    return Drawer(
-      width: MediaQuery.sizeOf(context).width * 0.75,
-      backgroundColor: const Color(0xFF0D0D0D),
-      child: SafeArea(
-        child: Column(
-          children: [
-            const ListTile(
-              leading: CircleAvatar(child: Text('FS')),
-              title: Text('FlowSpace User'),
-              subtitle: Text('student@flowspace.app'),
-            ),
-            const Divider(color: Color(0x22FFFFFF)),
-            ListTile(
-              leading: const Icon(Icons.analytics_outlined),
-              title: const Text('Analytics'),
-              onTap: () => context.go('/analytics'),
-            ),
-            ListTile(
-              leading: const Icon(Icons.settings),
-              title: const Text('Settings'),
-              onTap: () => context.go('/settings'),
-            ),
-            ListTile(
-              leading: const Icon(Icons.logout),
-              title: const Text('Logout'),
-              onTap: () => Navigator.of(context).pop(),
-            ),
-            const Spacer(),
-            const Padding(
-              padding: EdgeInsets.all(16),
-              child: Text(
-                'FlowSpace v1.0.0',
-                style: TextStyle(color: Color(0xFF555555)),
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }
