@@ -268,8 +268,17 @@ class TaskNotifier extends AsyncNotifier<List<Task>> {
         .where()
         .sortByCreatedAt()
         .findAll();
-    tasks.sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
-    return tasks;
+    final filtered =
+        tasks
+            .where(
+              (task) =>
+                  task.tag != 'planner_subject' &&
+                  task.tag != 'planner_milestone' &&
+                  task.tag != 'planner_focus_block',
+            )
+            .toList()
+          ..sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
+    return filtered;
   }
 
   Future<void> _reloadActivities(Isar isar) async {

@@ -233,6 +233,31 @@ class TimerNotifier extends Notifier<TimerState> {
     await _startForegroundNotification();
   }
 
+  Future<void> startFocusWithDuration({
+    required int durationSeconds,
+    String? linkedTaskId,
+    String? linkedTaskTitle,
+  }) async {
+    final safeDuration = durationSeconds <= 0 ? 1500 : durationSeconds;
+    _ticker?.cancel();
+    _runStartedAt = null;
+    _elapsedBeforeRun = Duration.zero;
+    _activeSession = null;
+    state = state.copyWith(
+      sessionType: SessionType.focus,
+      totalDurationSeconds: safeDuration,
+      remainingSeconds: safeDuration,
+      isRunning: false,
+      clearSessionStartAt: true,
+      clearLinkedTask: true,
+      clearOverlay: true,
+      clearSuggestedBreak: true,
+      lastTickAt: DateTime.now(),
+    );
+    await _persistTimerState();
+    await start(linkedTaskId: linkedTaskId, linkedTaskTitle: linkedTaskTitle);
+  }
+
   Future<void> pause() async {
     if (!state.isRunning) return;
     if (_runStartedAt != null) {

@@ -46,9 +46,22 @@ class SessionTimerNotifier extends Notifier<void> {
   @override
   void build() {}
 
-  Future<void> startTimer(PomodoroSession session) async {
+  Future<void> startTimer(
+    PomodoroSession session, {
+    int? customFocusDurationSeconds,
+  }) async {
     final timer = ref.read(timerNotifierProvider.notifier);
     final sessionType = SessionTypeFromName.fromName(session.sessionType);
+    if (sessionType == SessionType.focus &&
+        customFocusDurationSeconds != null &&
+        customFocusDurationSeconds > 0) {
+      await timer.startFocusWithDuration(
+        durationSeconds: customFocusDurationSeconds,
+        linkedTaskId: session.linkedTaskId,
+        linkedTaskTitle: session.linkedTaskTitle,
+      );
+      return;
+    }
     await timer.switchType(sessionType, force: true);
     await timer.start(
       linkedTaskId: session.linkedTaskId,

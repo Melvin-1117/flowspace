@@ -5,9 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../widgets/app_drawer.dart';
 import 'providers/pomodoro_providers.dart';
-import 'widgets/ambient_sound_grid.dart';
 import 'widgets/daily_goal_card.dart';
-import 'widgets/now_playing_card.dart';
 import 'widgets/session_complete_overlay.dart';
 import 'widgets/session_history_card.dart';
 import 'widgets/session_type_toggle.dart';
