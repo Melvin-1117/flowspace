@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:isar/isar.dart';
 
 import '../../../core/models/analytics_models.dart';
 import '../../../core/models/focus_goal_settings.dart';
@@ -406,8 +407,7 @@ final analyticsTargetDurationProvider = FutureProvider<int>((ref) async {
     return PomodoroWebStore.instance.ensureSettings().focusDuration;
   }
   final isar = await ref.watch(isarProvider.future);
-  final settings =
-      await (isar as dynamic).focusGoalSettings.get(1) as FocusGoalSettings?;
+  final settings = await isar.focusGoalSettings.get(1) as FocusGoalSettings?;
   return settings?.focusDuration ?? 1500;
 });
 
@@ -435,10 +435,7 @@ Future<List<PomodoroSession>> _loadCompletedSessions(Ref ref) async {
         .toList();
   }
   final isar = await ref.watch(isarProvider.future);
-  return await (isar as dynamic).pomodoroSessions
-          .filter()
-          .isCompletedEqualTo(true)
-          .findAll()
+  return await isar.pomodoroSessions.filter().isCompletedEqualTo(true).findAll()
       as List<PomodoroSession>;
 }
 
@@ -459,7 +456,7 @@ Future<List<PomodoroSession>> _loadCompletedSessionsInRange(
         .toList();
   }
   final isar = await ref.watch(isarProvider.future);
-  return await (isar as dynamic).pomodoroSessions
+  return await isar.pomodoroSessions
           .filter()
           .isCompletedEqualTo(true)
           .startTimeBetween(start, end)
@@ -473,8 +470,7 @@ Future<List<Task>> _loadTasks(Ref ref) async {
     return ref.watch(taskNotifierProvider.future);
   }
   final isar = await ref.watch(isarProvider.future);
-  return await (isar as dynamic).collection<Task>().where().findAll()
-      as List<Task>;
+  return await isar.tasks.where().findAll() as List<Task>;
 }
 
 List<Map<String, Object?>> _sessionRawRows(List<PomodoroSession> sessions) {

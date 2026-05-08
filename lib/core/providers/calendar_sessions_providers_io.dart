@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:isar/isar.dart';
 
 import '../models/pomodoro_session_isar.dart';
 import 'isar_provider.dart';
@@ -7,8 +8,9 @@ final sessionsByDateProvider =
     FutureProvider.family<List<PomodoroSession>, DateTime>((ref, day) async {
       final isar = await ref.watch(isarProvider.future);
       final normalized = DateTime(day.year, day.month, day.day);
-      final all = await (isar as dynamic).pomodoroSessions.where().findAll()
-          as List<PomodoroSession>;
+      final all =
+          await isar.pomodoroSessions.where().findAll()
+              as List<PomodoroSession>;
       return all
           .where((s) => _isSameCalendarDay(s.startTime, normalized))
           .toList();
@@ -16,8 +18,8 @@ final sessionsByDateProvider =
 
 final streakDaysProvider = FutureProvider<List<DateTime>>((ref) async {
   final isar = await ref.watch(isarProvider.future);
-  final sessions = await (isar as dynamic).pomodoroSessions.where().findAll()
-      as List<PomodoroSession>;
+  final sessions =
+      await isar.pomodoroSessions.where().findAll() as List<PomodoroSession>;
   final daysWithActivity = <DateTime>{};
   for (final s in sessions) {
     if (!s.isCompleted) continue;

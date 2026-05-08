@@ -82,9 +82,7 @@ class _FlowSpaceAppState extends ConsumerState<FlowSpaceApp> {
   Future<void> _restoreAppState() async {
     final settings = kIsWeb
         ? PomodoroWebStore.instance.ensureSettings()
-        : await (await ref.read(isarProvider.future) as dynamic)
-                  .focusGoalSettings
-                  .get(1)
+        : await (await ref.read(isarProvider.future)).focusGoalSettings.get(1)
               as FocusGoalSettings?;
     if (settings != null) {
       if (settings.wasTimerRunning && settings.killTimestamp != null) {

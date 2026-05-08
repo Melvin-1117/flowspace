@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/models/milestone.dart';
 import '../../../core/models/task.dart';
 import '../../../core/providers/isar_provider.dart';
+import 'package:isar/isar.dart';
 import '../../../core/services/notification_service.dart';
 import 'planner_providers.dart';
 import 'planner_storage.dart';
@@ -20,7 +21,7 @@ class MilestoneNotifier extends AsyncNotifier<List<Milestone>> {
     final isar = await ref.read(isarProvider.future);
     final existing = await _taskByUuid(isar, milestone.uuid);
     await isar.writeTxn(() async {
-      await (isar as dynamic).tasks.put(
+      await isar.tasks.put(
         PlannerStorage.fromMilestone(milestone, existing: existing),
       );
     });
@@ -103,7 +104,7 @@ class MilestoneNotifier extends AsyncNotifier<List<Milestone>> {
   Future<List<Milestone>> _load() async {
     if (kIsWeb) return const <Milestone>[];
     final isar = await ref.read(isarProvider.future);
-    final tasks = await (isar as dynamic).tasks.where().findAll() as List<Task>;
+    final tasks = await isar.tasks.where().findAll() as List<Task>;
     return tasks
         .where((task) => task.tag == plannerMilestoneTag)
         .map(PlannerStorage.toMilestone)
@@ -111,8 +112,8 @@ class MilestoneNotifier extends AsyncNotifier<List<Milestone>> {
       ..sort((a, b) => a.dueDate.compareTo(b.dueDate));
   }
 
-  Future<Task?> _taskByUuid(dynamic isar, String uuid) async {
-    final tasks = await (isar as dynamic).tasks.where().findAll() as List<Task>;
+  Future<Task?> _taskByUuid(Isar isar, String uuid) async {
+    final tasks = await isar.tasks.where().findAll() as List<Task>;
     try {
       return tasks.firstWhere(
         (task) => task.uuid == uuid && task.tag == plannerMilestoneTag,

@@ -5,6 +5,7 @@ import '../../../core/models/milestone.dart';
 import '../../../core/models/subject.dart';
 import '../../../core/models/task.dart';
 import '../../../core/providers/isar_provider.dart';
+import 'package:isar/isar.dart';
 import 'planner_providers.dart';
 import 'planner_storage.dart';
 
@@ -19,7 +20,7 @@ class SubjectNotifier extends AsyncNotifier<List<Subject>> {
     if (kIsWeb) return;
     final isar = await ref.read(isarProvider.future);
     await isar.writeTxn(() async {
-      await (isar as dynamic).tasks.put(PlannerStorage.fromSubject(subject));
+      await isar.tasks.put(PlannerStorage.fromSubject(subject));
     });
     state = AsyncData(await _load());
     ref.invalidate(allSubjectsProvider);
@@ -32,7 +33,7 @@ class SubjectNotifier extends AsyncNotifier<List<Subject>> {
     final isar = await ref.read(isarProvider.future);
     final existing = await _taskByUuid(isar, subject.uuid);
     await isar.writeTxn(() async {
-      await (isar as dynamic).tasks.put(
+      await isar.tasks.put(
         PlannerStorage.fromSubject(subject, existing: existing),
       );
     });
@@ -45,7 +46,7 @@ class SubjectNotifier extends AsyncNotifier<List<Subject>> {
   Future<void> deleteSubject(String uuid) async {
     if (kIsWeb) return;
     final isar = await ref.read(isarProvider.future);
-    final all = await (isar as dynamic).tasks.where().findAll() as List<Task>;
+    final all = await isar.tasks.where().findAll() as List<Task>;
     final toDelete = all
         .where((task) {
           if (task.tag == plannerSubjectTag && task.uuid == uuid) return true;
@@ -62,7 +63,7 @@ class SubjectNotifier extends AsyncNotifier<List<Subject>> {
         .map((task) => task.id);
     await isar.writeTxn(() async {
       for (final id in toDelete) {
-        await (isar as dynamic).tasks.delete(id);
+        await isar.tasks.delete(id);
       }
     });
     state = AsyncData(await _load());
@@ -126,7 +127,7 @@ class SubjectNotifier extends AsyncNotifier<List<Subject>> {
   Future<List<Subject>> _load() async {
     if (kIsWeb) return const <Subject>[];
     final isar = await ref.read(isarProvider.future);
-    final tasks = await (isar as dynamic).tasks.where().findAll() as List<Task>;
+    final tasks = await isar.tasks.where().findAll() as List<Task>;
     final subjects =
         tasks
             .where((task) => task.tag == plannerSubjectTag)
@@ -141,8 +142,8 @@ class SubjectNotifier extends AsyncNotifier<List<Subject>> {
     return subjects;
   }
 
-  Future<Task?> _taskByUuid(dynamic isar, String uuid) async {
-    final tasks = await (isar as dynamic).tasks.where().findAll() as List<Task>;
+  Future<Task?> _taskByUuid(Isar isar, String uuid) async {
+    final tasks = await isar.tasks.where().findAll() as List<Task>;
     try {
       return tasks.firstWhere(
         (task) => task.uuid == uuid && task.tag == plannerSubjectTag,

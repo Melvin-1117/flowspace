@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:isar/isar.dart';
 
 import '../../core/models/pomodoro_session.dart';
 import '../../core/providers/isar_provider.dart';
@@ -89,7 +90,7 @@ class SubjectDetailScreen extends ConsumerWidget {
                     ...sessions.map(
                       (session) => ListTile(
                         contentPadding: EdgeInsets.zero,
-                        title: Text(session.linkedTaskTitle),
+                        title: Text(session.linkedTaskTitle ?? ''),
                         subtitle: Text(
                           '${(session.actualDurationSeconds / 60).round()} mins • ${session.startTime}',
                         ),
@@ -127,7 +128,7 @@ final _subjectSessionsProvider =
     ) async {
       final isar = await ref.read(isarProvider.future);
       final all =
-          await (isar as dynamic).pomodoroSessions.where().findAll()
+          await isar.pomodoroSessions.where().findAll()
               as List<PomodoroSession>;
       return all.where((session) => session.linkedTaskId == subjectId).toList()
         ..sort((a, b) => b.startTime.compareTo(a.startTime));

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:isar/isar.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../core/models/focus_block.dart';
@@ -239,8 +240,7 @@ Future<List<PomodoroSession>> _loadSessions(Ref ref) async {
     return PomodoroWebStore.instance.sessions;
   }
   final isar = await ref.read(isarProvider.future);
-  return await (isar as dynamic).pomodoroSessions.where().findAll()
-      as List<PomodoroSession>;
+  return await isar.pomodoroSessions.where().findAll() as List<PomodoroSession>;
 }
 
 Future<double> _streakConsistency(Ref ref) async {
