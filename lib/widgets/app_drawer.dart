@@ -193,7 +193,7 @@ class AppDrawer extends StatelessWidget {
         style: TextStyle(color: Colors.grey[400], fontSize: 12),
       ),
       selected: isSelected,
-      selectedTileColor: const Color(0xFF7C3AED).withOpacity(0.1),
+      selectedTileColor: const Color(0xFF7C3AED).withValues(alpha: 0.1),
       onTap:
           onTap ??
           () {

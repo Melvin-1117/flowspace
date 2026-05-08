@@ -13,6 +13,8 @@ import 'core/services/notification_service.dart';
 import 'features/analytics/analytics_payload.dart';
 import 'features/analytics/analytics_screen.dart';
 import 'features/planner/planner_screen.dart';
+import 'features/planner/subject_detail_screen.dart';
+import 'features/planner/subject_list_screen.dart';
 import 'features/pomodoro/pomodoro_page.dart';
 import 'features/pomodoro/providers/pomodoro_providers.dart';
 import 'features/pomodoro/providers/pomodoro_web_store.dart';
@@ -55,6 +57,15 @@ class _FlowSpaceAppState extends ConsumerState<FlowSpaceApp> {
             AnalyticsScreen(payload: state.extra as AnalyticsPayload?),
       ),
       GoRoute(path: '/planner', builder: (_, __) => const PlannerScreen()),
+      GoRoute(
+        path: '/planner/subjects',
+        builder: (_, __) => const SubjectListScreen(),
+      ),
+      GoRoute(
+        path: '/planner/subjects/:subjectId',
+        builder: (_, state) =>
+            SubjectDetailScreen(subjectId: state.pathParameters['subjectId']!),
+      ),
       GoRoute(
         path: '/settings',
         builder: (_, __) => _PlaceholderScreen(title: 'Settings'),

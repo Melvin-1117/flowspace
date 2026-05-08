@@ -5,7 +5,6 @@ import '../../../core/models/milestone.dart';
 import '../../../core/models/subject.dart';
 import '../../../core/models/task.dart';
 import '../../../core/providers/isar_provider.dart';
-import '../../pomodoro/providers/pomodoro_web_store.dart';
 import 'planner_providers.dart';
 import 'planner_storage.dart';
 

@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../core/models/focus_block.dart';
 import '../../../core/models/pomodoro_session.dart';
@@ -8,7 +7,6 @@ import '../../../core/models/task.dart';
 import '../../../core/providers/isar_provider.dart';
 import '../../../core/services/notification_service.dart';
 import '../../../core/providers/session_timer_provider.dart';
-import '../../pomodoro/providers/timer_notifier.dart';
 import 'planner_providers.dart';
 import 'planner_storage.dart';
 
@@ -95,7 +93,7 @@ class FocusBlockNotifier extends AsyncNotifier<List<FocusBlock>> {
   Future<void> startFocusSession(FocusBlock block) async {
     final session = PomodoroSession()
       ..uuid = ''
-      ..sessionType = SessionType.focus.key
+      ..sessionType = 'focus'
       ..linkedTaskId = block.linkedSubjectId
       ..linkedTaskTitle = block.title
       ..startTime = DateTime.now()

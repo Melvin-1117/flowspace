@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/models/milestone.dart';
 import '../../../core/models/task.dart';
 import '../../../core/providers/isar_provider.dart';
-import '../../pomodoro/providers/pomodoro_web_store.dart';
+import '../../../core/services/notification_service.dart';
 import 'planner_providers.dart';
 import 'planner_storage.dart';
 
@@ -24,6 +24,22 @@ class MilestoneNotifier extends AsyncNotifier<List<Milestone>> {
         PlannerStorage.fromMilestone(milestone, existing: existing),
       );
     });
+    if (!milestone.isCompleted) {
+      for (final offset in [7, 1, 0]) {
+        await NotificationService.scheduleMilestoneReminder(
+          notificationId: reminderNotificationId(milestone.uuid, offset),
+          title: 'Milestone Reminder',
+          body: _milestoneBody(milestone.title, offset),
+          scheduledAt: DateTime(
+            milestone.dueDate.year,
+            milestone.dueDate.month,
+            milestone.dueDate.day,
+            9,
+          ).subtract(Duration(days: offset)),
+          payload: '/planner',
+        );
+      }
+    }
     state = AsyncData(await _load());
     ref.invalidate(allMilestonesProvider);
     ref.invalidate(nextMilestoneProvider);
@@ -105,6 +121,12 @@ class MilestoneNotifier extends AsyncNotifier<List<Milestone>> {
       return null;
     }
   }
+}
+
+String _milestoneBody(String title, int offsetDays) {
+  if (offsetDays == 7) return '$title in 7 days';
+  if (offsetDays == 1) return '$title is TOMORROW';
+  return '$title is TODAY';
 }
 
 extension _FirstOrNull<T> on Iterable<T> {

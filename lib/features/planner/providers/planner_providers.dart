@@ -8,8 +8,10 @@ import '../../../core/models/focus_block.dart';
 import '../../../core/models/milestone.dart';
 import '../../../core/models/pomodoro_session.dart';
 import '../../../core/models/subject.dart';
+import '../../../core/models/subject_module.dart';
 import '../../../core/models/task.dart';
 import '../../../core/providers/isar_provider.dart';
+import '../../../core/services/notification_service.dart';
 import '../../pomodoro/providers/pomodoro_web_store.dart';
 import 'focus_block_notifier.dart';
 import 'milestone_notifier.dart';
@@ -306,3 +308,50 @@ int reminderNotificationId(String uuid, int offset) {
 }
 
 bool isPlannerTask(Task task) => PlannerStorage.isPlannerRecord(task);
+
+// Re-schedules planner notifications from persisted records.
+final plannerNotificationBootstrapProvider = FutureProvider<void>((ref) async {
+  if (kIsWeb) return;
+  final milestones = await ref.watch(allMilestonesProvider.future);
+  final blocks = await ref.watch(focusBlockNotifierProvider.future);
+
+  for (final block in blocks) {
+    if (!block.reminderEnabled) continue;
+    await NotificationService.scheduleFocusBlockReminder(
+      notificationId: reminderNotificationId(
+        block.uuid,
+        block.reminderMinutesBefore,
+      ),
+      title: 'Focus Block Starting Soon',
+      body: '${block.title} in ${block.reminderMinutesBefore} mins',
+      scheduledAt: block.scheduledTime.subtract(
+        Duration(minutes: block.reminderMinutesBefore),
+      ),
+      payload: '/planner',
+    );
+  }
+
+  for (final milestone in milestones) {
+    if (milestone.isCompleted) continue;
+    for (final offset in [7, 1, 0]) {
+      await NotificationService.scheduleMilestoneReminder(
+        notificationId: reminderNotificationId(milestone.uuid, offset),
+        title: 'Milestone Reminder',
+        body: _milestoneReminderBody(milestone.title, offset),
+        scheduledAt: DateTime(
+          milestone.dueDate.year,
+          milestone.dueDate.month,
+          milestone.dueDate.day,
+          9,
+        ).subtract(Duration(days: offset)),
+        payload: '/planner',
+      );
+    }
+  }
+});
+
+String _milestoneReminderBody(String title, int offsetDays) {
+  if (offsetDays == 7) return '$title in 7 days';
+  if (offsetDays == 1) return '$title is TOMORROW';
+  return '$title is TODAY';
+}

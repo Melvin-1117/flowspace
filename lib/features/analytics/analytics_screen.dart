@@ -17,7 +17,6 @@ import 'widgets/weekly_velocity_chart.dart';
 
 const Color _screenBackground = Color(0xFF000000);
 const Color _textPrimary = Color(0xFFF0F0F0);
-const Color _textSecondary = Color(0xFF555555);
 const Color _purple = Color(0xFF7C3AED);
 const Duration _bannerAutoDismiss = Duration(seconds: 5);
 const Duration _fadeDuration = Duration(milliseconds: 420);
