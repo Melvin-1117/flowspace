@@ -4,7 +4,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:isar/isar.dart';
 
 import '../../../core/models/focus_goal_settings.dart';
+import '../../../core/models/focus_goal_settings_isar.dart';
 import '../../../core/models/pomodoro_session.dart';
+import '../../../core/models/pomodoro_session_isar.dart';
+import '../../../core/models/task.dart';
+import '../../../core/models/task_isar.dart';
 import '../../../core/providers/isar_provider.dart';
 import 'ambient_sound_notifier.dart';
 import 'music_player_notifier.dart';

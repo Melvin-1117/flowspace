@@ -7,8 +7,11 @@ import 'package:isar/isar.dart';
 
 import '../../../core/models/analytics_models.dart';
 import '../../../core/models/focus_goal_settings.dart';
+import '../../../core/models/focus_goal_settings_isar.dart';
 import '../../../core/models/pomodoro_session.dart';
+import '../../../core/models/pomodoro_session_isar.dart';
 import '../../../core/models/task.dart';
+import '../../../core/models/task_isar.dart';
 import '../../../core/providers/isar_provider.dart';
 import '../../pomodoro/providers/pomodoro_web_store.dart';
 import '../../tasks/providers/task_providers.dart';

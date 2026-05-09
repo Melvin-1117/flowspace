@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:isar/isar.dart';
 
 import '../../core/models/pomodoro_session.dart';
+import '../../core/models/pomodoro_session_isar.dart';
 import '../../core/providers/isar_provider.dart';
 import 'providers/planner_providers.dart';
 

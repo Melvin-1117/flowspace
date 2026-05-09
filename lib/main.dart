@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'core/models/focus_goal_settings.dart';
+import 'core/models/focus_goal_settings_isar.dart';
 import 'core/providers/isar_provider.dart';
 import 'core/services/foreground_timer_service.dart';
 import 'core/services/notification_service.dart';
