@@ -78,7 +78,16 @@ class AppDrawer extends StatelessWidget {
                         GoRouterState.of(context).uri.toString() == '/planner',
                   ),
 
-                  const Divider(color: Color(0x22FFFFFF), height: 32),
+                  // GitHub
+                  _buildDrawerItem(
+                    context,
+                    icon: Icons.code_outlined,
+                    title: 'GitHub',
+                    subtitle: 'Repository dashboard',
+                    route: '/settings',
+                    isSelected:
+                        GoRouterState.of(context).uri.toString() == '/settings',
+                  ),
 
                   // Analytics
                   _buildDrawerItem(
@@ -90,17 +99,6 @@ class AppDrawer extends StatelessWidget {
                     isSelected:
                         GoRouterState.of(context).uri.toString() ==
                         '/analytics',
-                  ),
-
-                  // Settings
-                  _buildDrawerItem(
-                    context,
-                    icon: Icons.code_outlined,
-                    title: 'GitHub',
-                    subtitle: 'Repository dashboard',
-                    route: '/settings',
-                    isSelected:
-                        GoRouterState.of(context).uri.toString() == '/settings',
                   ),
 
                   const Divider(color: Color(0x22FFFFFF), height: 32),
