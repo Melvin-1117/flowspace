@@ -549,8 +549,9 @@ class _TaskBoardScreenState extends ConsumerState<TaskBoardScreen> {
           label: 'Planner',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.settings_outlined),
-          label: 'Settings',
+          icon: Icon(Icons.code_outlined),
+          activeIcon: Icon(Icons.code),
+          label: 'GitHub',
         ),
       ],
     );

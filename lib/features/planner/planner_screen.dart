@@ -119,22 +119,26 @@ class _PlannerScreenState extends ConsumerState<PlannerScreen> {
                     ).animate().fadeIn().scale(begin: const Offset(0.8, 0.8)),
                     const SizedBox(height: 20),
                     Container(
-                      key: _milestoneSectionKey,
-                      child: nextMilestone.when(
-                        loading: () => const _PlannerSkeletonBox(height: 170),
-                        error: (_, __) => const _ErrorCard(
-                          message: 'Failed to load milestones',
-                        ),
-                        data: (milestone) => MilestoneCard(
-                          milestone: milestone,
-                          countdown: milestoneCountdown.valueOrNull,
-                          onAddMilestone: _openAddMilestoneSheet,
-                          onTap: milestone == null
-                              ? null
-                              : () => _openMilestoneDetailSheet(milestone),
-                        ),
-                      ),
-                    ).animate().fadeIn(delay: 100.ms).slideY(begin: 0.1, end: 0),
+                          key: _milestoneSectionKey,
+                          child: nextMilestone.when(
+                            loading: () =>
+                                const _PlannerSkeletonBox(height: 170),
+                            error: (_, __) => const _ErrorCard(
+                              message: 'Failed to load milestones',
+                            ),
+                            data: (milestone) => MilestoneCard(
+                              milestone: milestone,
+                              countdown: milestoneCountdown.valueOrNull,
+                              onAddMilestone: _openAddMilestoneSheet,
+                              onTap: milestone == null
+                                  ? null
+                                  : () => _openMilestoneDetailSheet(milestone),
+                            ),
+                          ),
+                        )
+                        .animate()
+                        .fadeIn(delay: 100.ms)
+                        .slideY(begin: 0.1, end: 0),
                     const SizedBox(height: 24),
                     Row(
                       key: _subjectsSectionKey,
@@ -169,9 +173,8 @@ class _PlannerScreenState extends ConsumerState<PlannerScreen> {
                           _PlannerSkeletonBox(height: 120),
                         ],
                       ),
-                      error: (_, __) => const _ErrorCard(
-                        message: 'Failed to load subjects',
-                      ),
+                      error: (_, __) =>
+                          const _ErrorCard(message: 'Failed to load subjects'),
                       data: (items) {
                         if (items.isEmpty) {
                           return const _EmptyPrompt(
@@ -183,15 +186,22 @@ class _PlannerScreenState extends ConsumerState<PlannerScreen> {
                           children: [
                             for (var i = 0; i < items.length; i++) ...[
                               SubjectMasteryCard(
-                                subject: items[i],
-                                index: i,
-                                hoursProvider: subjectHoursProvider(items[i].uuid),
-                                onTap: () => context.push(
-                                  '/planner/subjects/${items[i].uuid}',
-                                ),
-                              ).animate().fadeIn(
-                                    delay: Duration(milliseconds: 200 + (i * 80)),
-                                  ).slideY(begin: 0.1, end: 0),
+                                    subject: items[i],
+                                    index: i,
+                                    hoursProvider: subjectHoursProvider(
+                                      items[i].uuid,
+                                    ),
+                                    onTap: () => context.push(
+                                      '/planner/subjects/${items[i].uuid}',
+                                    ),
+                                  )
+                                  .animate()
+                                  .fadeIn(
+                                    delay: Duration(
+                                      milliseconds: 200 + (i * 80),
+                                    ),
+                                  )
+                                  .slideY(begin: 0.1, end: 0),
                               const SizedBox(height: 12),
                             ],
                           ],
@@ -208,7 +218,10 @@ class _PlannerScreenState extends ConsumerState<PlannerScreen> {
                         ),
                       ),
                       onPressed: _openAddSubjectSheet,
-                      icon: const Icon(Icons.add_circle_outline, color: Color(0xFF555555)),
+                      icon: const Icon(
+                        Icons.add_circle_outline,
+                        color: Color(0xFF555555),
+                      ),
                       label: const Text(
                         'Add New Subject',
                         style: TextStyle(color: Color(0xFF555555)),
@@ -216,13 +229,17 @@ class _PlannerScreenState extends ConsumerState<PlannerScreen> {
                     ),
                     const SizedBox(height: 24),
                     FocusBlockPlanner(
-                      sectionKey: _focusSectionKey,
-                      subjects: subjects.valueOrNull ?? const <Subject>[],
-                      blocks: focusBlocks.valueOrNull ?? const <FocusBlock>[],
-                      loading: focusBlocks.isLoading,
-                      onAddBlock: _openAddFocusBlockSheet,
-                      onOpenBlock: _openBlockDetails,
-                    ).animate().fadeIn(delay: 500.ms).slideY(begin: 0.1, end: 0),
+                          sectionKey: _focusSectionKey,
+                          subjects: subjects.valueOrNull ?? const <Subject>[],
+                          blocks:
+                              focusBlocks.valueOrNull ?? const <FocusBlock>[],
+                          loading: focusBlocks.isLoading,
+                          onAddBlock: _openAddFocusBlockSheet,
+                          onOpenBlock: _openBlockDetails,
+                        )
+                        .animate()
+                        .fadeIn(delay: 500.ms)
+                        .slideY(begin: 0.1, end: 0),
                   ],
                 ),
               ),
@@ -244,7 +261,10 @@ class _PlannerScreenState extends ConsumerState<PlannerScreen> {
           if (index == 4) context.go('/settings');
         },
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.timer_outlined), label: 'FOCUS'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.timer_outlined),
+            label: 'FOCUS',
+          ),
           BottomNavigationBarItem(
             icon: Icon(Icons.check_circle_outline),
             label: 'TASKS',
@@ -259,8 +279,9 @@ class _PlannerScreenState extends ConsumerState<PlannerScreen> {
             label: 'PLANNER',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings_outlined),
-            label: 'SETTINGS',
+            icon: Icon(Icons.code_outlined),
+            activeIcon: Icon(Icons.code),
+            label: 'GITHUB',
           ),
         ],
       ),
@@ -310,7 +331,8 @@ class _PlannerScreenState extends ConsumerState<PlannerScreen> {
                         autofocus: true,
                         onChanged: (_) => setModalState(() {}),
                         decoration: const InputDecoration(
-                          hintText: 'Search subjects, modules, milestones, blocks',
+                          hintText:
+                              'Search subjects, modules, milestones, blocks',
                           filled: true,
                           fillColor: Color(0xFF0D0D0D),
                           border: OutlineInputBorder(),
@@ -324,11 +346,11 @@ class _PlannerScreenState extends ConsumerState<PlannerScreen> {
                                 subtitle: 'Results are grouped by category',
                               )
                             : items.isEmpty
-                                ? const _EmptyPrompt(
-                                    title: 'No matches found',
-                                    subtitle: 'Try a different keyword',
-                                  )
-                                : _buildSearchGroupedList(items, scrollController),
+                            ? const _EmptyPrompt(
+                                title: 'No matches found',
+                                subtitle: 'Try a different keyword',
+                              )
+                            : _buildSearchGroupedList(items, scrollController),
                       ),
                     ],
                   ),
@@ -345,10 +367,10 @@ class _PlannerScreenState extends ConsumerState<PlannerScreen> {
     final key = (category == 'Subjects' || category == 'Modules')
         ? _subjectsSectionKey
         : (category == 'Milestones')
-            ? _milestoneSectionKey
-            : (category == 'Focus Blocks')
-                ? _focusSectionKey
-                : _healthSectionKey;
+        ? _milestoneSectionKey
+        : (category == 'Focus Blocks')
+        ? _focusSectionKey
+        : _healthSectionKey;
     if (key.currentContext != null) {
       Scrollable.ensureVisible(
         key.currentContext!,
@@ -463,9 +485,9 @@ class _PlannerScreenState extends ConsumerState<PlannerScreen> {
         onSubmit: (subject, examMilestone) async {
           await ref.read(subjectNotifierProvider.notifier).addSubject(subject);
           if (examMilestone != null) {
-            await ref.read(milestoneNotifierProvider.notifier).addMilestone(
-                  examMilestone,
-                );
+            await ref
+                .read(milestoneNotifierProvider.notifier)
+                .addMilestone(examMilestone);
           }
         },
       ),
@@ -473,7 +495,8 @@ class _PlannerScreenState extends ConsumerState<PlannerScreen> {
   }
 
   Future<void> _openAddMilestoneSheet() async {
-    final subjects = ref.read(allSubjectsProvider).valueOrNull ?? const <Subject>[];
+    final subjects =
+        ref.read(allSubjectsProvider).valueOrNull ?? const <Subject>[];
     final selected = subjects.isNotEmpty ? subjects.first.uuid : null;
     final due = DateTime.now().add(const Duration(days: 7));
     final milestone = Milestone(
@@ -482,7 +505,9 @@ class _PlannerScreenState extends ConsumerState<PlannerScreen> {
       description: 'Add details',
       linkedSubjectId: selected,
       dueDate: due,
-      priority: plannerPriorityFromRemainingDays(due.difference(DateTime.now()).inDays),
+      priority: plannerPriorityFromRemainingDays(
+        due.difference(DateTime.now()).inDays,
+      ),
       isCompleted: false,
       completedAt: null,
       checklistItems: const <String>['Prepare', 'Revise', 'Submit'],
@@ -507,7 +532,9 @@ class _PlannerScreenState extends ConsumerState<PlannerScreen> {
             .read(milestoneNotifierProvider.notifier)
             .completeMilestone(milestone.uuid),
         onEdit: (title, description, dueDate) async {
-          await ref.read(milestoneNotifierProvider.notifier).addMilestone(
+          await ref
+              .read(milestoneNotifierProvider.notifier)
+              .addMilestone(
                 Milestone(
                   id: milestone.id,
                   uuid: milestone.uuid,
@@ -530,7 +557,8 @@ class _PlannerScreenState extends ConsumerState<PlannerScreen> {
   }
 
   Future<void> _openAddFocusBlockSheet() async {
-    final subjects = ref.read(allSubjectsProvider).valueOrNull ?? const <Subject>[];
+    final subjects =
+        ref.read(allSubjectsProvider).valueOrNull ?? const <Subject>[];
     await showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
@@ -544,7 +572,8 @@ class _PlannerScreenState extends ConsumerState<PlannerScreen> {
   }
 
   Future<void> _openBlockDetails(FocusBlock block) async {
-    final subjects = ref.read(allSubjectsProvider).valueOrNull ?? const <Subject>[];
+    final subjects =
+        ref.read(allSubjectsProvider).valueOrNull ?? const <Subject>[];
     final subjectName = subjects
         .where((s) => s.uuid == block.linkedSubjectId)
         .map((s) => s.name)
@@ -642,13 +671,15 @@ class _PlannerSkeletonBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.infinity,
-      height: height,
-      decoration: BoxDecoration(
-        color: const Color(0xFF0D0D0D),
-        borderRadius: BorderRadius.circular(16),
-      ),
-    ).animate(onPlay: (controller) => controller.repeat(reverse: true)).fade(
+          width: double.infinity,
+          height: height,
+          decoration: BoxDecoration(
+            color: const Color(0xFF0D0D0D),
+            borderRadius: BorderRadius.circular(16),
+          ),
+        )
+        .animate(onPlay: (controller) => controller.repeat(reverse: true))
+        .fade(
           begin: 0.35,
           end: 0.8,
           duration: const Duration(milliseconds: 900),
@@ -683,10 +714,7 @@ class _EmptyPrompt extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 4),
-          Text(
-            subtitle,
-            style: const TextStyle(color: Color(0xFF555555)),
-          ),
+          Text(subtitle, style: const TextStyle(color: Color(0xFF555555))),
         ],
       ),
     );
@@ -708,10 +736,7 @@ class _ErrorCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: const Color(0xFFEF4444)),
       ),
-      child: Text(
-        message,
-        style: const TextStyle(color: Color(0xFFF0F0F0)),
-      ),
+      child: Text(message, style: const TextStyle(color: Color(0xFFF0F0F0))),
     );
   }
 }

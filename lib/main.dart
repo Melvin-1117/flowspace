@@ -19,10 +19,10 @@ import 'features/planner/subject_list_screen.dart';
 import 'features/pomodoro/pomodoro_page.dart';
 import 'features/pomodoro/providers/pomodoro_providers.dart';
 import 'features/pomodoro/providers/pomodoro_web_store.dart';
+import 'features/settings/pulse_dashboard_screen.dart';
 import 'features/tasks/task_board_screen.dart';
 import 'features/tasks/task_detail_screen.dart';
 import 'home_page.dart';
-import 'widgets/app_drawer.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -69,7 +69,7 @@ class _FlowSpaceAppState extends ConsumerState<FlowSpaceApp> {
       ),
       GoRoute(
         path: '/settings',
-        builder: (_, __) => _PlaceholderScreen(title: 'Settings'),
+        builder: (_, __) => const PulseDashboardScreen(),
       ),
     ],
   );
@@ -139,50 +139,6 @@ class _FlowSpaceAppState extends ConsumerState<FlowSpaceApp> {
         ),
         textTheme: GoogleFonts.interTextTheme(ThemeData.dark().textTheme),
         useMaterial3: true,
-      ),
-    );
-  }
-}
-
-class _PlaceholderScreen extends StatelessWidget {
-  _PlaceholderScreen({required this.title});
-
-  final String title;
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      backgroundColor: const Color(0xFF000000),
-      drawer: const AppDrawer(),
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF000000),
-        leading: IconButton(
-          icon: const Icon(Icons.menu, color: Colors.white),
-          onPressed: () => _scaffoldKey.currentState?.openDrawer(),
-        ),
-        title: Text(title, style: const TextStyle(color: Colors.white)),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              '$title screen',
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 16),
-            const Text(
-              'This feature is coming soon!',
-              style: TextStyle(color: Colors.grey, fontSize: 16),
-            ),
-          ],
-        ),
       ),
     );
   }

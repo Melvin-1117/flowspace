@@ -95,9 +95,9 @@ class AppDrawer extends StatelessWidget {
                   // Settings
                   _buildDrawerItem(
                     context,
-                    icon: Icons.settings_outlined,
-                    title: 'Settings',
-                    subtitle: 'App preferences',
+                    icon: Icons.code_outlined,
+                    title: 'GitHub',
+                    subtitle: 'Repository dashboard',
                     route: '/settings',
                     isSelected:
                         GoRouterState.of(context).uri.toString() == '/settings',

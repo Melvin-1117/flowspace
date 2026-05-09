@@ -112,8 +112,9 @@ class _PomodoroScreenState extends ConsumerState<PomodoroScreen>
             label: 'PLANNER',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings_outlined),
-            label: 'SETTINGS',
+            icon: Icon(Icons.code_outlined),
+            activeIcon: Icon(Icons.code),
+            label: 'GITHUB',
           ),
         ],
       ),

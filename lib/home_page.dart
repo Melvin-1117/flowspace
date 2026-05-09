@@ -138,9 +138,9 @@ class _HomePageState extends ConsumerState<HomePage> {
               label: 'PLANNER',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.settings_outlined),
-              activeIcon: Icon(Icons.settings),
-              label: 'SETTINGS',
+              icon: Icon(Icons.code_outlined),
+              activeIcon: Icon(Icons.code),
+              label: 'GITHUB',
             ),
           ],
         ),
