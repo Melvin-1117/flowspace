@@ -5,10 +5,13 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../core/constants/animation_tokens.dart';
 import '../../core/models/focus_block.dart';
 import '../../core/models/milestone.dart';
 import '../../core/models/subject.dart';
+import '../../widgets/app_bottom_nav.dart';
 import '../../widgets/app_drawer.dart';
+import '../../widgets/app_top_bar.dart';
 import '../tasks/widgets/profile_sheet.dart';
 import 'providers/planner_providers.dart';
 import 'providers/planner_storage.dart';
@@ -50,20 +53,8 @@ class _PlannerScreenState extends ConsumerState<PlannerScreen> {
       key: _scaffoldKey,
       backgroundColor: const Color(0xFF000000),
       drawer: const AppDrawer(),
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF000000),
-        leading: IconButton(
-          icon: const Icon(Icons.menu, color: Colors.white),
-          onPressed: () => _scaffoldKey.currentState?.openDrawer(),
-        ),
-        title: const Text(
-          'FlowSpace',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-          ),
-        ),
+      appBar: buildFlowSpaceAppBar(
+        scaffoldKey: _scaffoldKey,
         actions: [
           IconButton(
             icon: const Icon(Icons.search, color: Colors.grey),
@@ -198,7 +189,9 @@ class _PlannerScreenState extends ConsumerState<PlannerScreen> {
                                   .animate()
                                   .fadeIn(
                                     delay: Duration(
-                                      milliseconds: 200 + (i * 80),
+                                      milliseconds:
+                                          kPageStaggerStep.inMilliseconds * 2 +
+                                          (i * kPageStaggerStep.inMilliseconds),
                                     ),
                                   )
                                   .slideY(begin: 0.1, end: 0),
@@ -237,9 +230,9 @@ class _PlannerScreenState extends ConsumerState<PlannerScreen> {
                           onAddBlock: _openAddFocusBlockSheet,
                           onOpenBlock: _openBlockDetails,
                         )
-                        .animate()
-                        .fadeIn(delay: 500.ms)
-                        .slideY(begin: 0.1, end: 0),
+                         .animate()
+                         .fadeIn(delay: kPageStaggerStep * 6)
+                         .slideY(begin: 0.1, end: 0),
                   ],
                 ),
               ),
@@ -247,44 +240,7 @@ class _PlannerScreenState extends ConsumerState<PlannerScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: const Color(0xFF09090B),
-        selectedItemColor: const Color(0xFF7C3AED),
-        unselectedItemColor: const Color(0xFF7A7A83),
-        currentIndex: 3,
-        onTap: (index) {
-          if (index == 0) context.go('/focus');
-          if (index == 1) context.go('/tasks');
-          if (index == 2) context.go('/pomodoro');
-          if (index == 3) context.go('/planner');
-          if (index == 4) context.go('/settings');
-        },
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.timer_outlined),
-            label: 'FOCUS',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.check_circle_outline),
-            label: 'TASKS',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.hourglass_top_rounded),
-            label: 'POMO',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_today_outlined),
-            activeIcon: Icon(Icons.calendar_today),
-            label: 'PLANNER',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.code_outlined),
-            activeIcon: Icon(Icons.code),
-            label: 'GITHUB',
-          ),
-        ],
-      ),
+      bottomNavigationBar: const AppBottomNav(currentIndex: 3),
     );
   }
 
@@ -374,8 +330,8 @@ class _PlannerScreenState extends ConsumerState<PlannerScreen> {
     if (key.currentContext != null) {
       Scrollable.ensureVisible(
         key.currentContext!,
-        duration: const Duration(milliseconds: 350),
-        curve: Curves.easeOutCubic,
+        duration: kScrollToDuration,
+        curve: kScrollToCurve,
       );
     }
   }
@@ -682,7 +638,7 @@ class _PlannerSkeletonBox extends StatelessWidget {
         .fade(
           begin: 0.35,
           end: 0.8,
-          duration: const Duration(milliseconds: 900),
+          duration: kShimmerDuration,
         );
   }
 }

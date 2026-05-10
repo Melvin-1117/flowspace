@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/constants/animation_tokens.dart';
 import '../providers/pomodoro_providers.dart';
 
 class SessionTypeToggle extends ConsumerWidget {
@@ -25,7 +26,8 @@ class SessionTypeToggle extends ConsumerWidget {
             child: GestureDetector(
               onTap: () => onSwitchType(type),
               child: AnimatedContainer(
-                duration: const Duration(milliseconds: 180),
+                duration: kMicroDuration,
+                curve: kMicroCurve,
                 padding: const EdgeInsets.symmetric(vertical: 10),
                 decoration: BoxDecoration(
                   color: selected

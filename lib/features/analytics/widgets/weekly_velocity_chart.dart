@@ -2,6 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/constants/animation_tokens.dart';
 import '../../../core/models/analytics_models.dart';
 import 'analytics_empty_state.dart';
 import '../providers/analytics_providers.dart';
@@ -45,7 +46,7 @@ class _WeeklyVelocityChartState extends ConsumerState<WeeklyVelocityChart>
     super.initState();
     _barAnimationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 950),
+      duration: kChartDuration,
     )..forward();
   }
 

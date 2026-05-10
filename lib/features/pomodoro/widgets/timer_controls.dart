@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/constants/animation_tokens.dart';
 import '../providers/pomodoro_providers.dart';
 
 class TimerControls extends ConsumerWidget {
@@ -111,7 +112,8 @@ class _ScaleTapButtonState extends State<_ScaleTapButton> {
       },
       child: AnimatedScale(
         scale: _pressed ? 0.94 : 1,
-        duration: const Duration(milliseconds: 100),
+        duration: kMicroDuration,
+        curve: kMicroCurve,
         child: widget.child,
       ),
     );

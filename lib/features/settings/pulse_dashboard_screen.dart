@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../widgets/app_drawer.dart';
+import '../../widgets/app_top_bar.dart';
 
 const Color _bg = Color(0xFF000000);
 const Color _surface = Color(0xFF0D0D0D);
@@ -28,20 +29,8 @@ class _PulseDashboardScreenState extends State<PulseDashboardScreen> {
       key: _scaffoldKey,
       backgroundColor: _bg,
       drawer: const AppDrawer(),
-      appBar: AppBar(
-        backgroundColor: _bg,
-        elevation: 0,
-        leading: IconButton(
-          onPressed: () => _scaffoldKey.currentState?.openDrawer(),
-          icon: const Icon(Icons.menu, color: _primary),
-        ),
-        title: Text(
-          'FlowSpace',
-          style: GoogleFonts.spaceGrotesk(
-            color: Colors.white,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
+      appBar: buildFlowSpaceAppBar(
+        scaffoldKey: _scaffoldKey,
         actions: const [
           Padding(
             padding: EdgeInsets.only(right: 16),

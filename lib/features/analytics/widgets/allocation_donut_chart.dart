@@ -2,6 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/constants/animation_tokens.dart';
 import '../../../core/models/analytics_models.dart';
 import 'analytics_empty_state.dart';
 import '../providers/analytics_providers.dart';
@@ -74,8 +75,8 @@ class _AllocationDonutChartState extends ConsumerState<AllocationDonutChart> {
                   children: [
                     TweenAnimationBuilder<double>(
                       tween: Tween<double>(begin: 0, end: 1),
-                      duration: const Duration(milliseconds: 900),
-                      curve: Curves.easeOutCubic,
+                      duration: kChartDuration,
+                      curve: kChartCurve,
                       builder: (_, progress, __) {
                         return PieChart(
                           PieChartData(

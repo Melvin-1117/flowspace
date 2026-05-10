@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/constants/animation_tokens.dart';
 import '../../../core/models/subject.dart';
 
 class SubjectMasteryCard extends ConsumerWidget {
@@ -116,8 +117,8 @@ class SubjectMasteryCard extends ConsumerWidget {
                 borderRadius: BorderRadius.circular(2),
                 child: TweenAnimationBuilder<double>(
                   tween: Tween<double>(begin: 0, end: progress / 100),
-                  duration: const Duration(milliseconds: 600),
-                  curve: Curves.easeOutCubic,
+                  duration: kChartDuration,
+                  curve: kChartCurve,
                   builder: (context, value, _) {
                     return LinearProgressIndicator(
                       value: value,
@@ -147,7 +148,7 @@ class SubjectMasteryCard extends ConsumerWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                ).animate().scale(duration: 400.ms),
+                ).animate().scale(duration: kMountDuration),
               ],
             ],
           ),

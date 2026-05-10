@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../widgets/app_bottom_nav.dart';
 import '../../widgets/app_drawer.dart';
+import '../../widgets/app_top_bar.dart';
 import 'providers/pomodoro_providers.dart';
 import 'widgets/daily_goal_card.dart';
 import 'widgets/session_complete_overlay.dart';
@@ -70,51 +71,20 @@ class _PomodoroScreenState extends ConsumerState<PomodoroScreen>
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
         child: const Icon(Icons.add, color: Colors.white),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: const Color(0xFF09090B),
-        selectedItemColor: const Color(0xFF7C3AED),
-        unselectedItemColor: const Color(0xFF7A7A83),
-        selectedLabelStyle: const TextStyle(
-          fontSize: 10,
-          fontWeight: FontWeight.w700,
-          letterSpacing: 1,
-        ),
-        unselectedLabelStyle: const TextStyle(
-          fontSize: 10,
-          fontWeight: FontWeight.w600,
-          letterSpacing: 1,
-        ),
-        currentIndex: 2,
-        onTap: (index) {
-          if (index == 0) context.go('/focus');
-          if (index == 1) context.go('/tasks');
-          if (index == 2) context.go('/pomodoro');
-          if (index == 3) context.go('/planner');
-          if (index == 4) context.go('/settings');
-        },
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.timer_outlined),
-            label: 'FOCUS',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.check_circle_outline),
-            label: 'TASKS',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.hourglass_top_rounded),
-            activeIcon: Icon(Icons.hourglass_bottom_rounded),
-            label: 'POMO',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_today_outlined),
-            label: 'PLANNER',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.code_outlined),
-            activeIcon: Icon(Icons.code),
-            label: 'GITHUB',
+      bottomNavigationBar: const AppBottomNav(currentIndex: 2),
+      appBar: buildFlowSpaceAppBar(
+        scaffoldKey: _scaffoldKey,
+        actions: [
+          Container(
+            width: 34,
+            height: 34,
+            margin: const EdgeInsets.only(right: 12),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(99),
+              border: Border.all(color: const Color(0x33FFFFFF)),
+              color: const Color(0xFF121212),
+            ),
+            child: const Icon(Icons.person, size: 18, color: Color(0xFFB0B0B0)),
           ),
         ],
       ),
@@ -123,7 +93,6 @@ class _PomodoroScreenState extends ConsumerState<PomodoroScreen>
           children: [
             Column(
               children: [
-                _buildTopBar(),
                 const Divider(height: 1, color: Color(0x16FFFFFF)),
                 Expanded(
                   child: SingleChildScrollView(
@@ -206,39 +175,5 @@ class _PomodoroScreenState extends ConsumerState<PomodoroScreen>
     }
     if (!shouldSwitch) return;
     await ref.read(timerNotifierProvider.notifier).switchType(nextType);
-  }
-
-  Widget _buildTopBar() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-      child: Row(
-        children: [
-          IconButton(
-            onPressed: () => _scaffoldKey.currentState?.openDrawer(),
-            icon: const Icon(Icons.menu, color: Color(0xFF7C3AED)),
-            splashRadius: 20,
-          ),
-          const Text(
-            'FlowSpace',
-            style: TextStyle(
-              color: Color(0xFFF0F0F0),
-              fontWeight: FontWeight.w700,
-              fontSize: 20,
-            ),
-          ),
-          const Spacer(),
-          Container(
-            width: 34,
-            height: 34,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(99),
-              border: Border.all(color: const Color(0x33FFFFFF)),
-              color: const Color(0xFF121212),
-            ),
-            child: const Icon(Icons.person, size: 18, color: Color(0xFFB0B0B0)),
-          ),
-        ],
-      ),
-    );
   }
 }

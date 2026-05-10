@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../core/constants/animation_tokens.dart';
 import '../../../core/models/github_event_cache.dart';
 import '../providers/pulse_providers.dart';
 import 'event_stream_item.dart';
@@ -154,8 +155,8 @@ class _EventStreamTerminalState extends ConsumerState<EventStreamTerminal> {
                         if (_controller.hasClients) {
                           _controller.animateTo(
                             _controller.position.maxScrollExtent,
-                            duration: const Duration(milliseconds: 250),
-                            curve: Curves.easeOut,
+                            duration: kScrollToDuration,
+                            curve: kScrollToCurve,
                           );
                         }
                       },

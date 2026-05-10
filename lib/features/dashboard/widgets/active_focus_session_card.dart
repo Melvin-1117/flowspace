@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
+import '../../../core/constants/animation_tokens.dart';
 import '../../../core/models/pomodoro_session.dart';
 import '../../../core/providers/session_timer_provider.dart';
 
@@ -14,10 +15,10 @@ class ActiveFocusSessionCard extends ConsumerWidget {
     final session = ref.watch(activeSessionProvider);
 
     return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 400),
-      reverseDuration: const Duration(milliseconds: 300),
-      switchInCurve: Curves.easeOutCubic,
-      switchOutCurve: Curves.easeInCubic,
+      duration: kMountDuration,
+      reverseDuration: kUnmountDuration,
+      switchInCurve: kMountCurve,
+      switchOutCurve: kUnmountCurve,
       transitionBuilder: (Widget child, Animation<double> animation) {
         return FadeTransition(
           opacity: animation,
@@ -92,14 +93,14 @@ class _SessionCardContent extends ConsumerWidget {
                       .scale(
                         begin: const Offset(1, 1),
                         end: const Offset(1.4, 1.4),
-                        duration: 600.ms,
-                        curve: Curves.easeInOut,
+                        duration: kPulseDuration,
+                        curve: kPulseCurve,
                       )
                       .fade(
                         begin: 1.0,
                         end: 0.4,
-                        duration: 600.ms,
-                        curve: Curves.easeInOut,
+                        duration: kPulseDuration,
+                        curve: kPulseCurve,
                       ),
                   const SizedBox(width: 12),
                   const Text(
@@ -187,7 +188,8 @@ class _SessionCardContent extends ConsumerWidget {
                           }
                         },
                         child: AnimatedContainer(
-                          duration: const Duration(milliseconds: 200),
+                          duration: kMicroDuration,
+                          curve: kMicroCurve,
                           decoration: BoxDecoration(
                             color: isRunning
                                 ? const Color(0xFF7C3AED)
@@ -252,7 +254,8 @@ class _SessionCardContent extends ConsumerWidget {
               ),
 
               AnimatedSize(
-                duration: const Duration(milliseconds: 300),
+                duration: kMountDuration,
+                curve: kMountCurve,
                 child: !isRunning
                     ? Padding(
                         padding: const EdgeInsets.only(top: 12.0),
@@ -302,7 +305,8 @@ class _ScaleButtonState extends State<_ScaleButton>
       onTapCancel: () => setState(() => _isPressed = false),
       child: AnimatedScale(
         scale: _isPressed ? 0.96 : 1.0,
-        duration: const Duration(milliseconds: 100),
+        duration: kMicroDuration,
+        curve: kMicroCurve,
         child: widget.child,
       ),
     );

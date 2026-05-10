@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/constants/animation_tokens.dart';
 import '../../widgets/app_drawer.dart';
+import '../../widgets/app_top_bar.dart';
 import 'analytics_payload.dart';
 import 'providers/analytics_providers.dart';
 import 'widgets/allocation_donut_chart.dart';
@@ -19,8 +21,6 @@ const Color _screenBackground = Color(0xFF000000);
 const Color _textPrimary = Color(0xFFF0F0F0);
 const Color _purple = Color(0xFF7C3AED);
 const Duration _bannerAutoDismiss = Duration(seconds: 5);
-const Duration _fadeDuration = Duration(milliseconds: 420);
-const Duration _slideDuration = Duration(milliseconds: 420);
 
 class AnalyticsScreen extends ConsumerStatefulWidget {
   const AnalyticsScreen({this.payload, super.key});
@@ -66,21 +66,8 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
       key: _scaffoldKey,
       backgroundColor: _screenBackground,
       drawer: const AppDrawer(),
-      appBar: AppBar(
-        backgroundColor: _screenBackground,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.menu, color: _purple),
-          onPressed: () => _scaffoldKey.currentState?.openDrawer(),
-        ),
-        title: const Text(
-          'FlowSpace',
-          style: TextStyle(
-            fontWeight: FontWeight.w700,
-            color: _textPrimary,
-            fontSize: 28,
-          ),
-        ),
+      appBar: buildFlowSpaceAppBar(
+        scaffoldKey: _scaffoldKey,
         actions: const [
           Padding(
             padding: EdgeInsets.only(right: 16),
@@ -123,68 +110,80 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
           const SizedBox(height: 16),
           const FocusRecordCard()
               .animate()
-              .fadeIn(duration: _fadeDuration, delay: 0.ms)
+              .fadeIn(duration: kPageEntryDuration, delay: 0.ms)
               .slideY(
                 begin: 0.06,
                 end: 0,
-                duration: _slideDuration,
+                duration: kPageEntryDuration,
                 delay: 0.ms,
-                curve: Curves.easeOutCubic,
+                curve: kPageEntryCurve,
               ),
           const SizedBox(height: 16),
           const WeeklyVelocityChart()
               .animate()
-              .fadeIn(duration: _fadeDuration, delay: 100.ms)
+              .fadeIn(duration: kPageEntryDuration, delay: kPageStaggerStep)
               .slideY(
                 begin: 0.06,
                 end: 0,
-                duration: _slideDuration,
-                delay: 100.ms,
-                curve: Curves.easeOutCubic,
+                duration: kPageEntryDuration,
+                delay: kPageStaggerStep,
+                curve: kPageEntryCurve,
               ),
           const SizedBox(height: 16),
           const AllocationDonutChart()
               .animate()
-              .fadeIn(duration: _fadeDuration, delay: 200.ms)
+              .fadeIn(
+                duration: kPageEntryDuration,
+                delay: kPageStaggerStep * 2,
+              )
               .slideY(
                 begin: 0.06,
                 end: 0,
-                duration: _slideDuration,
-                delay: 200.ms,
-                curve: Curves.easeOutCubic,
+                duration: kPageEntryDuration,
+                delay: kPageStaggerStep * 2,
+                curve: kPageEntryCurve,
               ),
           const SizedBox(height: 16),
           const ConsistencyArchiveHeatmap()
               .animate()
-              .fadeIn(duration: _fadeDuration, delay: 300.ms)
+              .fadeIn(
+                duration: kPageEntryDuration,
+                delay: kPageStaggerStep * 3,
+              )
               .slideY(
                 begin: 0.06,
                 end: 0,
-                duration: _slideDuration,
-                delay: 300.ms,
-                curve: Curves.easeOutCubic,
+                duration: kPageEntryDuration,
+                delay: kPageStaggerStep * 3,
+                curve: kPageEntryCurve,
               ),
           const SizedBox(height: 16),
           const AvgSessionCard()
               .animate()
-              .fadeIn(duration: _fadeDuration, delay: 400.ms)
+              .fadeIn(
+                duration: kPageEntryDuration,
+                delay: kPageStaggerStep * 4,
+              )
               .slideY(
                 begin: 0.06,
                 end: 0,
-                duration: _slideDuration,
-                delay: 400.ms,
-                curve: Curves.easeOutCubic,
+                duration: kPageEntryDuration,
+                delay: kPageStaggerStep * 4,
+                curve: kPageEntryCurve,
               ),
           const SizedBox(height: 16),
           const TaskCompletionCard()
               .animate()
-              .fadeIn(duration: _fadeDuration, delay: 400.ms)
+              .fadeIn(
+                duration: kPageEntryDuration,
+                delay: kPageStaggerStep * 5,
+              )
               .slideY(
                 begin: 0.06,
                 end: 0,
-                duration: _slideDuration,
-                delay: 400.ms,
-                curve: Curves.easeOutCubic,
+                duration: kPageEntryDuration,
+                delay: kPageStaggerStep * 5,
+                curve: kPageEntryCurve,
               ),
           const SizedBox(height: 24),
         ],

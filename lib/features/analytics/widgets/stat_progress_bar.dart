@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-const Duration _progressAnimationDuration = Duration(milliseconds: 600);
-const Curve _progressAnimationCurve = Curves.easeOutCubic;
+import '../../../core/constants/animation_tokens.dart';
+
 
 class StatProgressBar extends StatelessWidget {
   const StatProgressBar({
@@ -24,8 +24,8 @@ class StatProgressBar extends StatelessWidget {
       borderRadius: BorderRadius.circular(height / 2),
       child: TweenAnimationBuilder<double>(
         tween: Tween<double>(begin: 0, end: clampedValue),
-        duration: _progressAnimationDuration,
-        curve: _progressAnimationCurve,
+        duration: kChartDuration,
+        curve: kChartCurve,
         builder: (context, animatedValue, _) {
           return LinearProgressIndicator(
             value: animatedValue,

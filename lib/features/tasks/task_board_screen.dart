@@ -4,7 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import '../../core/models/task.dart';
+import '../../widgets/app_bottom_nav.dart';
 import '../../widgets/app_drawer.dart';
+import '../../widgets/app_top_bar.dart';
 import 'providers/task_providers.dart';
 import 'widgets/filter_sheet.dart';
 import 'widgets/kanban_board.dart';
@@ -63,13 +65,8 @@ class _TaskBoardScreenState extends ConsumerState<TaskBoardScreen> {
         drawer: const AppDrawer(),
         appBar: widget.embedInShell
             ? null
-            : AppBar(
-                backgroundColor: const Color(0xFF000000),
-                elevation: 0,
-                leading: IconButton(
-                  icon: const Icon(Icons.menu),
-                  onPressed: () => _scaffoldKey.currentState?.openDrawer(),
-                ),
+            : buildFlowSpaceAppBar(
+                scaffoldKey: _scaffoldKey,
                 actions: [
                   Stack(
                     children: [
@@ -417,7 +414,7 @@ class _TaskBoardScreenState extends ConsumerState<TaskBoardScreen> {
         ),
         bottomNavigationBar: widget.embedInShell
             ? null
-            : _buildBottomNavigation(context),
+            : const AppBottomNav(currentIndex: 1),
         bottomSheet: selected.isEmpty
             ? null
             : Container(
@@ -516,44 +513,6 @@ class _TaskBoardScreenState extends ConsumerState<TaskBoardScreen> {
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildBottomNavigation(BuildContext context) {
-    return BottomNavigationBar(
-      type: BottomNavigationBarType.fixed,
-      backgroundColor: const Color(0xFF000000),
-      selectedItemColor: const Color(0xFF7C3AED),
-      unselectedItemColor: const Color(0xFF555555),
-      currentIndex: 1,
-      onTap: (index) {
-        if (index == 0) context.go('/focus');
-        if (index == 1) context.go('/tasks');
-        if (index == 2) context.go('/pomodoro');
-        if (index == 3) context.go('/planner');
-        if (index == 4) context.go('/settings');
-      },
-      items: const [
-        BottomNavigationBarItem(
-          icon: Icon(Icons.timer_outlined),
-          label: 'Focus',
-        ),
-        BottomNavigationBarItem(icon: Icon(Icons.check_circle), label: 'Tasks'),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.hourglass_top_rounded),
-          activeIcon: Icon(Icons.hourglass_bottom_rounded),
-          label: 'Pomo',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.calendar_month_outlined),
-          label: 'Planner',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.code_outlined),
-          activeIcon: Icon(Icons.code),
-          label: 'GitHub',
-        ),
-      ],
     );
   }
 

@@ -3,15 +3,17 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../core/constants/animation_tokens.dart';
 import '../../core/models/task.dart';
 import '../../core/providers/isar_provider.dart';
+import '../../widgets/app_bottom_nav.dart';
+import '../../widgets/app_top_bar.dart';
 import 'providers/github_sync_notifier.dart';
 import 'providers/pulse_providers.dart';
 import 'services/github_service.dart';
@@ -77,20 +79,8 @@ class _PulseScreenState extends ConsumerState<PulseScreen> {
         onDisconnect: _disconnectGitHub,
         onSettingsTap: () => Navigator.of(context).pop(),
       ),
-      appBar: AppBar(
-        backgroundColor: pulseBackground,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.menu, color: pulsePrimary),
-          onPressed: () => _scaffoldKey.currentState?.openDrawer(),
-        ),
-        title: Text(
-          'FlowSpace',
-          style: GoogleFonts.inter(
-            color: pulseText,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
+      appBar: buildFlowSpaceAppBar(
+        scaffoldKey: _scaffoldKey,
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 12),
@@ -192,23 +182,23 @@ class _PulseScreenState extends ConsumerState<PulseScreen> {
               const SizedBox(height: 14),
               const ContributionHeatmap()
                   .animate()
-                  .fadeIn(delay: 100.ms)
-                  .slideY(begin: 0.05, end: 0, delay: 100.ms),
+                  .fadeIn(delay: kPageStaggerStep)
+                  .slideY(begin: 0.05, end: 0, delay: kPageStaggerStep),
               const SizedBox(height: 14),
               const LanguageDonutChart()
                   .animate()
-                  .fadeIn(delay: 200.ms)
-                  .slideY(begin: 0.05, end: 0, delay: 200.ms),
+                  .fadeIn(delay: kPageStaggerStep * 2)
+                  .slideY(begin: 0.05, end: 0, delay: kPageStaggerStep * 2),
               const SizedBox(height: 14),
               const EventStreamTerminal()
                   .animate()
-                  .fadeIn(delay: 300.ms)
-                  .slideY(begin: 0.05, end: 0, delay: 300.ms),
+                  .fadeIn(delay: kPageStaggerStep * 3)
+                  .slideY(begin: 0.05, end: 0, delay: kPageStaggerStep * 3),
               const SizedBox(height: 14),
               const TopRepositoriesSection()
                   .animate()
-                  .fadeIn(delay: 400.ms)
-                  .slideY(begin: 0.05, end: 0, delay: 400.ms),
+                  .fadeIn(delay: kPageStaggerStep * 4)
+                  .slideY(begin: 0.05, end: 0, delay: kPageStaggerStep * 4),
             ],
           );
         },
@@ -226,44 +216,7 @@ class _PulseScreenState extends ConsumerState<PulseScreen> {
         backgroundColor: pulsePrimary,
         child: const Icon(Icons.add, color: Colors.white),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: pulseCard,
-        selectedItemColor: pulsePrimary,
-        unselectedItemColor: const Color(0xFF7A7A83),
-        currentIndex: 4,
-        onTap: (index) {
-          if (index == 0) context.go('/focus');
-          if (index == 1) context.go('/tasks');
-          if (index == 2) context.go('/pomodoro');
-          if (index == 3) context.go('/planner');
-          if (index == 4) context.go('/settings');
-        },
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.timer_outlined),
-            label: 'FOCUS',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.check_circle_outline),
-            label: 'TASKS',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.hourglass_top_rounded),
-            activeIcon: Icon(Icons.hourglass_bottom_rounded),
-            label: 'POMO',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_today_outlined),
-            label: 'PLANNER',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.code_outlined),
-            activeIcon: Icon(Icons.code),
-            label: 'GITHUB',
-          ),
-        ],
-      ),
+      bottomNavigationBar: const AppBottomNav(currentIndex: 4),
     );
   }
 

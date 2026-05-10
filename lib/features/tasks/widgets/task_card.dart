@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../../core/constants/animation_tokens.dart';
 import '../../../core/models/task.dart';
 import '../providers/task_providers.dart';
 import 'dependency_manager.dart';
@@ -41,7 +42,8 @@ class TaskCard extends ConsumerWidget {
         context.push('/tasks/${task.uuid}');
       },
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
+        duration: kMicroDuration,
+        curve: kMicroCurve,
         margin: const EdgeInsets.only(bottom: 10),
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(

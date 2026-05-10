@@ -1,12 +1,13 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'features/dashboard/widgets/calendar_widget.dart';
 import 'features/dashboard/widgets/active_focus_session_card.dart';
 import 'core/providers/session_timer_provider.dart';
 import 'core/models/pomodoro_session.dart';
+import 'widgets/app_bottom_nav.dart';
 import 'widgets/app_drawer.dart';
+import 'widgets/app_top_bar.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
@@ -23,21 +24,9 @@ class _HomePageState extends ConsumerState<HomePage> {
     return Scaffold(
       key: _scaffoldKey,
       drawer: const AppDrawer(),
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.menu, color: Colors.white),
-          onPressed: () => _scaffoldKey.currentState?.openDrawer(),
-        ),
-        title: const Text(
-          'FlowSpace',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-            fontSize: 20,
-          ),
-        ),
+      appBar: buildFlowSpaceAppBar(
+        scaffoldKey: _scaffoldKey,
+        useTransparentBackground: true,
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16.0),
@@ -98,53 +87,7 @@ class _HomePageState extends ConsumerState<HomePage> {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         child: const Icon(Icons.bolt, color: Colors.white, size: 30),
       ),
-      bottomNavigationBar: Theme(
-        data: Theme.of(context).copyWith(
-          splashColor: Colors.transparent,
-          highlightColor: Colors.transparent,
-        ),
-        child: BottomNavigationBar(
-          backgroundColor: const Color(0xFF0C0910),
-          type: BottomNavigationBarType.fixed,
-          selectedItemColor: const Color(0xFF8B5CF6),
-          unselectedItemColor: Colors.grey[600],
-          currentIndex: 0,
-          onTap: (index) {
-            if (index == 0) context.go('/focus');
-            if (index == 1) context.go('/tasks');
-            if (index == 2) context.go('/pomodoro');
-            if (index == 3) context.go('/planner');
-            if (index == 4) context.go('/settings');
-          },
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.timer_outlined),
-              activeIcon: Icon(Icons.timer),
-              label: 'FOCUS',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.check_circle_outline),
-              activeIcon: Icon(Icons.check_circle),
-              label: 'TASKS',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.hourglass_top_rounded),
-              activeIcon: Icon(Icons.hourglass_bottom_rounded),
-              label: 'POMO',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.calendar_today_outlined),
-              activeIcon: Icon(Icons.calendar_today),
-              label: 'PLANNER',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.code_outlined),
-              activeIcon: Icon(Icons.code),
-              label: 'GITHUB',
-            ),
-          ],
-        ),
-      ),
+      bottomNavigationBar: const AppBottomNav(currentIndex: 0),
     );
   }
 
