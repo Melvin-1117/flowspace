@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import '../../../app/theme.dart';
 
 class TimerRingPainter extends CustomPainter {
   const TimerRingPainter({required this.progress, required this.sessionColor});
@@ -15,7 +16,7 @@ class TimerRingPainter extends CustomPainter {
     final rect = Rect.fromCircle(center: center, radius: radius);
 
     final background = Paint()
-      ..color = const Color(0xFF1A1A1A)
+      ..color = AppTheme.surfaceElevated
       ..style = PaintingStyle.stroke
       ..strokeWidth = 6;
     canvas.drawCircle(center, radius, background);

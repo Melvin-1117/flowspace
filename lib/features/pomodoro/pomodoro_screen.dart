@@ -12,6 +12,7 @@ import 'widgets/session_history_card.dart';
 import 'widgets/session_type_toggle.dart';
 import 'widgets/timer_controls.dart';
 import 'widgets/timer_ring.dart';
+import '../../app/theme.dart';
 
 class PomodoroScreen extends ConsumerStatefulWidget {
   const PomodoroScreen({super.key});
@@ -63,11 +64,11 @@ class _PomodoroScreenState extends ConsumerState<PomodoroScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: const Color(0xFF000000),
+      backgroundColor: AppTheme.background,
       drawer: const AppDrawer(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
-        backgroundColor: const Color(0xFF7C3AED),
+        backgroundColor: AppTheme.primary,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
         child: const Icon(Icons.add, color: Colors.white),
       ),
@@ -82,9 +83,9 @@ class _PomodoroScreenState extends ConsumerState<PomodoroScreen>
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(99),
               border: Border.all(color: const Color(0x33FFFFFF)),
-              color: const Color(0xFF121212),
+              color: AppTheme.surfaceCard,
             ),
-            child: const Icon(Icons.person, size: 18, color: Color(0xFFB0B0B0)),
+            child: const Icon(Icons.person, size: 18, color: AppTheme.textSecondary),
           ),
         ],
       ),
@@ -124,13 +125,13 @@ class _PomodoroScreenState extends ConsumerState<PomodoroScreen>
                   child: Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF0D0D0D),
+                      color: AppTheme.surfaceCard,
                       borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: const Color(0x227C3AED)),
+                      border: Border.all(color: AppTheme.primaryGlow),
                     ),
                     child: const Text(
                       'Pomodoro: 25 min focus → 5 min break → repeat. Tap to dismiss.',
-                      style: TextStyle(color: Color(0xFFF0F0F0)),
+                      style: TextStyle(color: AppTheme.textPrimary),
                     ),
                   ),
                 ),
@@ -153,7 +154,7 @@ class _PomodoroScreenState extends ConsumerState<PomodoroScreen>
           await showDialog<bool>(
             context: context,
             builder: (_) => AlertDialog(
-              backgroundColor: const Color(0xFF0D0D0D),
+              backgroundColor: AppTheme.surfaceCard,
               title: Text('Switch to ${nextType.label}?'),
               content: const Text('Current session will be lost.'),
               actions: [
@@ -164,7 +165,7 @@ class _PomodoroScreenState extends ConsumerState<PomodoroScreen>
                 FilledButton(
                   onPressed: () => Navigator.of(context).pop(true),
                   style: FilledButton.styleFrom(
-                    backgroundColor: const Color(0xFF7C3AED),
+                    backgroundColor: AppTheme.primary,
                   ),
                   child: const Text('Confirm'),
                 ),

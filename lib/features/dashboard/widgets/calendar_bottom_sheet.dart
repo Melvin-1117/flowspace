@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/providers/calendar_providers.dart';
 import 'calendar_task_card.dart';
+import '../../../app/theme.dart';
 
 class CalendarBottomSheet extends ConsumerWidget {
   final DateTime date;
@@ -28,7 +29,7 @@ class CalendarBottomSheet extends ConsumerWidget {
           width: double.infinity,
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: const Color(0xFF1A1D27).withValues(alpha: 0.8),
+            color: AppTheme.surfaceElevated.withValues(alpha: 0.8),
             borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
             border: Border(
               top: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
@@ -44,14 +45,14 @@ class CalendarBottomSheet extends ConsumerWidget {
                   height: 4,
                   margin: const EdgeInsets.only(bottom: 16),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF6B7280),
+                    color: AppTheme.textMuted,
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
               ),
               Text(
                 DateFormat('EEEE, MMMM d').format(date),
-                style: GoogleFonts.inter(
+                style: GoogleFonts.spaceGrotesk(
                   color: Colors.white,
                   fontSize: 18,
                   fontWeight: FontWeight.w700,
@@ -66,8 +67,8 @@ class CalendarBottomSheet extends ConsumerWidget {
                       child: Center(
                         child: Text(
                           isPast ? "No tasks" : "No tasks — add one?",
-                          style: GoogleFonts.inter(
-                            color: const Color(0xFF6B7280),
+                          style: GoogleFonts.spaceGrotesk(
+                            color: AppTheme.textMuted,
                             fontSize: 14,
                           ),
                         ),
@@ -94,7 +95,7 @@ class CalendarBottomSheet extends ConsumerWidget {
                   width: double.infinity,
                   child: FilledButton(
                     style: FilledButton.styleFrom(
-                      backgroundColor: const Color(0xFF7C3AED),
+                      backgroundColor: AppTheme.primary,
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -106,7 +107,7 @@ class CalendarBottomSheet extends ConsumerWidget {
                     },
                     child: Text(
                       'Add Task for this day',
-                      style: GoogleFonts.inter(
+                      style: GoogleFonts.spaceGrotesk(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
                       ),

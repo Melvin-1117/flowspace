@@ -6,17 +6,18 @@ import '../../../core/constants/animation_tokens.dart';
 import '../../../core/models/analytics_models.dart';
 import 'analytics_empty_state.dart';
 import '../providers/analytics_providers.dart';
+import '../../../app/theme.dart';
 
-const Color _cardBackground = Color(0xFF0D0D0D);
+const Color _cardBackground = AppTheme.surfaceCard;
 const Color _cardBorder = Color(0x0DFFFFFF);
-const Color _textPrimary = Color(0xFFF0F0F0);
-const Color _textSecondary = Color(0xFF555555);
-const Color _gridColor = Color(0xFF1A1A1A);
-const Color _purple = Color(0xFF7C3AED);
-const Color _barDefault = Color(0xFF1A1A1A);
-const Color _barTouched = Color(0xFF9D5EF0);
-const Color _success = Color(0xFF10B981);
-const Color _danger = Color(0xFFEF4444);
+const Color _textPrimary = AppTheme.textPrimary;
+const Color _textSecondary = AppTheme.textSecondary;
+const Color _gridColor = AppTheme.surfaceElevated;
+const Color _purple = AppTheme.primary;
+const Color _barDefault = AppTheme.surfaceElevated;
+const Color _barTouched = AppTheme.primaryLight;
+const Color _success = AppTheme.success;
+const Color _danger = AppTheme.danger;
 const double _barWidth = 28;
 const List<String> _weekdayLabels = <String>[
   'MON',
@@ -161,7 +162,7 @@ class _WeeklyVelocityChartState extends ConsumerState<WeeklyVelocityChart>
                         barTouchData: BarTouchData(
                           enabled: true,
                           touchTooltipData: BarTouchTooltipData(
-                            getTooltipColor: (_) => const Color(0xFF1A1A1A),
+                            getTooltipColor: (_) => AppTheme.surfaceElevated,
                             getTooltipItem: (group, _, rod, __) {
                               final row = rows[group.x.toInt()];
                               return BarTooltipItem(

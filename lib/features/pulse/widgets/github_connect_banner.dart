@@ -24,7 +24,7 @@ class GitHubConnectBanner extends StatelessWidget {
         children: [
           Text(
             'Connect your GitHub account to see your activity',
-            style: GoogleFonts.inter(
+            style: GoogleFonts.spaceGrotesk(
               color: pulseText,
               fontWeight: FontWeight.w600,
               fontSize: 15,

@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/pomodoro_providers.dart';
 import 'timer_ring_painter.dart';
+import '../../../app/theme.dart';
 
 class TimerRing extends ConsumerStatefulWidget {
   const TimerRing({super.key});
@@ -90,7 +91,7 @@ class _TimerRingState extends ConsumerState<TimerRing>
               Text(
                 '$minutes:$seconds',
                 style: const TextStyle(
-                  color: Color(0xFFF0F0F0),
+                  color: AppTheme.textPrimary,
                   fontSize: 52,
                   fontWeight: FontWeight.w700,
                   fontFeatures: [FontFeature.tabularFigures()],

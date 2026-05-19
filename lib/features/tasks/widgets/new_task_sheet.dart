@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import '../../../core/models/task.dart';
 import '../providers/task_providers.dart';
+import '../../../app/theme.dart';
 
 class NewTaskSheet extends ConsumerStatefulWidget {
   const NewTaskSheet({super.key, this.editingTask});
@@ -91,7 +92,7 @@ class _NewTaskSheetState extends ConsumerState<NewTaskSheet> {
                 width: 42,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: const Color(0xFF555555),
+                  color: AppTheme.textSecondary,
                   borderRadius: BorderRadius.circular(99),
                 ),
               ),
@@ -139,7 +140,7 @@ class _NewTaskSheetState extends ConsumerState<NewTaskSheet> {
                             Padding(
                               padding: const EdgeInsets.only(right: 8),
                               child: ChoiceChip(
-                                selectedColor: const Color(0xFF7C3AED),
+                                selectedColor: AppTheme.primary,
                                 label: Text(value),
                                 selected: _tag == value,
                                 onSelected: (_) => setState(() => _tag = value),
@@ -177,11 +178,11 @@ class _NewTaskSheetState extends ConsumerState<NewTaskSheet> {
                     const SizedBox(height: 6),
                     Row(
                       children: [
-                        _priorityButton('high', const Color(0xFFEF4444)),
+                        _priorityButton('high', AppTheme.danger),
                         const SizedBox(width: 8),
-                        _priorityButton('med', const Color(0xFFF59E0B)),
+                        _priorityButton('med', AppTheme.warning),
                         const SizedBox(width: 8),
-                        _priorityButton('low', const Color(0xFF10B981)),
+                        _priorityButton('low', AppTheme.success),
                       ],
                     ),
                     const SizedBox(height: 10),
@@ -330,7 +331,7 @@ class _NewTaskSheetState extends ConsumerState<NewTaskSheet> {
                   Expanded(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF7C3AED),
+                        backgroundColor: AppTheme.primary,
                       ),
                       onPressed: () async {
                         final title = _titleController.text.trim();
@@ -415,7 +416,7 @@ class _NewTaskSheetState extends ConsumerState<NewTaskSheet> {
     return Expanded(
       child: FilledButton(
         style: FilledButton.styleFrom(
-          backgroundColor: selected ? color : const Color(0xFF1A1A1A),
+          backgroundColor: selected ? color : AppTheme.surfaceElevated,
         ),
         onPressed: () => setState(() => _priority = value),
         child: Text(value.toUpperCase()),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/pomodoro_providers.dart';
+import '../../../app/theme.dart';
 
 class AmbientSoundGrid extends ConsumerWidget {
   const AmbientSoundGrid({super.key});
@@ -13,7 +14,7 @@ class AmbientSoundGrid extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFF13101A),
+        color: AppTheme.surfaceCard,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
@@ -82,10 +83,10 @@ class AmbientSoundGrid extends ConsumerWidget {
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFF7C3AED) : const Color(0xFF1A1A1A),
+          color: isSelected ? AppTheme.primary : AppTheme.surfaceElevated,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: isSelected ? const Color(0xFF7C3AED) : const Color(0xFF2A2A2A),
+            color: isSelected ? AppTheme.primary : AppTheme.surfaceBorder,
           ),
         ),
         child: Column(

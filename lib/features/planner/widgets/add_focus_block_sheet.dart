@@ -3,6 +3,7 @@ import 'package:uuid/uuid.dart';
 
 import '../../../core/models/focus_block.dart';
 import '../../../core/models/subject.dart';
+import '../../../app/theme.dart';
 
 class AddFocusBlockSheet extends StatefulWidget {
   const AddFocusBlockSheet({
@@ -48,7 +49,7 @@ class _AddFocusBlockSheetState extends State<AddFocusBlockSheet> {
                 const Text(
                   'Add Focus Block',
                   style: TextStyle(
-                    color: Color(0xFFF0F0F0),
+                    color: AppTheme.textPrimary,
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
@@ -181,7 +182,7 @@ class _AddFocusBlockSheetState extends State<AddFocusBlockSheet> {
                     Expanded(
                       child: FilledButton(
                         style: FilledButton.styleFrom(
-                          backgroundColor: const Color(0xFF7C3AED),
+                          backgroundColor: AppTheme.primary,
                         ),
                         onPressed: _submit,
                         child: const Text('Add Block'),

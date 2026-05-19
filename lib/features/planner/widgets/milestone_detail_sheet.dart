@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/models/milestone.dart';
+import '../../../app/theme.dart';
 
 class MilestoneDetailSheet extends StatelessWidget {
   const MilestoneDetailSheet({
@@ -34,7 +35,7 @@ class MilestoneDetailSheet extends StatelessWidget {
             Text(
               milestone.title,
               style: const TextStyle(
-                color: Color(0xFFF0F0F0),
+                color: AppTheme.textPrimary,
                 fontWeight: FontWeight.w700,
                 fontSize: 22,
               ),
@@ -42,12 +43,12 @@ class MilestoneDetailSheet extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               milestone.description,
-              style: const TextStyle(color: Color(0xFF555555)),
+              style: const TextStyle(color: AppTheme.textSecondary),
             ),
             const SizedBox(height: 8),
             Text(
               'Due ${DateFormat.yMMMd().format(milestone.dueDate)}',
-              style: const TextStyle(color: Color(0xFF555555)),
+              style: const TextStyle(color: AppTheme.textSecondary),
             ),
             const SizedBox(height: 12),
             ...List.generate(milestone.checklistItems.length, (index) {
@@ -57,10 +58,10 @@ class MilestoneDetailSheet extends StatelessWidget {
               return CheckboxListTile(
                 contentPadding: EdgeInsets.zero,
                 value: checked,
-                activeColor: const Color(0xFF7C3AED),
+                activeColor: AppTheme.primary,
                 title: Text(
                   milestone.checklistItems[index],
-                  style: const TextStyle(color: Color(0xFFF0F0F0)),
+                  style: const TextStyle(color: AppTheme.textPrimary),
                 ),
                 onChanged: (value) {
                   if (value != null) {
@@ -76,7 +77,7 @@ class MilestoneDetailSheet extends StatelessWidget {
                 if (context.mounted) Navigator.of(context).pop();
               },
               style: FilledButton.styleFrom(
-                backgroundColor: const Color(0xFF7C3AED),
+                backgroundColor: AppTheme.primary,
                 minimumSize: const Size.fromHeight(48),
               ),
               child: const Text('Mark as complete'),
@@ -114,7 +115,7 @@ class MilestoneDetailSheet extends StatelessWidget {
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
-              backgroundColor: const Color(0xFF0D0D0D),
+              backgroundColor: AppTheme.surfaceCard,
               title: const Text('Edit Milestone'),
               content: Column(
                 mainAxisSize: MainAxisSize.min,

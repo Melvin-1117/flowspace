@@ -11,6 +11,7 @@ import '../pomodoro/providers/pomodoro_providers.dart';
 import 'providers/task_providers.dart';
 import 'widgets/dependency_manager.dart';
 import 'widgets/subtask_list.dart';
+import '../../app/theme.dart';
 
 class TaskDetailScreen extends ConsumerWidget {
   TaskDetailScreen({super.key, required this.taskId});
@@ -31,10 +32,10 @@ class TaskDetailScreen extends ConsumerWidget {
 
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: const Color(0xFF000000),
+      backgroundColor: AppTheme.background,
       drawer: const AppDrawer(),
       appBar: AppBar(
-        backgroundColor: const Color(0xFF000000),
+        backgroundColor: AppTheme.background,
         leading: IconButton(
           icon: const Icon(Icons.menu, color: Colors.white),
           onPressed: () => _scaffoldKey.currentState?.openDrawer(),
@@ -116,7 +117,7 @@ class TaskDetailScreen extends ConsumerWidget {
                 showModalBottomSheet<void>(
                   context: context,
                   isScrollControlled: true,
-                  backgroundColor: const Color(0xFF0D0D0D),
+                  backgroundColor: AppTheme.surfaceCard,
                   builder: (_) => DependencyManager(task: task),
                 );
               },
@@ -155,11 +156,11 @@ class TaskDetailScreen extends ConsumerWidget {
             const SizedBox(height: 10),
             Text(
               'Created ${DateFormat('MMM d, y HH:mm').format(task.createdAt)}',
-              style: const TextStyle(color: Color(0xFF555555)),
+              style: const TextStyle(color: AppTheme.textSecondary),
             ),
             Text(
               'Modified ${DateFormat('MMM d, y HH:mm').format(task.updatedAt)}',
-              style: const TextStyle(color: Color(0xFF555555)),
+              style: const TextStyle(color: AppTheme.textSecondary),
             ),
             const SizedBox(height: 16),
             const Text(
@@ -178,7 +179,7 @@ class TaskDetailScreen extends ConsumerWidget {
             const SizedBox(height: 16),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFFEF4444),
+                backgroundColor: AppTheme.danger,
               ),
               onPressed: () async {
                 await ref

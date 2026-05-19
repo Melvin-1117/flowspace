@@ -8,6 +8,7 @@ import '../providers/task_providers.dart';
 import 'dependency_manager.dart';
 import 'edit_task_sheet.dart';
 import 'priority_popover.dart';
+import '../../../app/theme.dart';
 
 class TaskCard extends ConsumerWidget {
   const TaskCard({super.key, required this.task});
@@ -47,11 +48,11 @@ class TaskCard extends ConsumerWidget {
         margin: const EdgeInsets.only(bottom: 10),
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: const Color(0xFF0D0D0D),
+          color: AppTheme.surfaceCard,
           borderRadius: BorderRadius.circular(16),
           border: Border(
             left: BorderSide(
-              color: isOverdue ? const Color(0xFFEF4444) : Colors.transparent,
+              color: isOverdue ? AppTheme.danger : Colors.transparent,
               width: 3,
             ),
             top: const BorderSide(color: Color(0x22FFFFFF)),
@@ -76,9 +77,9 @@ class TaskCard extends ConsumerWidget {
                       vertical: 4,
                     ),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF1A1A1A),
+                      color: AppTheme.surfaceElevated,
                       borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: const Color(0xFF262626)),
+                      border: Border.all(color: AppTheme.surfaceBorder),
                     ),
                     child: Text(
                       task.tag.toUpperCase(),
@@ -110,7 +111,7 @@ class TaskCard extends ConsumerWidget {
                     showModalBottomSheet<void>(
                       context: context,
                       isScrollControlled: true,
-                      backgroundColor: const Color(0xFF0D0D0D),
+                      backgroundColor: AppTheme.surfaceCard,
                       builder: (_) => EditTaskSheet(task: task),
                     );
                   },
@@ -125,7 +126,7 @@ class TaskCard extends ConsumerWidget {
               style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
-                color: Color(0xFFF0F0F0),
+                color: AppTheme.textPrimary,
               ),
             ),
             if (task.description.trim().isNotEmpty) ...[
@@ -134,7 +135,7 @@ class TaskCard extends ConsumerWidget {
                 task.description,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(color: Color(0xFF555555), fontSize: 13),
+                style: const TextStyle(color: AppTheme.textSecondary, fontSize: 13),
               ),
             ],
             const SizedBox(height: 10),
@@ -159,7 +160,7 @@ class TaskCard extends ConsumerWidget {
                     showModalBottomSheet<void>(
                       context: context,
                       isScrollControlled: true,
-                      backgroundColor: const Color(0xFF0D0D0D),
+                      backgroundColor: AppTheme.surfaceCard,
                       builder: (_) => DependencyManager(task: task),
                     );
                   },
@@ -169,7 +170,7 @@ class TaskCard extends ConsumerWidget {
                       vertical: 4,
                     ),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF1A1A1A),
+                      color: AppTheme.surfaceElevated,
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text('${task.dependencyIds.length} deps'),
@@ -181,8 +182,8 @@ class TaskCard extends ConsumerWidget {
                     '${task.dueDate!.month}/${task.dueDate!.day}',
                     style: TextStyle(
                       color: isOverdue
-                          ? const Color(0xFFEF4444)
-                          : const Color(0xFF555555),
+                          ? AppTheme.danger
+                          : AppTheme.textSecondary,
                     ),
                   ),
               ],
@@ -217,15 +218,15 @@ class _PriorityBadge extends StatelessWidget {
     switch (priority) {
       case 'high':
         icon = Icons.priority_high;
-        color = const Color(0xFFEF4444);
+        color = AppTheme.danger;
         label = 'High';
       case 'low':
         icon = Icons.arrow_downward;
-        color = const Color(0xFF10B981);
+        color = AppTheme.success;
         label = 'Low';
       default:
         icon = Icons.drag_handle;
-        color = const Color(0xFFF59E0B);
+        color = AppTheme.warning;
         label = 'Med';
     }
     return Container(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import '../app/theme.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({super.key});
@@ -8,13 +9,13 @@ class AppDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Drawer(
       width: MediaQuery.sizeOf(context).width * 0.75,
-      backgroundColor: const Color(0xFF0D0D0D),
+      backgroundColor: AppTheme.surfaceCard,
       child: SafeArea(
         child: Column(
           children: [
             // User Profile Section
             UserAccountsDrawerHeader(
-              decoration: const BoxDecoration(color: Color(0xFF7C3AED)),
+              decoration: const BoxDecoration(color: AppTheme.primary),
               accountName: const Text(
                 'FlowSpace User',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
@@ -134,11 +135,11 @@ class AppDrawer extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(16),
               child: ListTile(
-                leading: const Icon(Icons.logout, color: Color(0xFFEF4444)),
+                leading: const Icon(Icons.logout, color: AppTheme.danger),
                 title: const Text(
                   'Logout',
                   style: TextStyle(
-                    color: Color(0xFFEF4444),
+                    color: AppTheme.danger,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -154,7 +155,7 @@ class AppDrawer extends StatelessWidget {
               padding: EdgeInsets.all(16),
               child: Text(
                 'FlowSpace v1.0.0',
-                style: TextStyle(color: Color(0xFF555555), fontSize: 12),
+                style: TextStyle(color: AppTheme.textSecondary, fontSize: 12),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -176,13 +177,13 @@ class AppDrawer extends StatelessWidget {
     return ListTile(
       leading: Icon(
         icon,
-        color: isSelected ? const Color(0xFF7C3AED) : Colors.grey[400],
+        color: isSelected ? AppTheme.primary : Colors.grey[400],
         size: 24,
       ),
       title: Text(
         title,
         style: TextStyle(
-          color: isSelected ? const Color(0xFF7C3AED) : Colors.white,
+          color: isSelected ? AppTheme.primary : Colors.white,
           fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
         ),
       ),
@@ -191,7 +192,7 @@ class AppDrawer extends StatelessWidget {
         style: TextStyle(color: Colors.grey[400], fontSize: 12),
       ),
       selected: isSelected,
-      selectedTileColor: const Color(0xFF7C3AED).withValues(alpha: 0.1),
+      selectedTileColor: AppTheme.primary.withValues(alpha: 0.1),
       onTap:
           onTap ??
           () {
@@ -207,7 +208,7 @@ class AppDrawer extends StatelessWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: const Color(0xFF0D0D0D),
+        backgroundColor: AppTheme.surfaceCard,
         title: const Text('Help & Support'),
         content: const Column(
           mainAxisSize: MainAxisSize.min,
@@ -246,7 +247,7 @@ class AppDrawer extends StatelessWidget {
       context: context,
       applicationName: 'FlowSpace',
       applicationVersion: '1.0.0',
-      applicationIcon: const Icon(Icons.timer, color: Color(0xFF7C3AED)),
+      applicationIcon: const Icon(Icons.timer, color: AppTheme.primary),
       children: [
         const Text(
           'FlowSpace is your productivity companion for deep work, task management, and focus sessions.',
@@ -259,7 +260,7 @@ class AppDrawer extends StatelessWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: const Color(0xFF0D0D0D),
+        backgroundColor: AppTheme.surfaceCard,
         title: const Text('Logout'),
         content: const Text('Are you sure you want to logout?'),
         actions: [
@@ -274,12 +275,12 @@ class AppDrawer extends StatelessWidget {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   content: Text('Logout functionality coming soon!'),
-                  backgroundColor: Color(0xFF7C3AED),
+                  backgroundColor: AppTheme.primary,
                 ),
               );
             },
             style: TextButton.styleFrom(
-              foregroundColor: const Color(0xFFEF4444),
+              foregroundColor: AppTheme.danger,
             ),
             child: const Text('Logout'),
           ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/pomodoro_providers.dart';
+import '../../../app/theme.dart';
 
 class SessionCompleteOverlay extends ConsumerWidget {
   const SessionCompleteOverlay({super.key});
@@ -21,7 +22,7 @@ class SessionCompleteOverlay extends ConsumerWidget {
           margin: const EdgeInsets.symmetric(horizontal: 24),
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: const Color(0xFF0D0D0D),
+            color: AppTheme.surfaceCard,
             borderRadius: BorderRadius.circular(16),
             border: Border.all(color: const Color(0x1AFFFFFF)),
           ),
@@ -31,7 +32,7 @@ class SessionCompleteOverlay extends ConsumerWidget {
               const Text(
                 'Session Complete!',
                 style: TextStyle(
-                  color: Color(0xFFF0F0F0),
+                  color: AppTheme.textPrimary,
                   fontSize: 22,
                   fontWeight: FontWeight.w700,
                 ),
@@ -39,7 +40,7 @@ class SessionCompleteOverlay extends ConsumerWidget {
               const SizedBox(height: 8),
               Text(
                 '${overlay.sessionType.label} • $minutes min',
-                style: const TextStyle(color: Color(0xFF555555)),
+                style: const TextStyle(color: AppTheme.textSecondary),
               ),
               const SizedBox(height: 18),
               Row(
@@ -48,7 +49,7 @@ class SessionCompleteOverlay extends ConsumerWidget {
                     child: FilledButton(
                       onPressed: notifier.startSuggestedBreak,
                       style: FilledButton.styleFrom(
-                        backgroundColor: const Color(0xFF7C3AED),
+                        backgroundColor: AppTheme.primary,
                       ),
                       child: const Text('Start Break'),
                     ),
@@ -58,7 +59,7 @@ class SessionCompleteOverlay extends ConsumerWidget {
                     child: OutlinedButton(
                       onPressed: notifier.skipBreakAndFocus,
                       style: OutlinedButton.styleFrom(
-                        foregroundColor: const Color(0xFFF0F0F0),
+                        foregroundColor: AppTheme.textPrimary,
                         side: const BorderSide(color: Color(0x1EFFFFFF)),
                       ),
                       child: const Text('Skip Break'),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../core/models/task.dart';
 import 'task_card.dart';
+import '../../../app/theme.dart';
 
 class KanbanColumn extends StatelessWidget {
   const KanbanColumn({
@@ -24,7 +25,7 @@ class KanbanColumn extends StatelessWidget {
       width: width ?? double.infinity,
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: const Color(0xFF0D0D0D),
+        color: AppTheme.surfaceCard,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: const Color(0x22FFFFFF)),
       ),
@@ -52,7 +53,7 @@ class KanbanColumn extends StatelessWidget {
               const SizedBox(width: 8),
               CircleAvatar(
                 radius: 10,
-                backgroundColor: const Color(0xFF1A1A1A),
+                backgroundColor: AppTheme.surfaceElevated,
                 child: Text(
                   '${tasks.length}',
                   style: const TextStyle(fontSize: 10),
@@ -102,12 +103,12 @@ class _EmptyState extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: const [
-              Icon(Icons.inbox_outlined, color: Color(0xFF555555)),
+              Icon(Icons.inbox_outlined, color: AppTheme.textSecondary),
               SizedBox(height: 8),
               Text(
                 'No tasks here — drag one or add new',
                 textAlign: TextAlign.center,
-                style: TextStyle(color: Color(0xFF555555)),
+                style: TextStyle(color: AppTheme.textSecondary),
               ),
             ],
           ),

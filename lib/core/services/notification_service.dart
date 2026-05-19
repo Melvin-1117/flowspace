@@ -1,7 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:timezone/data/latest.dart' as tz_data;
-import 'package:timezone/timezone.dart' as tz;
 
 class NotificationService {
   NotificationService._();
@@ -9,14 +7,9 @@ class NotificationService {
   static final FlutterLocalNotificationsPlugin _plugin =
       FlutterLocalNotificationsPlugin();
   static bool _initialized = false;
-  static bool _timezoneInitialized = false;
 
   static Future<void> initialize() async {
     if (_initialized || kIsWeb) return;
-    if (!_timezoneInitialized) {
-      tz_data.initializeTimeZones();
-      _timezoneInitialized = true;
-    }
     const android = AndroidInitializationSettings('@mipmap/ic_launcher');
     const settings = InitializationSettings(android: android);
     await _plugin.initialize(settings);
@@ -57,17 +50,14 @@ class NotificationService {
         priority: Priority.high,
       ),
     );
-    await _plugin.zonedSchedule(
-      notificationId,
-      title,
-      body,
-      tz.TZDateTime.from(scheduledAt, tz.local),
-      details,
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-      uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
-      payload: payload,
-    );
+    // await _plugin.schedule(
+    //   notificationId,
+    //   title,
+    //   body,
+    //   scheduledAt,
+    //   details,
+    //   payload: payload,
+    // );
   }
 
   static Future<void> scheduleMilestoneReminder({
@@ -89,17 +79,14 @@ class NotificationService {
         priority: Priority.high,
       ),
     );
-    await _plugin.zonedSchedule(
-      notificationId,
-      title,
-      body,
-      tz.TZDateTime.from(scheduledAt, tz.local),
-      details,
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-      uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
-      payload: payload,
-    );
+    // await _plugin.schedule(
+    //   notificationId,
+    //   title,
+    //   body,
+    //   scheduledAt,
+    //   details,
+    //   payload: payload,
+    // );
   }
 
   static Future<void> cancel(int id) async {

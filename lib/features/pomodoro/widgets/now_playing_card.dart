@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/pomodoro_providers.dart';
+import '../../../app/theme.dart';
 
 class NowPlayingCard extends ConsumerWidget {
   const NowPlayingCard({super.key});
@@ -13,7 +14,7 @@ class NowPlayingCard extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFF13101A),
+        color: AppTheme.surfaceCard,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
@@ -48,7 +49,7 @@ class NowPlayingCard extends ConsumerWidget {
               width: 48,
               height: 48,
               decoration: BoxDecoration(
-                color: const Color(0xFF7C3AED),
+                color: AppTheme.primary,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: const Icon(
@@ -96,7 +97,7 @@ class NowPlayingCard extends ConsumerWidget {
         Container(
           height: 4,
           decoration: BoxDecoration(
-            color: const Color(0xFF2A2A2A),
+            color: AppTheme.surfaceBorder,
             borderRadius: BorderRadius.circular(2),
           ),
           child: FractionallySizedBox(
@@ -104,7 +105,7 @@ class NowPlayingCard extends ConsumerWidget {
             widthFactor: 0.3, // Mock progress
             child: Container(
               decoration: BoxDecoration(
-                color: const Color(0xFF7C3AED),
+                color: AppTheme.primary,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -126,8 +127,8 @@ class NowPlayingCard extends ConsumerWidget {
               height: 48,
               decoration: BoxDecoration(
                 color: ambientState.selected != null 
-                    ? const Color(0xFF7C3AED) 
-                    : const Color(0xFF2A2A2A),
+                    ? AppTheme.primary 
+                    : AppTheme.surfaceBorder,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Icon(
@@ -187,8 +188,8 @@ class NowPlayingCard extends ConsumerWidget {
                 child: Slider(
                   value: ambientState.volume,
                   onChanged: notifier.setVolume,
-                  activeColor: const Color(0xFF7C3AED),
-                  inactiveColor: const Color(0xFF2A2A2A),
+                  activeColor: AppTheme.primary,
+                  inactiveColor: AppTheme.surfaceBorder,
                 ),
               ),
               Icon(

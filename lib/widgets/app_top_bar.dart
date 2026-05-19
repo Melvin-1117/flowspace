@@ -6,13 +6,14 @@
 library;
 
 import 'package:flutter/material.dart';
+import '../app/theme.dart';
 
 // ── Design tokens ─────────────────────────────────────────────────────────────
-const Color kAppBarBackground = Color(0xFF000000);
+const Color kAppBarBackground = AppTheme.background;
 const double kAppBarTitleSize = 20.0;
 const FontWeight kAppBarTitleWeight = FontWeight.w700;
-const Color kAppBarTitleColor = Color(0xFFF0F0F0);
-const Color kAppBarIconColor = Color(0xFF7C3AED); // purple accent
+const Color kAppBarTitleColor = AppTheme.textPrimary;
+const Color kAppBarIconColor = AppTheme.primary; // purple accent
 
 /// Builds the canonical [AppBar] for FlowSpace screens.
 ///

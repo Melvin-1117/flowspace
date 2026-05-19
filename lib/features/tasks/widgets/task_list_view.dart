@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/models/task.dart';
 import '../providers/task_providers.dart';
+import '../../../app/theme.dart';
 
 class TaskListView extends ConsumerWidget {
   const TaskListView({super.key, required this.tasks});
@@ -26,7 +27,7 @@ class TaskListView extends ConsumerWidget {
             child: Text(
               _title(entry.key),
               style: const TextStyle(
-                color: Color(0xFF555555),
+                color: AppTheme.textSecondary,
                 fontWeight: FontWeight.w700,
                 letterSpacing: 1.3,
               ),
@@ -38,13 +39,13 @@ class TaskListView extends ConsumerWidget {
               background: Container(
                 alignment: Alignment.centerLeft,
                 padding: const EdgeInsets.only(left: 16),
-                color: const Color(0xFF10B981),
+                color: AppTheme.success,
                 child: const Icon(Icons.check),
               ),
               secondaryBackground: Container(
                 alignment: Alignment.centerRight,
                 padding: const EdgeInsets.only(right: 16),
-                color: const Color(0xFFEF4444),
+                color: AppTheme.danger,
                 child: const Icon(Icons.delete),
               ),
               confirmDismiss: (direction) async {

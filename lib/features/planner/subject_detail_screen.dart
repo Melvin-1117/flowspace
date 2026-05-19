@@ -6,6 +6,7 @@ import '../../core/models/pomodoro_session.dart';
 import '../../core/models/pomodoro_session_isar.dart';
 import '../../core/providers/isar_provider.dart';
 import 'providers/planner_providers.dart';
+import '../../app/theme.dart';
 
 class SubjectDetailScreen extends ConsumerWidget {
   const SubjectDetailScreen({required this.subjectId, super.key});
@@ -16,9 +17,9 @@ class SubjectDetailScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final subjects = ref.watch(allSubjectsProvider);
     return Scaffold(
-      backgroundColor: const Color(0xFF000000),
+      backgroundColor: AppTheme.background,
       appBar: AppBar(
-        backgroundColor: const Color(0xFF000000),
+        backgroundColor: AppTheme.background,
         title: const Text('Subject Details'),
       ),
       body: subjects.when(
@@ -38,14 +39,14 @@ class SubjectDetailScreen extends ConsumerWidget {
                 style: const TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.w700,
-                  color: Color(0xFFF0F0F0),
+                  color: AppTheme.textPrimary,
                 ),
               ),
               const SizedBox(height: 12),
               const Text(
                 'Modules',
                 style: TextStyle(
-                  color: Color(0xFFF0F0F0),
+                  color: AppTheme.textPrimary,
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -83,7 +84,7 @@ class SubjectDetailScreen extends ConsumerWidget {
                     const Text(
                       'Pomodoro Sessions',
                       style: TextStyle(
-                        color: Color(0xFFF0F0F0),
+                        color: AppTheme.textPrimary,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -110,7 +111,7 @@ class SubjectDetailScreen extends ConsumerWidget {
               FilledButton(
                 onPressed: () {},
                 style: FilledButton.styleFrom(
-                  backgroundColor: const Color(0xFF7C3AED),
+                  backgroundColor: AppTheme.primary,
                 ),
                 child: const Text('Edit subject'),
               ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/models/pomodoro_session.dart';
+import '../../../app/theme.dart';
 
 class SessionHistoryItem extends StatelessWidget {
   const SessionHistoryItem({super.key, required this.session});
@@ -12,8 +13,8 @@ class SessionHistoryItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final barColor = this.barColor;
     final textColor = session.isAbandoned
-        ? const Color(0xFF555555)
-        : const Color(0xFFF0F0F0);
+        ? AppTheme.textSecondary
+        : AppTheme.textPrimary;
 
     final start = DateFormat('h:mm a').format(session.startTime);
     final effectiveEnd =
@@ -55,19 +56,19 @@ class SessionHistoryItem extends StatelessWidget {
               ),
               Text(
                 '$start - $end',
-                style: const TextStyle(color: Color(0xFF555555), fontSize: 12),
+                style: const TextStyle(color: AppTheme.textSecondary, fontSize: 12),
               ),
               const SizedBox(height: 4),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF111116),
+                  color: AppTheme.surfaceCard,
                   borderRadius: BorderRadius.circular(4),
                 ),
                 child: Text(
                   '$durationMinutes MIN',
                   style: const TextStyle(
-                    color: Color(0xFF8F8F99),
+                    color: AppTheme.textMuted,
                     fontSize: 10,
                     fontWeight: FontWeight.w700,
                   ),
@@ -81,9 +82,9 @@ class SessionHistoryItem extends StatelessWidget {
   }
 
   Color get barColor {
-    if (session.isAbandoned) return const Color(0xFF262626);
-    if (session.sessionType == 'focus') return const Color(0xFF7C3AED);
-    return const Color(0xFF06B6D4);
+    if (session.isAbandoned) return AppTheme.surfaceBorder;
+    if (session.sessionType == 'focus') return AppTheme.primary;
+    return AppTheme.accent;
   }
 
   double get itemOpacity => session.isAbandoned ? 0.6 : 1.0;

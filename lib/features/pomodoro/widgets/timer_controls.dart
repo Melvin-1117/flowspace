@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/constants/animation_tokens.dart';
 import '../providers/pomodoro_providers.dart';
+import '../../../app/theme.dart';
 
 class TimerControls extends ConsumerWidget {
   const TimerControls({super.key});
@@ -26,7 +27,7 @@ class TimerControls extends ConsumerWidget {
             width: 56,
             height: 56,
             decoration: BoxDecoration(
-              color: const Color(0xFF7C3AED),
+              color: AppTheme.primary,
               borderRadius: BorderRadius.circular(14),
               boxShadow: const [
                 BoxShadow(color: Color(0x807C3AED), blurRadius: 16),
@@ -46,7 +47,7 @@ class TimerControls extends ConsumerWidget {
               final confirmed = await showDialog<bool>(
                 context: context,
                 builder: (_) => AlertDialog(
-                  backgroundColor: const Color(0xFF0D0D0D),
+                  backgroundColor: AppTheme.surfaceCard,
                   title: const Text('Reset timer?'),
                   content: const Text('Current progress will be lost.'),
                   actions: [
@@ -57,7 +58,7 @@ class TimerControls extends ConsumerWidget {
                     FilledButton(
                       onPressed: () => Navigator.of(context).pop(true),
                       style: FilledButton.styleFrom(
-                        backgroundColor: const Color(0xFF7C3AED),
+                        backgroundColor: AppTheme.primary,
                       ),
                       child: const Text('Reset'),
                     ),
@@ -72,13 +73,13 @@ class TimerControls extends ConsumerWidget {
             width: 56,
             height: 56,
             decoration: BoxDecoration(
-              color: const Color(0xFF1A1A1A),
+              color: AppTheme.surfaceElevated,
               borderRadius: BorderRadius.circular(14),
-              border: Border.all(color: const Color(0xFF262626)),
+              border: Border.all(color: AppTheme.surfaceBorder),
             ),
             child: const Icon(
               Icons.refresh,
-              color: Color(0xFFF0F0F0),
+              color: AppTheme.textPrimary,
               size: 20,
             ),
           ),

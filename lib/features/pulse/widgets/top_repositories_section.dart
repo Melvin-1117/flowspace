@@ -28,7 +28,7 @@ class TopRepositoriesSection extends ConsumerWidget {
             children: [
               Text(
                 'Top Repositories',
-                style: GoogleFonts.inter(
+                style: GoogleFonts.spaceGrotesk(
                   color: pulseText,
                   fontWeight: FontWeight.w700,
                   fontSize: 20,
@@ -39,7 +39,7 @@ class TopRepositoriesSection extends ConsumerWidget {
                 onTap: () => _showAllRepos(context, ref),
                 child: Text(
                   'VIEW ALL',
-                  style: GoogleFonts.inter(
+                  style: GoogleFonts.spaceGrotesk(
                     color: pulsePrimary,
                     fontWeight: FontWeight.w600,
                     fontSize: 13,
@@ -75,7 +75,7 @@ class TopRepositoriesSection extends ConsumerWidget {
             ),
             error: (_, __) => Text(
               'Failed to load repositories',
-              style: GoogleFonts.inter(color: pulseMuted),
+              style: GoogleFonts.spaceGrotesk(color: pulseMuted),
             ),
           ),
         ],
@@ -96,7 +96,7 @@ class TopRepositoriesSection extends ConsumerWidget {
             children: [
               Text(
                 'All Repositories',
-                style: GoogleFonts.inter(
+                style: GoogleFonts.spaceGrotesk(
                   color: pulseText,
                   fontWeight: FontWeight.w700,
                   fontSize: 18,
@@ -144,7 +144,7 @@ class _EmptyRepos extends StatelessWidget {
         children: [
           Text(
             'No repositories found',
-            style: GoogleFonts.inter(color: pulseText),
+            style: GoogleFonts.spaceGrotesk(color: pulseText),
           ),
           const SizedBox(height: 8),
           TextButton(

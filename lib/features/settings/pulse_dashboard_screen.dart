@@ -4,14 +4,15 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../widgets/app_drawer.dart';
 import '../../widgets/app_top_bar.dart';
+import '../../app/theme.dart';
 
-const Color _bg = Color(0xFF000000);
-const Color _surface = Color(0xFF0D0D0D);
-const Color _surfaceAlt = Color(0xFF151515);
-const Color _primary = Color(0xFF7C3AED);
-const Color _secondary = Color(0xFF4CD7F6);
-const Color _text = Color(0xFFE8DFEE);
-const Color _muted = Color(0xFF958DA1);
+const Color _bg = AppTheme.background;
+const Color _surface = AppTheme.surfaceCard;
+const Color _surfaceAlt = Color(0xFF0D1520);
+const Color _primary = AppTheme.primary;
+const Color _secondary = Color(0xFF00B4FF);
+const Color _text = Color(0xFFFFFFFF);
+const Color _muted = Color(0xFF6B8CAE);
 
 class PulseDashboardScreen extends StatefulWidget {
   const PulseDashboardScreen({super.key});
@@ -36,7 +37,7 @@ class _PulseDashboardScreenState extends State<PulseDashboardScreen> {
             padding: EdgeInsets.only(right: 16),
             child: CircleAvatar(
               radius: 16,
-              backgroundColor: Color(0xFF1D1A24),
+              backgroundColor: AppTheme.surfaceCard,
               child: Icon(Icons.person, color: Colors.white, size: 16),
             ),
           ),
@@ -47,7 +48,7 @@ class _PulseDashboardScreenState extends State<PulseDashboardScreen> {
         children: [
           Text(
             'LIVE REPOSITORY ANALYSIS',
-            style: GoogleFonts.inter(
+            style: GoogleFonts.spaceGrotesk(
               color: _secondary,
               fontSize: 10,
               fontWeight: FontWeight.w700,
@@ -101,9 +102,9 @@ class _PulseDashboardScreenState extends State<PulseDashboardScreen> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        backgroundColor: const Color(0xFF0D0D0D),
+        backgroundColor: AppTheme.surfaceCard,
         selectedItemColor: _primary,
-        unselectedItemColor: const Color(0xFF7A7A83),
+        unselectedItemColor: AppTheme.textMuted,
         selectedLabelStyle: const TextStyle(
           fontSize: 10,
           fontWeight: FontWeight.w700,
@@ -187,7 +188,7 @@ class _ActionChip extends StatelessWidget {
       height: 44,
       padding: const EdgeInsets.symmetric(horizontal: 12),
       decoration: BoxDecoration(
-        color: filled ? _primary : const Color(0xFF262626),
+        color: filled ? _primary : AppTheme.surfaceBorder,
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
           color: filled
@@ -202,7 +203,7 @@ class _ActionChip extends StatelessWidget {
           const SizedBox(width: 8),
           Text(
             label,
-            style: GoogleFonts.inter(
+            style: GoogleFonts.spaceGrotesk(
               color: Colors.white,
               fontWeight: FontWeight.w600,
               fontSize: 14,
@@ -234,21 +235,21 @@ class _ContributionCard extends StatelessWidget {
             Expanded(
               child: Text(
                 '1,284 contributions in the last year',
-                style: GoogleFonts.inter(color: _muted, fontSize: 14),
+                style: GoogleFonts.spaceGrotesk(color: _muted, fontSize: 14),
               ),
             ),
-            Text('Less', style: GoogleFonts.inter(color: _muted, fontSize: 10)),
+            Text('Less', style: GoogleFonts.spaceGrotesk(color: _muted, fontSize: 10)),
             const SizedBox(width: 4),
             Row(
               children: const [
-                _LevelCell(color: Color(0xFF181818)),
-                _LevelCell(color: Color(0xFF32195A)),
-                _LevelCell(color: Color(0xFF5D2FB0)),
+                _LevelCell(color: AppTheme.surfaceElevated),
+                _LevelCell(color: Color(0xFF001A3D)),
+                _LevelCell(color: Color(0xFF003380)),
                 _LevelCell(color: _primary),
               ],
             ),
             const SizedBox(width: 4),
-            Text('More', style: GoogleFonts.inter(color: _muted, fontSize: 10)),
+            Text('More', style: GoogleFonts.spaceGrotesk(color: _muted, fontSize: 10)),
           ],
         ),
         const SizedBox(height: 18),
@@ -263,10 +264,10 @@ class _ContributionCard extends StatelessWidget {
                   children: List.generate(7, (row) {
                     final seed = (col * 7 + row) % 5;
                     final colors = [
-                      const Color(0xFF161616),
-                      const Color(0xFF1F1F1F),
-                      const Color(0xFF32195A),
-                      const Color(0xFF5D2FB0),
+                      AppTheme.surfaceElevated,
+                      AppTheme.surfaceHover,
+                      const Color(0xFF001A3D),
+                      const Color(0xFF003380),
                       _primary,
                     ];
                     return Padding(
@@ -327,7 +328,7 @@ class _LanguageCard extends StatelessWidget {
                 child: CircularProgressIndicator(
                   value: 1,
                   strokeWidth: 16,
-                  valueColor: const AlwaysStoppedAnimation(Color(0xFF2A2A2A)),
+                  valueColor: const AlwaysStoppedAnimation(AppTheme.surfaceBorder),
                   backgroundColor: Colors.transparent,
                 ),
               ),
@@ -374,7 +375,7 @@ class _LanguageCard extends StatelessWidget {
                     ),
                     Text(
                       'TypeScript',
-                      style: GoogleFonts.inter(color: _muted, fontSize: 11),
+                      style: GoogleFonts.spaceGrotesk(color: _muted, fontSize: 11),
                     ),
                   ],
                 ),
@@ -388,7 +389,7 @@ class _LanguageCard extends StatelessWidget {
         const _LegendRow(color: _secondary, label: 'Rust', value: '20%'),
         const SizedBox(height: 8),
         const _LegendRow(
-          color: Color(0xFF6B7280),
+          color: AppTheme.textMuted,
           label: 'Other',
           value: '15%',
         ),
@@ -418,11 +419,11 @@ class _LegendRow extends StatelessWidget {
           decoration: BoxDecoration(color: color, shape: BoxShape.circle),
         ),
         const SizedBox(width: 8),
-        Text(label, style: GoogleFonts.inter(color: _text, fontSize: 14)),
+        Text(label, style: GoogleFonts.spaceGrotesk(color: _text, fontSize: 14)),
         const Spacer(),
         Text(
           value,
-          style: GoogleFonts.inter(
+          style: GoogleFonts.spaceGrotesk(
             color: _text,
             fontSize: 24 - 8,
             fontWeight: FontWeight.w700,
@@ -446,16 +447,16 @@ class _TerminalCard extends StatelessWidget {
           ),
           child: Row(
             children: [
-              _dot(const Color(0xFFEF4444)),
+              _dot(AppTheme.danger),
               const SizedBox(width: 6),
-              _dot(const Color(0xFFF59E0B)),
+              _dot(AppTheme.warning),
               const SizedBox(width: 6),
-              _dot(const Color(0xFF10B981)),
+              _dot(AppTheme.success),
               const Spacer(),
               Text(
                 'REAL-TIME STREAM',
-                style: GoogleFonts.inter(
-                  color: const Color(0xFF6B7280),
+                style: GoogleFonts.spaceGrotesk(
+                  color: AppTheme.textMuted,
                   fontSize: 10,
                   letterSpacing: 1.1,
                   fontWeight: FontWeight.w700,
@@ -551,7 +552,7 @@ class _TerminalLine extends StatelessWidget {
             ),
             TextSpan(
               text: '  $detail',
-              style: const TextStyle(color: Color(0xFF6B7280)),
+              style: const TextStyle(color: AppTheme.textMuted),
             ),
           ],
         ),
@@ -586,12 +587,12 @@ class _TopReposCard extends StatelessWidget {
       ),
       const _RepoData(
         icon: Icons.storage,
-        iconColor: Color(0xFF9CA3AF),
+        iconColor: AppTheme.textSecondary,
         title: 'data-lake-adapter',
         stars: '124',
         forks: '12',
         lang: 'Python',
-        langColor: Color(0xFFF59E0B),
+        langColor: AppTheme.warning,
         updated: '4d ago',
       ),
     ];
@@ -611,7 +612,7 @@ class _TopReposCard extends StatelessWidget {
             const Spacer(),
             Text(
               'VIEW ALL',
-              style: GoogleFonts.inter(
+              style: GoogleFonts.spaceGrotesk(
                 color: _primary,
                 fontSize: 11,
                 fontWeight: FontWeight.w700,
@@ -677,14 +678,14 @@ class _RepoTile extends StatelessWidget {
                     const SizedBox(width: 3),
                     Text(
                       data.stars,
-                      style: GoogleFonts.inter(color: _muted, fontSize: 11),
+                      style: GoogleFonts.spaceGrotesk(color: _muted, fontSize: 11),
                     ),
                     const SizedBox(width: 9),
                     const Icon(Icons.call_split, size: 12, color: _muted),
                     const SizedBox(width: 3),
                     Text(
                       data.forks,
-                      style: GoogleFonts.inter(color: _muted, fontSize: 11),
+                      style: GoogleFonts.spaceGrotesk(color: _muted, fontSize: 11),
                     ),
                     const SizedBox(width: 9),
                     Container(
@@ -698,7 +699,7 @@ class _RepoTile extends StatelessWidget {
                     const SizedBox(width: 4),
                     Text(
                       data.lang,
-                      style: GoogleFonts.inter(
+                      style: GoogleFonts.spaceGrotesk(
                         color: data.langColor,
                         fontSize: 11,
                       ),

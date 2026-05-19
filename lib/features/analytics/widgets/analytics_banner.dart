@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../analytics_payload.dart';
+import '../../../app/theme.dart';
 
-const Color _bannerBorder = Color(0xFF7C3AED);
+const Color _bannerBorder = AppTheme.primary;
 const Color _bannerBackground = Color(0x1A7C3AED);
-const Color _bannerText = Color(0xFFF0F0F0);
+const Color _bannerText = AppTheme.textPrimary;
 
 class AnalyticsBanner extends StatelessWidget {
   const AnalyticsBanner({

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../app/theme.dart';
 
 class MilestoneCountdown extends StatelessWidget {
   const MilestoneCountdown({required this.remaining, super.key});
@@ -25,8 +26,8 @@ class MilestoneCountdown extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 8),
       decoration: BoxDecoration(
-        color: const Color(0xFF1A1A1A),
-        border: Border.all(color: const Color(0xFF262626)),
+        color: AppTheme.surfaceElevated,
+        border: Border.all(color: AppTheme.surfaceBorder),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Column(
@@ -34,14 +35,14 @@ class MilestoneCountdown extends StatelessWidget {
           Text(
             value,
             style: const TextStyle(
-              color: Color(0xFFF0F0F0),
+              color: AppTheme.textPrimary,
               fontWeight: FontWeight.w700,
               fontSize: 24,
             ),
           ),
           Text(
             label,
-            style: const TextStyle(color: Color(0xFF555555), fontSize: 10),
+            style: const TextStyle(color: AppTheme.textSecondary, fontSize: 10),
           ),
         ],
       ),

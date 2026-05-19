@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import '../../../app/theme.dart';
 
 class QuickActionFab extends StatefulWidget {
   const QuickActionFab({
@@ -28,34 +29,34 @@ class _QuickActionFabState extends State<QuickActionFab> {
       children: [
         _actionButton(
           icon: Icons.search,
-          color: const Color(0xFF1A1A1A),
+          color: AppTheme.surfaceElevated,
           onTap: widget.onSearch,
         ),
         const SizedBox(height: 10),
         _actionButton(
           icon: Icons.bolt,
-          color: const Color(0xFF1A1A1A),
+          color: AppTheme.surfaceElevated,
           onTap: () => setState(() => _expanded = !_expanded),
         ),
         if (_expanded) ...[
           const SizedBox(height: 10),
           _dialOption(
             'Add Task',
-            const Color(0xFF7C3AED),
+            AppTheme.primary,
             Icons.add,
             widget.onAddTask,
           ),
           const SizedBox(height: 8),
           _dialOption(
             'Start Focus',
-            const Color(0xFF06B6D4),
+            AppTheme.accent,
             Icons.timer,
             widget.onStartFocus,
           ),
           const SizedBox(height: 8),
           _dialOption(
             'Add Note',
-            const Color(0xFF555555),
+            AppTheme.textSecondary,
             Icons.note_add,
             () {},
           ),
@@ -69,7 +70,7 @@ class _QuickActionFabState extends State<QuickActionFab> {
                     width: 56,
                     height: 56,
                     decoration: BoxDecoration(
-                      color: const Color(0xFF7C3AED),
+                      color: AppTheme.primary,
                       borderRadius: BorderRadius.circular(18),
                       boxShadow: const [
                         BoxShadow(blurRadius: 16, color: Color(0x807C3AED)),
@@ -102,7 +103,7 @@ class _QuickActionFabState extends State<QuickActionFab> {
           borderRadius: BorderRadius.circular(14),
           border: Border.all(color: const Color(0x22FFFFFF)),
         ),
-        child: Icon(icon, color: const Color(0xFFF0F0F0)),
+        child: Icon(icon, color: AppTheme.textPrimary),
       ),
     );
   }
@@ -121,7 +122,7 @@ class _QuickActionFabState extends State<QuickActionFab> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             decoration: BoxDecoration(
-              color: const Color(0xFF1A1A1A),
+              color: AppTheme.surfaceElevated,
               borderRadius: BorderRadius.circular(8),
             ),
             child: Text(label),

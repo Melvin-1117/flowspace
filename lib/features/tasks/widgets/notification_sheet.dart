@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import '../providers/task_providers.dart';
+import '../../../app/theme.dart';
 
 class NotificationSheet extends ConsumerWidget {
   const NotificationSheet({super.key, required this.notifications});
@@ -33,7 +34,7 @@ class NotificationSheet extends ConsumerWidget {
             },
             background: Container(
               alignment: Alignment.centerLeft,
-              color: const Color(0xFF1A1A1A),
+              color: AppTheme.surfaceElevated,
               padding: const EdgeInsets.only(left: 16),
               child: const Icon(Icons.done),
             ),
@@ -62,9 +63,9 @@ class NotificationSheet extends ConsumerWidget {
   }
 
   Color _colorFor(String type) {
-    if (type == 'overdue') return const Color(0xFFEF4444);
-    if (type == 'completed') return const Color(0xFF10B981);
-    if (type == 'unblocked') return const Color(0xFF06B6D4);
-    return const Color(0xFF7C3AED);
+    if (type == 'overdue') return AppTheme.danger;
+    if (type == 'completed') return AppTheme.success;
+    if (type == 'unblocked') return AppTheme.accent;
+    return AppTheme.primary;
   }
 }

@@ -5,16 +5,17 @@ import 'package:intl/intl.dart';
 import '../../../core/models/analytics_models.dart';
 import 'analytics_empty_state.dart';
 import '../providers/analytics_providers.dart';
+import '../../../app/theme.dart';
 
-const Color _cardBackground = Color(0xFF0D0D0D);
+const Color _cardBackground = AppTheme.surfaceCard;
 const Color _cardBorder = Color(0x0DFFFFFF);
-const Color _textPrimary = Color(0xFFF0F0F0);
-const Color _textSecondary = Color(0xFF555555);
-const Color _intensity0 = Color(0xFF1A1A1A);
-const Color _intensity1 = Color(0xFF2D1B69);
-const Color _intensity2 = Color(0xFF4C1D95);
-const Color _intensity3 = Color(0xFF7C3AED);
-const Color _intensity4 = Color(0xFF06B6D4);
+const Color _textPrimary = AppTheme.textPrimary;
+const Color _textSecondary = AppTheme.textSecondary;
+const Color _intensity0 = AppTheme.surfaceElevated;
+const Color _intensity1 = Color(0xFF001A3D);
+const Color _intensity2 = Color(0xFF003380);
+const Color _intensity3 = AppTheme.primary;
+const Color _intensity4 = AppTheme.accent;
 const int _rows = 7;
 const int _columns = 13;
 const double _cellSize = 14;
@@ -178,10 +179,10 @@ class ConsistencyArchiveHeatmap extends ConsumerWidget {
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: const Color(0xFF1A1A1A),
+          backgroundColor: AppTheme.surfaceElevated,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
-            side: const BorderSide(color: Color(0xFF262626)),
+            side: BorderSide(color: AppTheme.surfaceBorder),
           ),
           title: Text(
             DateFormat('EEE, MMM d').format(day.date),

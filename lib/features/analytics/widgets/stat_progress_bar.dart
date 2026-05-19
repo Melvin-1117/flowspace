@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/constants/animation_tokens.dart';
+import '../../../app/theme.dart';
 
 
 class StatProgressBar extends StatelessWidget {
   const StatProgressBar({
     required this.value,
     required this.fillColor,
-    this.backgroundColor = const Color(0xFF1A1A1A),
+    this.backgroundColor = AppTheme.surfaceElevated,
     this.height = 4,
     super.key,
   });

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
 import '../providers/planner_providers.dart';
+import '../../../app/theme.dart';
 
 class SemesterHealthRing extends StatelessWidget {
   const SemesterHealthRing({
@@ -26,7 +27,7 @@ class SemesterHealthRing extends StatelessWidget {
         width: 200,
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: const Color(0xFF0D0D0D),
+          color: AppTheme.surfaceCard,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(color: const Color(0x0DFFFFFF)),
         ),
@@ -35,7 +36,7 @@ class SemesterHealthRing extends StatelessWidget {
             const Text(
               'SEMESTER HEALTH',
               style: TextStyle(
-                color: Color(0xFF555555),
+                color: AppTheme.textSecondary,
                 fontWeight: FontWeight.w700,
                 fontSize: 11,
                 letterSpacing: 1.5,
@@ -54,7 +55,7 @@ class SemesterHealthRing extends StatelessWidget {
                     child: CircularProgressIndicator(
                       value: 1,
                       strokeWidth: 12,
-                      color: const Color(0xFF1A1A1A),
+                      color: AppTheme.surfaceElevated,
                     ),
                   ),
                   SizedBox(
@@ -63,7 +64,7 @@ class SemesterHealthRing extends StatelessWidget {
                     child: CircularProgressIndicator(
                       value: ratio,
                       strokeWidth: 12,
-                      color: const Color(0xFF7C3AED),
+                      color: AppTheme.primary,
                     ),
                   ).animate().fadeIn(duration: 1000.ms),
                   Column(
@@ -72,7 +73,7 @@ class SemesterHealthRing extends StatelessWidget {
                       Text(
                         '${score.round()}%',
                         style: const TextStyle(
-                          color: Color(0xFFF0F0F0),
+                          color: AppTheme.textPrimary,
                           fontSize: 32,
                           fontWeight: FontWeight.w700,
                         ),
@@ -103,8 +104,8 @@ String _statusForScore(double score) {
 }
 
 Color _statusColor(double score) {
-  if (score >= 85) return const Color(0xFF10B981);
-  if (score >= 60) return const Color(0xFF06B6D4);
-  if (score >= 40) return const Color(0xFFF59E0B);
-  return const Color(0xFFEF4444);
+  if (score >= 85) return AppTheme.success;
+  if (score >= 60) return AppTheme.accent;
+  if (score >= 40) return AppTheme.warning;
+  return AppTheme.danger;
 }

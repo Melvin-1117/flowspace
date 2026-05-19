@@ -13,6 +13,7 @@ import '../../core/constants/animation_tokens.dart';
 import '../../core/models/task.dart';
 import '../../core/providers/isar_provider.dart';
 import '../../widgets/app_bottom_nav.dart';
+import '../../app/theme.dart';
 import '../../widgets/app_top_bar.dart';
 import 'providers/github_sync_notifier.dart';
 import 'providers/pulse_providers.dart';
@@ -90,7 +91,7 @@ class _PulseScreenState extends ConsumerState<PulseScreen> {
               child: userAsync.when(
                 data: (user) => CircleAvatar(
                   radius: 16,
-                  backgroundColor: const Color(0xFF1D1A24),
+                  backgroundColor: AppTheme.surfaceCard,
                   backgroundImage: user != null && user.avatarUrl.isNotEmpty
                       ? NetworkImage(user.avatarUrl)
                       : null,
@@ -100,12 +101,12 @@ class _PulseScreenState extends ConsumerState<PulseScreen> {
                 ),
                 error: (_, __) => const CircleAvatar(
                   radius: 16,
-                  backgroundColor: Color(0xFF1D1A24),
+                  backgroundColor: AppTheme.surfaceCard,
                   child: Icon(Icons.person, color: Colors.white, size: 16),
                 ),
                 loading: () => const CircleAvatar(
                   radius: 16,
-                  backgroundColor: Color(0xFF1D1A24),
+                  backgroundColor: AppTheme.surfaceCard,
                   child: SizedBox(
                     width: 14,
                     height: 14,
@@ -135,7 +136,7 @@ class _PulseScreenState extends ConsumerState<PulseScreen> {
             children: [
               Text(
                 'LIVE REPOSITORY ANALYSIS',
-                style: GoogleFonts.inter(
+                style: GoogleFonts.spaceGrotesk(
                   color: pulsePrimary,
                   fontSize: 11,
                   fontWeight: FontWeight.w700,
@@ -145,7 +146,7 @@ class _PulseScreenState extends ConsumerState<PulseScreen> {
               const SizedBox(height: 6),
               Text(
                 'Pulse Dashboard',
-                style: GoogleFonts.inter(
+                style: GoogleFonts.spaceGrotesk(
                   color: pulseText,
                   fontSize: 28,
                   fontWeight: FontWeight.w700,
@@ -167,13 +168,13 @@ class _PulseScreenState extends ConsumerState<PulseScreen> {
                       vertical: 6,
                     ),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFF59E0B).withValues(alpha: 0.2),
+                      color: AppTheme.warning.withValues(alpha: 0.2),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Text(
                       'Offline — showing cached data',
-                      style: GoogleFonts.inter(
-                        color: const Color(0xFFF59E0B),
+                      style: GoogleFonts.spaceGrotesk(
+                        color: AppTheme.warning,
                         fontSize: 12,
                       ),
                     ),
@@ -207,7 +208,7 @@ class _PulseScreenState extends ConsumerState<PulseScreen> {
         error: (_, __) => Center(
           child: Text(
             'Unable to determine GitHub connection',
-            style: GoogleFonts.inter(color: pulseMuted),
+            style: GoogleFonts.spaceGrotesk(color: pulseMuted),
           ),
         ),
       ),
@@ -298,7 +299,7 @@ class _PulseScreenState extends ConsumerState<PulseScreen> {
               children: [
                 Text(
                   'Enter your GitHub Personal Access Token',
-                  style: GoogleFonts.inter(
+                  style: GoogleFonts.spaceGrotesk(
                     color: pulseText,
                     fontWeight: FontWeight.w700,
                   ),
@@ -316,7 +317,7 @@ class _PulseScreenState extends ConsumerState<PulseScreen> {
                   },
                   child: Text(
                     'Open github.com/settings/tokens (scopes: repo, read:user, read:org)',
-                    style: GoogleFonts.inter(
+                    style: GoogleFonts.spaceGrotesk(
                       color: pulsePrimary,
                       decoration: TextDecoration.underline,
                     ),
@@ -404,7 +405,7 @@ class _PulseScreenState extends ConsumerState<PulseScreen> {
         child: user == null
             ? Text(
                 'No profile loaded',
-                style: GoogleFonts.inter(color: pulseMuted),
+                style: GoogleFonts.spaceGrotesk(color: pulseMuted),
               )
             : Column(
                 mainAxisSize: MainAxisSize.min,
@@ -416,7 +417,7 @@ class _PulseScreenState extends ConsumerState<PulseScreen> {
                   const SizedBox(height: 8),
                   Text(
                     user.displayName,
-                    style: GoogleFonts.inter(
+                    style: GoogleFonts.spaceGrotesk(
                       color: pulseText,
                       fontWeight: FontWeight.w700,
                       fontSize: 18,
@@ -424,10 +425,10 @@ class _PulseScreenState extends ConsumerState<PulseScreen> {
                   ),
                   Text(
                     '@${user.username}',
-                    style: GoogleFonts.inter(color: pulseMuted),
+                    style: GoogleFonts.spaceGrotesk(color: pulseMuted),
                   ),
                   const SizedBox(height: 10),
-                  Text(user.bio, style: GoogleFonts.inter(color: pulseMuted)),
+                  Text(user.bio, style: GoogleFonts.spaceGrotesk(color: pulseMuted)),
                   const SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -448,12 +449,12 @@ class _PulseScreenState extends ConsumerState<PulseScreen> {
       children: [
         Text(
           value,
-          style: GoogleFonts.inter(
+          style: GoogleFonts.spaceGrotesk(
             color: pulseText,
             fontWeight: FontWeight.w700,
           ),
         ),
-        Text(label, style: GoogleFonts.inter(color: pulseMuted, fontSize: 12)),
+        Text(label, style: GoogleFonts.spaceGrotesk(color: pulseMuted, fontSize: 12)),
       ],
     );
   }
@@ -506,7 +507,7 @@ class _PulseScreenState extends ConsumerState<PulseScreen> {
   }) {
     return ListTile(
       leading: Icon(icon, color: pulsePrimary),
-      title: Text(title, style: GoogleFonts.inter(color: pulseText)),
+      title: Text(title, style: GoogleFonts.spaceGrotesk(color: pulseText)),
       onTap: onTap,
     );
   }
@@ -534,7 +535,7 @@ class _PulseScreenState extends ConsumerState<PulseScreen> {
             children: [
               Text(
                 'Repository Note',
-                style: GoogleFonts.inter(
+                style: GoogleFonts.spaceGrotesk(
                   color: pulseText,
                   fontWeight: FontWeight.w700,
                 ),
@@ -709,7 +710,7 @@ class _LastSyncedSubtitle extends ConsumerWidget {
         if (value == null) {
           return Text(
             'Not synced yet',
-            style: GoogleFonts.inter(color: pulseMuted, fontSize: 12),
+            style: GoogleFonts.spaceGrotesk(color: pulseMuted, fontSize: 12),
           );
         }
         final diff = DateTime.now().difference(value);
@@ -720,12 +721,12 @@ class _LastSyncedSubtitle extends ConsumerWidget {
             : DateFormat.yMMMd().add_jm().format(value);
         return Text(
           'Last synced $label',
-          style: GoogleFonts.inter(color: pulseMuted, fontSize: 12),
+          style: GoogleFonts.spaceGrotesk(color: pulseMuted, fontSize: 12),
         );
       },
       loading: () => Text(
         'Loading sync status…',
-        style: GoogleFonts.inter(color: pulseMuted, fontSize: 12),
+        style: GoogleFonts.spaceGrotesk(color: pulseMuted, fontSize: 12),
       ),
       error: (_, __) => const SizedBox.shrink(),
     );
@@ -767,18 +768,18 @@ class _PulseDrawer extends ConsumerWidget {
                       children: [
                         Text(
                           user.displayName,
-                          style: GoogleFonts.inter(
+                          style: GoogleFonts.spaceGrotesk(
                             color: pulseText,
                             fontWeight: FontWeight.w700,
                           ),
                         ),
                         Text(
                           '@${user.username}',
-                          style: GoogleFonts.inter(color: pulseMuted),
+                          style: GoogleFonts.spaceGrotesk(color: pulseMuted),
                         ),
                         Text(
                           '${user.followers} followers • ${user.following} following',
-                          style: GoogleFonts.inter(
+                          style: GoogleFonts.spaceGrotesk(
                             color: pulseMuted,
                             fontSize: 12,
                           ),
@@ -791,7 +792,7 @@ class _PulseDrawer extends ConsumerWidget {
             else
               Text(
                 'No account connected',
-                style: GoogleFonts.inter(color: pulseMuted),
+                style: GoogleFonts.spaceGrotesk(color: pulseMuted),
               ),
             const SizedBox(height: 14),
             Row(
@@ -807,7 +808,7 @@ class _PulseDrawer extends ConsumerWidget {
                 const SizedBox(width: 8),
                 Text(
                   connected ? 'Connected' : 'Not connected',
-                  style: GoogleFonts.inter(color: pulseText),
+                  style: GoogleFonts.spaceGrotesk(color: pulseText),
                 ),
               ],
             ),
@@ -816,7 +817,7 @@ class _PulseDrawer extends ConsumerWidget {
               leading: const Icon(Icons.settings_outlined, color: pulsePrimary),
               title: Text(
                 'Settings shortcut',
-                style: GoogleFonts.inter(color: pulseText),
+                style: GoogleFonts.spaceGrotesk(color: pulseText),
               ),
               onTap: onSettingsTap,
             ),
@@ -824,7 +825,7 @@ class _PulseDrawer extends ConsumerWidget {
               leading: const Icon(Icons.link_off, color: pulseDanger),
               title: Text(
                 'Disconnect GitHub',
-                style: GoogleFonts.inter(color: pulseDanger),
+                style: GoogleFonts.spaceGrotesk(color: pulseDanger),
               ),
               onTap: () => onDisconnect(),
             ),

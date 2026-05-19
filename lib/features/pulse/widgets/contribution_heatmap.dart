@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import '../../../core/models/contribution_cache.dart';
 import '../pulse_types.dart';
 import '../providers/pulse_providers.dart';
+import '../../../app/theme.dart';
 import 'pulse_theme.dart';
 
 class ContributionHeatmap extends ConsumerWidget {
@@ -53,7 +54,7 @@ class _Content extends StatelessWidget {
       children: [
         Text(
           'Contribution Activity',
-          style: GoogleFonts.inter(
+          style: GoogleFonts.spaceGrotesk(
             color: pulseText,
             fontWeight: FontWeight.w700,
             fontSize: 18,
@@ -62,25 +63,25 @@ class _Content extends StatelessWidget {
         const SizedBox(height: 2),
         Text(
           '$total contributions in the last ${range.days >= 365 ? 'year' : '${range.days} days'}',
-          style: GoogleFonts.inter(color: pulseMuted, fontSize: 13),
+          style: GoogleFonts.spaceGrotesk(color: pulseMuted, fontSize: 13),
         ),
         const SizedBox(height: 8),
         Row(
           children: [
             Text(
               'Less',
-              style: GoogleFonts.inter(color: pulseMuted, fontSize: 10),
+              style: GoogleFonts.spaceGrotesk(color: pulseMuted, fontSize: 10),
             ),
             const SizedBox(width: 6),
-            const _LegendCell(color: Color(0xFF1A1A1A)),
-            const _LegendCell(color: Color(0xFF2D1B69)),
-            const _LegendCell(color: Color(0xFF4C1D95)),
-            const _LegendCell(color: Color(0xFF7C3AED)),
-            const _LegendCell(color: Color(0xFF06B6D4)),
+            const _LegendCell(color: AppTheme.surfaceElevated),
+            const _LegendCell(color: Color(0xFF001A3D)),
+            const _LegendCell(color: Color(0xFF003380)),
+            const _LegendCell(color: AppTheme.primary),
+            const _LegendCell(color: AppTheme.accent),
             const SizedBox(width: 6),
             Text(
               'More',
-              style: GoogleFonts.inter(color: pulseMuted, fontSize: 10),
+              style: GoogleFonts.spaceGrotesk(color: pulseMuted, fontSize: 10),
             ),
           ],
         ),
@@ -103,13 +104,13 @@ class _Content extends StatelessWidget {
                             showDuration: const Duration(seconds: 2),
                             preferBelow: false,
                             decoration: BoxDecoration(
-                              color: const Color(0xFF1A1A1A),
+                              color: AppTheme.surfaceElevated,
                               border: Border.all(
-                                color: const Color(0xFF262626),
+                                color: AppTheme.surfaceBorder,
                               ),
                               borderRadius: BorderRadius.circular(8),
                             ),
-                            textStyle: GoogleFonts.inter(
+                            textStyle: GoogleFonts.spaceGrotesk(
                               color: Colors.white,
                               fontSize: 12,
                             ),
@@ -174,11 +175,11 @@ class _Content extends StatelessWidget {
   }
 
   Color _colorForCount(int count) {
-    if (count == 0) return const Color(0xFF1A1A1A);
-    if (count <= 3) return const Color(0xFF2D1B69);
-    if (count <= 6) return const Color(0xFF4C1D95);
-    if (count <= 9) return const Color(0xFF7C3AED);
-    return const Color(0xFF06B6D4);
+    if (count == 0) return AppTheme.surfaceElevated;
+    if (count <= 3) return const Color(0xFF001A3D);
+    if (count <= 6) return const Color(0xFF003380);
+    if (count <= 9) return AppTheme.primary;
+    return AppTheme.accent;
   }
 }
 
@@ -217,7 +218,7 @@ class _ErrorState extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(message, style: GoogleFonts.inter(color: pulseMuted)),
+            Text(message, style: GoogleFonts.spaceGrotesk(color: pulseMuted)),
             const SizedBox(height: 10),
             OutlinedButton(onPressed: onRetry, child: const Text('Retry')),
           ],

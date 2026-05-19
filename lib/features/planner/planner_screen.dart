@@ -23,6 +23,7 @@ import 'widgets/milestone_detail_sheet.dart';
 import 'widgets/semester_health_ring.dart';
 import 'widgets/semester_health_sheet.dart';
 import 'widgets/subject_mastery_card.dart';
+import '../../app/theme.dart';
 
 class PlannerScreen extends ConsumerStatefulWidget {
   const PlannerScreen({super.key});
@@ -51,7 +52,7 @@ class _PlannerScreenState extends ConsumerState<PlannerScreen> {
 
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: const Color(0xFF000000),
+      backgroundColor: AppTheme.background,
       drawer: const AppDrawer(),
       appBar: buildFlowSpaceAppBar(
         scaffoldKey: _scaffoldKey,
@@ -66,13 +67,13 @@ class _PlannerScreenState extends ConsumerState<PlannerScreen> {
               onTap: () {
                 showModalBottomSheet<void>(
                   context: context,
-                  backgroundColor: const Color(0xFF0D0D0D),
+                  backgroundColor: AppTheme.surfaceCard,
                   builder: (_) => const ProfileSheet(),
                 );
               },
               child: const CircleAvatar(
                 radius: 16,
-                backgroundColor: Color(0xFF1A1A1A),
+                backgroundColor: AppTheme.surfaceElevated,
                 child: Text('FS', style: TextStyle(fontSize: 11)),
               ),
             ),
@@ -102,7 +103,7 @@ class _PlannerScreenState extends ConsumerState<PlannerScreen> {
                           onTap: () => showModalBottomSheet<void>(
                             context: context,
                             isScrollControlled: true,
-                            backgroundColor: const Color(0xFF0D0D0D),
+                            backgroundColor: AppTheme.surfaceCard,
                             builder: (_) => SemesterHealthSheet(health: value),
                           ),
                         ),
@@ -138,7 +139,7 @@ class _PlannerScreenState extends ConsumerState<PlannerScreen> {
                         const Text(
                           'Subject Mastery',
                           style: TextStyle(
-                            color: Color(0xFFF0F0F0),
+                            color: AppTheme.textPrimary,
                             fontSize: 24,
                             fontWeight: FontWeight.w700,
                           ),
@@ -148,7 +149,7 @@ class _PlannerScreenState extends ConsumerState<PlannerScreen> {
                           child: const Text(
                             'View All →',
                             style: TextStyle(
-                              color: Color(0xFF7C3AED),
+                              color: AppTheme.primary,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
@@ -204,7 +205,7 @@ class _PlannerScreenState extends ConsumerState<PlannerScreen> {
                     const SizedBox(height: 8),
                     OutlinedButton.icon(
                       style: OutlinedButton.styleFrom(
-                        side: const BorderSide(color: Color(0xFF262626)),
+                        side: const BorderSide(color: AppTheme.surfaceBorder),
                         minimumSize: const Size.fromHeight(56),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
@@ -213,11 +214,11 @@ class _PlannerScreenState extends ConsumerState<PlannerScreen> {
                       onPressed: _openAddSubjectSheet,
                       icon: const Icon(
                         Icons.add_circle_outline,
-                        color: Color(0xFF555555),
+                        color: AppTheme.textSecondary,
                       ),
                       label: const Text(
                         'Add New Subject',
-                        style: TextStyle(color: Color(0xFF555555)),
+                        style: TextStyle(color: AppTheme.textSecondary),
                       ),
                     ),
                     const SizedBox(height: 24),
@@ -252,7 +253,7 @@ class _PlannerScreenState extends ConsumerState<PlannerScreen> {
     await showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
-      backgroundColor: const Color(0xFF000000),
+      backgroundColor: AppTheme.background,
       builder: (_) {
         return DraggableScrollableSheet(
           initialChildSize: 0.95,
@@ -278,7 +279,7 @@ class _PlannerScreenState extends ConsumerState<PlannerScreen> {
                         style: TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.bold,
-                          color: Color(0xFFF0F0F0),
+                          color: AppTheme.textPrimary,
                         ),
                       ),
                       const SizedBox(height: 12),
@@ -290,7 +291,7 @@ class _PlannerScreenState extends ConsumerState<PlannerScreen> {
                           hintText:
                               'Search subjects, modules, milestones, blocks',
                           filled: true,
-                          fillColor: Color(0xFF0D0D0D),
+                          fillColor: AppTheme.surfaceCard,
                           border: OutlineInputBorder(),
                         ),
                       ),
@@ -355,7 +356,7 @@ class _PlannerScreenState extends ConsumerState<PlannerScreen> {
               child: Text(
                 entry.key.toUpperCase(),
                 style: const TextStyle(
-                  color: Color(0xFF555555),
+                  color: AppTheme.textSecondary,
                   letterSpacing: 1.2,
                   fontWeight: FontWeight.w700,
                 ),
@@ -436,7 +437,7 @@ class _PlannerScreenState extends ConsumerState<PlannerScreen> {
     await showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
-      backgroundColor: const Color(0xFF0D0D0D),
+      backgroundColor: AppTheme.surfaceCard,
       builder: (_) => AddSubjectSheet(
         onSubmit: (subject, examMilestone) async {
           await ref.read(subjectNotifierProvider.notifier).addSubject(subject);
@@ -476,7 +477,7 @@ class _PlannerScreenState extends ConsumerState<PlannerScreen> {
     await showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
-      backgroundColor: const Color(0xFF0D0D0D),
+      backgroundColor: AppTheme.surfaceCard,
       builder: (_) => MilestoneDetailSheet(
         milestone: milestone,
         onToggleChecklist: (index, value) async {
@@ -518,7 +519,7 @@ class _PlannerScreenState extends ConsumerState<PlannerScreen> {
     await showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
-      backgroundColor: const Color(0xFF0D0D0D),
+      backgroundColor: AppTheme.surfaceCard,
       builder: (_) => AddFocusBlockSheet(
         subjects: subjects,
         onSubmit: (block) =>
@@ -538,7 +539,7 @@ class _PlannerScreenState extends ConsumerState<PlannerScreen> {
     await showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
-      backgroundColor: const Color(0xFF0D0D0D),
+      backgroundColor: AppTheme.surfaceCard,
       builder: (_) {
         return SafeArea(
           child: Padding(
@@ -550,7 +551,7 @@ class _PlannerScreenState extends ConsumerState<PlannerScreen> {
                 Text(
                   block.title,
                   style: const TextStyle(
-                    color: Color(0xFFF0F0F0),
+                    color: AppTheme.textPrimary,
                     fontWeight: FontWeight.w700,
                     fontSize: 20,
                   ),
@@ -558,17 +559,17 @@ class _PlannerScreenState extends ConsumerState<PlannerScreen> {
                 const SizedBox(height: 8),
                 Text(
                   subjectName ?? 'No linked subject',
-                  style: const TextStyle(color: Color(0xFF555555)),
+                  style: const TextStyle(color: AppTheme.textSecondary),
                 ),
                 const SizedBox(height: 8),
                 Text(
                   '${DateFormat.Hm().format(block.scheduledTime)} • ${block.durationMinutes} mins • ${block.sessionType}',
-                  style: const TextStyle(color: Color(0xFF555555)),
+                  style: const TextStyle(color: AppTheme.textSecondary),
                 ),
                 const SizedBox(height: 16),
                 FilledButton(
                   style: FilledButton.styleFrom(
-                    backgroundColor: const Color(0xFF7C3AED),
+                    backgroundColor: AppTheme.primary,
                     minimumSize: const Size.fromHeight(48),
                   ),
                   onPressed: () async {
@@ -603,7 +604,7 @@ class _PlannerScreenState extends ConsumerState<PlannerScreen> {
                           if (mounted) Navigator.of(context).pop();
                         },
                         style: OutlinedButton.styleFrom(
-                          foregroundColor: const Color(0xFFEF4444),
+                          foregroundColor: AppTheme.danger,
                         ),
                         child: const Text('Delete'),
                       ),
@@ -630,7 +631,7 @@ class _PlannerSkeletonBox extends StatelessWidget {
           width: double.infinity,
           height: height,
           decoration: BoxDecoration(
-            color: const Color(0xFF0D0D0D),
+            color: AppTheme.surfaceCard,
             borderRadius: BorderRadius.circular(16),
           ),
         )
@@ -655,7 +656,7 @@ class _EmptyPrompt extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: const Color(0xFF0D0D0D),
+        color: AppTheme.surfaceCard,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: const Color(0x0DFFFFFF)),
       ),
@@ -665,12 +666,12 @@ class _EmptyPrompt extends StatelessWidget {
           Text(
             title,
             style: const TextStyle(
-              color: Color(0xFFF0F0F0),
+              color: AppTheme.textPrimary,
               fontWeight: FontWeight.w700,
             ),
           ),
           const SizedBox(height: 4),
-          Text(subtitle, style: const TextStyle(color: Color(0xFF555555))),
+          Text(subtitle, style: const TextStyle(color: AppTheme.textSecondary)),
         ],
       ),
     );
@@ -688,11 +689,11 @@ class _ErrorCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: const Color(0xFF0D0D0D),
+        color: AppTheme.surfaceCard,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFEF4444)),
+        border: Border.all(color: AppTheme.danger),
       ),
-      child: Text(message, style: const TextStyle(color: Color(0xFFF0F0F0))),
+      child: Text(message, style: const TextStyle(color: AppTheme.textPrimary)),
     );
   }
 }

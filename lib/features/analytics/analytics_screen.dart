@@ -16,10 +16,11 @@ import 'widgets/consistency_archive_heatmap.dart';
 import 'widgets/focus_record_card.dart';
 import 'widgets/task_completion_card.dart';
 import 'widgets/weekly_velocity_chart.dart';
+import '../../app/theme.dart';
 
-const Color _screenBackground = Color(0xFF000000);
-const Color _textPrimary = Color(0xFFF0F0F0);
-const Color _purple = Color(0xFF7C3AED);
+const Color _screenBackground = AppTheme.background;
+const Color _textPrimary = AppTheme.textPrimary;
+const Color _purple = AppTheme.primary;
 const Duration _bannerAutoDismiss = Duration(seconds: 5);
 
 class AnalyticsScreen extends ConsumerStatefulWidget {
@@ -73,7 +74,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
             padding: EdgeInsets.only(right: 16),
             child: CircleAvatar(
               radius: 16,
-              backgroundColor: Color(0xFF1A1A1A),
+              backgroundColor: AppTheme.surfaceElevated,
               child: Text('FS', style: TextStyle(fontSize: 11)),
             ),
           ),

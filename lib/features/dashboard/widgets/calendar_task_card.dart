@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../core/models/task.dart';
 import '../../../core/providers/calendar_providers.dart';
+import '../../../app/theme.dart';
 
 class CalendarTaskCard extends ConsumerWidget {
   final Task task;
@@ -12,11 +13,11 @@ class CalendarTaskCard extends ConsumerWidget {
   Color _getPriorityColor() {
     switch (task.priority.toLowerCase()) {
       case 'urgent':
-        return const Color(0xFFEF4444); // Danger
+        return AppTheme.danger; // Danger
       case 'normal':
-        return const Color(0xFF7C3AED); // Primary
+        return AppTheme.primary; // Primary
       default:
-        return const Color(0xFF06B6D4); // Accent
+        return AppTheme.accent; // Accent
     }
   }
 
@@ -44,9 +45,9 @@ class CalendarTaskCard extends ConsumerWidget {
           // Checkbox logic
           Checkbox(
             value: task.isCompleted,
-            activeColor: const Color(0xFF7C3AED),
+            activeColor: AppTheme.primary,
             checkColor: Colors.white,
-            side: const BorderSide(color: Color(0xFF6B7280)),
+            side: const BorderSide(color: AppTheme.textMuted),
             onChanged: (bool? value) {
               if (value != null) {
                 ref
@@ -67,7 +68,7 @@ class CalendarTaskCard extends ConsumerWidget {
                       Flexible(
                         child: Text(
                           task.priority.toUpperCase(),
-                          style: GoogleFonts.inter(
+                          style: GoogleFonts.spaceGrotesk(
                             color: _getPriorityColor(),
                             fontSize: 10,
                             fontWeight: FontWeight.bold,
@@ -83,13 +84,13 @@ class CalendarTaskCard extends ConsumerWidget {
                           vertical: 2,
                         ),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF1A1D27),
+                          color: AppTheme.surfaceElevated,
                           borderRadius: BorderRadius.circular(4),
                         ),
                         child: Text(
                           task.tag.toUpperCase(),
-                          style: GoogleFonts.inter(
-                            color: const Color(0xFF6B7280),
+                          style: GoogleFonts.spaceGrotesk(
+                            color: AppTheme.textMuted,
                             fontSize: 9,
                             fontWeight: FontWeight.w600,
                           ),
@@ -100,9 +101,9 @@ class CalendarTaskCard extends ConsumerWidget {
                   const SizedBox(height: 4),
                   Text(
                     task.title,
-                    style: GoogleFonts.inter(
+                    style: GoogleFonts.spaceGrotesk(
                       color: task.isCompleted
-                          ? const Color(0xFF6B7280)
+                          ? AppTheme.textMuted
                           : Colors.white,
                       fontSize: 14,
                       fontWeight: FontWeight.w600,

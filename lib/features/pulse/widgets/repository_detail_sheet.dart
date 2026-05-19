@@ -22,7 +22,7 @@ class RepositoryDetailSheet extends StatelessWidget {
           children: [
             Text(
               repo.fullName,
-              style: GoogleFonts.inter(
+              style: GoogleFonts.spaceGrotesk(
                 color: pulseText,
                 fontWeight: FontWeight.w700,
                 fontSize: 18,
@@ -31,7 +31,7 @@ class RepositoryDetailSheet extends StatelessWidget {
             const SizedBox(height: 6),
             Text(
               repo.description.isEmpty ? 'No description' : repo.description,
-              style: GoogleFonts.inter(color: pulseMuted),
+              style: GoogleFonts.spaceGrotesk(color: pulseMuted),
             ),
             const SizedBox(height: 12),
             Wrap(
@@ -48,7 +48,7 @@ class RepositoryDetailSheet extends StatelessWidget {
             const SizedBox(height: 12),
             Text(
               'Last pushed ${DateFormat.yMMMd().add_jm().format(repo.pushedAt)}',
-              style: GoogleFonts.inter(color: pulseMuted),
+              style: GoogleFonts.spaceGrotesk(color: pulseMuted),
             ),
             if (repo.topics.isNotEmpty) ...[
               const SizedBox(height: 8),
@@ -96,7 +96,7 @@ class RepositoryDetailSheet extends StatelessWidget {
       ),
       child: Text(
         text,
-        style: GoogleFonts.inter(color: pulseText, fontSize: 12),
+        style: GoogleFonts.spaceGrotesk(color: pulseText, fontSize: 12),
       ),
     );
   }

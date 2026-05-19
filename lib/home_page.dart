@@ -8,6 +8,7 @@ import 'core/models/pomodoro_session.dart';
 import 'widgets/app_bottom_nav.dart';
 import 'widgets/app_drawer.dart';
 import 'widgets/app_top_bar.dart';
+import 'app/theme.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
@@ -83,7 +84,7 @@ class _HomePageState extends ConsumerState<HomePage> {
             ..isAbandoned = false;
           await ref.read(sessionTimerProvider.notifier).startTimer(mockSession);
         },
-        backgroundColor: const Color(0xFF8B5CF6),
+        backgroundColor: AppTheme.primary,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         child: const Icon(Icons.bolt, color: Colors.white, size: 30),
       ),
@@ -98,13 +99,13 @@ class _HomePageState extends ConsumerState<HomePage> {
         color: Colors.transparent,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: const Color(0xFFE48E83).withValues(alpha: 0.5),
+          color: AppTheme.danger.withValues(alpha: 0.5),
           width: 1,
         ),
       ),
       child: Row(
         children: [
-          const Icon(Icons.error_outline, color: Color(0xFFE48E83)),
+          const Icon(Icons.error_outline, color: AppTheme.danger),
           const SizedBox(width: 12),
           Expanded(
             child: Text(
@@ -121,7 +122,7 @@ class _HomePageState extends ConsumerState<HomePage> {
             'Complete\nNow',
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: Color(0xFFE48E83),
+              color: AppTheme.danger,
               fontWeight: FontWeight.bold,
               fontSize: 13,
             ),
@@ -157,12 +158,12 @@ class _HomePageState extends ConsumerState<HomePage> {
       width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 24),
       decoration: BoxDecoration(
-        color: const Color(0xFF13101A),
+        color: AppTheme.surfaceCard,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Column(
         children: [
-          const Icon(Icons.bolt, color: Color(0xFFC084FC), size: 40),
+          const Icon(Icons.bolt, color: AppTheme.primaryLight, size: 40),
           const SizedBox(height: 12),
           const Text(
             '14',
@@ -187,8 +188,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                 height: 24,
                 decoration: BoxDecoration(
                   color: index < 4
-                      ? const Color(0xFF8B5CF6)
-                      : const Color(0xFF2A2438),
+                      ? AppTheme.primary
+                      : AppTheme.surfaceBorder,
                   borderRadius: BorderRadius.circular(4),
                 ),
               );
@@ -209,7 +210,7 @@ class _HomePageState extends ConsumerState<HomePage> {
       width: double.infinity,
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: const Color(0xFF13101A),
+        color: AppTheme.surfaceCard,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Column(
@@ -219,8 +220,8 @@ class _HomePageState extends ConsumerState<HomePage> {
             lineWidth: 12.0,
             percent: 0.75,
             circularStrokeCap: CircularStrokeCap.round,
-            backgroundColor: const Color(0xFF2A2438),
-            progressColor: const Color(0xFF8B5CF6),
+            backgroundColor: AppTheme.surfaceBorder,
+            progressColor: AppTheme.primary,
             center: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: const [
@@ -270,7 +271,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   Text(
                     '12',
                     style: TextStyle(
-                      color: Color(0xFF2DD4BF),
+                      color: AppTheme.success,
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
@@ -343,7 +344,7 @@ class _HomePageState extends ConsumerState<HomePage> {
       width: double.infinity,
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: const Color(0xFF13101A),
+        color: AppTheme.surfaceCard,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Stack(
@@ -380,14 +381,14 @@ class _HomePageState extends ConsumerState<HomePage> {
                   Container(
                     width: 20,
                     height: 1,
-                    color: const Color(0xFF8B5CF6),
+                    color: AppTheme.primary,
                   ),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
                       dailyQuote['author']!,
                       style: const TextStyle(
-                        color: Color(0xFFC084FC),
+                        color: AppTheme.primaryLight,
                         fontSize: 12,
                         letterSpacing: 1.5,
                         fontWeight: FontWeight.w600,

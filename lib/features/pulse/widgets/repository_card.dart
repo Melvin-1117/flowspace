@@ -4,6 +4,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/models/repository_cache.dart';
 import 'repository_detail_sheet.dart';
+import '../../../app/theme.dart';
 
 class RepositoryCard extends StatelessWidget {
   const RepositoryCard({required this.repo, super.key});
@@ -17,14 +18,14 @@ class RepositoryCard extends StatelessWidget {
     return InkWell(
       onTap: () => showModalBottomSheet<void>(
         context: context,
-        backgroundColor: const Color(0xFF0D0D0D),
+        backgroundColor: AppTheme.surfaceCard,
         isScrollControlled: true,
         builder: (_) => RepositoryDetailSheet(repo: repo),
       ),
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: const Color(0xFF151515),
+          color: AppTheme.surfaceElevated,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
         ),
@@ -34,7 +35,7 @@ class RepositoryCard extends StatelessWidget {
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color: const Color(0xFF1A1A1A),
+                color: AppTheme.surfaceElevated,
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Icon(
@@ -53,8 +54,8 @@ class RepositoryCard extends StatelessWidget {
                       repo.name.length > 20
                           ? '${repo.name.substring(0, 20)}…'
                           : repo.name,
-                      style: GoogleFonts.inter(
-                        color: const Color(0xFFF0F0F0),
+                      style: GoogleFonts.spaceGrotesk(
+                        color: AppTheme.textPrimary,
                         fontWeight: FontWeight.w600,
                         fontSize: 15,
                       ),
@@ -94,7 +95,7 @@ class RepositoryCard extends StatelessWidget {
                             const SizedBox(width: 4),
                             Text(
                               repo.primaryLanguage,
-                              style: GoogleFonts.inter(
+                              style: GoogleFonts.spaceGrotesk(
                                 color: langColor,
                                 fontSize: 11,
                               ),
@@ -110,8 +111,8 @@ class RepositoryCard extends StatelessWidget {
             const SizedBox(width: 8),
             Text(
               'Updated $ago',
-              style: GoogleFonts.inter(
-                color: const Color(0xFF555555),
+              style: GoogleFonts.spaceGrotesk(
+                color: AppTheme.textSecondary,
                 fontSize: 11,
               ),
             ),
@@ -125,12 +126,12 @@ class RepositoryCard extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(icon, size: 12, color: const Color(0xFF555555)),
+        Icon(icon, size: 12, color: AppTheme.textSecondary),
         const SizedBox(width: 3),
         Text(
           value,
-          style: GoogleFonts.inter(
-            color: const Color(0xFF555555),
+          style: GoogleFonts.spaceGrotesk(
+            color: AppTheme.textSecondary,
             fontSize: 12,
           ),
         ),
@@ -158,13 +159,13 @@ class RepositoryCard extends StatelessWidget {
       };
 
   Color _languageColor(String language) => switch (language.toLowerCase()) {
-    'rust' => const Color(0xFFEF4444),
-    'typescript' => const Color(0xFF7C3AED),
-    'javascript' => const Color(0xFFF59E0B),
-    'python' => const Color(0xFF06B6D4),
-    'go' => const Color(0xFF10B981),
-    'dart' => const Color(0xFF4C1D95),
-    _ => const Color(0xFF555555),
+    'rust' => AppTheme.danger,
+    'typescript' => AppTheme.primary,
+    'javascript' => AppTheme.warning,
+    'python' => AppTheme.accent,
+    'go' => AppTheme.success,
+    'dart' => AppTheme.primaryDark,
+    _ => AppTheme.textSecondary,
   };
 
   Future<void> _openUrl(String url) async {

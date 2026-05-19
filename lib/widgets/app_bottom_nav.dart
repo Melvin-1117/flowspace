@@ -7,11 +7,12 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import '../app/theme.dart';
 
 // ── Design tokens ─────────────────────────────────────────────────────────────
-const Color kNavBackground = Color(0xFF09090B);
-const Color kNavSelectedColor = Color(0xFF7C3AED);
-const Color kNavUnselectedColor = Color(0xFF7A7A83);
+const Color kNavBackground = AppTheme.background;
+const Color kNavSelectedColor = AppTheme.primary;
+const Color kNavUnselectedColor = AppTheme.textMuted;
 const TextStyle kNavSelectedLabel = TextStyle(
   fontSize: 10,
   fontWeight: FontWeight.w700,

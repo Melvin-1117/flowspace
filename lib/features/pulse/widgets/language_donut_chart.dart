@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../../core/models/language_cache.dart';
 import '../providers/pulse_providers.dart';
+import '../../../app/theme.dart';
 import 'pulse_theme.dart';
 
 class LanguageDonutChart extends ConsumerStatefulWidget {
@@ -37,7 +38,7 @@ class _LanguageDonutChartState extends ConsumerState<LanguageDonutChart> {
         error: (_, __) => SizedBox(
           height: 180,
           child: Center(
-            child: Text('No data', style: GoogleFonts.inter(color: pulseMuted)),
+            child: Text('No data', style: GoogleFonts.spaceGrotesk(color: pulseMuted)),
           ),
         ),
       ),
@@ -50,7 +51,7 @@ class _LanguageDonutChartState extends ConsumerState<LanguageDonutChart> {
       return SizedBox(
         height: 220,
         child: Center(
-          child: Text('No data', style: GoogleFonts.inter(color: pulseMuted)),
+          child: Text('No data', style: GoogleFonts.spaceGrotesk(color: pulseMuted)),
         ),
       );
     }
@@ -60,7 +61,7 @@ class _LanguageDonutChartState extends ConsumerState<LanguageDonutChart> {
       children: [
         Text(
           'Language Distribution',
-          style: GoogleFonts.inter(
+          style: GoogleFonts.spaceGrotesk(
             color: pulseText,
             fontWeight: FontWeight.w700,
             fontSize: 20,
@@ -93,7 +94,7 @@ class _LanguageDonutChartState extends ConsumerState<LanguageDonutChart> {
                 children: [
                   Text(
                     '${dominant.value.round()}%',
-                    style: GoogleFonts.inter(
+                    style: GoogleFonts.spaceGrotesk(
                       color: pulseText,
                       fontWeight: FontWeight.w800,
                       fontSize: 28,
@@ -101,7 +102,7 @@ class _LanguageDonutChartState extends ConsumerState<LanguageDonutChart> {
                   ),
                   Text(
                     dominant.key,
-                    style: GoogleFonts.inter(color: pulseMuted, fontSize: 12),
+                    style: GoogleFonts.spaceGrotesk(color: pulseMuted, fontSize: 12),
                   ),
                 ],
               ),
@@ -128,7 +129,7 @@ class _LanguageDonutChartState extends ConsumerState<LanguageDonutChart> {
                   Expanded(
                     child: Text(
                       entries[i].key,
-                      style: GoogleFonts.inter(color: pulseText, fontSize: 14),
+                      style: GoogleFonts.spaceGrotesk(color: pulseText, fontSize: 14),
                     ),
                   ),
                   Tooltip(
@@ -136,7 +137,7 @@ class _LanguageDonutChartState extends ConsumerState<LanguageDonutChart> {
                         '${entries[i].key} — ${entries[i].value.toStringAsFixed(1)}% — ${data.repoCounts[entries[i].key] ?? 0} repos',
                     child: Text(
                       '${entries[i].value.toStringAsFixed(0)}%',
-                      style: GoogleFonts.inter(
+                      style: GoogleFonts.spaceGrotesk(
                         color: pulseText,
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
@@ -152,13 +153,13 @@ class _LanguageDonutChartState extends ConsumerState<LanguageDonutChart> {
   }
 
   Color _languageColor(String language) => switch (language.toLowerCase()) {
-    'typescript' => const Color(0xFF7C3AED),
-    'javascript' => const Color(0xFFF59E0B),
-    'python' => const Color(0xFF06B6D4),
-    'rust' => const Color(0xFFEF4444),
-    'go' => const Color(0xFF10B981),
-    'dart' => const Color(0xFF4C1D95),
-    'other' => const Color(0xFF555555),
-    _ => const Color(0xFF555555),
+    'typescript' => AppTheme.primary,
+    'javascript' => AppTheme.warning,
+    'python' => AppTheme.accent,
+    'rust' => AppTheme.danger,
+    'go' => AppTheme.success,
+    'dart' => AppTheme.primaryDark,
+    'other' => AppTheme.textSecondary,
+    _ => AppTheme.textSecondary,
   };
 }

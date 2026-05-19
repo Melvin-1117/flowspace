@@ -2,6 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../core/models/task.dart';
+import '../../../app/theme.dart';
 
 class ProgressBreakdownSheet extends StatelessWidget {
   const ProgressBreakdownSheet({
@@ -47,17 +48,17 @@ class ProgressBreakdownSheet extends StatelessWidget {
                   sections: [
                     PieChartSectionData(
                       value: todo,
-                      color: const Color(0xFF555555),
+                      color: AppTheme.textSecondary,
                       title: 'To Do',
                     ),
                     PieChartSectionData(
                       value: inProgress,
-                      color: const Color(0xFF06B6D4),
+                      color: AppTheme.accent,
                       title: 'In Progress',
                     ),
                     PieChartSectionData(
                       value: done,
-                      color: const Color(0xFF10B981),
+                      color: AppTheme.success,
                       title: 'Done',
                     ),
                   ],
@@ -69,7 +70,7 @@ class ProgressBreakdownSheet extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               'Estimated completion: $date',
-              style: const TextStyle(color: Color(0xFF555555)),
+              style: const TextStyle(color: AppTheme.textSecondary),
             ),
           ],
         ),

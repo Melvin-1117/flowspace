@@ -6,6 +6,7 @@ import '../../../core/models/milestone.dart';
 import '../../../core/models/subject.dart';
 import '../../../core/models/subject_module.dart';
 import '../providers/planner_providers.dart';
+import '../../../app/theme.dart';
 
 class AddSubjectSheet extends StatefulWidget {
   const AddSubjectSheet({required this.onSubmit, super.key});
@@ -71,7 +72,7 @@ class _AddSubjectSheetState extends State<AddSubjectSheet> {
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFFF0F0F0),
+                    color: AppTheme.textPrimary,
                   ),
                 ),
                 const SizedBox(height: 14),
@@ -101,13 +102,13 @@ class _AddSubjectSheetState extends State<AddSubjectSheet> {
                         height: 40,
                         decoration: BoxDecoration(
                           color: selected
-                              ? const Color(0xFF7C3AED).withValues(alpha: 0.2)
-                              : const Color(0xFF1A1A1A),
+                              ? AppTheme.primary.withValues(alpha: 0.2)
+                              : AppTheme.surfaceElevated,
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(
                             color: selected
-                                ? const Color(0xFF7C3AED)
-                                : const Color(0xFF262626),
+                                ? AppTheme.primary
+                                : AppTheme.surfaceBorder,
                           ),
                         ),
                         child: Icon(_iconForName(name), size: 18),
@@ -205,7 +206,7 @@ class _AddSubjectSheetState extends State<AddSubjectSheet> {
                     Expanded(
                       child: FilledButton(
                         style: FilledButton.styleFrom(
-                          backgroundColor: const Color(0xFF7C3AED),
+                          backgroundColor: AppTheme.primary,
                         ),
                         onPressed: _save,
                         child: const Text('Add Subject'),

@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/models/task.dart';
 import '../providers/task_providers.dart';
 import 'kanban_column.dart';
+import '../../../app/theme.dart';
 
 class KanbanBoard extends ConsumerStatefulWidget {
   const KanbanBoard({super.key, required this.tasks, this.maxWidth});
@@ -102,13 +103,13 @@ class _KanbanBoardState extends ConsumerState<KanbanBoard> {
       onListReorder: (_, __) {},
       listInnerDecoration: const BoxDecoration(color: Colors.transparent),
       itemDecorationWhileDragging: BoxDecoration(
-        color: const Color(0xFF0D0D0D),
+        color: AppTheme.surfaceCard,
         borderRadius: BorderRadius.circular(16),
         boxShadow: const [BoxShadow(blurRadius: 20, color: Color(0x40000000))],
       ),
       listDecorationWhileDragging: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFF7C3AED)),
+        border: Border.all(color: AppTheme.primary),
       ),
     );
   }
@@ -207,8 +208,8 @@ class _KanbanBoardState extends ConsumerState<KanbanBoard> {
   }
 
   Color _statusColor(String status) {
-    if (status == 'inprogress') return const Color(0xFF06B6D4);
-    if (status == 'done') return const Color(0xFF10B981);
-    return const Color(0xFF555555);
+    if (status == 'inprogress') return AppTheme.accent;
+    if (status == 'done') return AppTheme.success;
+    return AppTheme.textSecondary;
   }
 }

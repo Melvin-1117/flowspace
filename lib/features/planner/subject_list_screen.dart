@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../widgets/app_drawer.dart';
 import 'providers/planner_providers.dart';
 import 'widgets/subject_mastery_card.dart';
+import '../../app/theme.dart';
 
 class SubjectListScreen extends ConsumerStatefulWidget {
   const SubjectListScreen({super.key});
@@ -21,10 +22,10 @@ class _SubjectListScreenState extends ConsumerState<SubjectListScreen> {
     final subjects = ref.watch(allSubjectsProvider);
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: const Color(0xFF000000),
+      backgroundColor: AppTheme.background,
       drawer: const AppDrawer(),
       appBar: AppBar(
-        backgroundColor: const Color(0xFF000000),
+        backgroundColor: AppTheme.background,
         leading: IconButton(
           onPressed: () => _scaffoldKey.currentState?.openDrawer(),
           icon: const Icon(Icons.menu, color: Colors.white),
@@ -39,7 +40,7 @@ class _SubjectListScreenState extends ConsumerState<SubjectListScreen> {
             return const Center(
               child: Text(
                 'No subjects available',
-                style: TextStyle(color: Color(0xFF555555)),
+                style: TextStyle(color: AppTheme.textSecondary),
               ),
             );
           }

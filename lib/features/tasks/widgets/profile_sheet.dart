@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/task_providers.dart';
+import '../../../app/theme.dart';
 
 class ProfileSheet extends ConsumerWidget {
   const ProfileSheet({super.key});
@@ -19,7 +20,7 @@ class ProfileSheet extends ConsumerWidget {
           children: [
             CircleAvatar(
               radius: 40,
-              backgroundColor: const Color(0xFF1A1A1A),
+              backgroundColor: AppTheme.surfaceElevated,
               child: Text(
                 user.avatarInitials,
                 style: const TextStyle(fontSize: 18),
@@ -30,7 +31,7 @@ class ProfileSheet extends ConsumerWidget {
               user.name,
               style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
             ),
-            Text(user.email, style: const TextStyle(color: Color(0xFF555555))),
+            Text(user.email, style: const TextStyle(color: AppTheme.textSecondary)),
             const SizedBox(height: 12),
             Wrap(
               spacing: 8,

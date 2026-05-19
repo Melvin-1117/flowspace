@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/models/focus_block.dart';
+import '../../../app/theme.dart';
 
 class FocusBlockItem extends StatelessWidget {
   const FocusBlockItem({
@@ -37,10 +38,10 @@ class FocusBlockItem extends StatelessWidget {
                       : DateFormat('HH:mm').format(block.scheduledTime),
                   style: TextStyle(
                     color: isMissed
-                        ? const Color(0xFFEF4444)
+                        ? AppTheme.danger
                         : (block.isCompleted
-                              ? const Color(0xFF555555)
-                              : const Color(0xFFF0F0F0)),
+                              ? AppTheme.textSecondary
+                              : AppTheme.textPrimary),
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -54,8 +55,8 @@ class FocusBlockItem extends StatelessWidget {
                       block.title,
                       style: TextStyle(
                         color: block.isCompleted
-                            ? const Color(0xFF555555)
-                            : const Color(0xFFF0F0F0),
+                            ? AppTheme.textSecondary
+                            : AppTheme.textPrimary,
                         decoration: block.isCompleted
                             ? TextDecoration.lineThrough
                             : null,
@@ -66,7 +67,7 @@ class FocusBlockItem extends StatelessWidget {
                     Text(
                       '${_sessionLabel(block.sessionType)} • ${block.durationMinutes} mins',
                       style: const TextStyle(
-                        color: Color(0xFF555555),
+                        color: AppTheme.textSecondary,
                         fontSize: 12,
                       ),
                     ),
@@ -78,8 +79,8 @@ class FocusBlockItem extends StatelessWidget {
                 icon: Icon(
                   block.isCompleted ? Icons.check_circle : Icons.more_vert,
                   color: block.isCompleted
-                      ? const Color(0xFF10B981)
-                      : const Color(0xFF6B7280),
+                      ? AppTheme.success
+                      : AppTheme.textMuted,
                 ),
               ),
             ],

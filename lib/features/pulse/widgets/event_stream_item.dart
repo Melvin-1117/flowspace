@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/models/github_event_cache.dart';
+import '../../../app/theme.dart';
 import 'pulse_theme.dart';
 
 class EventStreamItem extends StatelessWidget {
@@ -68,7 +69,7 @@ Color _eventColor(String type) => switch (type) {
   'RELEASE' => pulseCyan,
   'ISSUE' => pulseDanger,
   'WATCH' => pulseMuted,
-  'FORK' => Color(0xFFF59E0B),
+  'FORK' => AppTheme.warning,
   'CREATE' => pulseSuccess,
   _ => pulseText,
 };

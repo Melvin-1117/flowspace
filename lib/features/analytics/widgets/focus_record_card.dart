@@ -4,12 +4,13 @@ import 'package:intl/intl.dart';
 
 import 'analytics_empty_state.dart';
 import '../providers/analytics_providers.dart';
+import '../../../app/theme.dart';
 
-const Color _cardBackground = Color(0xFF0D0D0D);
+const Color _cardBackground = AppTheme.surfaceCard;
 const Color _cardBorder = Color(0x0DFFFFFF);
-const Color _textPrimary = Color(0xFFF0F0F0);
-const Color _textSecondary = Color(0xFF555555);
-const Color _purple = Color(0xFF7C3AED);
+const Color _textPrimary = AppTheme.textPrimary;
+const Color _textSecondary = AppTheme.textSecondary;
+const Color _purple = AppTheme.primary;
 const Color _purpleSoft = Color(0x267C3AED);
 
 class FocusRecordCard extends ConsumerWidget {

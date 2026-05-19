@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/planner_providers.dart';
+import '../../../app/theme.dart';
 
 class SemesterHealthSheet extends ConsumerWidget {
   const SemesterHealthSheet({required this.health, super.key});
@@ -29,7 +30,7 @@ class SemesterHealthSheet extends ConsumerWidget {
               const Text(
                 'Semester Health Breakdown',
                 style: TextStyle(
-                  color: Color(0xFFF0F0F0),
+                  color: AppTheme.textPrimary,
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
@@ -38,14 +39,14 @@ class SemesterHealthSheet extends ConsumerWidget {
               for (final (label, value, weight) in bars) ...[
                 Text(
                   '$label (${(weight * 100).round()}%)',
-                  style: const TextStyle(color: Color(0xFF555555)),
+                  style: const TextStyle(color: AppTheme.textSecondary),
                 ),
                 const SizedBox(height: 6),
                 LinearProgressIndicator(
                   value: value.clamp(0, 1),
                   minHeight: 8,
-                  backgroundColor: const Color(0xFF1A1A1A),
-                  color: const Color(0xFF7C3AED),
+                  backgroundColor: AppTheme.surfaceElevated,
+                  color: AppTheme.primary,
                 ),
                 const SizedBox(height: 12),
               ],
@@ -53,20 +54,20 @@ class SemesterHealthSheet extends ConsumerWidget {
               const Text(
                 'Recommendation',
                 style: TextStyle(
-                  color: Color(0xFFF0F0F0),
+                  color: AppTheme.textPrimary,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               const SizedBox(height: 4),
               const Text(
                 'Focus more on subjects with low completion and near deadlines.',
-                style: TextStyle(color: Color(0xFF555555)),
+                style: TextStyle(color: AppTheme.textSecondary),
               ),
               const SizedBox(height: 20),
               const Text(
                 '7-Day Health Trend',
                 style: TextStyle(
-                  color: Color(0xFFF0F0F0),
+                  color: AppTheme.textPrimary,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -79,7 +80,7 @@ class SemesterHealthSheet extends ConsumerWidget {
                   error: (_, __) => const Center(
                     child: Text(
                       'Trend unavailable',
-                      style: TextStyle(color: Color(0xFF555555)),
+                      style: TextStyle(color: AppTheme.textSecondary),
                     ),
                   ),
                   data: (points) => LineChart(
@@ -92,7 +93,7 @@ class SemesterHealthSheet extends ConsumerWidget {
                       lineBarsData: [
                         LineChartBarData(
                           isCurved: true,
-                          color: const Color(0xFF7C3AED),
+                          color: AppTheme.primary,
                           barWidth: 3,
                           dotData: const FlDotData(show: true),
                           spots: [

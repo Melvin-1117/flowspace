@@ -6,15 +6,16 @@ import '../../../core/models/analytics_models.dart';
 import 'analytics_empty_state.dart';
 import '../providers/analytics_providers.dart';
 import 'stat_progress_bar.dart';
+import '../../../app/theme.dart';
 
-const Color _cardBackground = Color(0xFF0D0D0D);
+const Color _cardBackground = AppTheme.surfaceCard;
 const Color _cardBorder = Color(0x0DFFFFFF);
-const Color _textPrimary = Color(0xFFF0F0F0);
-const Color _textSecondary = Color(0xFF555555);
-const Color _purple = Color(0xFF7C3AED);
-const Color _cyan = Color(0xFF06B6D4);
-const Color _success = Color(0xFF10B981);
-const Color _danger = Color(0xFFEF4444);
+const Color _textPrimary = AppTheme.textPrimary;
+const Color _textSecondary = AppTheme.textSecondary;
+const Color _purple = AppTheme.primary;
+const Color _cyan = AppTheme.accent;
+const Color _success = AppTheme.success;
+const Color _danger = AppTheme.danger;
 
 class TaskCompletionCard extends ConsumerWidget {
   const TaskCompletionCard({super.key});
@@ -169,7 +170,7 @@ class TaskCompletionCard extends ConsumerWidget {
                             drawVerticalLine: false,
                             horizontalInterval: 0.25,
                             getDrawingHorizontalLine: (_) =>
-                                const FlLine(color: Color(0xFF1A1A1A)),
+                                const FlLine(color: AppTheme.surfaceElevated),
                           ),
                           minY: 0,
                           maxY: 1,

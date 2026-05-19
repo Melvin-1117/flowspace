@@ -8,6 +8,7 @@ import '../providers/focus_block_notifier.dart';
 import '../providers/planner_providers.dart';
 import 'focus_block_item.dart';
 import 'focus_block_options_menu.dart';
+import '../../../app/theme.dart';
 
 class FocusBlockPlanner extends ConsumerWidget {
   const FocusBlockPlanner({
@@ -34,7 +35,7 @@ class FocusBlockPlanner extends ConsumerWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: const Color(0xFF0D0D0D),
+        color: AppTheme.surfaceCard,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: const Color(0x0DFFFFFF)),
       ),
@@ -43,12 +44,12 @@ class FocusBlockPlanner extends ConsumerWidget {
         children: [
           const Row(
             children: [
-              Icon(Icons.schedule, color: Color(0xFF06B6D4), size: 18),
+              Icon(Icons.schedule, color: AppTheme.accent, size: 18),
               SizedBox(width: 8),
               Text(
                 'Focus Block Planner',
                 style: TextStyle(
-                  color: Color(0xFFF0F0F0),
+                  color: AppTheme.textPrimary,
                   fontWeight: FontWeight.w700,
                   fontSize: 18,
                 ),
@@ -64,7 +65,7 @@ class FocusBlockPlanner extends ConsumerWidget {
           else if (blocks.isEmpty)
             const Text(
               'No blocks today. Add a focus block to stay on plan.',
-              style: TextStyle(color: Color(0xFF555555)),
+              style: TextStyle(color: AppTheme.textSecondary),
             )
           else
             ...blocks.map(
@@ -79,7 +80,7 @@ class FocusBlockPlanner extends ConsumerWidget {
             alignment: Alignment.centerRight,
             child: FloatingActionButton.small(
               heroTag: 'planner-add-focus-block',
-              backgroundColor: const Color(0xFF7C3AED),
+              backgroundColor: AppTheme.primary,
               onPressed: onAddBlock,
               child: const Icon(Icons.timer, color: Colors.white),
             ),
@@ -96,7 +97,7 @@ class FocusBlockPlanner extends ConsumerWidget {
   ) async {
     await showModalBottomSheet<void>(
       context: context,
-      backgroundColor: const Color(0xFF0D0D0D),
+      backgroundColor: AppTheme.surfaceCard,
       builder: (_) => FocusBlockOptionsMenu(
         onStartNow: () async {
           await ref

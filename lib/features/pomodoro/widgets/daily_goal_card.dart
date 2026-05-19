@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import '../providers/pomodoro_providers.dart';
+import '../../../app/theme.dart';
 
 class DailyGoalCard extends ConsumerWidget {
   const DailyGoalCard({super.key});
@@ -18,8 +19,8 @@ class DailyGoalCard extends ConsumerWidget {
         child: goalProgress.when(
           data: (progress) {
             final color = progress.isReached
-                ? const Color(0xFF10B981)
-                : const Color(0xFF7C3AED);
+                ? AppTheme.success
+                : AppTheme.primary;
             return Row(
               children: [
                 SizedBox(
@@ -31,7 +32,7 @@ class DailyGoalCard extends ConsumerWidget {
                       CircularProgressIndicator(
                         value: progress.percent,
                         strokeWidth: 4,
-                        backgroundColor: const Color(0xFF1A1A1A),
+                        backgroundColor: AppTheme.surfaceElevated,
                         valueColor: AlwaysStoppedAnimation<Color>(color),
                       ),
                       Text(
@@ -52,7 +53,7 @@ class DailyGoalCard extends ConsumerWidget {
                       const Text(
                         'DAILY FOCUS GOAL',
                         style: TextStyle(
-                          color: Color(0xFF555555),
+                          color: AppTheme.textSecondary,
                           fontSize: 11,
                           letterSpacing: 1.3,
                           fontWeight: FontWeight.w600,
@@ -66,7 +67,7 @@ class DailyGoalCard extends ConsumerWidget {
                                 ? 'Goal Reached! 🎉'
                                 : '${progress.percentValue}% Complete',
                             style: const TextStyle(
-                              color: Color(0xFFF0F0F0),
+                              color: AppTheme.textPrimary,
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
                             ),
@@ -75,7 +76,7 @@ class DailyGoalCard extends ConsumerWidget {
                             const SizedBox(width: 8),
                             const Icon(
                                   Icons.celebration,
-                                  color: Color(0xFF10B981),
+                                  color: AppTheme.success,
                                   size: 18,
                                 )
                                 .animate(onPlay: (c) => c.repeat(reverse: true))
@@ -99,7 +100,7 @@ class DailyGoalCard extends ConsumerWidget {
           ),
           error: (_, __) => const Text(
             'Daily goal unavailable',
-            style: TextStyle(color: Color(0xFF555555)),
+            style: TextStyle(color: AppTheme.textSecondary),
           ),
         ),
       ),
@@ -113,7 +114,7 @@ class DailyGoalCard extends ConsumerWidget {
 
     await showModalBottomSheet<void>(
       context: context,
-      backgroundColor: const Color(0xFF0D0D0D),
+      backgroundColor: AppTheme.surfaceCard,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
@@ -142,7 +143,7 @@ class DailyGoalCard extends ConsumerWidget {
                     Text(
                       '${sliderValue.round()} sessions',
                       style: const TextStyle(
-                        color: Color(0xFFF0F0F0),
+                        color: AppTheme.textPrimary,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -168,9 +169,9 @@ class DailyGoalCard extends ConsumerWidget {
                                 CircularProgressIndicator(
                                   value: progress.percent,
                                   strokeWidth: 4,
-                                  backgroundColor: const Color(0xFF1A1A1A),
+                                  backgroundColor: AppTheme.surfaceElevated,
                                   valueColor: const AlwaysStoppedAnimation<Color>(
-                                    Color(0xFF7C3AED),
+                                    AppTheme.primary,
                                   ),
                                 ),
                                 Text(
@@ -185,7 +186,7 @@ class DailyGoalCard extends ConsumerWidget {
                           const SizedBox(width: 12),
                           Text(
                             '${progress.completedSessions} of ${sliderValue.round()} sessions',
-                            style: const TextStyle(color: Color(0xFFF0F0F0)),
+                            style: const TextStyle(color: AppTheme.textPrimary),
                           ),
                         ],
                       ),
@@ -199,7 +200,7 @@ class DailyGoalCard extends ConsumerWidget {
                     // Row 3: Weekly heatmap
                     const Text(
                       'Weekly heatmap',
-                      style: TextStyle(color: Color(0xFF555555), fontSize: 12),
+                      style: TextStyle(color: AppTheme.textSecondary, fontSize: 12),
                     ),
                     const SizedBox(height: 8),
                     weekly.when(
@@ -221,7 +222,7 @@ class DailyGoalCard extends ConsumerWidget {
                               Text(
                                 label,
                                 style: const TextStyle(
-                                  color: Color(0xFF555555),
+                                  color: AppTheme.textSecondary,
                                   fontSize: 10,
                                 ),
                               ),
@@ -243,12 +244,12 @@ class DailyGoalCard extends ConsumerWidget {
                           vertical: 8,
                         ),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF121212),
+                          color: AppTheme.surfaceCard,
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(
                           '🔥 $value day streak',
-                          style: const TextStyle(color: Color(0xFFF0F0F0)),
+                          style: const TextStyle(color: AppTheme.textPrimary),
                         ),
                       ),
                       loading: () =>
@@ -261,7 +262,7 @@ class DailyGoalCard extends ConsumerWidget {
                     bestStreak.when(
                       data: (value) => Text(
                         'Best streak: $value days',
-                        style: const TextStyle(color: Color(0xFF555555)),
+                        style: const TextStyle(color: AppTheme.textSecondary),
                       ),
                       loading: () => const SizedBox.shrink(),
                       error: (_, __) => const SizedBox.shrink(),
@@ -285,7 +286,7 @@ class DailyGoalCard extends ConsumerWidget {
                           if (context.mounted) Navigator.pop(context);
                         },
                         style: FilledButton.styleFrom(
-                          backgroundColor: const Color(0xFF7C3AED),
+                          backgroundColor: AppTheme.primary,
                         ),
                         child: const Text('Save Goal'),
                       ),
@@ -306,7 +307,7 @@ Widget _sectionCard({required Widget child}) {
     width: double.infinity,
     padding: const EdgeInsets.all(16),
     decoration: BoxDecoration(
-      color: const Color(0xFF0D0D0D),
+      color: AppTheme.surfaceCard,
       borderRadius: BorderRadius.circular(16),
       border: Border.all(color: const Color(0x1AFFFFFF)),
     ),

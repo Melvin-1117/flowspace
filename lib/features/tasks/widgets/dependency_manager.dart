@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/models/task.dart';
 import '../providers/task_providers.dart';
+import '../../../app/theme.dart';
 
 class DependencyManager extends ConsumerStatefulWidget {
   const DependencyManager({super.key, required this.task});
@@ -46,7 +47,7 @@ class _DependencyManagerState extends ConsumerState<DependencyManager> {
               width: 42,
               height: 4,
               decoration: BoxDecoration(
-                color: const Color(0xFF555555),
+                color: AppTheme.textSecondary,
                 borderRadius: BorderRadius.circular(99),
               ),
             ),
@@ -69,7 +70,7 @@ class _DependencyManagerState extends ConsumerState<DependencyManager> {
                 padding: const EdgeInsets.only(bottom: 8),
                 child: Text(
                   _error!,
-                  style: const TextStyle(color: Color(0xFFEF4444)),
+                  style: const TextStyle(color: AppTheme.danger),
                 ),
               ),
             SizedBox(

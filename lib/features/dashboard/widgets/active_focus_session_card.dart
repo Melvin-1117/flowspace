@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/constants/animation_tokens.dart';
 import '../../../core/models/pomodoro_session.dart';
 import '../../../core/providers/session_timer_provider.dart';
+import '../../../app/theme.dart';
 
 class ActiveFocusSessionCard extends ConsumerWidget {
   const ActiveFocusSessionCard({super.key});
@@ -82,7 +83,7 @@ class _SessionCardContent extends ConsumerWidget {
                         width: 8,
                         height: 8,
                         decoration: const BoxDecoration(
-                          color: Color(0xFF7C3AED),
+                          color: AppTheme.primary,
                           shape: BoxShape.circle,
                         ),
                       )
@@ -107,7 +108,7 @@ class _SessionCardContent extends ConsumerWidget {
                     'ACTIVE FOCUS SESSION',
                     style: TextStyle(
                       fontFamily: 'Inter',
-                      color: Color(0xFF7C3AED),
+                      color: AppTheme.primary,
                       fontSize: 11,
                       letterSpacing: 1.5,
                       fontWeight: FontWeight.w700,
@@ -128,7 +129,7 @@ class _SessionCardContent extends ConsumerWidget {
                     fontFamily: 'Inter',
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFFF0F0F0),
+                    color: AppTheme.textPrimary,
                   ),
                 ),
               ),
@@ -139,7 +140,7 @@ class _SessionCardContent extends ConsumerWidget {
                 children: [
                   const Icon(
                     Icons.schedule,
-                    color: Color(0xFF555555),
+                    color: AppTheme.textSecondary,
                     size: 16,
                   ),
                   const SizedBox(width: 8),
@@ -149,7 +150,7 @@ class _SessionCardContent extends ConsumerWidget {
                       const Text(
                         'Remaining:',
                         style: TextStyle(
-                          color: Color(0xFF555555),
+                          color: AppTheme.textSecondary,
                           fontSize: 12,
                         ),
                       ),
@@ -157,7 +158,7 @@ class _SessionCardContent extends ConsumerWidget {
                         formattedTime,
                         style: const TextStyle(
                           fontFamily: 'Inter',
-                          color: Color(0xFFF0F0F0),
+                          color: AppTheme.textPrimary,
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
@@ -192,14 +193,14 @@ class _SessionCardContent extends ConsumerWidget {
                           curve: kMicroCurve,
                           decoration: BoxDecoration(
                             color: isRunning
-                                ? const Color(0xFF7C3AED)
-                                : const Color(0xFF262626),
+                                ? AppTheme.primary
+                                : AppTheme.surfaceBorder,
                             borderRadius: BorderRadius.circular(12),
                             boxShadow: isRunning
                                 ? [
                                     BoxShadow(
                                       color: const Color(
-                                        0xFF7C3AED,
+                                        0xFF006EE6,
                                       ).withValues(alpha: 0.4),
                                       blurRadius: 12,
                                     ),
@@ -231,15 +232,15 @@ class _SessionCardContent extends ConsumerWidget {
                         },
                         child: Container(
                           decoration: BoxDecoration(
-                            color: const Color(0xFF1A1A1A),
+                            color: AppTheme.surfaceElevated,
                             borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: const Color(0xFF262626)),
+                            border: Border.all(color: AppTheme.surfaceBorder),
                           ),
                           child: const Center(
                             child: Text(
                               'View Plan',
                               style: TextStyle(
-                                color: Color(0xFFF0F0F0),
+                                color: AppTheme.textPrimary,
                                 fontFamily: 'Inter',
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import '../../../app/theme.dart';
 
-const Color _textSecondary = Color(0xFF555555);
-const Color _textPrimary = Color(0xFFF0F0F0);
-const Color _accent = Color(0xFF7C3AED);
+const Color _textSecondary = AppTheme.textSecondary;
+const Color _textPrimary = AppTheme.textPrimary;
+const Color _accent = AppTheme.primary;
 const Color _accentSoft = Color(0x337C3AED);
 
 class AnalyticsEmptyState extends StatelessWidget {

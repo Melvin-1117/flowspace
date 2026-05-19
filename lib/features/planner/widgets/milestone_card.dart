@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/models/milestone.dart';
+import '../../../app/theme.dart';
 
 class MilestoneCard extends StatelessWidget {
   const MilestoneCard({
@@ -46,7 +47,7 @@ class MilestoneCard extends StatelessWidget {
             const Text(
               'NEXT CRITICAL MILESTONE',
               style: TextStyle(
-                color: Color(0xFF555555),
+                color: AppTheme.textSecondary,
                 fontSize: 11,
                 letterSpacing: 1.2,
                 fontWeight: FontWeight.w700,
@@ -59,7 +60,7 @@ class MilestoneCard extends StatelessWidget {
                   child: Text(
                     milestone!.title,
                     style: const TextStyle(
-                      color: Color(0xFFF0F0F0),
+                      color: AppTheme.textPrimary,
                       fontWeight: FontWeight.w700,
                       fontSize: 28,
                     ),
@@ -99,7 +100,7 @@ class MilestoneCard extends StatelessWidget {
             const SizedBox(height: 10),
             Text(
               'Due ${DateFormat.yMMMd().add_jm().format(milestone!.dueDate)}',
-              style: const TextStyle(color: Color(0xFF555555), fontSize: 12),
+              style: const TextStyle(color: AppTheme.textSecondary, fontSize: 12),
             ),
           ],
         ),
@@ -112,7 +113,7 @@ class MilestoneCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFF0D0D0D),
+        color: AppTheme.surfaceCard,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: const Color(0x0DFFFFFF)),
       ),
@@ -122,7 +123,7 @@ class MilestoneCard extends StatelessWidget {
           const Text(
             'No upcoming milestones — add one to stay on track',
             style: TextStyle(
-              color: Color(0xFFF0F0F0),
+              color: AppTheme.textPrimary,
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -140,16 +141,16 @@ class MilestoneCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 10),
       decoration: BoxDecoration(
-        color: const Color(0xFF1A1A1A),
+        color: AppTheme.surfaceElevated,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: const Color(0xFF262626)),
+        border: Border.all(color: AppTheme.surfaceBorder),
       ),
       child: Column(
         children: [
           Text(
             value,
             style: const TextStyle(
-              color: Color(0xFFF0F0F0),
+              color: AppTheme.textPrimary,
               fontWeight: FontWeight.w700,
               fontSize: 24,
             ),
@@ -157,7 +158,7 @@ class MilestoneCard extends StatelessWidget {
           Text(
             label,
             style: const TextStyle(
-              color: Color(0xFF555555),
+              color: AppTheme.textSecondary,
               fontSize: 10,
               letterSpacing: 1.1,
             ),
@@ -176,8 +177,8 @@ String _priorityLabel(int daysRemaining) {
 }
 
 Color _priorityColor(int daysRemaining) {
-  if (daysRemaining <= 3) return const Color(0xFFEF4444);
-  if (daysRemaining <= 7) return const Color(0xFF06B6D4);
-  if (daysRemaining <= 14) return const Color(0xFFF59E0B);
-  return const Color(0xFF262626);
+  if (daysRemaining <= 3) return AppTheme.danger;
+  if (daysRemaining <= 7) return AppTheme.accent;
+  if (daysRemaining <= 14) return AppTheme.warning;
+  return AppTheme.surfaceBorder;
 }

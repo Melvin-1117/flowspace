@@ -16,6 +16,7 @@ import 'widgets/profile_sheet.dart';
 import 'widgets/progress_breakdown_sheet.dart';
 import 'widgets/quick_action_fab.dart';
 import 'widgets/task_list_view.dart';
+import '../../app/theme.dart';
 
 class TaskBoardScreen extends ConsumerStatefulWidget {
   const TaskBoardScreen({super.key, this.embedInShell = false});
@@ -61,7 +62,7 @@ class _TaskBoardScreenState extends ConsumerState<TaskBoardScreen> {
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         key: _scaffoldKey,
-        backgroundColor: const Color(0xFF000000),
+        backgroundColor: AppTheme.background,
         drawer: const AppDrawer(),
         appBar: widget.embedInShell
             ? null
@@ -74,7 +75,7 @@ class _TaskBoardScreenState extends ConsumerState<TaskBoardScreen> {
                         onPressed: () {
                           showModalBottomSheet<void>(
                             context: context,
-                            backgroundColor: const Color(0xFF0D0D0D),
+                            backgroundColor: AppTheme.surfaceCard,
                             isScrollControlled: true,
                             builder: (_) =>
                                 NotificationSheet(notifications: notifications),
@@ -92,7 +93,7 @@ class _TaskBoardScreenState extends ConsumerState<TaskBoardScreen> {
                               vertical: 2,
                             ),
                             decoration: BoxDecoration(
-                              color: const Color(0xFFEF4444),
+                              color: AppTheme.danger,
                               borderRadius: BorderRadius.circular(99),
                             ),
                             child: Text(
@@ -113,13 +114,13 @@ class _TaskBoardScreenState extends ConsumerState<TaskBoardScreen> {
                       onTap: () {
                         showModalBottomSheet<void>(
                           context: context,
-                          backgroundColor: const Color(0xFF0D0D0D),
+                          backgroundColor: AppTheme.surfaceCard,
                           builder: (_) => const ProfileSheet(),
                         );
                       },
                       child: const CircleAvatar(
                         radius: 16,
-                        backgroundColor: Color(0xFF1A1A1A),
+                        backgroundColor: AppTheme.surfaceElevated,
                         child: Text('FS', style: TextStyle(fontSize: 11)),
                       ),
                     ),
@@ -165,7 +166,7 @@ class _TaskBoardScreenState extends ConsumerState<TaskBoardScreen> {
                                     style: const TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.w700,
-                                      color: Color(0xFFF0F0F0),
+                                      color: AppTheme.textPrimary,
                                     ),
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
@@ -181,7 +182,7 @@ class _TaskBoardScreenState extends ConsumerState<TaskBoardScreen> {
                                 onTap: () => _showTeamSheet(context),
                                 child: const CircleAvatar(
                                   radius: 14,
-                                  backgroundColor: Color(0xFF1A1A1A),
+                                  backgroundColor: AppTheme.surfaceElevated,
                                   child: Text(
                                     '+4',
                                     style: TextStyle(fontSize: 10),
@@ -193,7 +194,7 @@ class _TaskBoardScreenState extends ConsumerState<TaskBoardScreen> {
                                 onTap: () {
                                   showModalBottomSheet<void>(
                                     context: context,
-                                    backgroundColor: const Color(0xFF0D0D0D),
+                                    backgroundColor: AppTheme.surfaceCard,
                                     builder: (_) => ProgressBreakdownSheet(
                                       tasks: allTasks,
                                       progress: progress,
@@ -206,7 +207,7 @@ class _TaskBoardScreenState extends ConsumerState<TaskBoardScreen> {
                                       width: 8,
                                       height: 8,
                                       decoration: const BoxDecoration(
-                                        color: Color(0xFF06B6D4),
+                                        color: AppTheme.accent,
                                         shape: BoxShape.circle,
                                       ),
                                     ).animate().scale(
@@ -223,7 +224,7 @@ class _TaskBoardScreenState extends ConsumerState<TaskBoardScreen> {
                                         letterSpacing: 1.4,
                                         fontWeight: FontWeight.w700,
                                         fontSize: 12,
-                                        color: Color(0xFF555555),
+                                        color: AppTheme.textSecondary,
                                       ),
                                     ),
                                   ],
@@ -234,7 +235,7 @@ class _TaskBoardScreenState extends ConsumerState<TaskBoardScreen> {
                                 const Text(
                                   'OFFLINE',
                                   style: TextStyle(
-                                    color: Color(0xFFEF4444),
+                                    color: AppTheme.danger,
                                     fontSize: 11,
                                     fontWeight: FontWeight.w700,
                                   ),
@@ -279,7 +280,7 @@ class _TaskBoardScreenState extends ConsumerState<TaskBoardScreen> {
                                   showModalBottomSheet<void>(
                                     context: context,
                                     isScrollControlled: true,
-                                    backgroundColor: const Color(0xFF0D0D0D),
+                                    backgroundColor: AppTheme.surfaceCard,
                                     builder: (_) => const FilterSheet(),
                                   );
                                 },
@@ -293,7 +294,7 @@ class _TaskBoardScreenState extends ConsumerState<TaskBoardScreen> {
                                         child: CircleAvatar(
                                           radius: 7,
                                           backgroundColor: const Color(
-                                            0xFFEF4444,
+                                            0xFFFF3B5C,
                                           ),
                                           child: Text(
                                             filters.activeCount.toString(),
@@ -307,8 +308,8 @@ class _TaskBoardScreenState extends ConsumerState<TaskBoardScreen> {
                               final newBtn = ElevatedButton(
                                 onPressed: () => _openNewTaskSheet(context),
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFF7C3AED),
-                                  foregroundColor: const Color(0xFFF0F0F0),
+                                  backgroundColor: AppTheme.primary,
+                                  foregroundColor: AppTheme.textPrimary,
                                   textStyle: const TextStyle(
                                     fontWeight: FontWeight.w700,
                                   ),
@@ -418,7 +419,7 @@ class _TaskBoardScreenState extends ConsumerState<TaskBoardScreen> {
         bottomSheet: selected.isEmpty
             ? null
             : Container(
-                color: const Color(0xFF0D0D0D),
+                color: AppTheme.surfaceCard,
                 padding: const EdgeInsets.symmetric(
                   horizontal: 10,
                   vertical: 8,
@@ -490,7 +491,7 @@ class _TaskBoardScreenState extends ConsumerState<TaskBoardScreen> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         decoration: BoxDecoration(
-          color: active ? const Color(0xFF1A1A1A) : const Color(0xFF0D0D0D),
+          color: active ? AppTheme.surfaceElevated : AppTheme.surfaceCard,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: const Color(0x22FFFFFF)),
         ),
@@ -499,15 +500,15 @@ class _TaskBoardScreenState extends ConsumerState<TaskBoardScreen> {
             Icon(
               icon,
               size: 16,
-              color: active ? const Color(0xFFF0F0F0) : const Color(0xFF555555),
+              color: active ? AppTheme.textPrimary : AppTheme.textSecondary,
             ),
             const SizedBox(width: 6),
             Text(
               title,
               style: TextStyle(
                 color: active
-                    ? const Color(0xFFF0F0F0)
-                    : const Color(0xFF555555),
+                    ? AppTheme.textPrimary
+                    : AppTheme.textSecondary,
               ),
             ),
           ],
@@ -527,7 +528,7 @@ class _TaskBoardScreenState extends ConsumerState<TaskBoardScreen> {
                 padding: const EdgeInsets.all(12),
                 child: TextField(
                   autofocus: true,
-                  style: const TextStyle(color: Color(0xFFF0F0F0)),
+                  style: const TextStyle(color: AppTheme.textPrimary),
                   decoration: InputDecoration(
                     hintText: 'Search tasks...',
                     suffixIcon: IconButton(
@@ -577,7 +578,7 @@ class _TaskBoardScreenState extends ConsumerState<TaskBoardScreen> {
     await showDialog<void>(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        backgroundColor: const Color(0xFF0D0D0D),
+        backgroundColor: AppTheme.surfaceCard,
         title: const Text('Rename project'),
         content: TextField(
           controller: controller,
@@ -607,7 +608,7 @@ class _TaskBoardScreenState extends ConsumerState<TaskBoardScreen> {
     await showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
-      backgroundColor: const Color(0xFF0D0D0D),
+      backgroundColor: AppTheme.surfaceCard,
       builder: (_) => const NewTaskSheet(),
     );
   }
@@ -616,7 +617,7 @@ class _TaskBoardScreenState extends ConsumerState<TaskBoardScreen> {
     final members = ref.read(teamMembersProvider);
     await showModalBottomSheet<void>(
       context: context,
-      backgroundColor: const Color(0xFF0D0D0D),
+      backgroundColor: AppTheme.surfaceCard,
       builder: (_) => SafeArea(
         child: Column(
           mainAxisSize: MainAxisSize.min,

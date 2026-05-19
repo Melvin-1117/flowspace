@@ -9,6 +9,7 @@ import '../../../core/constants/animation_tokens.dart';
 import '../../../core/models/github_event_cache.dart';
 import '../providers/pulse_providers.dart';
 import 'event_stream_item.dart';
+import '../../../app/theme.dart';
 import 'pulse_theme.dart';
 
 class EventStreamTerminal extends ConsumerStatefulWidget {
@@ -75,13 +76,13 @@ class _EventStreamTerminalState extends ConsumerState<EventStreamTerminal> {
               children: [
                 _dot(pulseDanger),
                 const SizedBox(width: 4),
-                _dot(const Color(0xFFF59E0B)),
+                _dot(AppTheme.warning),
                 const SizedBox(width: 4),
                 _dot(pulseSuccess),
                 const Spacer(),
                 Text(
                   'REAL-TIME STREAM',
-                  style: GoogleFonts.inter(
+                  style: GoogleFonts.spaceGrotesk(
                     color: pulseMuted,
                     fontSize: 11,
                     letterSpacing: 1.1,
@@ -142,7 +143,7 @@ class _EventStreamTerminalState extends ConsumerState<EventStreamTerminal> {
                   error: (_, __) => Center(
                     child: Text(
                       'Unable to load events',
-                      style: GoogleFonts.inter(color: pulseMuted),
+                      style: GoogleFonts.spaceGrotesk(color: pulseMuted),
                     ),
                   ),
                 ),
@@ -196,7 +197,7 @@ class _EventStreamTerminalState extends ConsumerState<EventStreamTerminal> {
           children: [
             Text(
               event.eventType,
-              style: GoogleFonts.inter(
+              style: GoogleFonts.spaceGrotesk(
                 color: pulseText,
                 fontWeight: FontWeight.w700,
                 fontSize: 18,
@@ -205,18 +206,18 @@ class _EventStreamTerminalState extends ConsumerState<EventStreamTerminal> {
             const SizedBox(height: 6),
             Text(
               event.createdAt.toString(),
-              style: GoogleFonts.inter(color: pulseMuted),
+              style: GoogleFonts.spaceGrotesk(color: pulseMuted),
             ),
             const SizedBox(height: 12),
             ListTile(
               contentPadding: EdgeInsets.zero,
               title: Text(
                 event.repoFullName,
-                style: GoogleFonts.inter(color: pulseText),
+                style: GoogleFonts.spaceGrotesk(color: pulseText),
               ),
               subtitle: Text(
                 event.description,
-                style: GoogleFonts.inter(color: pulseMuted),
+                style: GoogleFonts.spaceGrotesk(color: pulseMuted),
               ),
               trailing: const Icon(Icons.open_in_new, color: pulsePrimary),
               onTap: () => _openUrl(event.htmlUrl),
@@ -225,7 +226,7 @@ class _EventStreamTerminalState extends ConsumerState<EventStreamTerminal> {
               const SizedBox(height: 10),
               Text(
                 'Message',
-                style: GoogleFonts.inter(
+                style: GoogleFonts.spaceGrotesk(
                   color: pulseText,
                   fontWeight: FontWeight.w700,
                 ),
@@ -233,7 +234,7 @@ class _EventStreamTerminalState extends ConsumerState<EventStreamTerminal> {
               const SizedBox(height: 4),
               Text(
                 event.fullMessage!,
-                style: GoogleFonts.inter(color: pulseMuted),
+                style: GoogleFonts.spaceGrotesk(color: pulseMuted),
               ),
             ],
           ],

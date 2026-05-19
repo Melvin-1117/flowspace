@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import '../../../core/providers/calendar_providers.dart';
+import '../../../app/theme.dart';
 import 'calendar_header.dart';
 import 'calendar_day_cell.dart';
 import 'calendar_task_card.dart';
@@ -107,11 +108,11 @@ class _DashboardCalendarWidgetState
                   headerVisible: false,
                   daysOfWeekStyle: const DaysOfWeekStyle(
                     weekdayStyle: TextStyle(
-                      color: Color(0xFF6B7280),
+                      color: AppTheme.textMuted,
                       fontSize: 11,
                     ),
                     weekendStyle: TextStyle(
-                      color: Color(0xFF6B7280),
+                      color: AppTheme.textMuted,
                       fontSize: 11,
                     ),
                   ),
@@ -167,7 +168,7 @@ class _DashboardCalendarWidgetState
 
             Text(
               'Tasks for ${DateFormat('MMMM d, yyyy').format(selectedDay)}',
-              style: GoogleFonts.inter(
+              style: GoogleFonts.spaceGrotesk(
                 color: Colors.white,
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
@@ -185,8 +186,8 @@ class _DashboardCalendarWidgetState
                         child: Center(
                           child: Text(
                             "No tasks scheduled for this day.",
-                            style: GoogleFonts.inter(
-                              color: const Color(0xFF6B7280),
+                            style: GoogleFonts.spaceGrotesk(
+                              color: AppTheme.textMuted,
                               fontSize: 14,
                             ),
                           ),

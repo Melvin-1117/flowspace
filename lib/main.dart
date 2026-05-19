@@ -4,7 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+
+import 'app/theme.dart';
 
 import 'core/models/focus_goal_settings.dart';
 import 'core/models/focus_goal_settings_isar.dart';
@@ -19,10 +20,10 @@ import 'features/planner/subject_list_screen.dart';
 import 'features/pomodoro/pomodoro_page.dart';
 import 'features/pomodoro/providers/pomodoro_providers.dart';
 import 'features/pomodoro/providers/pomodoro_web_store.dart';
-import 'features/pulse/pulse_screen.dart';
 import 'features/tasks/task_board_screen.dart';
 import 'features/tasks/task_detail_screen.dart';
 import 'home_page.dart';
+import 'widgets/app_drawer.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -69,7 +70,7 @@ class _FlowSpaceAppState extends ConsumerState<FlowSpaceApp> {
       ),
       GoRoute(
         path: '/settings',
-        builder: (_, __) => const PulseScreen(),
+        builder: (_, __) => _PlaceholderScreen(title: 'Settings'),
       ),
     ],
   );
@@ -117,9 +118,9 @@ class _FlowSpaceAppState extends ConsumerState<FlowSpaceApp> {
     if (!_restored) {
       return MaterialApp(
         debugShowCheckedModeBanner: false,
-        theme: ThemeData.dark(),
+        theme: AppTheme.darkTheme,
         home: const Scaffold(
-          backgroundColor: Color(0xFF000000),
+          backgroundColor: AppTheme.background,
           body: Center(child: CircularProgressIndicator()),
         ),
       );
@@ -129,16 +130,50 @@ class _FlowSpaceAppState extends ConsumerState<FlowSpaceApp> {
       title: 'FlowSpace',
       debugShowCheckedModeBanner: false,
       routerConfig: _router,
-      theme: ThemeData(
-        brightness: Brightness.dark,
-        scaffoldBackgroundColor: const Color(0xFF000000),
-        colorScheme: const ColorScheme.dark(
-          primary: Color(0xFF7C3AED),
-          surface: Color(0xFF0D0D0D),
-          onSurface: Colors.white,
+      theme: AppTheme.darkTheme,
+    );
+  }
+}
+
+class _PlaceholderScreen extends StatelessWidget {
+  _PlaceholderScreen({required this.title});
+
+  final String title;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      key: _scaffoldKey,
+      backgroundColor: AppTheme.background,
+      drawer: const AppDrawer(),
+      appBar: AppBar(
+        backgroundColor: AppTheme.background,
+        leading: IconButton(
+          icon: const Icon(Icons.menu, color: Colors.white),
+          onPressed: () => _scaffoldKey.currentState?.openDrawer(),
         ),
-        textTheme: GoogleFonts.interTextTheme(ThemeData.dark().textTheme),
-        useMaterial3: true,
+        title: Text(title, style: const TextStyle(color: Colors.white)),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              '$title screen',
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              'This feature is coming soon!',
+              style: TextStyle(color: Colors.grey, fontSize: 16),
+            ),
+          ],
+        ),
       ),
     );
   }

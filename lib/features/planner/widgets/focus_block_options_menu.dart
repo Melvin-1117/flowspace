@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../app/theme.dart';
 
 class FocusBlockOptionsMenu extends StatelessWidget {
   const FocusBlockOptionsMenu({
@@ -37,10 +38,10 @@ class FocusBlockOptionsMenu extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.delete_outline, color: Color(0xFFEF4444)),
+            leading: const Icon(Icons.delete_outline, color: AppTheme.danger),
             title: const Text(
               'Delete Block',
-              style: TextStyle(color: Color(0xFFEF4444)),
+              style: TextStyle(color: AppTheme.danger),
             ),
             onTap: () {
               Navigator.of(context).pop();

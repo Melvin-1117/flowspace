@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../../app/theme.dart';
 import '../pulse_types.dart';
 import '../providers/pulse_providers.dart';
 import 'pulse_theme.dart';
@@ -27,13 +28,13 @@ class DateRangeSelector extends ConsumerWidget {
             icon: const Icon(Icons.calendar_today, size: 16),
             style: OutlinedButton.styleFrom(
               side: BorderSide(color: Colors.white.withValues(alpha: 0.08)),
-              backgroundColor: const Color(0xFF262626),
+              backgroundColor: AppTheme.surfaceBorder,
               foregroundColor: Colors.white,
               minimumSize: const Size.fromHeight(44),
             ),
             label: Text(
               selected.label,
-              style: GoogleFonts.inter(fontWeight: FontWeight.w600),
+              style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w600),
             ),
           ),
         ),
@@ -65,7 +66,7 @@ class DateRangeSelector extends ConsumerWidget {
                 const SizedBox(width: 8),
                 Text(
                   'Sync Data',
-                  style: GoogleFonts.inter(fontWeight: FontWeight.w700),
+                  style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w700),
                 ),
               ],
             ),
@@ -93,7 +94,7 @@ class DateRangeSelector extends ConsumerWidget {
                 const SizedBox(height: 12),
                 Text(
                   'Select Date Range',
-                  style: GoogleFonts.inter(
+                  style: GoogleFonts.spaceGrotesk(
                     color: pulseText,
                     fontWeight: FontWeight.w700,
                   ),
@@ -106,7 +107,7 @@ class DateRangeSelector extends ConsumerWidget {
                     activeColor: pulsePrimary,
                     title: Text(
                       option.label,
-                      style: GoogleFonts.inter(color: pulseText),
+                      style: GoogleFonts.spaceGrotesk(color: pulseText),
                     ),
                     onChanged: (value) {
                       if (value == null) return;

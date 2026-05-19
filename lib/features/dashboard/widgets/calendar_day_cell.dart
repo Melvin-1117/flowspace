@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../core/providers/calendar_providers.dart';
+import '../../../app/theme.dart';
 
 class CalendarDayCell extends ConsumerWidget {
   final DateTime day;
@@ -28,14 +29,14 @@ class CalendarDayCell extends ConsumerWidget {
       int count = sessionsAsync.value!.length;
       if (count <= 2) {
         heatGlow = const Color(
-          0xFF7C3AED,
+          0xFF006EE6,
         ).withValues(alpha: 0.15); // Faint purple
       } else if (count <= 4) {
         heatGlow = const Color(
-          0xFF7C3AED,
+          0xFF006EE6,
         ).withValues(alpha: 0.4); // Medium purple
       } else {
-        heatGlow = const Color(0xFF06B6D4).withValues(alpha: 0.5); // Peak cyan
+        heatGlow = AppTheme.accent.withValues(alpha: 0.5); // Peak cyan
       }
     }
 
@@ -69,12 +70,12 @@ class CalendarDayCell extends ConsumerWidget {
         if (dueDate == null) continue;
         if (!t.isCompleted) {
           if (dueDate.isBefore(now)) {
-            dotColors.add(const Color(0xFFEF4444)); // Overdue context
+            dotColors.add(AppTheme.danger); // Overdue context
           } else if (isSameDay(dueDate, now)) {
-            dotColors.add(const Color(0xFF7C3AED)); // Due today
+            dotColors.add(AppTheme.primary); // Due today
           } else {
             dotColors.add(
-              const Color(0xFF06B6D4),
+              AppTheme.accent,
             ); // Due this week or future logic
           }
         }
@@ -85,12 +86,12 @@ class CalendarDayCell extends ConsumerWidget {
     BoxDecoration? circularDeco;
     if (isSelected) {
       circularDeco = BoxDecoration(
-        color: const Color(0xFF06B6D4), // Cyan for selected
+        color: AppTheme.accent, // Cyan for selected
         shape: BoxShape.circle,
       );
     } else if (isToday) {
       circularDeco = BoxDecoration(
-        color: const Color(0xFF7C3AED), // Purple for today
+        color: AppTheme.primary, // Purple for today
         shape: BoxShape.circle,
       );
     }
@@ -109,7 +110,7 @@ class CalendarDayCell extends ConsumerWidget {
               bottom: 18,
               child: Container(
                 decoration: BoxDecoration(
-                  color: const Color(0xFF7C3AED).withValues(alpha: 0.3),
+                  color: AppTheme.primary.withValues(alpha: 0.3),
                   borderRadius: BorderRadius.horizontal(
                     left: prevInStreak
                         ? Radius.zero
@@ -133,8 +134,8 @@ class CalendarDayCell extends ConsumerWidget {
             alignment: Alignment.center,
             child: Text(
               '${day.day}',
-              style: GoogleFonts.inter(
-                color: isOutside ? const Color(0xFF6B7280) : Colors.white,
+              style: GoogleFonts.spaceGrotesk(
+                color: isOutside ? AppTheme.textMuted : Colors.white,
                 fontSize: 12,
                 fontWeight: isSelected || isToday
                     ? FontWeight.w700
@@ -154,7 +155,7 @@ class CalendarDayCell extends ConsumerWidget {
                 if (dotColors.length > 3)
                   Text(
                     '3+',
-                    style: GoogleFonts.inter(color: Colors.white, fontSize: 8),
+                    style: GoogleFonts.spaceGrotesk(color: Colors.white, fontSize: 8),
                   )
                 else
                   ...dotColors

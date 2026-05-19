@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import '../../../app/theme.dart';
 
 class CalendarHeader extends StatelessWidget {
   final DateTime focusedDay;
@@ -31,7 +32,7 @@ class CalendarHeader extends StatelessWidget {
                   Flexible(
                     child: Text(
                       DateFormat('MMMM yyyy').format(focusedDay).toUpperCase(),
-                      style: GoogleFonts.inter(
+                      style: GoogleFonts.spaceGrotesk(
                         color: const Color(0xFFFFFFFF),
                         letterSpacing: 1.2,
                         fontSize: 14,
@@ -43,7 +44,7 @@ class CalendarHeader extends StatelessWidget {
                   const SizedBox(width: 4),
                   const Icon(
                     Icons.expand_more_rounded,
-                    color: Color(0xFF6B7280),
+                    color: AppTheme.textMuted,
                     size: 18,
                   ),
                 ],
@@ -58,7 +59,7 @@ class CalendarHeader extends StatelessWidget {
                 onPressed: onLeftChevronTap,
                 icon: const Icon(
                   Icons.chevron_left,
-                  color: Color(0xFF7C3AED), // Primary color
+                  color: AppTheme.primary, // Primary color
                   size: 24,
                 ),
               ),
@@ -69,7 +70,7 @@ class CalendarHeader extends StatelessWidget {
                 onPressed: onRightChevronTap,
                 icon: const Icon(
                   Icons.chevron_right,
-                  color: Color(0xFF7C3AED), // Primary color
+                  color: AppTheme.primary, // Primary color
                   size: 24,
                 ),
               ),

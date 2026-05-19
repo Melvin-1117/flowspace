@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import '../providers/pomodoro_providers.dart';
 import '../../analytics/analytics_payload.dart';
 import 'session_history_item.dart';
+import '../../../app/theme.dart';
 
 class SessionHistoryCard extends ConsumerWidget {
   const SessionHistoryCard({super.key});
@@ -20,7 +21,7 @@ class SessionHistoryCard extends ConsumerWidget {
           const Text(
             'SESSION HISTORY',
             style: TextStyle(
-              color: Color(0xFF555555),
+              color: AppTheme.textSecondary,
               letterSpacing: 1.6,
               fontSize: 12,
               fontWeight: FontWeight.w600,
@@ -33,7 +34,7 @@ class SessionHistoryCard extends ConsumerWidget {
               if (visible.isEmpty) {
                 return const Text(
                   'No sessions yet today.',
-                  style: TextStyle(color: Color(0xFF555555)),
+                  style: TextStyle(color: AppTheme.textSecondary),
                 );
               }
               return Column(
@@ -56,7 +57,7 @@ class SessionHistoryCard extends ConsumerWidget {
                 const Center(child: CircularProgressIndicator(strokeWidth: 2)),
             error: (_, __) => const Text(
               'Could not load history',
-              style: TextStyle(color: Color(0xFF555555)),
+              style: TextStyle(color: AppTheme.textSecondary),
             ),
           ),
           const SizedBox(height: 14),
@@ -90,8 +91,8 @@ class SessionHistoryCard extends ConsumerWidget {
                 context.push('/analytics', extra: payload);
               },
               style: ElevatedButton.styleFrom(
-                foregroundColor: const Color(0xFFB2B2B7),
-                backgroundColor: const Color(0xFF141414),
+                foregroundColor: AppTheme.textSecondary,
+                backgroundColor: AppTheme.surfaceElevated,
                 padding: const EdgeInsets.symmetric(vertical: 14),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
@@ -114,7 +115,7 @@ Widget _sectionCard({required Widget child}) {
     width: double.infinity,
     padding: const EdgeInsets.all(16),
     decoration: BoxDecoration(
-      color: const Color(0xFF0D0D0D),
+      color: AppTheme.surfaceCard,
       borderRadius: BorderRadius.circular(16),
       border: Border.all(color: const Color(0x1AFFFFFF)),
     ),

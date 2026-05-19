@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/constants/animation_tokens.dart';
 import '../providers/pomodoro_providers.dart';
+import '../../../app/theme.dart';
 
 class SessionTypeToggle extends ConsumerWidget {
   const SessionTypeToggle({super.key, required this.onSwitchType});
@@ -15,7 +16,7 @@ class SessionTypeToggle extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-        color: const Color(0xFF0A0A0E),
+        color: AppTheme.surfaceCard,
         borderRadius: BorderRadius.circular(14),
         border: Border.all(color: const Color(0x1EFFFFFF)),
       ),
@@ -31,7 +32,7 @@ class SessionTypeToggle extends ConsumerWidget {
                 padding: const EdgeInsets.symmetric(vertical: 10),
                 decoration: BoxDecoration(
                   color: selected
-                      ? const Color(0xFF7C3AED)
+                      ? AppTheme.primary
                       : Colors.transparent,
                   borderRadius: BorderRadius.circular(999),
                 ),
@@ -39,7 +40,7 @@ class SessionTypeToggle extends ConsumerWidget {
                   type.label,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: selected ? Colors.white : const Color(0xFF555555),
+                    color: selected ? Colors.white : AppTheme.textSecondary,
                     fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
                     fontSize: 14,
                   ),
