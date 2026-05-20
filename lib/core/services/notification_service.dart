@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
@@ -19,16 +21,23 @@ class NotificationService {
   static Future<void> showSessionComplete(String body) async {
     if (kIsWeb) return;
     await initialize();
-    const details = NotificationDetails(
+    final details = NotificationDetails(
       android: AndroidNotificationDetails(
-        'flowspace_pomodoro',
-        'Pomodoro',
+        'pomodoro_alarm',
+        'Pomodoro Alarms',
         channelDescription: 'Pomodoro completion alerts',
-        importance: Importance.high,
+        importance: Importance.max,
         priority: Priority.high,
+        fullScreenIntent: true,
+        category: AndroidNotificationCategory.alarm,
+        playSound: true,
+        enableVibration: true,
+        vibrationPattern: Int64List.fromList(
+          [0, 500, 200, 500, 200, 500],
+        ),
       ),
     );
-    await _plugin.show(1001, 'FlowSpace', body, details);
+    await _plugin.show(1001, '🎯  Focus Session Complete!', body, details);
   }
 
   static Future<void> scheduleFocusBlockReminder({

@@ -10,31 +10,69 @@ class TimerControls extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isRunning = ref.watch(timerRunningProvider);
+    final timerState = ref.watch(timerNotifierProvider);
+    final isRunning = timerState.isRunning;
     final notifier = ref.read(timerNotifierProvider.notifier);
+
+    // Locked when running a focus session with 0 trials remaining
+    final isLocked = timerState.sessionType == SessionType.focus &&
+        timerState.trialsRemaining <= 0 &&
+        isRunning;
+
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
         _ScaleTapButton(
           onTap: () async {
+            if (isLocked) {
+              // Show snackbar — do NOT pause
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    '🔒  No pauses remaining — stay focused!',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 13,
+                      fontFamily:
+                          Theme.of(context).textTheme.bodyMedium?.fontFamily,
+                    ),
+                  ),
+                  backgroundColor: AppTheme.danger,
+                  duration: const Duration(seconds: 2),
+                  behavior: SnackBarBehavior.floating,
+                  margin: const EdgeInsets.all(16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              );
+              return;
+            }
             if (isRunning) {
               await notifier.pause();
             } else {
               await notifier.start();
             }
           },
-          child: Container(
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
             width: 56,
             height: 56,
             decoration: BoxDecoration(
-              color: AppTheme.primary,
+              color: isLocked ? AppTheme.dangerSubtle : AppTheme.primary,
               borderRadius: BorderRadius.circular(14),
-              boxShadow: const [
-                BoxShadow(color: Color(0x807C3AED), blurRadius: 16),
+              boxShadow: [
+                BoxShadow(
+                  color: (isLocked ? AppTheme.danger : AppTheme.primary)
+                      .withValues(alpha: 0.35),
+                  blurRadius: 16,
+                ),
               ],
             ),
             child: Icon(
-              isRunning ? Icons.pause : Icons.play_arrow,
+              isLocked
+                  ? Icons.lock_rounded
+                  : (isRunning ? Icons.pause : Icons.play_arrow),
               color: Colors.white,
               size: 24,
             ),

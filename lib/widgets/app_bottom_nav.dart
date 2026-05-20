@@ -30,7 +30,7 @@ const List<String> _navRoutes = [
   '/tasks',
   '/pomodoro',
   '/planner',
-  '/settings',
+  '/pulse',
 ];
 
 /// Canonical bottom navigation bar shared by all main screens.

@@ -19,4 +19,7 @@ class PomodoroSession {
 
   late bool isCompleted;
   late bool isAbandoned;
+
+  int trialsUsed = 0;
+  int trialsRemaining = 3;
 }

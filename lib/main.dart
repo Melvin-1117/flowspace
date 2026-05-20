@@ -20,6 +20,7 @@ import 'features/planner/subject_list_screen.dart';
 import 'features/pomodoro/pomodoro_page.dart';
 import 'features/pomodoro/providers/pomodoro_providers.dart';
 import 'features/pomodoro/providers/pomodoro_web_store.dart';
+import 'features/pulse/pulse_screen.dart';
 import 'features/tasks/task_board_screen.dart';
 import 'features/tasks/task_detail_screen.dart';
 import 'home_page.dart';
@@ -68,6 +69,7 @@ class _FlowSpaceAppState extends ConsumerState<FlowSpaceApp> {
         builder: (_, state) =>
             SubjectDetailScreen(subjectId: state.pathParameters['subjectId']!),
       ),
+      GoRoute(path: '/pulse', builder: (_, __) => const PulseScreen()),
       GoRoute(
         path: '/settings',
         builder: (_, __) => _PlaceholderScreen(title: 'Settings'),

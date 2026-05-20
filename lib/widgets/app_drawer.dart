@@ -85,9 +85,9 @@ class AppDrawer extends StatelessWidget {
                     icon: Icons.code_outlined,
                     title: 'GitHub',
                     subtitle: 'Repository dashboard',
-                    route: '/settings',
+                    route: '/pulse',
                     isSelected:
-                        GoRouterState.of(context).uri.toString() == '/settings',
+                        GoRouterState.of(context).uri.toString() == '/pulse',
                   ),
 
                   // Analytics
@@ -279,9 +279,7 @@ class AppDrawer extends StatelessWidget {
                 ),
               );
             },
-            style: TextButton.styleFrom(
-              foregroundColor: AppTheme.danger,
-            ),
+            style: TextButton.styleFrom(foregroundColor: AppTheme.danger),
             child: const Text('Logout'),
           ),
         ],

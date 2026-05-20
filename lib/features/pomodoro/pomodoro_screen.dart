@@ -6,12 +6,17 @@ import '../../widgets/app_bottom_nav.dart';
 import '../../widgets/app_drawer.dart';
 import '../../widgets/app_top_bar.dart';
 import 'providers/pomodoro_providers.dart';
+import 'services/alarm_service.dart';
+import 'services/flip_detector_service.dart';
 import 'widgets/daily_goal_card.dart';
+import 'widgets/flip_pause_overlay.dart';
+import 'widgets/session_alarm_overlay.dart';
 import 'widgets/session_complete_overlay.dart';
 import 'widgets/session_history_card.dart';
 import 'widgets/session_type_toggle.dart';
 import 'widgets/timer_controls.dart';
 import 'widgets/timer_ring.dart';
+import 'widgets/trial_indicator.dart';
 import '../../app/theme.dart';
 
 class PomodoroScreen extends ConsumerStatefulWidget {
@@ -57,11 +62,25 @@ class _PomodoroScreenState extends ConsumerState<PomodoroScreen>
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    // Ensure flip detection is stopped when screen disposes
+    ref.read(flipDetectorProvider).stopListening();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final timerState = ref.watch(timerNotifierProvider);
+    final flipDetector = ref.read(flipDetectorProvider);
+
+    // Start or stop flip detection based on timer state
+    ref.listen(timerNotifierProvider, (previous, next) {
+      if (next.isRunning && next.sessionType == SessionType.focus) {
+        flipDetector.startListening();
+      } else if (!next.isRunning && !next.pausedByFlip) {
+        flipDetector.stopListening();
+      }
+    });
+
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: AppTheme.background,
@@ -92,6 +111,7 @@ class _PomodoroScreenState extends ConsumerState<PomodoroScreen>
       body: SafeArea(
         child: Stack(
           children: [
+            // ── Main Pomodoro screen content ──
             Column(
               children: [
                 const Divider(height: 1, color: Color(0x16FFFFFF)),
@@ -104,6 +124,9 @@ class _PomodoroScreenState extends ConsumerState<PomodoroScreen>
                         const SizedBox(height: 18),
                         const TimerRing(),
                         const SizedBox(height: 12),
+                        // Trial indicator — only visible during focus sessions
+                        const TrialIndicator(),
+                        const SizedBox(height: 16),
                         const TimerControls(),
                         const SizedBox(height: 18),
                         const DailyGoalCard(),
@@ -115,6 +138,8 @@ class _PomodoroScreenState extends ConsumerState<PomodoroScreen>
                 ),
               ],
             ),
+
+            // ── Onboarding tooltip ──
             if (_showOnboarding)
               Positioned(
                 top: 82,
@@ -136,7 +161,19 @@ class _PomodoroScreenState extends ConsumerState<PomodoroScreen>
                   ),
                 ),
               ),
+
+            // ── Existing session complete overlay ──
             const SessionCompleteOverlay(),
+
+            // ── Flip pause overlay (Feature 1) ──
+            if (timerState.pausedByFlip) const FlipPauseOverlay(),
+
+            // ── Session alarm overlay (Feature 3) ──
+            if (ref.watch(alarmOverlayVisibleProvider))
+              SessionAlarmOverlay(
+                sessionNumber: ref.watch(sessionCountProvider),
+                isLastBeforeLong: ref.watch(isLastBeforeLongProvider),
+              ),
           ],
         ),
       ),

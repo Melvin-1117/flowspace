@@ -10,4 +10,7 @@ class PomodoroSession {
   late int actualDurationSeconds;
   late bool isCompleted;
   late bool isAbandoned;
+
+  int trialsUsed = 0;
+  int trialsRemaining = 3;
 }
