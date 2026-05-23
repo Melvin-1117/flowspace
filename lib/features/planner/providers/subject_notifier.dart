@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/models/milestone.dart';
 import '../../../core/models/subject.dart';
 import '../../../core/models/task.dart';
-import '../../../core/models/task_isar.dart';
 import '../../../core/providers/isar_provider.dart';
 import 'package:isar/isar.dart';
 import 'planner_providers.dart';

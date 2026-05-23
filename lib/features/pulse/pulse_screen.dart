@@ -12,6 +12,8 @@ import 'package:uuid/uuid.dart';
 import '../../core/constants/animation_tokens.dart';
 import '../../core/models/task.dart';
 import '../../core/providers/isar_provider.dart';
+import '../../core/providers/user_profile_provider.dart';
+import '../../core/widgets/user_avatar.dart';
 import '../../widgets/app_bottom_nav.dart';
 import '../../app/theme.dart';
 import '../../widgets/app_top_bar.dart';
@@ -72,7 +74,6 @@ class _PulseScreenState extends ConsumerState<PulseScreen> {
     final connectedAsync = ref.watch(githubConnectedProvider);
     final syncing = ref.watch(syncLoadingProvider);
     final offlineMode = ref.watch(offlineModeProvider);
-    final userAsync = ref.watch(githubUserProvider);
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: pulseBackground,
@@ -82,42 +83,10 @@ class _PulseScreenState extends ConsumerState<PulseScreen> {
       ),
       appBar: buildFlowSpaceAppBar(
         scaffoldKey: _scaffoldKey,
-        actions: [
+        actions: const [
           Padding(
-            padding: const EdgeInsets.only(right: 12),
-            child: InkWell(
-              onTap: () => _showProfileSheet(context),
-              borderRadius: BorderRadius.circular(20),
-              child: userAsync.when(
-                data: (user) => CircleAvatar(
-                  radius: 16,
-                  backgroundColor: AppTheme.surfaceCard,
-                  backgroundImage: user != null && user.avatarUrl.isNotEmpty
-                      ? NetworkImage(user.avatarUrl)
-                      : null,
-                  child: (user == null || user.avatarUrl.isEmpty)
-                      ? const Icon(Icons.person, color: Colors.white, size: 16)
-                      : null,
-                ),
-                error: (_, __) => const CircleAvatar(
-                  radius: 16,
-                  backgroundColor: AppTheme.surfaceCard,
-                  child: Icon(Icons.person, color: Colors.white, size: 16),
-                ),
-                loading: () => const CircleAvatar(
-                  radius: 16,
-                  backgroundColor: AppTheme.surfaceCard,
-                  child: SizedBox(
-                    width: 14,
-                    height: 14,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ),
-            ),
+            padding: EdgeInsets.only(right: 16),
+            child: UserAvatar(size: 36),
           ),
         ],
       ),
@@ -392,70 +361,6 @@ class _PulseScreenState extends ConsumerState<PulseScreen> {
           ),
         );
       },
-    );
-  }
-
-  Future<void> _showProfileSheet(BuildContext context) async {
-    final user = await ref.read(githubUserProvider.future);
-    await showModalBottomSheet<void>(
-      context: context,
-      backgroundColor: pulseCard,
-      builder: (_) => Padding(
-        padding: const EdgeInsets.all(16),
-        child: user == null
-            ? Text(
-                'No profile loaded',
-                style: GoogleFonts.spaceGrotesk(color: pulseMuted),
-              )
-            : Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  CircleAvatar(
-                    radius: 36,
-                    backgroundImage: NetworkImage(user.avatarUrl),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    user.displayName,
-                    style: GoogleFonts.spaceGrotesk(
-                      color: pulseText,
-                      fontWeight: FontWeight.w700,
-                      fontSize: 18,
-                    ),
-                  ),
-                  Text(
-                    '@${user.username}',
-                    style: GoogleFonts.spaceGrotesk(color: pulseMuted),
-                  ),
-                  const SizedBox(height: 10),
-                  Text(user.bio, style: GoogleFonts.spaceGrotesk(color: pulseMuted)),
-                  const SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      _stat('Followers', '${user.followers}'),
-                      _stat('Following', '${user.following}'),
-                      _stat('Repos', '${user.publicRepos}'),
-                    ],
-                  ),
-                ],
-              ),
-      ),
-    );
-  }
-
-  Widget _stat(String label, String value) {
-    return Column(
-      children: [
-        Text(
-          value,
-          style: GoogleFonts.spaceGrotesk(
-            color: pulseText,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-        Text(label, style: GoogleFonts.spaceGrotesk(color: pulseMuted, fontSize: 12)),
-      ],
     );
   }
 
@@ -742,43 +647,37 @@ class _PulseDrawer extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final connected = ref.watch(githubConnectedProvider).valueOrNull ?? false;
-    final user = ref.watch(githubUserProvider).valueOrNull;
+    final profile = ref.watch(userProfileProvider).value;
+    final displayName = ref.watch(displayNameProvider);
+    final username = ref.watch(usernameProvider);
     return Drawer(
       backgroundColor: pulseCard,
       child: SafeArea(
         child: ListView(
           padding: const EdgeInsets.all(12),
           children: [
-            if (user != null)
+            if (profile != null)
               Row(
                 children: [
-                  CircleAvatar(
-                    radius: 24,
-                    backgroundImage: user.avatarUrl.isNotEmpty
-                        ? NetworkImage(user.avatarUrl)
-                        : null,
-                    child: user.avatarUrl.isEmpty
-                        ? const Icon(Icons.person)
-                        : null,
-                  ),
+                  const UserAvatar(size: 56),
                   const SizedBox(width: 10),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          user.displayName,
+                          displayName,
                           style: GoogleFonts.spaceGrotesk(
                             color: pulseText,
                             fontWeight: FontWeight.w700,
                           ),
                         ),
                         Text(
-                          '@${user.username}',
+                          '@$username',
                           style: GoogleFonts.spaceGrotesk(color: pulseMuted),
                         ),
                         Text(
-                          '${user.followers} followers • ${user.following} following',
+                          '${profile.followers} followers • ${profile.following} following',
                           style: GoogleFonts.spaceGrotesk(
                             color: pulseMuted,
                             fontSize: 12,

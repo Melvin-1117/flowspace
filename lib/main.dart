@@ -8,12 +8,14 @@ import 'package:go_router/go_router.dart';
 import 'app/theme.dart';
 
 import 'core/models/focus_goal_settings.dart';
-import 'core/models/focus_goal_settings_isar.dart';
 import 'core/providers/isar_provider.dart';
+import 'core/services/onboarding_service.dart';
 import 'core/services/foreground_timer_service.dart';
 import 'core/services/notification_service.dart';
 import 'features/analytics/analytics_payload.dart';
 import 'features/analytics/analytics_screen.dart';
+import 'features/onboarding/onboarding_screen.dart';
+import 'features/onboarding/splash_screen.dart';
 import 'features/planner/planner_screen.dart';
 import 'features/planner/subject_detail_screen.dart';
 import 'features/planner/subject_list_screen.dart';
@@ -44,8 +46,14 @@ class _FlowSpaceAppState extends ConsumerState<FlowSpaceApp> {
   bool _restored = false;
 
   late final GoRouter _router = GoRouter(
-    initialLocation: '/focus',
+    initialLocation: '/splash',
     routes: [
+      GoRoute(path: '/splash', builder: (_, __) => const SplashScreen()),
+      GoRoute(
+        path: '/onboarding',
+        builder: (_, __) => const OnboardingScreen(),
+      ),
+      GoRoute(path: '/dashboard', builder: (_, __) => const HomePage()),
       GoRoute(path: '/focus', builder: (_, __) => const HomePage()),
       GoRoute(path: '/tasks', builder: (_, __) => const TaskBoardScreen()),
       GoRoute(path: '/pomodoro', builder: (_, __) => const PomodoroPage()),
@@ -75,6 +83,22 @@ class _FlowSpaceAppState extends ConsumerState<FlowSpaceApp> {
         builder: (_, __) => _PlaceholderScreen(title: 'Settings'),
       ),
     ],
+    redirect: (context, state) async {
+      final isOnboarding = state.matchedLocation == '/onboarding';
+      final isSplash = state.matchedLocation == '/splash';
+
+      // Always allow splash and onboarding.
+      if (isSplash || isOnboarding) return null;
+
+      // Check onboarding for all other routes.
+      final container = ProviderScope.containerOf(context, listen: false);
+      final isComplete = await container
+          .read(onboardingServiceProvider)
+          .isOnboardingComplete();
+
+      if (!isComplete) return '/onboarding';
+      return null;
+    },
   );
 
   @override

@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
+import '../../../core/providers/user_profile_provider.dart';
 import '../../../core/providers/isar_provider.dart';
 import '../../../core/models/project.dart';
 import '../../../core/models/task.dart';
@@ -208,8 +209,9 @@ final taskActivitiesProvider = StateProvider<Map<String, List<TaskActivity>>>(
   (ref) => {},
 );
 
-final projectProvider =
-    AsyncNotifierProvider<ProjectNotifier, Project>(ProjectNotifier.new);
+final projectProvider = AsyncNotifierProvider<ProjectNotifier, Project>(
+  ProjectNotifier.new,
+);
 
 final teamMembersProvider = StateProvider<List<TeamMember>>((ref) {
   return const [
@@ -217,14 +219,25 @@ final teamMembersProvider = StateProvider<List<TeamMember>>((ref) {
   ];
 });
 
-final currentUserProvider = StateProvider<AppUserProfile>((ref) {
-  return const AppUserProfile(
-    name: 'FlowSpace User',
-    email: 'student@flowspace.app',
-    avatarInitials: 'FS',
+final currentUserProvider = Provider<AppUserProfile>((ref) {
+  final name = ref.watch(displayNameProvider);
+  final username = ref.watch(usernameProvider);
+  return AppUserProfile(
+    name: name,
+    email: username.isEmpty ? '' : '@$username',
+    avatarInitials: _initialsFrom(name.isNotEmpty ? name : username),
     streakDays: 14,
   );
 });
+
+String _initialsFrom(String value) {
+  if (value.trim().isEmpty) return '';
+  final parts = value.trim().split(RegExp(r'\s+'));
+  if (parts.length == 1) {
+    return parts.first.substring(0, 1).toUpperCase();
+  }
+  return (parts[0].substring(0, 1) + parts[1].substring(0, 1)).toUpperCase();
+}
 
 final notificationsProvider = StateProvider<List<AppNotification>>((ref) => []);
 

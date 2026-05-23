@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/constants/animation_tokens.dart';
 import '../../widgets/app_drawer.dart';
 import '../../widgets/app_top_bar.dart';
+import '../../core/widgets/user_avatar.dart';
 import 'analytics_payload.dart';
 import 'providers/analytics_providers.dart';
 import 'widgets/allocation_donut_chart.dart';
@@ -72,11 +73,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
         actions: const [
           Padding(
             padding: EdgeInsets.only(right: 16),
-            child: CircleAvatar(
-              radius: 16,
-              backgroundColor: AppTheme.surfaceElevated,
-              child: Text('FS', style: TextStyle(fontSize: 11)),
-            ),
+            child: UserAvatar(size: 36),
           ),
         ],
       ),
@@ -133,10 +130,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
           const SizedBox(height: 16),
           const AllocationDonutChart()
               .animate()
-              .fadeIn(
-                duration: kPageEntryDuration,
-                delay: kPageStaggerStep * 2,
-              )
+              .fadeIn(duration: kPageEntryDuration, delay: kPageStaggerStep * 2)
               .slideY(
                 begin: 0.06,
                 end: 0,
@@ -147,10 +141,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
           const SizedBox(height: 16),
           const ConsistencyArchiveHeatmap()
               .animate()
-              .fadeIn(
-                duration: kPageEntryDuration,
-                delay: kPageStaggerStep * 3,
-              )
+              .fadeIn(duration: kPageEntryDuration, delay: kPageStaggerStep * 3)
               .slideY(
                 begin: 0.06,
                 end: 0,
@@ -161,10 +152,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
           const SizedBox(height: 16),
           const AvgSessionCard()
               .animate()
-              .fadeIn(
-                duration: kPageEntryDuration,
-                delay: kPageStaggerStep * 4,
-              )
+              .fadeIn(duration: kPageEntryDuration, delay: kPageStaggerStep * 4)
               .slideY(
                 begin: 0.06,
                 end: 0,
@@ -175,10 +163,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
           const SizedBox(height: 16),
           const TaskCompletionCard()
               .animate()
-              .fadeIn(
-                duration: kPageEntryDuration,
-                delay: kPageStaggerStep * 5,
-              )
+              .fadeIn(duration: kPageEntryDuration, delay: kPageStaggerStep * 5)
               .slideY(
                 begin: 0.06,
                 end: 0,

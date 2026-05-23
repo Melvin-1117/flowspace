@@ -5,6 +5,8 @@ import 'features/dashboard/widgets/calendar_widget.dart';
 import 'features/dashboard/widgets/active_focus_session_card.dart';
 import 'core/providers/session_timer_provider.dart';
 import 'core/models/pomodoro_session.dart';
+import 'core/providers/user_profile_provider.dart';
+import 'core/widgets/user_avatar.dart';
 import 'widgets/app_bottom_nav.dart';
 import 'widgets/app_drawer.dart';
 import 'widgets/app_top_bar.dart';
@@ -39,11 +41,7 @@ class _HomePageState extends ConsumerState<HomePage> {
           ),
           Padding(
             padding: const EdgeInsets.only(right: 16.0),
-            child: CircleAvatar(
-              backgroundColor: Colors.purple.withValues(alpha: 0.3),
-              radius: 16,
-              child: const Icon(Icons.person, color: Colors.white, size: 18),
-            ),
+            child: UserAvatar(size: 36),
           ),
         ],
       ),
@@ -136,13 +134,18 @@ class _HomePageState extends ConsumerState<HomePage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Welcome back, Productivity Pro.',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
+        Consumer(
+          builder: (context, ref, _) {
+            final name = ref.watch(displayNameProvider);
+            return Text(
+              'Hello, $name!',
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
+            );
+          },
         ),
         const SizedBox(height: 8),
         Text(
@@ -187,9 +190,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                 width: 8,
                 height: 24,
                 decoration: BoxDecoration(
-                  color: index < 4
-                      ? AppTheme.primary
-                      : AppTheme.surfaceBorder,
+                  color: index < 4 ? AppTheme.primary : AppTheme.surfaceBorder,
                   borderRadius: BorderRadius.circular(4),
                 ),
               );
@@ -378,11 +379,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               const SizedBox(height: 16),
               Row(
                 children: [
-                  Container(
-                    width: 20,
-                    height: 1,
-                    color: AppTheme.primary,
-                  ),
+                  Container(width: 20, height: 1, color: AppTheme.primary),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(

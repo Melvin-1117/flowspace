@@ -7,12 +7,12 @@ import '../../core/models/task.dart';
 import '../../widgets/app_bottom_nav.dart';
 import '../../widgets/app_drawer.dart';
 import '../../widgets/app_top_bar.dart';
+import '../../core/widgets/user_avatar.dart';
 import 'providers/task_providers.dart';
 import 'widgets/filter_sheet.dart';
 import 'widgets/kanban_board.dart';
 import 'widgets/new_task_sheet.dart';
 import 'widgets/notification_sheet.dart';
-import 'widgets/profile_sheet.dart';
 import 'widgets/progress_breakdown_sheet.dart';
 import 'widgets/quick_action_fab.dart';
 import 'widgets/task_list_view.dart';
@@ -109,21 +109,8 @@ class _TaskBoardScreenState extends ConsumerState<TaskBoardScreen> {
                     ],
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(right: 12),
-                    child: GestureDetector(
-                      onTap: () {
-                        showModalBottomSheet<void>(
-                          context: context,
-                          backgroundColor: AppTheme.surfaceCard,
-                          builder: (_) => const ProfileSheet(),
-                        );
-                      },
-                      child: const CircleAvatar(
-                        radius: 16,
-                        backgroundColor: AppTheme.surfaceElevated,
-                        child: Text('FS', style: TextStyle(fontSize: 11)),
-                      ),
-                    ),
+                    padding: const EdgeInsets.only(right: 16),
+                    child: const UserAvatar(size: 36),
                   ),
                 ],
               ),
@@ -506,9 +493,7 @@ class _TaskBoardScreenState extends ConsumerState<TaskBoardScreen> {
             Text(
               title,
               style: TextStyle(
-                color: active
-                    ? AppTheme.textPrimary
-                    : AppTheme.textSecondary,
+                color: active ? AppTheme.textPrimary : AppTheme.textSecondary,
               ),
             ),
           ],

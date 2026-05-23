@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../widgets/app_drawer.dart';
 import '../../widgets/app_top_bar.dart';
 import '../../app/theme.dart';
+import '../../core/widgets/user_avatar.dart';
 
 const Color _bg = AppTheme.background;
 const Color _surface = AppTheme.surfaceCard;
@@ -35,11 +36,7 @@ class _PulseDashboardScreenState extends State<PulseDashboardScreen> {
         actions: const [
           Padding(
             padding: EdgeInsets.only(right: 16),
-            child: CircleAvatar(
-              radius: 16,
-              backgroundColor: AppTheme.surfaceCard,
-              child: Icon(Icons.person, color: Colors.white, size: 16),
-            ),
+            child: UserAvatar(size: 36),
           ),
         ],
       ),
@@ -238,7 +235,10 @@ class _ContributionCard extends StatelessWidget {
                 style: GoogleFonts.spaceGrotesk(color: _muted, fontSize: 14),
               ),
             ),
-            Text('Less', style: GoogleFonts.spaceGrotesk(color: _muted, fontSize: 10)),
+            Text(
+              'Less',
+              style: GoogleFonts.spaceGrotesk(color: _muted, fontSize: 10),
+            ),
             const SizedBox(width: 4),
             Row(
               children: const [
@@ -249,7 +249,10 @@ class _ContributionCard extends StatelessWidget {
               ],
             ),
             const SizedBox(width: 4),
-            Text('More', style: GoogleFonts.spaceGrotesk(color: _muted, fontSize: 10)),
+            Text(
+              'More',
+              style: GoogleFonts.spaceGrotesk(color: _muted, fontSize: 10),
+            ),
           ],
         ),
         const SizedBox(height: 18),
@@ -328,7 +331,9 @@ class _LanguageCard extends StatelessWidget {
                 child: CircularProgressIndicator(
                   value: 1,
                   strokeWidth: 16,
-                  valueColor: const AlwaysStoppedAnimation(AppTheme.surfaceBorder),
+                  valueColor: const AlwaysStoppedAnimation(
+                    AppTheme.surfaceBorder,
+                  ),
                   backgroundColor: Colors.transparent,
                 ),
               ),
@@ -375,7 +380,10 @@ class _LanguageCard extends StatelessWidget {
                     ),
                     Text(
                       'TypeScript',
-                      style: GoogleFonts.spaceGrotesk(color: _muted, fontSize: 11),
+                      style: GoogleFonts.spaceGrotesk(
+                        color: _muted,
+                        fontSize: 11,
+                      ),
                     ),
                   ],
                 ),
@@ -419,7 +427,10 @@ class _LegendRow extends StatelessWidget {
           decoration: BoxDecoration(color: color, shape: BoxShape.circle),
         ),
         const SizedBox(width: 8),
-        Text(label, style: GoogleFonts.spaceGrotesk(color: _text, fontSize: 14)),
+        Text(
+          label,
+          style: GoogleFonts.spaceGrotesk(color: _text, fontSize: 14),
+        ),
         const Spacer(),
         Text(
           value,
@@ -678,14 +689,20 @@ class _RepoTile extends StatelessWidget {
                     const SizedBox(width: 3),
                     Text(
                       data.stars,
-                      style: GoogleFonts.spaceGrotesk(color: _muted, fontSize: 11),
+                      style: GoogleFonts.spaceGrotesk(
+                        color: _muted,
+                        fontSize: 11,
+                      ),
                     ),
                     const SizedBox(width: 9),
                     const Icon(Icons.call_split, size: 12, color: _muted),
                     const SizedBox(width: 3),
                     Text(
                       data.forks,
-                      style: GoogleFonts.spaceGrotesk(color: _muted, fontSize: 11),
+                      style: GoogleFonts.spaceGrotesk(
+                        color: _muted,
+                        fontSize: 11,
+                      ),
                     ),
                     const SizedBox(width: 9),
                     Container(

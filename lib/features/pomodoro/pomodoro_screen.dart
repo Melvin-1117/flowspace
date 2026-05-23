@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../widgets/app_bottom_nav.dart';
 import '../../widgets/app_drawer.dart';
 import '../../widgets/app_top_bar.dart';
+import '../../core/widgets/user_avatar.dart';
 import 'providers/pomodoro_providers.dart';
 import 'services/alarm_service.dart';
 import 'services/flip_detector_service.dart';
@@ -94,17 +95,10 @@ class _PomodoroScreenState extends ConsumerState<PomodoroScreen>
       bottomNavigationBar: const AppBottomNav(currentIndex: 2),
       appBar: buildFlowSpaceAppBar(
         scaffoldKey: _scaffoldKey,
-        actions: [
-          Container(
-            width: 34,
-            height: 34,
-            margin: const EdgeInsets.only(right: 12),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(99),
-              border: Border.all(color: const Color(0x33FFFFFF)),
-              color: AppTheme.surfaceCard,
-            ),
-            child: const Icon(Icons.person, size: 18, color: AppTheme.textSecondary),
+        actions: const [
+          Padding(
+            padding: EdgeInsets.only(right: 16),
+            child: UserAvatar(size: 36),
           ),
         ],
       ),

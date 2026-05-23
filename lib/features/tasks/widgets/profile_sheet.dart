@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../core/widgets/user_avatar.dart';
 import '../providers/task_providers.dart';
 import '../../../app/theme.dart';
 
@@ -18,20 +19,16 @@ class ProfileSheet extends ConsumerWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            CircleAvatar(
-              radius: 40,
-              backgroundColor: AppTheme.surfaceElevated,
-              child: Text(
-                user.avatarInitials,
-                style: const TextStyle(fontSize: 18),
-              ),
-            ),
+            const UserAvatar(size: 80),
             const SizedBox(height: 12),
             Text(
               user.name,
               style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
             ),
-            Text(user.email, style: const TextStyle(color: AppTheme.textSecondary)),
+            Text(
+              user.email,
+              style: const TextStyle(color: AppTheme.textSecondary),
+            ),
             const SizedBox(height: 12),
             Wrap(
               spacing: 8,

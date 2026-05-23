@@ -10,6 +10,7 @@ import '../../../core/models/github_event_cache.dart';
 import '../../../core/models/github_user_cache.dart';
 import '../../../core/models/language_cache.dart';
 import '../../../core/models/repository_cache.dart';
+import '../../../core/models/user_profile.dart';
 import '../pulse_types.dart';
 
 const githubApiBase = 'https://api.github.com';
@@ -150,6 +151,65 @@ class GitHubService {
       publicRepos: data['public_repos'] as int? ?? 0,
       cachedAt: DateTime.now(),
     );
+  }
+
+  /// Verify token and fetch full profile.
+  Future<UserProfile> verifyAndFetchProfile(String token) async {
+    final response = await _client.get(
+      Uri.parse('$githubApiBase/user'),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Accept': 'application/vnd.github+json',
+      },
+    );
+
+    if (response.statusCode == 401) {
+      throw Exception('401 Unauthorized');
+    }
+    if (response.statusCode == 403) {
+      throw Exception('403 Forbidden');
+    }
+    if (response.statusCode != 200) {
+      throw Exception('GitHub API error ${response.statusCode}');
+    }
+
+    final data = jsonDecode(response.body) as Map<String, dynamic>;
+
+    return UserProfile()
+      ..githubUsername = data['login'] as String? ?? ''
+      ..displayName = data['name'] as String? ?? data['login'] as String? ?? ''
+      ..avatarUrl = data['avatar_url'] as String? ?? ''
+      ..bio = data['bio'] as String? ?? ''
+      ..githubUrl = data['html_url'] as String? ?? ''
+      ..publicRepos = data['public_repos'] as int? ?? 0
+      ..followers = data['followers'] as int? ?? 0
+      ..following = data['following'] as int? ?? 0
+      ..connectedAt = DateTime.now()
+      ..lastSyncedAt = DateTime.now()
+      ..isConnected = true;
+  }
+
+  /// Verify stored token is still valid.
+  Future<bool> verifyStoredToken() async {
+    try {
+      final token = await getToken();
+      if (token == null) return false;
+
+      final response = await _client
+          .get(
+            Uri.parse('$githubApiBase/user'),
+            headers: {
+              'Authorization': 'Bearer $token',
+              'Accept': 'application/vnd.github+json',
+            },
+          )
+          .timeout(const Duration(seconds: 10));
+
+      return response.statusCode == 200;
+    } catch (_) {
+      // Network error — assume valid, use cached data.
+      return true;
+    }
   }
 
   /// Fetches and parses contribution data from GitHub GraphQL.

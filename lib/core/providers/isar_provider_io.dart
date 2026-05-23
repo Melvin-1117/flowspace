@@ -8,9 +8,10 @@ import '../models/project.dart';
 import '../models/study_event.dart';
 import '../models/task.dart';
 import '../models/task_activity.dart';
+import '../models/user_profile.dart';
 
 const _isarName = 'flowspace';
-const _isarSchemaVersion = 2;
+const _isarSchemaVersion = 3;
 
 final isarProvider = FutureProvider<Isar>((ref) async {
   final existing = Isar.getInstance(_isarName);
@@ -25,6 +26,7 @@ final isarProvider = FutureProvider<Isar>((ref) async {
       PomodoroSessionSchema,
       FocusGoalSettingsSchema,
       StudyEventSchema,
+      UserProfileSchema,
     ],
     name: _isarName,
     directory: directory.path,

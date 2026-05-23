@@ -12,7 +12,7 @@ import '../../core/models/subject.dart';
 import '../../widgets/app_bottom_nav.dart';
 import '../../widgets/app_drawer.dart';
 import '../../widgets/app_top_bar.dart';
-import '../tasks/widgets/profile_sheet.dart';
+import '../../core/widgets/user_avatar.dart';
 import 'providers/planner_providers.dart';
 import 'providers/planner_storage.dart';
 import 'widgets/add_focus_block_sheet.dart';
@@ -61,22 +61,9 @@ class _PlannerScreenState extends ConsumerState<PlannerScreen> {
             icon: const Icon(Icons.search, color: Colors.grey),
             onPressed: _openSearchOverlay,
           ),
-          Padding(
-            padding: const EdgeInsets.only(right: 16),
-            child: GestureDetector(
-              onTap: () {
-                showModalBottomSheet<void>(
-                  context: context,
-                  backgroundColor: AppTheme.surfaceCard,
-                  builder: (_) => const ProfileSheet(),
-                );
-              },
-              child: const CircleAvatar(
-                radius: 16,
-                backgroundColor: AppTheme.surfaceElevated,
-                child: Text('FS', style: TextStyle(fontSize: 11)),
-              ),
-            ),
+          const Padding(
+            padding: EdgeInsets.only(right: 16),
+            child: UserAvatar(size: 36),
           ),
         ],
       ),
@@ -231,9 +218,9 @@ class _PlannerScreenState extends ConsumerState<PlannerScreen> {
                           onAddBlock: _openAddFocusBlockSheet,
                           onOpenBlock: _openBlockDetails,
                         )
-                         .animate()
-                         .fadeIn(delay: kPageStaggerStep * 6)
-                         .slideY(begin: 0.1, end: 0),
+                        .animate()
+                        .fadeIn(delay: kPageStaggerStep * 6)
+                        .slideY(begin: 0.1, end: 0),
                   ],
                 ),
               ),
@@ -636,11 +623,7 @@ class _PlannerSkeletonBox extends StatelessWidget {
           ),
         )
         .animate(onPlay: (controller) => controller.repeat(reverse: true))
-        .fade(
-          begin: 0.35,
-          end: 0.8,
-          duration: kShimmerDuration,
-        );
+        .fade(begin: 0.35, end: 0.8, duration: kShimmerDuration);
   }
 }
 

@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../app/theme.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-class AppDrawer extends StatelessWidget {
+import '../app/theme.dart';
+import '../core/providers/user_profile_provider.dart';
+import '../core/widgets/user_avatar.dart';
+
+class AppDrawer extends ConsumerWidget {
   const AppDrawer({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final displayName = ref.watch(displayNameProvider);
+    final username = ref.watch(usernameProvider);
+
     return Drawer(
       width: MediaQuery.sizeOf(context).width * 0.75,
       backgroundColor: AppTheme.surfaceCard,
@@ -14,19 +22,31 @@ class AppDrawer extends StatelessWidget {
         child: Column(
           children: [
             // User Profile Section
-            UserAccountsDrawerHeader(
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(16),
               decoration: const BoxDecoration(color: AppTheme.primary),
-              accountName: const Text(
-                'FlowSpace User',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              ),
-              accountEmail: const Text(
-                'student@flowspace.app',
-                style: TextStyle(fontSize: 14),
-              ),
-              currentAccountPicture: const CircleAvatar(
-                backgroundColor: Colors.white24,
-                child: Icon(Icons.person, color: Colors.white, size: 32),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const UserAvatar(size: 56),
+                  const SizedBox(height: 12),
+                  Text(
+                    displayName,
+                    style: GoogleFonts.spaceGrotesk(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                      color: AppTheme.textPrimary,
+                    ),
+                  ),
+                  Text(
+                    '@$username',
+                    style: GoogleFonts.spaceGrotesk(
+                      fontSize: 13,
+                      color: AppTheme.textSecondary,
+                    ),
+                  ),
+                ],
               ),
             ),
 
@@ -183,7 +203,7 @@ class AppDrawer extends StatelessWidget {
       title: Text(
         title,
         style: TextStyle(
-          color: isSelected ? AppTheme.primary : Colors.white,
+          color: isSelected ? AppTheme.primary : AppTheme.textPrimary,
           fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
         ),
       ),
