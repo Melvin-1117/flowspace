@@ -1,7 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/user_profile.dart';
-import '../models/user_profile_isar.dart';
 import '../providers/isar_provider.dart';
 import '../services/onboarding_service.dart';
 import '../../features/pulse/providers/pulse_providers.dart';
@@ -9,13 +9,14 @@ import '../../features/pulse/providers/pulse_providers.dart';
 class UserProfileNotifier extends AsyncNotifier<UserProfile?> {
   @override
   Future<UserProfile?> build() async {
+    if (kIsWeb) return null;
     return _loadFromIsar();
   }
 
   Future<UserProfile?> _loadFromIsar() async {
     final isar = await ref.read(isarProvider.future);
     // Try to get the first profile by ID
-    return await isar.userProfiles.get(1);
+    return await isar.collection<UserProfile>().get(1);
   }
 
   // Load cached profile on app start
@@ -26,8 +27,12 @@ class UserProfileNotifier extends AsyncNotifier<UserProfile?> {
 
   // Save new profile after GitHub connect
   Future<void> saveProfile(UserProfile profile) async {
+    if (kIsWeb) {
+      state = AsyncData(profile);
+      return;
+    }
     final isar = await ref.read(isarProvider.future);
-    await isar.writeTxn(() => isar.userProfiles.put(profile));
+    await isar.writeTxn(() => isar.collection<UserProfile>().put(profile));
     state = AsyncData(profile);
   }
 

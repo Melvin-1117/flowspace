@@ -76,8 +76,9 @@ final githubUserProvider = FutureProvider<GitHubUserCache?>((ref) async {
 /// Provider for contribution calendar data with date-range-specific cache.
 final contributionDataProvider = FutureProvider<ContributionData>((ref) async {
   final connected = await ref.watch(githubConnectedProvider.future);
-  if (!connected)
+  if (!connected) {
     return ContributionData(totalContributions: 0, weeks: const []);
+  }
   final range = ref.watch(dateRangeProvider);
   return _withCache<ContributionCache>(
     ref: ref,
@@ -147,8 +148,9 @@ final recentEventsProvider = FutureProvider<List<GitHubEventCache>>((
     },
     fetchFresh: () async {
       final user = await ref.read(githubUserProvider.future);
-      if (user == null || user.username.isEmpty)
+      if (user == null || user.username.isEmpty) {
         return const <GitHubEventCache>[];
+      }
       return ref
           .read(githubServiceProvider)
           .fetchRecentEvents(username: user.username, range: range);

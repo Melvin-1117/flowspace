@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
@@ -32,9 +30,7 @@ class NotificationService {
         category: AndroidNotificationCategory.alarm,
         playSound: true,
         enableVibration: true,
-        vibrationPattern: Int64List.fromList(
-          [0, 500, 200, 500, 200, 500],
-        ),
+        vibrationPattern: Int64List.fromList([0, 500, 200, 500, 200, 500]),
       ),
     );
     await _plugin.show(1001, '🎯  Focus Session Complete!', body, details);

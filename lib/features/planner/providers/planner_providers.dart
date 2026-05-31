@@ -240,7 +240,7 @@ Future<List<PomodoroSession>> _loadSessions(Ref ref) async {
     return PomodoroWebStore.instance.sessions;
   }
   final isar = await ref.read(isarProvider.future);
-  return await isar.pomodoroSessions.where().findAll() as List<PomodoroSession>;
+  return await isar.collection<PomodoroSession>().where().findAll();
 }
 
 Future<double> _streakConsistency(Ref ref) async {

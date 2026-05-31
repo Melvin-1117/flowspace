@@ -8,9 +8,7 @@ final sessionsByDateProvider =
     FutureProvider.family<List<PomodoroSession>, DateTime>((ref, day) async {
       final isar = await ref.watch(isarProvider.future);
       final normalized = DateTime(day.year, day.month, day.day);
-      final all =
-          await isar.pomodoroSessions.where().findAll()
-              as List<PomodoroSession>;
+      final all = await isar.collection<PomodoroSession>().where().findAll();
       return all
           .where((s) => _isSameCalendarDay(s.startTime, normalized))
           .toList();
@@ -18,8 +16,7 @@ final sessionsByDateProvider =
 
 final streakDaysProvider = FutureProvider<List<DateTime>>((ref) async {
   final isar = await ref.watch(isarProvider.future);
-  final sessions =
-      await isar.pomodoroSessions.where().findAll() as List<PomodoroSession>;
+  final sessions = await isar.collection<PomodoroSession>().where().findAll();
   final daysWithActivity = <DateTime>{};
   for (final s in sessions) {
     if (!s.isCompleted) continue;

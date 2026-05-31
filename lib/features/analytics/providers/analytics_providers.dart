@@ -407,7 +407,7 @@ final analyticsTargetDurationProvider = FutureProvider<int>((ref) async {
     return PomodoroWebStore.instance.ensureSettings().focusDuration;
   }
   final isar = await ref.watch(isarProvider.future);
-  final settings = await isar.focusGoalSettings.get(1) as FocusGoalSettings?;
+  final settings = await isar.collection<FocusGoalSettings>().get(1) as FocusGoalSettings?;
   return settings?.focusDuration ?? 1500;
 });
 
@@ -435,8 +435,8 @@ Future<List<PomodoroSession>> _loadCompletedSessions(Ref ref) async {
         .toList();
   }
   final isar = await ref.watch(isarProvider.future);
-  return await isar.pomodoroSessions.filter().isCompletedEqualTo(true).findAll()
-      as List<PomodoroSession>;
+  final all = await isar.collection<PomodoroSession>().where().findAll();
+  return all.where((s) => s.isCompleted).toList();
 }
 
 Future<List<PomodoroSession>> _loadCompletedSessionsInRange(
@@ -456,12 +456,13 @@ Future<List<PomodoroSession>> _loadCompletedSessionsInRange(
         .toList();
   }
   final isar = await ref.watch(isarProvider.future);
-  return await isar.pomodoroSessions
-          .filter()
-          .isCompletedEqualTo(true)
-          .startTimeBetween(start, end)
-          .findAll()
-      as List<PomodoroSession>;
+  final all = await isar.collection<PomodoroSession>().where().findAll();
+  return all
+      .where((s) =>
+          s.isCompleted &&
+          !s.startTime.isBefore(start) &&
+          s.startTime.isBefore(end))
+      .toList();
 }
 
 Future<List<Task>> _loadTasks(Ref ref) async {
@@ -470,7 +471,7 @@ Future<List<Task>> _loadTasks(Ref ref) async {
     return ref.watch(taskNotifierProvider.future);
   }
   final isar = await ref.watch(isarProvider.future);
-  return await isar.tasks.where().findAll() as List<Task>;
+  return await isar.collection<Task>().where().findAll();
 }
 
 List<Map<String, Object?>> _sessionRawRows(List<PomodoroSession> sessions) {

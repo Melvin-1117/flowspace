@@ -32,7 +32,7 @@ class UserAvatar extends ConsumerWidget {
         child: ClipOval(
           child: hasAvatar
               ? CachedNetworkImage(
-                  imageUrl: avatarUrl!,
+                  imageUrl: avatarUrl,
                   fit: BoxFit.cover,
                   placeholder: (context, url) => _placeholder(),
                   errorWidget: (context, url, error) => _placeholder(),

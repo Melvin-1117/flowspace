@@ -591,14 +591,14 @@ class TimerNotifier extends Notifier<TimerState> {
       return;
     }
     final isar = await ref.read(isarProvider.future);
-    final settings = await isar.focusGoalSettings.get(1) as FocusGoalSettings?;
+    final settings = await isar.collection<FocusGoalSettings>().get(1) as FocusGoalSettings?;
     if (settings == null) return;
     settings.wasTimerRunning = state.isRunning;
     settings.remainingSecondsOnKill = state.remainingSeconds;
     settings.sessionTypeOnKill = state.sessionType.key;
     settings.killTimestamp = DateTime.now();
     await isar.writeTxn(() async {
-      await isar.focusGoalSettings.put(settings);
+      await isar.collection<FocusGoalSettings>().put(settings);
     });
   }
 
@@ -635,7 +635,7 @@ class TimerNotifier extends Notifier<TimerState> {
   Future<void> handleExpiredWhileKilled() async {
     final settings = kIsWeb
         ? PomodoroWebStore.instance.ensureSettings()
-        : await (await ref.read(isarProvider.future)).focusGoalSettings.get(1)
+        : await (await ref.read(isarProvider.future)).collection<FocusGoalSettings>().get(1)
               as FocusGoalSettings?;
     final restoredType = SessionTypeFromName.fromName(
       settings?.sessionTypeOnKill ?? 'focus',
@@ -689,7 +689,7 @@ class TimerNotifier extends Notifier<TimerState> {
     } else {
       final isar = await ref.read(isarProvider.future);
       await isar.writeTxn(() async {
-        await isar.pomodoroSessions.put(session);
+        await isar.collection<PomodoroSession>().put(session);
       });
     }
 
@@ -730,7 +730,7 @@ class TimerNotifier extends Notifier<TimerState> {
         }
       } else {
         final isar = await ref.read(isarProvider.future);
-        final tasks = await isar.tasks.where().findAll() as List<Task>;
+        final tasks = await isar.collection<Task>().where().findAll();
         final task = tasks
             .where((item) => item.uuid == session.linkedTaskId!)
             .firstOrNull;
@@ -738,7 +738,7 @@ class TimerNotifier extends Notifier<TimerState> {
           task.pomodoroCount += 1;
           task.updatedAt = DateTime.now();
           await isar.writeTxn(() async {
-            await isar.tasks.put(task);
+            await isar.collection<Task>().put(task);
           });
           ref.invalidate(allTasksProvider);
           for (final status in const ['todo', 'inprogress', 'done']) {
@@ -766,7 +766,7 @@ class TimerNotifier extends Notifier<TimerState> {
     final dayStart = DateTime(now.year, now.month, now.day);
     final dayEnd = dayStart.add(const Duration(days: 1));
     final sessions =
-        await isar.pomodoroSessions.where().findAll() as List<PomodoroSession>;
+        await isar.collection<PomodoroSession>().where().findAll();
     final todaysCompletedFocus = sessions.where(
       (session) =>
           session.sessionType == 'focus' &&

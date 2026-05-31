@@ -21,7 +21,7 @@ class MilestoneNotifier extends AsyncNotifier<List<Milestone>> {
     final isar = await ref.read(isarProvider.future);
     final existing = await _taskByUuid(isar, milestone.uuid);
     await isar.writeTxn(() async {
-      await isar.tasks.put(
+      await isar.collection<Task>().put(
         PlannerStorage.fromMilestone(milestone, existing: existing),
       );
     });
@@ -104,7 +104,7 @@ class MilestoneNotifier extends AsyncNotifier<List<Milestone>> {
   Future<List<Milestone>> _load() async {
     if (kIsWeb) return const <Milestone>[];
     final isar = await ref.read(isarProvider.future);
-    final tasks = await isar.tasks.where().findAll() as List<Task>;
+    final tasks = await isar.collection<Task>().where().findAll();
     return tasks
         .where((task) => task.tag == plannerMilestoneTag)
         .map(PlannerStorage.toMilestone)
@@ -113,7 +113,7 @@ class MilestoneNotifier extends AsyncNotifier<List<Milestone>> {
   }
 
   Future<Task?> _taskByUuid(Isar isar, String uuid) async {
-    final tasks = await isar.tasks.where().findAll() as List<Task>;
+    final tasks = await isar.collection<Task>().where().findAll();
     try {
       return tasks.firstWhere(
         (task) => task.uuid == uuid && task.tag == plannerMilestoneTag,

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:isar/isar.dart';
@@ -8,7 +9,7 @@ import '../../features/pulse/providers/pulse_providers.dart';
 
 class OnboardingService {
   final FlutterSecureStorage _storage;
-  final Isar _isar;
+  final Isar? _isar;
 
   static const _tokenKey = 'github_pat';
   static const _onboardingKey = 'onboarding_complete';
@@ -18,7 +19,12 @@ class OnboardingService {
   // Check if user has completed onboarding
   Future<bool> isOnboardingComplete() async {
     final value = await _storage.read(key: _onboardingKey);
-    final profile = await _isar.userProfiles.where().findFirst();
+    if (kIsWeb) {
+      return value == 'true';
+    }
+    final isar = _isar;
+    if (isar == null) return value == 'true';
+    final profile = await isar.collection<UserProfile>().where().findFirst();
     // Both must exist
     return value == 'true' && profile != null;
   }
@@ -43,8 +49,11 @@ class OnboardingService {
   Future<void> clearOnboarding() async {
     await _storage.deleteAll();
     await clearPulseCaches();
-    await _isar.writeTxn(() async {
-      await _isar.userProfiles.clear();
+    if (kIsWeb) return;
+    final isar = _isar;
+    if (isar == null) return;
+    await isar.writeTxn(() async {
+      await isar.collection<UserProfile>().clear();
     });
   }
 }
@@ -52,6 +61,6 @@ class OnboardingService {
 final onboardingServiceProvider = Provider<OnboardingService>((ref) {
   return OnboardingService(
     const FlutterSecureStorage(),
-    ref.watch(isarProvider).requireValue,
+    kIsWeb ? null : ref.watch(isarProvider).requireValue,
   );
 });

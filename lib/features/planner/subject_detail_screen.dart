@@ -128,9 +128,7 @@ final _subjectSessionsProvider =
       subjectId,
     ) async {
       final isar = await ref.read(isarProvider.future);
-      final all =
-          await isar.pomodoroSessions.where().findAll()
-              as List<PomodoroSession>;
+      final all = await isar.collection<PomodoroSession>().where().findAll();
       return all.where((session) => session.linkedTaskId == subjectId).toList()
         ..sort((a, b) => b.startTime.compareTo(a.startTime));
     });

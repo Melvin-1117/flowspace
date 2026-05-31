@@ -38,7 +38,7 @@ final isarProvider = FutureProvider<Isar>((ref) async {
 });
 
 Future<void> _ensureFocusSettings(Isar isar) async {
-  final settings = await isar.focusGoalSettings.get(1);
+  final settings = await isar.collection<FocusGoalSettings>().get(1);
   if (settings != null) return;
   final defaults = FocusGoalSettings()
     ..id = 1
@@ -57,7 +57,7 @@ Future<void> _ensureFocusSettings(Isar isar) async {
     ..sessionTypeOnKill = 'focus'
     ..killTimestamp = null;
   await isar.writeTxn(() async {
-    await isar.focusGoalSettings.put(defaults);
+    await isar.collection<FocusGoalSettings>().put(defaults);
   });
 }
 
@@ -68,8 +68,8 @@ Future<void> _runSchemaMigrations(Isar isar, int schemaVersion) async {
 }
 
 Future<void> _migratePomodoroSessionsV2(Isar isar) async {
-  final settings = await isar.focusGoalSettings.get(1);
-  final sessions = await isar.pomodoroSessions.where().findAll();
+  final settings = await isar.collection<FocusGoalSettings>().get(1);
+  final sessions = await isar.collection<PomodoroSession>().where().findAll();
   if (sessions.isEmpty) return;
   final uuid = const Uuid();
   final focusDuration = settings?.focusDuration ?? 1500;
@@ -119,7 +119,7 @@ Future<void> _migratePomodoroSessionsV2(Isar isar) async {
     }
     if (dirty) {
       await isar.writeTxn(() async {
-        await isar.pomodoroSessions.put(session);
+        await isar.collection<PomodoroSession>().put(session);
       });
     }
   }

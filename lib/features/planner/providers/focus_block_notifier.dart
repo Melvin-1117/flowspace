@@ -22,7 +22,7 @@ class FocusBlockNotifier extends AsyncNotifier<List<FocusBlock>> {
     final isar = await ref.read(isarProvider.future);
     final existing = await _taskByUuid(isar, block.uuid);
     await isar.writeTxn(() async {
-      await isar.tasks.put(
+      await isar.collection<Task>().put(
         PlannerStorage.fromFocusBlock(block, existing: existing),
       );
     });
@@ -78,13 +78,13 @@ class FocusBlockNotifier extends AsyncNotifier<List<FocusBlock>> {
   Future<void> deleteBlock(String uuid) async {
     if (kIsWeb) return;
     final isar = await ref.read(isarProvider.future);
-    final tasks = await isar.tasks.where().findAll() as List<Task>;
+    final tasks = await isar.collection<Task>().where().findAll();
     final found = tasks
         .where((t) => t.uuid == uuid && t.tag == plannerFocusBlockTag)
         .firstOrNull;
     if (found == null) return;
     await isar.writeTxn(() async {
-      await isar.tasks.delete(found.id);
+      await isar.collection<Task>().delete(found.id);
     });
     ref.invalidate(todayFocusBlocksProvider);
     state = AsyncData(await _load());
@@ -104,7 +104,7 @@ class FocusBlockNotifier extends AsyncNotifier<List<FocusBlock>> {
   Future<List<FocusBlock>> _load() async {
     if (kIsWeb) return const <FocusBlock>[];
     final isar = await ref.read(isarProvider.future);
-    final tasks = await isar.tasks.where().findAll() as List<Task>;
+    final tasks = await isar.collection<Task>().where().findAll();
     return tasks
         .where((task) => task.tag == plannerFocusBlockTag)
         .map(PlannerStorage.toFocusBlock)
@@ -113,7 +113,7 @@ class FocusBlockNotifier extends AsyncNotifier<List<FocusBlock>> {
   }
 
   Future<Task?> _taskByUuid(Isar isar, String uuid) async {
-    final tasks = await isar.tasks.where().findAll() as List<Task>;
+    final tasks = await isar.collection<Task>().where().findAll();
     try {
       return tasks.firstWhere(
         (task) => task.uuid == uuid && task.tag == plannerFocusBlockTag,

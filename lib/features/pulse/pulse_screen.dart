@@ -542,7 +542,7 @@ class _PulseScreenState extends ConsumerState<PulseScreen> {
                     ..dependencyIds = []
                     ..projectId = '';
                   await isar.writeTxn(() async {
-                    await isar.tasks.put(task);
+                    await isar.collection<Task>().put(task);
                   });
                   if (context.mounted) Navigator.of(context).pop();
                   if (mounted) {
