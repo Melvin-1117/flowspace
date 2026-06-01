@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -5,6 +6,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../providers/user_profile_provider.dart';
 import '../../app/theme.dart';
@@ -15,6 +19,7 @@ class UserProfileSheet extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final profileAsync = ref.watch(userProfileProvider);
+    final readmeAsync = ref.watch(profileReadmeProvider);
 
     return Container(
       decoration: const BoxDecoration(
@@ -29,9 +34,10 @@ class UserProfileSheet extends ConsumerWidget {
         error: (e, _) => const _ProfileError(),
         data: (profile) {
           if (profile == null) return const _ProfileError();
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
+          return SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
               // Drag handle
               Container(
                 width: 40,
@@ -150,7 +156,7 @@ class UserProfileSheet extends ConsumerWidget {
                 decoration: BoxDecoration(
                   color: AppTheme.primarySubtle,
                   borderRadius: BorderRadius.circular(AppTheme.radiusSM),
-                  border: Border.all(color: AppTheme.primary.withOpacity(0.2)),
+                  border: Border.all(color: AppTheme.primary.withValues(alpha: 0.2)),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -170,6 +176,109 @@ class UserProfileSheet extends ConsumerWidget {
                     ),
                   ],
                 ),
+              ),
+
+              // GitHub README Section
+              readmeAsync.when(
+                data: (readme) {
+                  if (readme == null || readme.trim().isEmpty) {
+                    return const SizedBox.shrink();
+                  }
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: AppTheme.spaceLG),
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.article_outlined,
+                            color: AppTheme.primary,
+                            size: 16,
+                          ),
+                          const SizedBox(width: 6),
+                          Text(
+                            'GITHUB README',
+                            style: GoogleFonts.spaceGrotesk(
+                              color: AppTheme.textSecondary,
+                              fontSize: 11,
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: 1.5,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: AppTheme.spaceSM),
+                      Container(
+                        width: double.infinity,
+                        constraints: const BoxConstraints(maxHeight: 250),
+                        padding: const EdgeInsets.all(AppTheme.spaceMD),
+                        decoration: BoxDecoration(
+                          color: AppTheme.surfaceHover,
+                          borderRadius: BorderRadius.circular(AppTheme.radiusMD),
+                          border: Border.all(color: AppTheme.surfaceBorder),
+                        ),
+                        child: SingleChildScrollView(
+                          child: MarkdownBody(
+                            data: _preprocessReadme(readme),
+                            selectable: true,
+                            imageBuilder: (uri, title, alt) {
+                              final urlString = uri.toString();
+                              final lowerUrl = urlString.toLowerCase();
+                              final isSvg = lowerUrl.contains('.svg') ||
+                                  lowerUrl.contains('shields.io') ||
+                                  lowerUrl.contains('badge') ||
+                                  lowerUrl.contains('github-readme-stats') ||
+                                  lowerUrl.contains('streak-stats') ||
+                                  lowerUrl.contains('komarev.com/ghpvc') ||
+                                  lowerUrl.contains('visitcount.itsvg.in');
+
+                              final isBadge = !lowerUrl.contains('github-readme-stats') &&
+                                  !lowerUrl.contains('streak-stats');
+
+                              if (isSvg) {
+                                final resolvedUrl = kIsWeb
+                                    ? 'https://corsproxy.io/?$urlString'
+                                    : urlString;
+                                return SvgPicture.network(
+                                  resolvedUrl,
+                                  placeholderBuilder: (context) => _ImageShimmerPlaceholder(
+                                    isBadge: isBadge,
+                                  ),
+                                );
+                              }
+
+                              return CachedNetworkImage(
+                                imageUrl: urlString,
+                                placeholder: (context, url) => _ImageShimmerPlaceholder(
+                                  isBadge: isBadge,
+                                ),
+                                errorWidget: (context, url, error) => const Icon(
+                                  Icons.broken_image,
+                                  size: 16,
+                                  color: AppTheme.textSecondary,
+                                ),
+                              );
+                            },
+                            styleSheet: MarkdownStyleSheet.fromTheme(Theme.of(context)).copyWith(
+                              p: GoogleFonts.spaceGrotesk(color: AppTheme.textPrimary, fontSize: 13),
+                              h1: GoogleFonts.spaceGrotesk(color: AppTheme.textPrimary, fontSize: 18, fontWeight: FontWeight.w700),
+                              h2: GoogleFonts.spaceGrotesk(color: AppTheme.textPrimary, fontSize: 16, fontWeight: FontWeight.w600),
+                              h3: GoogleFonts.spaceGrotesk(color: AppTheme.textPrimary, fontSize: 14, fontWeight: FontWeight.w600),
+                              code: GoogleFonts.spaceGrotesk(backgroundColor: AppTheme.surfaceCard, color: AppTheme.primary, fontSize: 12),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                },
+                loading: () => const Padding(
+                  padding: EdgeInsets.all(AppTheme.spaceLG),
+                  child: Center(
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  ),
+                ),
+                error: (_, __) => const SizedBox.shrink(),
               ),
 
               const SizedBox(height: AppTheme.spaceLG),
@@ -277,7 +386,8 @@ class UserProfileSheet extends ConsumerWidget {
 
               SizedBox(height: MediaQuery.of(context).padding.bottom + 8),
             ],
-          );
+          ),
+        );
         },
       ),
     );
@@ -466,5 +576,105 @@ class _StatDivider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(width: 1, height: 32, color: AppTheme.surfaceBorder);
+  }
+}
+
+String _preprocessReadme(String markdown) {
+  var processed = markdown;
+
+  // 1. Remove HTML comments
+  processed = processed.replaceAll(RegExp(r'<!--[\s\S]*?-->'), '');
+
+  // 2. Convert HTML headers to Markdown headers
+  processed = processed.replaceAllMapped(
+    RegExp(r'<h([1-6])(?:\s+[^>]*)?>([\s\S]*?)</h\1>', caseSensitive: false),
+    (match) {
+      final level = int.parse(match.group(1) ?? '1');
+      final content = (match.group(2) ?? '').trim();
+      return '${'#' * level} $content\n';
+    },
+  );
+
+  // 3. Convert HTML bold/strong and italic/em
+  processed = processed.replaceAllMapped(
+    RegExp(r'<(strong|b)(?:\s+[^>]*)?>([\s\S]*?)</\1>', caseSensitive: false),
+    (match) => '**${match.group(2)}**',
+  );
+  processed = processed.replaceAllMapped(
+    RegExp(r'<(em|i)(?:\s+[^>]*)?>([\s\S]*?)</\1>', caseSensitive: false),
+    (match) => '*${match.group(2)}*',
+  );
+
+  // 4. Convert HTML list items
+  processed = processed.replaceAllMapped(
+    RegExp(r'<li(?:\s+[^>]*)?>([\s\S]*?)</?li>', caseSensitive: false),
+    (match) => '- ${match.group(1)?.trim()}\n',
+  );
+
+  // 5. Convert HTML img tags to Markdown image format: ![alt](src)
+  processed = processed.replaceAllMapped(
+    RegExp(r'<img\s+[^>]*>', caseSensitive: false),
+    (match) {
+      final tag = match.group(0) ?? '';
+      final srcMatch = RegExp(r'''src=["']([^"']+)["']''', caseSensitive: false).firstMatch(tag);
+      final altMatch = RegExp(r'''alt=["']([^"']+)["']''', caseSensitive: false).firstMatch(tag);
+      
+      final src = srcMatch?.group(1) ?? '';
+      final alt = altMatch?.group(1) ?? '';
+      
+      if (src.isEmpty) return '';
+      return '![$alt]($src)';
+    },
+  );
+
+  // 6. Convert HTML anchor tags to Markdown link format: [content](href)
+  processed = processed.replaceAllMapped(
+    RegExp(r'''<a\s+[^>]*href=["']([^"']+)["'][^>]*>([\s\S]*?)</a>''', caseSensitive: false),
+    (match) {
+      final href = match.group(1) ?? '';
+      final content = match.group(2) ?? '';
+      return '[$content]($href)';
+    },
+  );
+
+  // 7. Strip other HTML tags, replacing them with newlines or spaces
+  processed = processed.replaceAll(
+    RegExp(r'</?(p|div|span|center|sub|sup|pre|code|table|tr|td|thead|tbody|ul|ol|a)(?:\s+[^>]*)?>', caseSensitive: false),
+    '\n',
+  );
+
+  // 8. Replace <br> and <br /> with newlines
+  processed = processed.replaceAll(RegExp(r'<br\s*/?>', caseSensitive: false), '\n');
+
+  // Clean up excessive consecutive newlines
+  processed = processed.replaceAll(RegExp(r'\n{3,}'), '\n\n');
+
+  return processed.trim();
+}
+
+class _ImageShimmerPlaceholder extends StatelessWidget {
+  final bool isBadge;
+
+  const _ImageShimmerPlaceholder({
+    required this.isBadge,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final double displayHeight = isBadge ? 20.0 : 140.0;
+    final double displayWidth = isBadge ? 80.0 : double.infinity;
+
+    return Shimmer.fromColors(
+      baseColor: AppTheme.surfaceCard,
+      highlightColor: AppTheme.surfaceHover,
+      child: Container(
+        width: displayWidth,
+        height: displayHeight,
+        decoration: BoxDecoration(
+          color: AppTheme.surfaceBorder,
+          borderRadius: BorderRadius.circular(isBadge ? 4 : 8),
+        ),
+      ),
+    );
   }
 }

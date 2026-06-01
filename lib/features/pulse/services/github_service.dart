@@ -350,6 +350,22 @@ class GitHubService {
     );
   }
 
+  /// Fetches the raw text content of the user's profile README.
+  Future<String?> fetchProfileReadme(String username) async {
+    try {
+      final response = await _requestJson(
+        Uri.parse('$githubApiBase/repos/$username/$username/readme'),
+      ) as Map<String, dynamic>;
+
+      final base64Content = response['content'] as String? ?? '';
+      final cleanedBase64 = base64Content.replaceAll('\n', '').trim();
+      final decodedBytes = base64.decode(cleanedBase64);
+      return utf8.decode(decodedBytes);
+    } catch (_) {
+      return null;
+    }
+  }
+
   /// Fetches a GitHub issue by `owner/repo#number` reference.
   Future<GitHubIssue> fetchIssueByRef(String ref) async {
     final parsed = RegExp(r'^([^/]+)/([^#]+)#(\d+)$').firstMatch(ref.trim());

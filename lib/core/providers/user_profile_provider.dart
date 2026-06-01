@@ -9,7 +9,17 @@ import '../../features/pulse/providers/pulse_providers.dart';
 class UserProfileNotifier extends AsyncNotifier<UserProfile?> {
   @override
   Future<UserProfile?> build() async {
-    if (kIsWeb) return null;
+    if (kIsWeb) {
+      final token = await ref.read(onboardingServiceProvider).getToken();
+      if (token != null && token.isNotEmpty) {
+        try {
+          return await ref.read(githubServiceProvider).verifyAndFetchProfile(token);
+        } catch (_) {
+          return null;
+        }
+      }
+      return null;
+    }
     return _loadFromIsar();
   }
 
@@ -22,6 +32,21 @@ class UserProfileNotifier extends AsyncNotifier<UserProfile?> {
   // Load cached profile on app start
   Future<void> loadFromCache() async {
     state = const AsyncLoading();
+    if (kIsWeb) {
+      final token = await ref.read(onboardingServiceProvider).getToken();
+      if (token != null && token.isNotEmpty) {
+        try {
+          final profile = await ref.read(githubServiceProvider).verifyAndFetchProfile(token);
+          state = AsyncData(profile);
+          return;
+        } catch (_) {
+          state = const AsyncData(null);
+          return;
+        }
+      }
+      state = const AsyncData(null);
+      return;
+    }
     state = AsyncData(await _loadFromIsar());
   }
 
@@ -76,4 +101,10 @@ final displayNameProvider = Provider<String>((ref) {
   return profile?.displayName.isNotEmpty == true
       ? profile!.displayName
       : profile?.githubUsername ?? 'Developer';
+});
+
+final profileReadmeProvider = FutureProvider<String?>((ref) async {
+  final username = ref.watch(usernameProvider);
+  if (username.isEmpty) return null;
+  return ref.read(githubServiceProvider).fetchProfileReadme(username);
 });
