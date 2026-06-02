@@ -1,4 +1,8 @@
+import 'dart:async';
+import 'dart:typed_data';
+
 import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -222,40 +226,96 @@ class UserProfileSheet extends ConsumerWidget {
                             data: _preprocessReadme(readme),
                             selectable: true,
                             imageBuilder: (uri, title, alt) {
-                              final urlString = uri.toString();
+                              // Strip dimension fragment before building the fetch URL
+                              final fragment = uri.fragment;
+                              double? reqWidth;
+                              double? reqHeight;
+                              if (fragment.isNotEmpty) {
+                                final wM = RegExp(r'_w=(\d+)').firstMatch(fragment);
+                                final hM = RegExp(r'_h=(\d+)').firstMatch(fragment);
+                                if (wM != null) reqWidth = double.parse(wM.group(1)!);
+                                if (hM != null) reqHeight = double.parse(hM.group(1)!);
+                              }
+                              // Remove our custom fragment so we don't send it in HTTP
+                              final cleanUri = uri.replace(fragment: '');
+                              final urlString = cleanUri.toString().replaceAll(RegExp(r'#$'), '');
                               final lowerUrl = urlString.toLowerCase();
-                              final isSvg = lowerUrl.contains('.svg') ||
+
+                              // Only treat as SVG when we are confident the URL returns SVG data
+                              final isSvg = lowerUrl.endsWith('.svg') ||
+                                  RegExp(r'\.svg[?#]').hasMatch(lowerUrl) ||
                                   lowerUrl.contains('shields.io') ||
-                                  lowerUrl.contains('badge') ||
                                   lowerUrl.contains('github-readme-stats') ||
                                   lowerUrl.contains('streak-stats') ||
                                   lowerUrl.contains('komarev.com/ghpvc') ||
-                                  lowerUrl.contains('visitcount.itsvg.in');
-
-                              final isBadge = !lowerUrl.contains('github-readme-stats') &&
-                                  !lowerUrl.contains('streak-stats');
+                                  lowerUrl.contains('visitcount.itsvg.in') ||
+                                  lowerUrl.contains('readme-typing-svg') ||
+                                  lowerUrl.contains('capsule-render');
 
                               if (isSvg) {
-                                final resolvedUrl = kIsWeb
-                                    ? 'https://corsproxy.io/?$urlString'
-                                    : urlString;
-                                return SvgPicture.network(
-                                  resolvedUrl,
-                                  placeholderBuilder: (context) => _ImageShimmerPlaceholder(
-                                    isBadge: isBadge,
+                                return _TimedNetworkSvg(
+                                  url: urlString,
+                                  displayHeight: reqHeight,
+                                  displayWidth: reqWidth,
+                                );
+                              }
+
+                              // Raster images (PNG from skillicons.dev, etc.)
+                              final double imgHeight = reqHeight ?? 48.0;
+                              final double? imgWidth = reqWidth;
+
+                              if (kIsWeb) {
+                                return ConstrainedBox(
+                                  constraints: BoxConstraints(
+                                    maxHeight: imgHeight,
+                                    maxWidth: imgWidth ?? double.infinity,
+                                  ),
+                                  child: Image.network(
+                                    urlString,
+                                    fit: BoxFit.contain,
+                                    loadingBuilder: (context, child, loadingProgress) {
+                                      if (loadingProgress == null) return child;
+                                      return SizedBox(
+                                        height: imgHeight,
+                                        width: imgWidth ?? 80,
+                                        child: Shimmer.fromColors(
+                                          baseColor: AppTheme.surfaceCard,
+                                          highlightColor: AppTheme.surfaceHover,
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              color: AppTheme.surfaceBorder,
+                                              borderRadius: BorderRadius.circular(4),
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    errorBuilder: (context, error, stackTrace) => const Icon(
+                                      Icons.broken_image_outlined,
+                                      size: 16,
+                                      color: AppTheme.textSecondary,
+                                    ),
                                   ),
                                 );
                               }
 
-                              return CachedNetworkImage(
-                                imageUrl: urlString,
-                                placeholder: (context, url) => _ImageShimmerPlaceholder(
-                                  isBadge: isBadge,
+                              return ConstrainedBox(
+                                constraints: BoxConstraints(
+                                  maxHeight: imgHeight,
+                                  maxWidth: imgWidth ?? double.infinity,
                                 ),
-                                errorWidget: (context, url, error) => const Icon(
-                                  Icons.broken_image,
-                                  size: 16,
-                                  color: AppTheme.textSecondary,
+                                child: CachedNetworkImage(
+                                  imageUrl: urlString,
+                                  fit: BoxFit.contain,
+                                  placeholder: (context, url) => SizedBox(
+                                    height: imgHeight,
+                                    width: imgWidth ?? 80,
+                                  ),
+                                  errorWidget: (context, url, error) => const Icon(
+                                    Icons.broken_image,
+                                    size: 16,
+                                    color: AppTheme.textSecondary,
+                                  ),
                                 ),
                               );
                             },
@@ -612,18 +672,27 @@ String _preprocessReadme(String markdown) {
   );
 
   // 5. Convert HTML img tags to Markdown image format: ![alt](src)
+  //    Preserve width/height as URL fragment so imageBuilder can read them.
   processed = processed.replaceAllMapped(
     RegExp(r'<img\s+[^>]*>', caseSensitive: false),
     (match) {
       final tag = match.group(0) ?? '';
       final srcMatch = RegExp(r'''src=["']([^"']+)["']''', caseSensitive: false).firstMatch(tag);
       final altMatch = RegExp(r'''alt=["']([^"']+)["']''', caseSensitive: false).firstMatch(tag);
-      
+      final widthMatch = RegExp(r'''width=["']?(\d+)["']?''', caseSensitive: false).firstMatch(tag);
+      final heightMatch = RegExp(r'''height=["']?(\d+)["']?''', caseSensitive: false).firstMatch(tag);
+
       final src = srcMatch?.group(1) ?? '';
       final alt = altMatch?.group(1) ?? '';
-      
+
       if (src.isEmpty) return '';
-      return '![$alt]($src)';
+
+      // Encode original dimensions as URL fragment
+      final dims = <String>[];
+      if (widthMatch != null) dims.add('_w=${widthMatch.group(1)}');
+      if (heightMatch != null) dims.add('_h=${heightMatch.group(1)}');
+      final frag = dims.isNotEmpty ? '#${dims.join('&')}' : '';
+      return '![$alt]($src$frag)';
     },
   );
 
@@ -676,5 +745,130 @@ class _ImageShimmerPlaceholder extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+enum _SvgLoadState { loading, loaded, failed, raster }
+
+/// Loads an SVG from the network by manually fetching the data.
+/// Validates content is actual SVG XML before rendering; falls back to
+/// raster Image.memory() if the response is PNG/JPEG/etc.
+class _TimedNetworkSvg extends StatefulWidget {
+  const _TimedNetworkSvg({
+    required this.url,
+    this.displayHeight,
+    this.displayWidth,
+  });
+
+  final String url;
+  final double? displayHeight;
+  final double? displayWidth;
+
+  @override
+  State<_TimedNetworkSvg> createState() => _TimedNetworkSvgState();
+}
+
+class _TimedNetworkSvgState extends State<_TimedNetworkSvg> {
+  static const _kSvgTimeout = Duration(seconds: 10);
+
+  _SvgLoadState _state = _SvgLoadState.loading;
+  String? _svgData;
+  Uint8List? _rasterBytes;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchSvg();
+  }
+
+  Future<void> _fetchSvg() async {
+    try {
+      final response = await http
+          .get(Uri.parse(widget.url))
+          .timeout(_kSvgTimeout);
+      if (!mounted) return;
+      if (response.statusCode == 200) {
+        final contentType = response.headers['content-type'] ?? '';
+        final body = response.body.trimLeft();
+        // Check Content-Type header first, then inspect body content
+        final isSvgContent = contentType.contains('svg') ||
+            body.startsWith('<svg') ||
+            body.startsWith('<?xml') ||
+            body.startsWith('<!DOCTYPE') && body.contains('<svg') ||
+            body.contains('<svg ') ||
+            body.contains('<svg>');
+        if (isSvgContent) {
+          setState(() {
+            _svgData = response.body;
+            _state = _SvgLoadState.loaded;
+          });
+        } else {
+          // Not SVG — treat as raster image
+          setState(() {
+            _rasterBytes = response.bodyBytes;
+            _state = _SvgLoadState.raster;
+          });
+        }
+      } else {
+        setState(() => _state = _SvgLoadState.failed);
+      }
+    } catch (_) {
+      if (mounted) setState(() => _state = _SvgLoadState.failed);
+    }
+  }
+
+  double get _h => widget.displayHeight ?? 28;
+  double? get _w => widget.displayWidth;
+
+  @override
+  Widget build(BuildContext context) {
+    return switch (_state) {
+      _SvgLoadState.loading => SizedBox(
+          height: _h,
+          width: _w ?? 80,
+          child: Shimmer.fromColors(
+            baseColor: AppTheme.surfaceCard,
+            highlightColor: AppTheme.surfaceHover,
+            child: Container(
+              decoration: BoxDecoration(
+                color: AppTheme.surfaceBorder,
+                borderRadius: BorderRadius.circular(4),
+              ),
+            ),
+          ),
+        ),
+      _SvgLoadState.failed => SizedBox(
+          height: _h,
+          width: _w ?? 80,
+          child: const Center(
+            child: Icon(
+              Icons.broken_image_outlined,
+              size: 16,
+              color: AppTheme.textSecondary,
+            ),
+          ),
+        ),
+      _SvgLoadState.loaded => SvgPicture.string(
+          _svgData!,
+          height: widget.displayHeight,
+          width: widget.displayWidth,
+          fit: BoxFit.contain,
+        ),
+      _SvgLoadState.raster => ConstrainedBox(
+          constraints: BoxConstraints(
+            maxHeight: _h,
+            maxWidth: _w ?? double.infinity,
+          ),
+          child: Image.memory(
+            _rasterBytes!,
+            fit: BoxFit.contain,
+            errorBuilder: (_, __, ___) => const Icon(
+              Icons.broken_image_outlined,
+              size: 16,
+              color: AppTheme.textSecondary,
+            ),
+          ),
+        ),
+    };
   }
 }
