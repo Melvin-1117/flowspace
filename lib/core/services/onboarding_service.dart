@@ -1,66 +1,65 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:isar/isar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/user_profile.dart';
 import '../providers/isar_provider.dart';
-import '../../features/pulse/providers/pulse_providers.dart';
+import '../../features/devtrack/models/coding_session.dart';
+import '../../features/devtrack/models/dev_project.dart';
+import '../../features/devtrack/models/skill_entry.dart';
+import '../../features/devtrack/models/daily_dev_log.dart';
 
 class OnboardingService {
-  final FlutterSecureStorage _storage;
   final Isar? _isar;
 
-  static const _tokenKey = 'github_pat';
   static const _onboardingKey = 'onboarding_complete';
 
-  OnboardingService(this._storage, this._isar);
+  OnboardingService(this._isar);
 
-  // Check if user has completed onboarding
+  /// Check if user has completed onboarding.
+  /// UserProfile existence IS the completion flag on native.
   Future<bool> isOnboardingComplete() async {
-    final value = await _storage.read(key: _onboardingKey);
     if (kIsWeb) {
-      return value == 'true';
+      final prefs = await SharedPreferences.getInstance();
+      return prefs.getBool(_onboardingKey) ?? false;
     }
     final isar = _isar;
-    if (isar == null) return value == 'true';
+    if (isar == null) return false;
     final profile = await isar.collection<UserProfile>().where().findFirst();
-    // Both must exist
-    return value == 'true' && profile != null;
+    return profile != null;
   }
 
-  // Save GitHub token securely
-  Future<void> saveToken(String token) async {
-    await _storage.write(key: _tokenKey, value: token);
-  }
-
-  // Read stored token
-  Future<String?> getToken() async {
-    return _storage.read(key: _tokenKey);
-  }
-
-  // Mark onboarding as done
+  /// Mark onboarding as done (web only; on native, saving UserProfile is enough).
   Future<void> markOnboardingComplete() async {
-    await _storage.write(key: _onboardingKey, value: 'true');
+    if (kIsWeb) {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool(_onboardingKey, true);
+    }
+    // On native, UserProfile existence is the flag.
   }
 
-  // Clear all onboarding data
-  // Used when token is revoked or expires
+  /// Clear all onboarding and DevTrack data.
   Future<void> clearOnboarding() async {
-    await _storage.deleteAll();
-    await clearPulseCaches();
-    if (kIsWeb) return;
+    if (kIsWeb) {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.remove(_onboardingKey);
+      return;
+    }
     final isar = _isar;
     if (isar == null) return;
     await isar.writeTxn(() async {
       await isar.collection<UserProfile>().clear();
+      await isar.collection<DevProject>().clear();
+      await isar.collection<CodingSession>().clear();
+      await isar.collection<SkillEntry>().clear();
+      await isar.collection<DailyDevLog>().clear();
     });
   }
 }
 
 final onboardingServiceProvider = Provider<OnboardingService>((ref) {
   return OnboardingService(
-    const FlutterSecureStorage(),
     kIsWeb ? null : ref.watch(isarProvider).requireValue,
   );
 });

@@ -9,9 +9,13 @@ import '../models/study_event.dart';
 import '../models/task.dart';
 import '../models/task_activity.dart';
 import '../models/user_profile.dart';
+import '../../features/devtrack/models/coding_session.dart';
+import '../../features/devtrack/models/dev_project.dart';
+import '../../features/devtrack/models/skill_entry.dart';
+import '../../features/devtrack/models/daily_dev_log.dart';
 
 const _isarName = 'flowspace';
-const _isarSchemaVersion = 3;
+const _isarSchemaVersion = 4;
 
 final isarProvider = FutureProvider<Isar>((ref) async {
   final existing = Isar.getInstance(_isarName);
@@ -27,6 +31,10 @@ final isarProvider = FutureProvider<Isar>((ref) async {
       FocusGoalSettingsSchema,
       StudyEventSchema,
       UserProfileSchema,
+      CodingSessionSchema,
+      DevProjectSchema,
+      SkillEntrySchema,
+      DailyDevLogSchema,
     ],
     name: _isarName,
     directory: directory.path,

@@ -12,8 +12,11 @@ class AppDrawer extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final displayName = ref.watch(displayNameProvider);
-    final username = ref.watch(usernameProvider);
+    final profile = ref.watch(userProfileProvider).value;
+    final displayName = profile?.displayName ?? 'Developer';
+    final subtitleText = profile != null && profile.courseName.isNotEmpty
+        ? '${profile.courseName} • ${profile.semesterName}'
+        : 'Student';
 
     return Drawer(
       width: MediaQuery.sizeOf(context).width * 0.75,
@@ -40,7 +43,7 @@ class AppDrawer extends ConsumerWidget {
                     ),
                   ),
                   Text(
-                    '@$username',
+                    subtitleText,
                     style: GoogleFonts.spaceGrotesk(
                       fontSize: 13,
                       color: AppTheme.textSecondary,
@@ -99,15 +102,15 @@ class AppDrawer extends ConsumerWidget {
                         GoRouterState.of(context).uri.toString() == '/planner',
                   ),
 
-                  // GitHub
+                  // DevTrack
                   _buildDrawerItem(
                     context,
-                    icon: Icons.code_outlined,
-                    title: 'GitHub',
-                    subtitle: 'Repository dashboard',
-                    route: '/pulse',
+                    icon: Icons.terminal_rounded,
+                    title: 'DevTrack',
+                    subtitle: 'Developer activity log',
+                    route: '/devtrack',
                     isSelected:
-                        GoRouterState.of(context).uri.toString() == '/pulse',
+                        GoRouterState.of(context).uri.toString() == '/devtrack',
                   ),
 
                   // Analytics

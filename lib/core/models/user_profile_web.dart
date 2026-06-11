@@ -1,20 +1,25 @@
 class UserProfile {
   int id = 0;
 
-  // GitHub identity
-  late String githubUsername;
+  // Identity
   late String displayName;
-  late String avatarUrl;
-  late String bio;
-  late String githubUrl;
+  late String avatarEmoji;
+  String avatarUrl = '';
+  String bio = '';
 
-  // GitHub stats (cached)
-  late int publicRepos;
-  late int followers;
-  late int following;
+  // Academic info
+  String semesterName = '';
+  String courseName = '';
+  DateTime? semesterEndDate;
+
+  // Developer preferences
+  List<String> primaryLanguages = [];
+
+  // Goals
+  int dailySessionGoal = 4;
+  int dailyCodingHoursGoal = 3;
 
   // App metadata
-  late DateTime connectedAt;
-  late DateTime lastSyncedAt;
-  late bool isConnected;
+  late DateTime createdAt;
+  late DateTime lastUpdatedAt;
 }

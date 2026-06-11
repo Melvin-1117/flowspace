@@ -62,8 +62,18 @@ const PomodoroSessionSchema = CollectionSchema(
       name: r'startTime',
       type: IsarType.dateTime,
     ),
-    r'uuid': PropertySchema(
+    r'trialsRemaining': PropertySchema(
       id: 9,
+      name: r'trialsRemaining',
+      type: IsarType.long,
+    ),
+    r'trialsUsed': PropertySchema(
+      id: 10,
+      name: r'trialsUsed',
+      type: IsarType.long,
+    ),
+    r'uuid': PropertySchema(
+      id: 11,
       name: r'uuid',
       type: IsarType.string,
     )
@@ -120,7 +130,9 @@ void _pomodoroSessionSerialize(
   writer.writeLong(offsets[6], object.plannedDurationSeconds);
   writer.writeString(offsets[7], object.sessionType);
   writer.writeDateTime(offsets[8], object.startTime);
-  writer.writeString(offsets[9], object.uuid);
+  writer.writeLong(offsets[9], object.trialsRemaining);
+  writer.writeLong(offsets[10], object.trialsUsed);
+  writer.writeString(offsets[11], object.uuid);
 }
 
 PomodoroSession _pomodoroSessionDeserialize(
@@ -140,7 +152,9 @@ PomodoroSession _pomodoroSessionDeserialize(
   object.plannedDurationSeconds = reader.readLong(offsets[6]);
   object.sessionType = reader.readString(offsets[7]);
   object.startTime = reader.readDateTime(offsets[8]);
-  object.uuid = reader.readString(offsets[9]);
+  object.trialsRemaining = reader.readLong(offsets[9]);
+  object.trialsUsed = reader.readLong(offsets[10]);
+  object.uuid = reader.readString(offsets[11]);
   return object;
 }
 
@@ -170,6 +184,10 @@ P _pomodoroSessionDeserializeProp<P>(
     case 8:
       return (reader.readDateTime(offset)) as P;
     case 9:
+      return (reader.readLong(offset)) as P;
+    case 10:
+      return (reader.readLong(offset)) as P;
+    case 11:
       return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -1034,6 +1052,118 @@ extension PomodoroSessionQueryFilter
   }
 
   QueryBuilder<PomodoroSession, PomodoroSession, QAfterFilterCondition>
+      trialsRemainingEqualTo(int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'trialsRemaining',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PomodoroSession, PomodoroSession, QAfterFilterCondition>
+      trialsRemainingGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'trialsRemaining',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PomodoroSession, PomodoroSession, QAfterFilterCondition>
+      trialsRemainingLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'trialsRemaining',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PomodoroSession, PomodoroSession, QAfterFilterCondition>
+      trialsRemainingBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'trialsRemaining',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<PomodoroSession, PomodoroSession, QAfterFilterCondition>
+      trialsUsedEqualTo(int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'trialsUsed',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PomodoroSession, PomodoroSession, QAfterFilterCondition>
+      trialsUsedGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'trialsUsed',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PomodoroSession, PomodoroSession, QAfterFilterCondition>
+      trialsUsedLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'trialsUsed',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PomodoroSession, PomodoroSession, QAfterFilterCondition>
+      trialsUsedBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'trialsUsed',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<PomodoroSession, PomodoroSession, QAfterFilterCondition>
       uuidEqualTo(
     String value, {
     bool caseSensitive = true,
@@ -1303,6 +1433,34 @@ extension PomodoroSessionQuerySortBy
     });
   }
 
+  QueryBuilder<PomodoroSession, PomodoroSession, QAfterSortBy>
+      sortByTrialsRemaining() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'trialsRemaining', Sort.asc);
+    });
+  }
+
+  QueryBuilder<PomodoroSession, PomodoroSession, QAfterSortBy>
+      sortByTrialsRemainingDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'trialsRemaining', Sort.desc);
+    });
+  }
+
+  QueryBuilder<PomodoroSession, PomodoroSession, QAfterSortBy>
+      sortByTrialsUsed() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'trialsUsed', Sort.asc);
+    });
+  }
+
+  QueryBuilder<PomodoroSession, PomodoroSession, QAfterSortBy>
+      sortByTrialsUsedDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'trialsUsed', Sort.desc);
+    });
+  }
+
   QueryBuilder<PomodoroSession, PomodoroSession, QAfterSortBy> sortByUuid() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'uuid', Sort.asc);
@@ -1456,6 +1614,34 @@ extension PomodoroSessionQuerySortThenBy
     });
   }
 
+  QueryBuilder<PomodoroSession, PomodoroSession, QAfterSortBy>
+      thenByTrialsRemaining() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'trialsRemaining', Sort.asc);
+    });
+  }
+
+  QueryBuilder<PomodoroSession, PomodoroSession, QAfterSortBy>
+      thenByTrialsRemainingDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'trialsRemaining', Sort.desc);
+    });
+  }
+
+  QueryBuilder<PomodoroSession, PomodoroSession, QAfterSortBy>
+      thenByTrialsUsed() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'trialsUsed', Sort.asc);
+    });
+  }
+
+  QueryBuilder<PomodoroSession, PomodoroSession, QAfterSortBy>
+      thenByTrialsUsedDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'trialsUsed', Sort.desc);
+    });
+  }
+
   QueryBuilder<PomodoroSession, PomodoroSession, QAfterSortBy> thenByUuid() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'uuid', Sort.asc);
@@ -1536,6 +1722,20 @@ extension PomodoroSessionQueryWhereDistinct
     });
   }
 
+  QueryBuilder<PomodoroSession, PomodoroSession, QDistinct>
+      distinctByTrialsRemaining() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'trialsRemaining');
+    });
+  }
+
+  QueryBuilder<PomodoroSession, PomodoroSession, QDistinct>
+      distinctByTrialsUsed() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'trialsUsed');
+    });
+  }
+
   QueryBuilder<PomodoroSession, PomodoroSession, QDistinct> distinctByUuid(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -1609,6 +1809,19 @@ extension PomodoroSessionQueryProperty
       startTimeProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'startTime');
+    });
+  }
+
+  QueryBuilder<PomodoroSession, int, QQueryOperations>
+      trialsRemainingProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'trialsRemaining');
+    });
+  }
+
+  QueryBuilder<PomodoroSession, int, QQueryOperations> trialsUsedProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'trialsUsed');
     });
   }
 

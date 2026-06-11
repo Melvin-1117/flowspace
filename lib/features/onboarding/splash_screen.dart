@@ -7,7 +7,6 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../app/theme.dart';
 import '../../core/providers/user_profile_provider.dart';
 import '../../core/services/onboarding_service.dart';
-import '../pulse/providers/pulse_providers.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
@@ -35,23 +34,10 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
     if (!mounted) return;
 
     if (isComplete) {
-      // Verify token still valid silently
-      final isValid = await ref.read(githubServiceProvider).verifyStoredToken();
-
+      // Load cached profile into provider
+      await ref.read(userProfileProvider.notifier).loadFromCache();
       if (!mounted) return;
-
-      if (isValid) {
-        // Load cached profile into provider
-        await ref.read(userProfileProvider.notifier).loadFromCache();
-        if (!mounted) return;
-        context.go('/dashboard');
-      } else {
-        // Token expired or revoked
-        // Clear everything and restart onboarding
-        await ref.read(onboardingServiceProvider).clearOnboarding();
-        if (!mounted) return;
-        context.go('/onboarding');
-      }
+      context.go('/dashboard');
     } else {
       context.go('/onboarding');
     }

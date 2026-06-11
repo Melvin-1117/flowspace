@@ -22,10 +22,10 @@ import 'features/planner/subject_list_screen.dart';
 import 'features/pomodoro/pomodoro_page.dart';
 import 'features/pomodoro/providers/pomodoro_providers.dart';
 import 'features/pomodoro/providers/pomodoro_web_store.dart';
-import 'features/pulse/pulse_screen.dart';
+import 'features/devtrack/devtrack_screen.dart';
 import 'features/tasks/task_board_screen.dart';
 import 'features/tasks/task_detail_screen.dart';
-import 'home_page.dart';
+import 'features/dashboard/dashboard_screen.dart';
 import 'widgets/app_drawer.dart';
 
 Future<void> main() async {
@@ -53,8 +53,8 @@ class _FlowSpaceAppState extends ConsumerState<FlowSpaceApp> {
         path: '/onboarding',
         builder: (_, __) => const OnboardingScreen(),
       ),
-      GoRoute(path: '/dashboard', builder: (_, __) => const HomePage()),
-      GoRoute(path: '/focus', builder: (_, __) => const HomePage()),
+      GoRoute(path: '/dashboard', builder: (_, __) => const DashboardScreen()),
+      GoRoute(path: '/focus', builder: (_, __) => const DashboardScreen()),
       GoRoute(path: '/tasks', builder: (_, __) => const TaskBoardScreen()),
       GoRoute(path: '/pomodoro', builder: (_, __) => const PomodoroPage()),
       GoRoute(
@@ -77,7 +77,7 @@ class _FlowSpaceAppState extends ConsumerState<FlowSpaceApp> {
         builder: (_, state) =>
             SubjectDetailScreen(subjectId: state.pathParameters['subjectId']!),
       ),
-      GoRoute(path: '/pulse', builder: (_, __) => const PulseScreen()),
+      GoRoute(path: '/devtrack', builder: (_, __) => const DevTrackScreen()),
       GoRoute(
         path: '/settings',
         builder: (_, __) => _PlaceholderScreen(title: 'Settings'),

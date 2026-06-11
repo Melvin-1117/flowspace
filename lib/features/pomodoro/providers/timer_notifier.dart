@@ -16,7 +16,6 @@ import '../../../core/services/audio_service.dart';
 import '../../../core/services/foreground_timer_service.dart';
 import '../../../core/services/notification_service.dart';
 import '../../tasks/providers/task_providers.dart';
-import '../services/alarm_service.dart';
 import 'pomodoro_providers.dart';
 import 'pomodoro_web_store.dart';
 
@@ -28,14 +27,13 @@ class TimerState {
     required this.isRunning,
     required this.completedFocusSessionsToday,
     required this.lastTickAt,
+    this.pausedByFlip = false,
+    this.trialsUsed = 0,
     this.sessionStartAt,
     this.linkedTaskId,
     this.linkedTaskTitle,
     this.completionOverlay,
     this.suggestedBreakType,
-    this.pausedByFlip = false,
-    this.trialsRemaining = 3,
-    this.trialsUsed = 0,
   });
 
   final SessionType sessionType;
@@ -44,14 +42,15 @@ class TimerState {
   final bool isRunning;
   final int completedFocusSessionsToday;
   final DateTime lastTickAt;
+  final bool pausedByFlip;
+  final int trialsUsed;
   final DateTime? sessionStartAt;
   final String? linkedTaskId;
   final String? linkedTaskTitle;
   final CompletionOverlayState? completionOverlay;
   final SessionType? suggestedBreakType;
-  final bool pausedByFlip;
-  final int trialsRemaining;
-  final int trialsUsed;
+
+  int get trialsRemaining => (3 - trialsUsed).clamp(0, 3);
 
   double get progress => totalDurationSeconds == 0
       ? 0
@@ -64,6 +63,8 @@ class TimerState {
     bool? isRunning,
     int? completedFocusSessionsToday,
     DateTime? lastTickAt,
+    bool? pausedByFlip,
+    int? trialsUsed,
     DateTime? sessionStartAt,
     bool clearSessionStartAt = false,
     String? linkedTaskId,
@@ -73,9 +74,6 @@ class TimerState {
     bool clearOverlay = false,
     SessionType? suggestedBreakType,
     bool clearSuggestedBreak = false,
-    bool? pausedByFlip,
-    int? trialsRemaining,
-    int? trialsUsed,
   }) {
     return TimerState(
       sessionType: sessionType ?? this.sessionType,
@@ -85,6 +83,8 @@ class TimerState {
       completedFocusSessionsToday:
           completedFocusSessionsToday ?? this.completedFocusSessionsToday,
       lastTickAt: lastTickAt ?? this.lastTickAt,
+      pausedByFlip: pausedByFlip ?? this.pausedByFlip,
+      trialsUsed: trialsUsed ?? this.trialsUsed,
       sessionStartAt: clearSessionStartAt
           ? null
           : (sessionStartAt ?? this.sessionStartAt),
@@ -100,9 +100,6 @@ class TimerState {
       suggestedBreakType: clearSuggestedBreak
           ? null
           : (suggestedBreakType ?? this.suggestedBreakType),
-      pausedByFlip: pausedByFlip ?? this.pausedByFlip,
-      trialsRemaining: trialsRemaining ?? this.trialsRemaining,
-      trialsUsed: trialsUsed ?? this.trialsUsed,
     );
   }
 }
@@ -240,10 +237,8 @@ class TimerNotifier extends Notifier<TimerState> {
       linkedTaskId: linkedTaskId,
       linkedTaskTitle: linkedTaskTitle,
       lastTickAt: DateTime.now(),
-      // Reset trials at session start
-      trialsRemaining: 3,
-      trialsUsed: 0,
       pausedByFlip: false,
+      trialsUsed: 0,
     );
     _startTicker();
     await _persistTimerState();
@@ -270,6 +265,8 @@ class TimerNotifier extends Notifier<TimerState> {
       clearOverlay: true,
       clearSuggestedBreak: true,
       lastTickAt: DateTime.now(),
+      pausedByFlip: false,
+      trialsUsed: 0,
     );
     await _persistTimerState();
     await start(linkedTaskId: linkedTaskId, linkedTaskTitle: linkedTaskTitle);
@@ -277,27 +274,20 @@ class TimerNotifier extends Notifier<TimerState> {
 
   Future<void> pause() async {
     if (!state.isRunning) return;
-
-    // Trial check — manual pause consumes 1 trial during focus sessions
-    if (state.sessionType == SessionType.focus) {
-      if (state.trialsRemaining <= 0) {
-        // No trials left — block manual pause
-        return;
-      }
-      state = state.copyWith(
-        trialsRemaining: state.trialsRemaining - 1,
-        trialsUsed: state.trialsUsed + 1,
-      );
-    }
-
     if (_runStartedAt != null) {
       _elapsedBeforeRun += DateTime.now().difference(_runStartedAt!);
     }
     _runStartedAt = null;
     _ticker?.cancel();
+
+    final newTrialsUsed = state.sessionType == SessionType.focus
+        ? state.trialsUsed + 1
+        : state.trialsUsed;
+
     state = state.copyWith(
       isRunning: false,
       pausedByFlip: false,
+      trialsUsed: newTrialsUsed,
       lastTickAt: DateTime.now(),
     );
     await _persistTimerState();
@@ -308,28 +298,8 @@ class TimerNotifier extends Notifier<TimerState> {
     );
   }
 
-  /// Pause triggered by phone flip — does NOT consume a trial.
-  void pauseFromFlip() {
-    if (!state.isRunning) return;
-    if (state.sessionType != SessionType.focus) return;
-
-    if (_runStartedAt != null) {
-      _elapsedBeforeRun += DateTime.now().difference(_runStartedAt!);
-    }
-    _runStartedAt = null;
-    _ticker?.cancel();
-    state = state.copyWith(
-      isRunning: false,
-      pausedByFlip: true,
-      lastTickAt: DateTime.now(),
-    );
-    _persistTimerState();
-  }
-
-  /// Resume after a flip pause.
-  void resumeFromFlip() {
-    if (!state.pausedByFlip) return;
-
+  Future<void> resume() async {
+    if (state.isRunning) return;
     _runStartedAt = DateTime.now();
     state = state.copyWith(
       isRunning: true,
@@ -337,13 +307,39 @@ class TimerNotifier extends Notifier<TimerState> {
       lastTickAt: DateTime.now(),
     );
     _startTicker();
-    _persistTimerState();
+    await _persistTimerState();
+    await _startForegroundNotification();
   }
 
-  Future<void> resume() async {
-    if (state.isRunning) return;
+  Future<void> pauseFromFlip() async {
+    if (!state.isRunning) return;
+    if (_runStartedAt != null) {
+      _elapsedBeforeRun += DateTime.now().difference(_runStartedAt!);
+    }
+    _runStartedAt = null;
+    _ticker?.cancel();
+
+    state = state.copyWith(
+      isRunning: false,
+      pausedByFlip: true,
+      lastTickAt: DateTime.now(),
+    );
+    await _persistTimerState();
+    await ForegroundTimerService.update(
+      title: 'FlowSpace — ${state.sessionType.label}',
+      text: '${_mmss(state.remainingSeconds)} remaining — Flipped Paused',
+      isRunning: false,
+    );
+  }
+
+  Future<void> resumeFromFlip() async {
+    if (state.isRunning || !state.pausedByFlip) return;
     _runStartedAt = DateTime.now();
-    state = state.copyWith(isRunning: true, lastTickAt: DateTime.now());
+    state = state.copyWith(
+      isRunning: true,
+      pausedByFlip: false,
+      lastTickAt: DateTime.now(),
+    );
     _startTicker();
     await _persistTimerState();
     await _startForegroundNotification();
@@ -379,6 +375,8 @@ class TimerNotifier extends Notifier<TimerState> {
       clearOverlay: true,
       clearSuggestedBreak: true,
       lastTickAt: DateTime.now(),
+      pausedByFlip: false,
+      trialsUsed: 0,
     );
     await _persistTimerState();
     await ForegroundTimerService.stop();
@@ -409,6 +407,8 @@ class TimerNotifier extends Notifier<TimerState> {
       clearOverlay: true,
       clearSuggestedBreak: true,
       lastTickAt: DateTime.now(),
+      pausedByFlip: false,
+      trialsUsed: 0,
     );
     await _persistTimerState();
   }
@@ -470,13 +470,11 @@ class TimerNotifier extends Notifier<TimerState> {
       clearLinkedTask: true,
       lastTickAt: DateTime.now(),
       pausedByFlip: false,
+      trialsUsed: 0,
     );
 
     if (!fromRestore) {
-      // Fire the alarm — it loops until the user dismisses it
-      ref.read(alarmServiceProvider).startAlarm();
-      ref.read(alarmOverlayVisibleProvider.notifier).state = true;
-
+      await _sfxPlayer.play(AssetSource(AudioService.completeSoundAsset));
       await NotificationService.showSessionComplete(
         '${completedType.label} session complete! Great work 🎉',
       );
@@ -509,9 +507,6 @@ class TimerNotifier extends Notifier<TimerState> {
         actualDurationSeconds: elapsed,
       ),
       suggestedBreakType: completedType == SessionType.focus ? breakType : null,
-      // Reset trials for next session
-      trialsRemaining: 3,
-      trialsUsed: 0,
     );
     await _persistTimerState();
   }
@@ -591,7 +586,7 @@ class TimerNotifier extends Notifier<TimerState> {
       return;
     }
     final isar = await ref.read(isarProvider.future);
-    final settings = await isar.collection<FocusGoalSettings>().get(1) as FocusGoalSettings?;
+    final settings = await isar.collection<FocusGoalSettings>().get(1);
     if (settings == null) return;
     settings.wasTimerRunning = state.isRunning;
     settings.remainingSecondsOnKill = state.remainingSeconds;
@@ -635,8 +630,9 @@ class TimerNotifier extends Notifier<TimerState> {
   Future<void> handleExpiredWhileKilled() async {
     final settings = kIsWeb
         ? PomodoroWebStore.instance.ensureSettings()
-        : await (await ref.read(isarProvider.future)).collection<FocusGoalSettings>().get(1)
-              as FocusGoalSettings?;
+        : await (await ref.read(
+            isarProvider.future,
+          )).collection<FocusGoalSettings>().get(1);
     final restoredType = SessionTypeFromName.fromName(
       settings?.sessionTypeOnKill ?? 'focus',
     );
@@ -680,9 +676,7 @@ class TimerNotifier extends Notifier<TimerState> {
       ..endTime = now
       ..actualDurationSeconds = now.difference(session.startTime).inSeconds
       ..isCompleted = wasCompleted
-      ..isAbandoned = wasAbandoned
-      ..trialsUsed = state.trialsUsed
-      ..trialsRemaining = state.trialsRemaining;
+      ..isAbandoned = wasAbandoned;
 
     if (kIsWeb) {
       PomodoroWebStore.instance.upsertSession(session);
@@ -765,8 +759,7 @@ class TimerNotifier extends Notifier<TimerState> {
     final now = DateTime.now();
     final dayStart = DateTime(now.year, now.month, now.day);
     final dayEnd = dayStart.add(const Duration(days: 1));
-    final sessions =
-        await isar.collection<PomodoroSession>().where().findAll();
+    final sessions = await isar.collection<PomodoroSession>().where().findAll();
     final todaysCompletedFocus = sessions.where(
       (session) =>
           session.sessionType == 'focus' &&

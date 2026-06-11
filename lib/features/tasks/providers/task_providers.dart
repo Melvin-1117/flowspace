@@ -220,12 +220,13 @@ final teamMembersProvider = StateProvider<List<TeamMember>>((ref) {
 });
 
 final currentUserProvider = Provider<AppUserProfile>((ref) {
-  final name = ref.watch(displayNameProvider);
-  final username = ref.watch(usernameProvider);
+  final profile = ref.watch(userProfileProvider).value;
+  final name = profile?.displayName ?? 'Developer';
+  final course = profile?.courseName ?? '';
   return AppUserProfile(
     name: name,
-    email: username.isEmpty ? '' : '@$username',
-    avatarInitials: _initialsFrom(name.isNotEmpty ? name : username),
+    email: course.isEmpty ? '' : course,
+    avatarInitials: _initialsFrom(name),
     streakDays: 14,
   );
 });

@@ -6,20 +6,25 @@ part 'user_profile_isar.g.dart';
 class UserProfile {
   Id id = Isar.autoIncrement;
 
-  // GitHub identity
-  late String githubUsername;
+  // Identity
   late String displayName;
-  late String avatarUrl;
-  late String bio;
-  late String githubUrl;
+  late String avatarEmoji; // selected avatar emoji
+  String avatarUrl = ''; // kept for backwards compat
+  String bio = ''; // optional short bio
 
-  // GitHub stats (cached)
-  late int publicRepos;
-  late int followers;
-  late int following;
+  // Academic info
+  String semesterName = ''; // "Semester 7"
+  String courseName = ''; // "B.Tech CSE"
+  DateTime? semesterEndDate;
+
+  // Developer preferences
+  List<String> primaryLanguages = []; // ['Dart', 'Python']
+
+  // Goals
+  int dailySessionGoal = 4; // sessions per day
+  int dailyCodingHoursGoal = 3; // hours per day
 
   // App metadata
-  late DateTime connectedAt;
-  late DateTime lastSyncedAt;
-  late bool isConnected;
+  late DateTime createdAt;
+  late DateTime lastUpdatedAt;
 }

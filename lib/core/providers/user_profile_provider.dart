@@ -3,54 +3,30 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/user_profile.dart';
 import '../providers/isar_provider.dart';
-import '../services/onboarding_service.dart';
-import '../../features/pulse/providers/pulse_providers.dart';
 
 class UserProfileNotifier extends AsyncNotifier<UserProfile?> {
   @override
   Future<UserProfile?> build() async {
-    if (kIsWeb) {
-      final token = await ref.read(onboardingServiceProvider).getToken();
-      if (token != null && token.isNotEmpty) {
-        try {
-          return await ref.read(githubServiceProvider).verifyAndFetchProfile(token);
-        } catch (_) {
-          return null;
-        }
-      }
-      return null;
-    }
+    if (kIsWeb) return null;
     return _loadFromIsar();
   }
 
   Future<UserProfile?> _loadFromIsar() async {
     final isar = await ref.read(isarProvider.future);
-    // Try to get the first profile by ID
     return await isar.collection<UserProfile>().get(1);
   }
 
-  // Load cached profile on app start
+  /// Load cached profile on app start.
   Future<void> loadFromCache() async {
     state = const AsyncLoading();
     if (kIsWeb) {
-      final token = await ref.read(onboardingServiceProvider).getToken();
-      if (token != null && token.isNotEmpty) {
-        try {
-          final profile = await ref.read(githubServiceProvider).verifyAndFetchProfile(token);
-          state = AsyncData(profile);
-          return;
-        } catch (_) {
-          state = const AsyncData(null);
-          return;
-        }
-      }
       state = const AsyncData(null);
       return;
     }
     state = AsyncData(await _loadFromIsar());
   }
 
-  // Save new profile after GitHub connect
+  /// Save profile to Isar.
   Future<void> saveProfile(UserProfile profile) async {
     if (kIsWeb) {
       state = AsyncData(profile);
@@ -61,35 +37,44 @@ class UserProfileNotifier extends AsyncNotifier<UserProfile?> {
     state = AsyncData(profile);
   }
 
-  // Refresh from GitHub API
-  Future<void> refreshFromGitHub() async {
-    final token = await ref.read(onboardingServiceProvider).getToken();
-    if (token == null || token.isEmpty) {
-      throw StateError('Missing GitHub token');
-    }
-    final fresh = await ref
-        .read(githubServiceProvider)
-        .verifyAndFetchProfile(token);
-    await saveProfile(fresh);
-  }
-
-  // Update avatar URL only
-  Future<void> updateAvatarUrl(String url) async {
+  /// Update profile fields locally.
+  Future<void> updateProfile({
+    String? displayName,
+    String? avatarEmoji,
+    String? bio,
+    String? semesterName,
+    String? courseName,
+    DateTime? semesterEndDate,
+    List<String>? primaryLanguages,
+    int? dailySessionGoal,
+    int? dailyCodingHoursGoal,
+  }) async {
     final current = state.value;
     if (current == null) return;
-    current.avatarUrl = url;
+    if (displayName != null) current.displayName = displayName;
+    if (avatarEmoji != null) current.avatarEmoji = avatarEmoji;
+    if (bio != null) current.bio = bio;
+    if (semesterName != null) current.semesterName = semesterName;
+    if (courseName != null) current.courseName = courseName;
+    if (semesterEndDate != null) current.semesterEndDate = semesterEndDate;
+    if (primaryLanguages != null) current.primaryLanguages = primaryLanguages;
+    if (dailySessionGoal != null) current.dailySessionGoal = dailySessionGoal;
+    if (dailyCodingHoursGoal != null) {
+      current.dailyCodingHoursGoal = dailyCodingHoursGoal;
+    }
+    current.lastUpdatedAt = DateTime.now();
     await saveProfile(current);
   }
 }
 
 final userProfileProvider =
     AsyncNotifierProvider<UserProfileNotifier, UserProfile?>(
-      UserProfileNotifier.new,
-    );
+  UserProfileNotifier.new,
+);
 
 // Quick access selectors
-final usernameProvider = Provider<String>((ref) {
-  return ref.watch(userProfileProvider).value?.githubUsername ?? '';
+final avatarEmojiProvider = Provider<String>((ref) {
+  return ref.watch(userProfileProvider).value?.avatarEmoji ?? '👨‍💻';
 });
 
 final avatarUrlProvider = Provider<String?>((ref) {
@@ -98,13 +83,5 @@ final avatarUrlProvider = Provider<String?>((ref) {
 
 final displayNameProvider = Provider<String>((ref) {
   final profile = ref.watch(userProfileProvider).value;
-  return profile?.displayName.isNotEmpty == true
-      ? profile!.displayName
-      : profile?.githubUsername ?? 'Developer';
-});
-
-final profileReadmeProvider = FutureProvider<String?>((ref) async {
-  final username = ref.watch(usernameProvider);
-  if (username.isEmpty) return null;
-  return ref.read(githubServiceProvider).fetchProfileReadme(username);
+  return profile?.displayName ?? 'Developer';
 });

@@ -30,7 +30,7 @@ const List<String> _navRoutes = [
   '/tasks',
   '/pomodoro',
   '/planner',
-  '/pulse',
+  '/devtrack',
 ];
 
 /// Canonical bottom navigation bar shared by all main screens.
@@ -41,7 +41,7 @@ const List<String> _navRoutes = [
 class AppBottomNav extends StatelessWidget {
   const AppBottomNav({required this.currentIndex, super.key});
 
-  /// Zero-based index of the currently active tab (0 = Focus … 4 = GitHub).
+  /// Zero-based index of the currently active tab (0 = Focus … 4 = DevTrack).
   final int currentIndex;
 
   @override
@@ -85,9 +85,9 @@ class AppBottomNav extends StatelessWidget {
             label: 'PLANNER',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.code_outlined),
-            activeIcon: Icon(Icons.code),
-            label: 'GITHUB',
+            icon: Icon(Icons.terminal_outlined),
+            activeIcon: Icon(Icons.terminal),
+            label: 'DEVTRACK',
           ),
         ],
       ),

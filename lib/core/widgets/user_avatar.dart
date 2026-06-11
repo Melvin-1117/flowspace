@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -14,8 +13,7 @@ class UserAvatar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final avatarUrl = ref.watch(avatarUrlProvider);
-    final hasAvatar = avatarUrl != null && avatarUrl.isNotEmpty;
+    final emoji = ref.watch(avatarEmojiProvider);
 
     return GestureDetector(
       onTap: onTap ?? () => _showProfileSheet(context),
@@ -24,29 +22,19 @@ class UserAvatar extends ConsumerWidget {
         height: size,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
+          color: AppTheme.primarySubtle,
           border: Border.all(
             color: AppTheme.primary.withOpacity(0.5),
             width: 2,
           ),
         ),
-        child: ClipOval(
-          child: hasAvatar
-              ? CachedNetworkImage(
-                  imageUrl: avatarUrl,
-                  fit: BoxFit.cover,
-                  placeholder: (context, url) => _placeholder(),
-                  errorWidget: (context, url, error) => _placeholder(),
-                )
-              : _placeholder(),
+        child: Center(
+          child: Text(
+            emoji,
+            style: TextStyle(fontSize: size * 0.5),
+          ),
         ),
       ),
-    );
-  }
-
-  Widget _placeholder() {
-    return Container(
-      color: AppTheme.surfaceCard,
-      child: const Icon(Icons.person_rounded, color: AppTheme.textSecondary),
     );
   }
 
