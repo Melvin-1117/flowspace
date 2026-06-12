@@ -44,20 +44,20 @@ dependencies:
   isar: ^3.1.0
   isar_flutter_libs: ^3.1.0
   riverpod: 2.5.1
-  shared_preferences: ^2.2.3
-  audioplayers: ^6.0.0
+  shared_preferences: ^2.3.3
+  audioplayers: ^6.7.1
   flutter_local_notifications: ^17.0.0
-  flutter_foreground_task: ^8.0.0
+  flutter_foreground_task: ^9.2.2
   drag_and_drop_lists: ^0.4.2
   uuid: ^4.4.0
   fl_chart: ^0.68.0
   path_provider: ^2.1.5
   audio_session: ^0.1.18
-  battery_plus: ^5.0.0
+  battery_plus: ^7.0.0
   timezone: ^0.9.4
   cached_network_image: ^3.3.1
   url_launcher: ^6.2.5
-  sensors_plus: ^6.1.1
+  sensors_plus: ^7.0.0
   shimmer: ^3.0.0
   flutter_markdown: ^0.7.3
   flutter_svg: ^2.0.10

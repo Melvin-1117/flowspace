@@ -252,6 +252,37 @@ class AppTheme {
         textTheme: textTheme,
         fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
 
+        // Button Themes
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: primaryButtonStyle,
+        ),
+        filledButtonTheme: FilledButtonThemeData(
+          style: FilledButton.styleFrom(
+            backgroundColor: primary,
+            foregroundColor: Colors.white,
+            textStyle: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w600),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(radiusMD),
+            ),
+          ),
+        ),
+        outlinedButtonTheme: OutlinedButtonThemeData(
+          style: OutlinedButton.styleFrom(
+            foregroundColor: textPrimary,
+            side: const BorderSide(color: surfaceBorder),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(radiusMD),
+            ),
+            textStyle: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w600),
+          ),
+        ),
+        textButtonTheme: TextButtonThemeData(
+          style: TextButton.styleFrom(
+            foregroundColor: const Color(0xFF00B4FF),
+            textStyle: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w600),
+          ),
+        ),
+
         // AppBar
         appBarTheme: AppBarTheme(
           backgroundColor: background,

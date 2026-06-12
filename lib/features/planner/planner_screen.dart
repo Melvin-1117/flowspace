@@ -3,7 +3,6 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import 'package:uuid/uuid.dart';
 
 import '../../core/constants/animation_tokens.dart';
 import '../../core/models/focus_block.dart';
@@ -15,6 +14,7 @@ import '../../widgets/app_top_bar.dart';
 import '../../core/widgets/user_avatar.dart';
 import 'providers/planner_providers.dart';
 import 'widgets/add_focus_block_sheet.dart';
+import 'widgets/add_milestone_sheet.dart';
 import 'widgets/add_subject_sheet.dart';
 import 'widgets/focus_block_planner.dart';
 import 'widgets/milestone_card.dart';
@@ -466,23 +466,16 @@ class _PlannerScreenState extends ConsumerState<PlannerScreen> {
   Future<void> _openAddMilestoneSheet() async {
     final subjects =
         ref.read(allSubjectsProvider).valueOrNull ?? const <Subject>[];
-    final selected = subjects.isNotEmpty ? subjects.first.uuid : null;
-    final due = DateTime.now().add(const Duration(days: 7));
-    final milestone = Milestone(
-      uuid: const Uuid().v4(),
-      title: 'New Milestone',
-      description: 'Add details',
-      linkedSubjectId: selected,
-      dueDate: due,
-      priority: plannerPriorityFromRemainingDays(
-        due.difference(DateTime.now()).inDays,
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: AppTheme.surfaceCard,
+      builder: (_) => AddMilestoneSheet(
+        subjects: subjects,
+        onSubmit: (milestone) =>
+            ref.read(milestoneNotifierProvider.notifier).addMilestone(milestone),
       ),
-      isCompleted: false,
-      completedAt: null,
-      checklistItems: const <String>['Prepare', 'Revise', 'Submit'],
-      checklistCompleted: const <bool>[false, false, false],
     );
-    await ref.read(milestoneNotifierProvider.notifier).addMilestone(milestone);
   }
 
   Future<void> _openMilestoneDetailSheet(Milestone milestone) async {
