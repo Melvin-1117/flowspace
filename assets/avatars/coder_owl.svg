@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="owlBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#001F3D"/>
+      <stop offset="100%" stop-color="#080C14"/>
+    </linearGradient>
+    <linearGradient id="owlGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFB800"/>
+      <stop offset="100%" stop-color="#FF8C00"/>
+    </linearGradient>
+  </defs>
+  <!-- Background Circle -->
+  <circle cx="50" cy="50" r="48" fill="url(#owlBg)" stroke="#1A2640" stroke-width="2"/>
+
+  <!-- Owl Body -->
+  <path d="M 32 74 C 32 54, 68 54, 68 74 C 68 84, 32 84, 32 74 Z" fill="#6B8CAE"/>
+  <!-- Chest plumage detail -->
+  <path d="M 44 64 Q 50 68 56 64 C 53 70, 47 70, 44 64 Z" fill="#FFFFFF" opacity="0.8"/>
+  <path d="M 46 69 Q 50 72 54 69 C 52 74, 48 74, 46 69 Z" fill="#FFFFFF" opacity="0.8"/>
+
+  <!-- Owl Head -->
+  <circle cx="50" cy="46" r="20" fill="url(#owlGrad)"/>
+  
+  <!-- Ear Tufts -->
+  <polygon points="32,34 30,22 42,30" fill="url(#owlGrad)"/>
+  <polygon points="68,34 70,22 58,30" fill="url(#owlGrad)"/>
+
+  <!-- Large Owl Eyes -->
+  <circle cx="41" cy="44" r="8" fill="#FFFFFF"/>
+  <circle cx="59" cy="44" r="8" fill="#FFFFFF"/>
+  
+  <!-- Pupils -->
+  <circle cx="41" cy="44" r="4" fill="#0D1520"/>
+  <circle cx="59" cy="44" r="4" fill="#0D1520"/>
+  
+  <!-- Eye highlights -->
+  <circle cx="39.5" cy="42.5" r="1.2" fill="#FFFFFF"/>
+  <circle cx="57.5" cy="42.5" r="1.2" fill="#FFFFFF"/>
+
+  <!-- Beak -->
+  <polygon points="50,48 47,54 53,54" fill="#FF3B5C"/>
+
+  <!-- Round Glasses -->
+  <circle cx="41" cy="44" r="9.5" fill="none" stroke="#FFFFFF" stroke-width="1.8"/>
+  <circle cx="59" cy="44" r="9.5" fill="none" stroke="#FFFFFF" stroke-width="1.8"/>
+  <line x1="50.5" y1="44" x2="49.5" y2="44" stroke="#FFFFFF" stroke-width="2"/>
+</svg>

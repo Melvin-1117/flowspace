@@ -47,8 +47,6 @@ class SearchResultItem {
   final String id;
 }
 
-final plannerSearchQueryProvider = StateProvider<String>((_) => '');
-
 final subjectNotifierProvider =
     AsyncNotifierProvider<SubjectNotifier, List<Subject>>(SubjectNotifier.new);
 
@@ -90,10 +88,20 @@ final subjectHoursProvider = FutureProvider.family<double, String>((
   subjectId,
 ) async {
   final sessions = await _loadSessions(ref);
+  final blocks = await ref.watch(focusBlockNotifierProvider.future);
+  
+  // Find all focus block UUIDs that are linked to this subjectId
+  final linkedBlockIds = blocks
+      .where((block) => block.linkedSubjectId == subjectId)
+      .map((block) => block.uuid)
+      .toSet();
+
   final totalSeconds = sessions
-      .where(
-        (session) => session.linkedTaskId == subjectId && session.isCompleted,
-      )
+      .where((session) => session.isCompleted)
+      .where((session) {
+        return session.linkedTaskId == subjectId || 
+               linkedBlockIds.contains(session.linkedTaskId);
+      })
       .fold<int>(0, (sum, session) => sum + session.actualDurationSeconds);
   return totalSeconds / 3600;
 });
@@ -102,8 +110,8 @@ final subjectHoursProvider = FutureProvider.family<double, String>((
 final nextMilestoneProvider = FutureProvider<Milestone?>((ref) async {
   final milestones = await ref.watch(allMilestonesProvider.future);
   final now = DateTime.now();
-  milestones.sort((a, b) => a.dueDate.compareTo(b.dueDate));
-  for (final milestone in milestones) {
+  final sortedMilestones = [...milestones]..sort((a, b) => a.dueDate.compareTo(b.dueDate));
+  for (final milestone in sortedMilestones) {
     if (!milestone.isCompleted && milestone.dueDate.isAfter(now)) {
       return milestone;
     }
@@ -177,63 +185,6 @@ final semesterHealthTrendProvider = FutureProvider<List<double>>((ref) async {
   return values;
 });
 
-final plannerSearchResultsProvider = FutureProvider<List<SearchResultItem>>((
-  ref,
-) async {
-  final query = ref.watch(plannerSearchQueryProvider).trim().toLowerCase();
-  if (query.isEmpty) return const <SearchResultItem>[];
-
-  final subjects = await ref.watch(allSubjectsProvider.future);
-  final milestones = await ref.watch(allMilestonesProvider.future);
-  final blocks = await ref.watch(todayFocusBlocksProvider.future);
-
-  final results = <SearchResultItem>[];
-  for (final subject in subjects) {
-    if (subject.name.toLowerCase().contains(query)) {
-      results.add(
-        SearchResultItem(
-          category: 'Subjects',
-          title: subject.name,
-          id: subject.uuid,
-        ),
-      );
-    }
-    for (final module in subject.modules) {
-      if (module.name.toLowerCase().contains(query)) {
-        results.add(
-          SearchResultItem(
-            category: 'Modules',
-            title: '${subject.name} • ${module.name}',
-            id: subject.uuid,
-          ),
-        );
-      }
-    }
-  }
-  for (final block in blocks) {
-    if (block.title.toLowerCase().contains(query)) {
-      results.add(
-        SearchResultItem(
-          category: 'Focus Blocks',
-          title: block.title,
-          id: block.uuid,
-        ),
-      );
-    }
-  }
-  for (final milestone in milestones) {
-    if (milestone.title.toLowerCase().contains(query)) {
-      results.add(
-        SearchResultItem(
-          category: 'Milestones',
-          title: milestone.title,
-          id: milestone.uuid,
-        ),
-      );
-    }
-  }
-  return results;
-});
 
 Future<List<PomodoroSession>> _loadSessions(Ref ref) async {
   if (kIsWeb) {

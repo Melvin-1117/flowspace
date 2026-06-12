@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../core/constants/animation_tokens.dart';
 
 import '../../widgets/app_bottom_nav.dart';
 import '../../widgets/app_drawer.dart';
@@ -18,6 +20,7 @@ import 'widgets/session_type_toggle.dart';
 import 'widgets/timer_controls.dart';
 import 'widgets/timer_ring.dart';
 import 'widgets/trial_indicator.dart';
+import 'widgets/link_task_sheet.dart';
 import '../../app/theme.dart';
 
 class PomodoroScreen extends ConsumerStatefulWidget {
@@ -87,10 +90,17 @@ class _PomodoroScreenState extends ConsumerState<PomodoroScreen>
       backgroundColor: AppTheme.background,
       drawer: const AppDrawer(),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          showModalBottomSheet<void>(
+            context: context,
+            isScrollControlled: true,
+            backgroundColor: Colors.transparent,
+            builder: (_) => const LinkTaskSheet(),
+          );
+        },
         backgroundColor: AppTheme.primary,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-        child: const Icon(Icons.add, color: Colors.white),
+        child: const Icon(Icons.link, color: Colors.white),
       ),
       bottomNavigationBar: const AppBottomNav(currentIndex: 2),
       appBar: buildFlowSpaceAppBar(
@@ -114,18 +124,36 @@ class _PomodoroScreenState extends ConsumerState<PomodoroScreen>
                     padding: const EdgeInsets.fromLTRB(16, 16, 16, 96),
                     child: Column(
                       children: [
-                        SessionTypeToggle(onSwitchType: _confirmSwitchType),
+                        SessionTypeToggle(onSwitchType: _confirmSwitchType)
+                            .animate()
+                            .fadeIn(duration: kPageEntryDuration, curve: kPageEntryCurve)
+                            .slideY(begin: 0.06, end: 0, duration: kPageEntryDuration, curve: kPageEntryCurve),
                         const SizedBox(height: 18),
-                        const TimerRing(),
+                        const TimerRing()
+                            .animate()
+                            .fadeIn(duration: kPageEntryDuration, delay: kPageStaggerStep, curve: kPageEntryCurve)
+                            .slideY(begin: 0.06, end: 0, duration: kPageEntryDuration, delay: kPageStaggerStep, curve: kPageEntryCurve),
                         const SizedBox(height: 12),
                         // Trial indicator — only visible during focus sessions
-                        const TrialIndicator(),
+                        const TrialIndicator()
+                            .animate()
+                            .fadeIn(duration: kPageEntryDuration, delay: kPageStaggerStep * 2, curve: kPageEntryCurve)
+                            .slideY(begin: 0.06, end: 0, duration: kPageEntryDuration, delay: kPageStaggerStep * 2, curve: kPageEntryCurve),
                         const SizedBox(height: 16),
-                        const TimerControls(),
+                        const TimerControls()
+                            .animate()
+                            .fadeIn(duration: kPageEntryDuration, delay: kPageStaggerStep * 3, curve: kPageEntryCurve)
+                            .slideY(begin: 0.06, end: 0, duration: kPageEntryDuration, delay: kPageStaggerStep * 3, curve: kPageEntryCurve),
                         const SizedBox(height: 18),
-                        const DailyGoalCard(),
+                        const DailyGoalCard()
+                            .animate()
+                            .fadeIn(duration: kPageEntryDuration, delay: kPageStaggerStep * 4, curve: kPageEntryCurve)
+                            .slideY(begin: 0.06, end: 0, duration: kPageEntryDuration, delay: kPageStaggerStep * 4, curve: kPageEntryCurve),
                         const SizedBox(height: 18),
-                        const SessionHistoryCard(),
+                        const SessionHistoryCard()
+                            .animate()
+                            .fadeIn(duration: kPageEntryDuration, delay: kPageStaggerStep * 5, curve: kPageEntryCurve)
+                            .slideY(begin: 0.06, end: 0, duration: kPageEntryDuration, delay: kPageStaggerStep * 5, curve: kPageEntryCurve),
                       ],
                     ),
                   ),

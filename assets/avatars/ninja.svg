@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="ninjaBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#080C14"/>
+      <stop offset="100%" stop-color="#1A2640"/>
+    </linearGradient>
+    <linearGradient id="bandGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#FF3B5C"/>
+      <stop offset="100%" stop-color="#99001A"/>
+    </linearGradient>
+  </defs>
+  <!-- Background Circle -->
+  <circle cx="50" cy="50" r="48" fill="url(#ninjaBg)" stroke="#1A2640" stroke-width="2"/>
+
+  <!-- Ninja Head (Covered in dark mask) -->
+  <circle cx="50" cy="50" r="22" fill="#0D1520" stroke="#1A2640" stroke-width="1"/>
+  
+  <!-- Head wrap details -->
+  <path d="M 28 50 C 28 35, 72 35, 72 50 C 72 65, 28 65, 28 50 Z" fill="#0D1520"/>
+  <path d="M 28 42 Q 50 36 72 42" fill="none" stroke="#1A2640" stroke-width="1.5"/>
+  
+  <!-- Red Headband -->
+  <rect x="27" y="32" width="46" height="8" rx="2" fill="url(#bandGrad)"/>
+  
+  <!-- Headband Tails (Flowing behind) -->
+  <path d="M 72 36 Q 86 32 82 48" fill="none" stroke="url(#bandGrad)" stroke-width="4" stroke-linecap="round"/>
+  <path d="M 72 38 Q 80 44 86 42" fill="none" stroke="url(#bandGrad)" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- Bug Emblem on Headband -->
+  <!-- Bug body -->
+  <circle cx="50" cy="36" r="1.5" fill="#FFFFFF"/>
+  <line x1="47" y1="36" x2="53" y2="36" stroke="#FFFFFF" stroke-width="0.8"/>
+  <line x1="48" y1="34" x2="52" y2="38" stroke="#FFFFFF" stroke-width="0.8"/>
+  <line x1="48" y1="38" x2="52" y2="34" stroke="#FFFFFF" stroke-width="0.8"/>
+
+  <!-- Eye Cutout Area -->
+  <path d="M 36 46 Q 50 43 64 46 C 64 46, 60 55, 50 55 C 40 55, 36 46, 36 46 Z" fill="#FCE2C6"/>
+
+  <!-- Ninja Eyes (Fierce and focused, glowing green/teal) -->
+  <path d="M 40 48 Q 44 47 47 50" fill="none" stroke="#0D1520" stroke-width="2" stroke-linecap="round"/>
+  <path d="M 60 48 Q 56 47 53 50" fill="none" stroke="#0D1520" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="43" cy="50" r="1.5" fill="#00D4AA"/>
+  <circle cx="57" cy="50" r="1.5" fill="#00D4AA"/>
+</svg>

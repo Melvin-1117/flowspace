@@ -71,7 +71,7 @@ class UpcomingBlocksCard extends ConsumerWidget {
                         .read(timerNotifierProvider.notifier)
                         .startFocusWithDuration(
                           durationSeconds: block.durationMinutes * 60,
-                          linkedTaskId: block.linkedTaskId,
+                          linkedTaskId: block.uuid,
                           linkedTaskTitle: block.title,
                         );
                     context.go('/pomodoro');

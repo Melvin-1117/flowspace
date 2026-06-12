@@ -7,18 +7,30 @@ import '../../../core/providers/isar_provider.dart';
 import 'package:isar/isar.dart';
 import '../../../core/services/notification_service.dart';
 import '../../pomodoro/providers/pomodoro_providers.dart';
-import '../../pomodoro/providers/pomodoro_web_store.dart';
 import 'planner_providers.dart';
 import 'planner_storage.dart';
 
 class FocusBlockNotifier extends AsyncNotifier<List<FocusBlock>> {
+  static final List<FocusBlock> _webFocusBlocks = [];
+
   @override
   Future<List<FocusBlock>> build() async {
     return _load();
   }
 
   Future<void> addBlock(FocusBlock block) async {
-    if (kIsWeb) return;
+    if (kIsWeb) {
+      final idx = _webFocusBlocks.indexWhere((b) => b.uuid == block.uuid);
+      if (idx >= 0) {
+        _webFocusBlocks[idx] = block;
+      } else {
+        _webFocusBlocks.add(block);
+      }
+      state = AsyncData([..._webFocusBlocks]);
+      ref.invalidate(todayFocusBlocksProvider);
+      ref.invalidate(semesterHealthProvider);
+      return;
+    }
     final isar = await ref.read(isarProvider.future);
     final existing = await _taskByUuid(isar, block.uuid);
     await isar.writeTxn(() async {
@@ -76,7 +88,12 @@ class FocusBlockNotifier extends AsyncNotifier<List<FocusBlock>> {
   }
 
   Future<void> deleteBlock(String uuid) async {
-    if (kIsWeb) return;
+    if (kIsWeb) {
+      _webFocusBlocks.removeWhere((b) => b.uuid == uuid);
+      state = AsyncData([..._webFocusBlocks]);
+      ref.invalidate(todayFocusBlocksProvider);
+      return;
+    }
     final isar = await ref.read(isarProvider.future);
     final tasks = await isar.collection<Task>().where().findAll();
     final found = tasks
@@ -102,7 +119,9 @@ class FocusBlockNotifier extends AsyncNotifier<List<FocusBlock>> {
   }
 
   Future<List<FocusBlock>> _load() async {
-    if (kIsWeb) return const <FocusBlock>[];
+    if (kIsWeb) {
+      return [..._webFocusBlocks]..sort((a, b) => a.scheduledTime.compareTo(b.scheduledTime));
+    }
     final isar = await ref.read(isarProvider.future);
     final tasks = await isar.collection<Task>().where().findAll();
     return tasks

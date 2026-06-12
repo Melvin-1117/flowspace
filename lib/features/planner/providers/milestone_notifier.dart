@@ -10,6 +10,8 @@ import 'planner_providers.dart';
 import 'planner_storage.dart';
 
 class MilestoneNotifier extends AsyncNotifier<List<Milestone>> {
+  static final List<Milestone> _webMilestones = [];
+
   @override
   Future<List<Milestone>> build() async {
     return _load();
@@ -17,7 +19,20 @@ class MilestoneNotifier extends AsyncNotifier<List<Milestone>> {
 
   // Creates and stores a milestone in planner persistence.
   Future<void> addMilestone(Milestone milestone) async {
-    if (kIsWeb) return;
+    if (kIsWeb) {
+      final idx = _webMilestones.indexWhere((m) => m.uuid == milestone.uuid);
+      if (idx >= 0) {
+        _webMilestones[idx] = milestone;
+      } else {
+        _webMilestones.add(milestone);
+      }
+      state = AsyncData([..._webMilestones]);
+      ref.invalidate(allMilestonesProvider);
+      ref.invalidate(nextMilestoneProvider);
+      ref.invalidate(milestoneCountdownProvider);
+      ref.invalidate(semesterHealthProvider);
+      return;
+    }
     final isar = await ref.read(isarProvider.future);
     final existing = await _taskByUuid(isar, milestone.uuid);
     await isar.writeTxn(() async {
@@ -102,7 +117,9 @@ class MilestoneNotifier extends AsyncNotifier<List<Milestone>> {
   }
 
   Future<List<Milestone>> _load() async {
-    if (kIsWeb) return const <Milestone>[];
+    if (kIsWeb) {
+      return [..._webMilestones]..sort((a, b) => a.dueDate.compareTo(b.dueDate));
+    }
     final isar = await ref.read(isarProvider.future);
     final tasks = await isar.collection<Task>().where().findAll();
     return tasks

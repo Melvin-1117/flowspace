@@ -1,0 +1,3 @@
+dart_code_metrics failed to run because it is incompatible with the current Dart SDK (^3.9.2) and analyzer backend. It crashed with:
+Unhandled exception: Null check operator used on a null value in ElementAnnotationExtensions.targetKinds.
+This tool is discontinued and incompatible with the current Dart SDK.

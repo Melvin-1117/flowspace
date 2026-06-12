@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
 
 import '../../../app/theme.dart';
+import '../../../core/utils/formatters.dart';
 import '../models/coding_session.dart';
 import '../models/dev_project.dart';
 
@@ -32,21 +32,6 @@ class SessionRow extends StatelessWidget {
       'review' => AppTheme.success,
       _ => AppTheme.primary,
     };
-  }
-
-  String _formatTime(DateTime time) {
-    final now = DateTime.now();
-    final difference = now.difference(time);
-
-    if (difference.inMinutes < 1) {
-      return 'Just now';
-    } else if (difference.inMinutes < 60) {
-      return '${difference.inMinutes}m ago';
-    } else if (difference.inHours < 24) {
-      return '${difference.inHours}h ago';
-    } else {
-      return DateFormat('MMM d, h:mm a').format(time);
-    }
   }
 
   @override
@@ -112,7 +97,7 @@ class SessionRow extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      _formatTime(session.startTime),
+                      formatRelativeTime(session.startTime),
                       style: GoogleFonts.spaceGrotesk(
                         fontSize: 11,
                         color: AppTheme.textSecondary,

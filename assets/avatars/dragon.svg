@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="dragBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3D0015"/>
+      <stop offset="100%" stop-color="#080C14"/>
+    </linearGradient>
+    <linearGradient id="dragGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF3B5C"/>
+      <stop offset="100%" stop-color="#8B5CF6"/>
+    </linearGradient>
+  </defs>
+  <!-- Background Circle -->
+  <circle cx="50" cy="50" r="48" fill="url(#dragBg)" stroke="#1A2640" stroke-width="2"/>
+
+  <!-- Dragon Spikes & Horns -->
+  <path d="M 28 34 L 18 24 L 28 28 Z" fill="url(#dragGrad)"/>
+  <path d="M 36 26 L 30 12 L 40 20 Z" fill="url(#dragGrad)"/>
+  <path d="M 48 22 L 48 6 L 54 18 Z" fill="url(#dragGrad)"/>
+  <path d="M 60 25 L 68 12 L 64 24 Z" fill="url(#dragGrad)"/>
+
+  <!-- Dragon Head -->
+  <!-- Snout, jaw, neck -->
+  <path d="M 30 68 C 30 82, 54 86, 68 84 C 68 72, 74 62, 78 52 C 78 40, 68 36, 56 36 C 42 36, 32 46, 30 54 L 46 54 L 30 60 Z" fill="url(#dragGrad)"/>
+
+  <!-- Glowing Eye -->
+  <polygon points="56,46 50,49 54,52" fill="#FFB800" filter="drop-shadow(0px 0px 2px #FFB800)"/>
+
+  <!-- Dragon Wing Outline in background -->
+  <path d="M 22 56 Q 12 42 24 30 Q 18 50 28 62" fill="none" stroke="#FF3B5C" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+
+  <!-- Compiler sparks / Fire breath -->
+  <circle cx="20" cy="74" r="2" fill="#FFB800" filter="drop-shadow(0px 0px 2px #FFB800)"/>
+  <circle cx="14" cy="70" r="1.5" fill="#FF3B5C"/>
+  <circle cx="26" cy="78" r="1" fill="#FFB800"/>
+</svg>

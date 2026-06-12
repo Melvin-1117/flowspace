@@ -46,15 +46,15 @@ class NotificationService {
     if (kIsWeb) return;
     await initialize();
     if (scheduledAt.isBefore(DateTime.now())) return;
-    const details = NotificationDetails(
-      android: AndroidNotificationDetails(
-        'flowspace_planner_focus',
-        'Planner Focus Blocks',
-        channelDescription: 'Focus block reminders',
-        importance: Importance.high,
-        priority: Priority.high,
-      ),
-    );
+    // const details = NotificationDetails(
+    //   android: AndroidNotificationDetails(
+    //     'flowspace_planner_focus',
+    //     'Planner Focus Blocks',
+    //     channelDescription: 'Focus block reminders',
+    //     importance: Importance.high,
+    //     priority: Priority.high,
+    //   ),
+    // );
     // await _plugin.schedule(
     //   notificationId,
     //   title,
@@ -75,15 +75,15 @@ class NotificationService {
     if (kIsWeb) return;
     await initialize();
     if (scheduledAt.isBefore(DateTime.now())) return;
-    const details = NotificationDetails(
-      android: AndroidNotificationDetails(
-        'flowspace_planner_milestone',
-        'Planner Milestones',
-        channelDescription: 'Milestone reminders',
-        importance: Importance.high,
-        priority: Priority.high,
-      ),
-    );
+    // const details = NotificationDetails(
+    //   android: AndroidNotificationDetails(
+    //     'flowspace_planner_milestone',
+    //     'Planner Milestones',
+    //     channelDescription: 'Milestone reminders',
+    //     importance: Importance.high,
+    //     priority: Priority.high,
+    //   ),
+    // );
     // await _plugin.schedule(
     //   notificationId,
     //   title,

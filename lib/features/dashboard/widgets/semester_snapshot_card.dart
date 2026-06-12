@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../app/theme.dart';
 import '../../planner/providers/planner_providers.dart';
-import 'shimmer/health_card_shimmer.dart';
+import '../../../core/widgets/shimmer_box.dart';
 
 class SemesterSnapshotCard extends ConsumerWidget {
   const SemesterSnapshotCard({super.key});
@@ -15,7 +15,7 @@ class SemesterSnapshotCard extends ConsumerWidget {
     final subjectsAsync = ref.watch(allSubjectsProvider);
 
     return healthAsync.when(
-      loading: () => const HealthCardShimmer(),
+      loading: () => const ShimmerBox.healthCard(),
       error: (_, __) => const SizedBox.shrink(),
       data: (health) {
         final subjects = subjectsAsync.valueOrNull ?? [];

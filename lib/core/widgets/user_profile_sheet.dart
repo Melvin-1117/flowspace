@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
@@ -66,20 +67,28 @@ class UserProfileSheet extends ConsumerWidget {
                 ),
                 const SizedBox(height: AppTheme.spaceMD),
 
-                // Avatar (emoji in circle)
+                // Avatar (emoji/SVG in circle)
                 Container(
                   width: 80,
                   height: 80,
+                  clipBehavior: Clip.antiAlias,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: AppTheme.primarySubtle,
                     border: Border.all(color: AppTheme.primary, width: 2),
                   ),
                   child: Center(
-                    child: Text(
-                      profile.avatarEmoji,
-                      style: const TextStyle(fontSize: 40),
-                    ),
+                    child: profile.avatarEmoji.startsWith('assets/') || profile.avatarEmoji.endsWith('.svg')
+                        ? SvgPicture.asset(
+                            profile.avatarEmoji,
+                            width: 80,
+                            height: 80,
+                            fit: BoxFit.cover,
+                          )
+                        : Text(
+                            profile.avatarEmoji,
+                            style: const TextStyle(fontSize: 40),
+                          ),
                   ),
                 ),
 
@@ -286,11 +295,21 @@ class _EditProfileSheet extends ConsumerStatefulWidget {
 class _EditProfileSheetState extends ConsumerState<_EditProfileSheet> {
   late TextEditingController _nameController;
   late TextEditingController _bioController;
-  String _selectedEmoji = '👨‍💻';
+  String _selectedEmoji = 'assets/avatars/cyberpunk.svg';
 
   static const _avatarOptions = [
-    '👨‍💻', '👩‍💻', '🧑‍💻', '👾', '🤖', '🦊',
-    '🐼', '🦁', '🐉', '🚀', '⚡', '🎯',
+    'assets/avatars/cyberpunk.svg',
+    'assets/avatars/robot.svg',
+    'assets/avatars/coffee.svg',
+    'assets/avatars/ninja.svg',
+    'assets/avatars/wizard.svg',
+    'assets/avatars/rocket.svg',
+    'assets/avatars/coder_cat.svg',
+    'assets/avatars/coder_owl.svg',
+    'assets/avatars/battery.svg',
+    'assets/avatars/gamepad.svg',
+    'assets/avatars/dragon.svg',
+    'assets/avatars/brain.svg',
   ];
 
   @override
@@ -300,7 +319,7 @@ class _EditProfileSheetState extends ConsumerState<_EditProfileSheet> {
     _nameController =
         TextEditingController(text: profile?.displayName ?? '');
     _bioController = TextEditingController(text: profile?.bio ?? '');
-    _selectedEmoji = profile?.avatarEmoji ?? '👨‍💻';
+    _selectedEmoji = profile?.avatarEmoji ?? 'assets/avatars/cyberpunk.svg';
   }
 
   @override
@@ -373,12 +392,14 @@ class _EditProfileSheetState extends ConsumerState<_EditProfileSheet> {
                 itemBuilder: (context, index) {
                   final emoji = _avatarOptions[index];
                   final isSelected = _selectedEmoji == emoji;
+                  final isSvg = emoji.startsWith('assets/') || emoji.endsWith('.svg');
                   return GestureDetector(
                     onTap: () =>
                         setState(() => _selectedEmoji = emoji),
                     child: Container(
                       width: 48,
                       height: 48,
+                      clipBehavior: Clip.antiAlias,
                       decoration: BoxDecoration(
                         color: isSelected
                             ? AppTheme.primarySubtle
@@ -391,10 +412,26 @@ class _EditProfileSheetState extends ConsumerState<_EditProfileSheet> {
                               : AppTheme.surfaceBorder,
                           width: isSelected ? 2 : 1,
                         ),
+                        boxShadow: isSelected
+                            ? [
+                                BoxShadow(
+                                  color: AppTheme.primaryGlow,
+                                  blurRadius: 8,
+                                  spreadRadius: 1,
+                                )
+                              ]
+                            : null,
                       ),
                       child: Center(
-                        child: Text(emoji,
-                            style: const TextStyle(fontSize: 22)),
+                        child: isSvg
+                            ? SvgPicture.asset(
+                                emoji,
+                                width: 32,
+                                height: 32,
+                                fit: BoxFit.contain,
+                              )
+                            : Text(emoji,
+                                style: const TextStyle(fontSize: 22)),
                       ),
                     ),
                   );

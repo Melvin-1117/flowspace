@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:flutter_svg/flutter_svg.dart';
+
 import '../providers/user_profile_provider.dart';
 import '../widgets/user_profile_sheet.dart';
 import '../../app/theme.dart';
@@ -13,13 +15,15 @@ class UserAvatar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final emoji = ref.watch(avatarEmojiProvider);
+    final avatarData = ref.watch(avatarEmojiProvider);
+    final isSvg = avatarData.startsWith('assets/') || avatarData.endsWith('.svg');
 
     return GestureDetector(
       onTap: onTap ?? () => _showProfileSheet(context),
       child: Container(
         width: size,
         height: size,
+        clipBehavior: Clip.antiAlias,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           color: AppTheme.primarySubtle,
@@ -29,10 +33,17 @@ class UserAvatar extends ConsumerWidget {
           ),
         ),
         child: Center(
-          child: Text(
-            emoji,
-            style: TextStyle(fontSize: size * 0.5),
-          ),
+          child: isSvg
+              ? SvgPicture.asset(
+                  avatarData,
+                  width: size,
+                  height: size,
+                  fit: BoxFit.cover,
+                )
+              : Text(
+                  avatarData,
+                  style: TextStyle(fontSize: size * 0.5),
+                ),
         ),
       ),
     );

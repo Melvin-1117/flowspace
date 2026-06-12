@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../app/theme.dart';
 import '../../planner/providers/planner_providers.dart';
-import 'shimmer/milestone_card_shimmer.dart';
+import '../../../core/widgets/shimmer_box.dart';
 import 'no_milestone_card.dart';
 
 class MilestoneCard extends ConsumerWidget {
@@ -16,7 +16,7 @@ class MilestoneCard extends ConsumerWidget {
     final countdownAsync = ref.watch(milestoneCountdownProvider);
 
     return milestoneAsync.when(
-      loading: () => const MilestoneCardShimmer(),
+      loading: () => const ShimmerBox.milestoneCard(),
       error: (_, __) => const SizedBox.shrink(),
       data: (milestone) {
         if (milestone == null) {

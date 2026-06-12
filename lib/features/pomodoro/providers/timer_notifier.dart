@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:math' as math;
 
 import 'package:audioplayers/audioplayers.dart';
@@ -16,8 +17,10 @@ import '../../../core/services/audio_service.dart';
 import '../../../core/services/foreground_timer_service.dart';
 import '../../../core/services/notification_service.dart';
 import '../../tasks/providers/task_providers.dart';
+import '../../planner/providers/planner_providers.dart';
 import 'pomodoro_providers.dart';
 import 'pomodoro_web_store.dart';
+import '../../../core/utils/formatters.dart';
 
 class TimerState {
   const TimerState({
@@ -270,6 +273,15 @@ class TimerNotifier extends Notifier<TimerState> {
     );
     await _persistTimerState();
     await start(linkedTaskId: linkedTaskId, linkedTaskTitle: linkedTaskTitle);
+  }
+
+  Future<void> setLinkedTask(String? linkedTaskId, String? linkedTaskTitle) async {
+    state = state.copyWith(
+      linkedTaskId: linkedTaskId,
+      linkedTaskTitle: linkedTaskTitle,
+      clearLinkedTask: linkedTaskId == null,
+    );
+    await _persistTimerState();
   }
 
   Future<void> pause() async {
@@ -686,14 +698,6 @@ class TimerNotifier extends Notifier<TimerState> {
         await isar.collection<PomodoroSession>().put(session);
       });
     }
-
-    debugPrint(
-      '[PomodoroSessionSave] uuid=${session.uuid} type=${session.sessionType} '
-      'completed=$wasCompleted abandoned=$wasAbandoned '
-      'planned=${session.plannedDurationSeconds}s actual=${session.actualDurationSeconds}s '
-      'task=${session.linkedTaskId}',
-    );
-
     ref.invalidate(todaySessionsProvider);
     ref.invalidate(dailyGoalProvider);
     ref.invalidate(weeklyHeatmapProvider);
@@ -731,12 +735,36 @@ class TimerNotifier extends Notifier<TimerState> {
         if (task != null) {
           task.pomodoroCount += 1;
           task.updatedAt = DateTime.now();
+          String? linkedSubjectId;
+          if (task.tag == 'planner_focus_block') {
+            task.status = 'done';
+            try {
+              final payload = jsonDecode(task.description);
+              if (payload is Map<String, dynamic>) {
+                payload['completedAt'] = DateTime.now().toIso8601String();
+                task.description = jsonEncode(payload);
+                linkedSubjectId = payload['linkedSubjectId'] as String?;
+              }
+            } catch (_) {}
+          } else if (task.tag == 'planner_subject') {
+            linkedSubjectId = task.uuid;
+          }
           await isar.writeTxn(() async {
             await isar.collection<Task>().put(task);
           });
           ref.invalidate(allTasksProvider);
           for (final status in const ['todo', 'inprogress', 'done']) {
             ref.invalidate(tasksByStatusProvider(status));
+          }
+          if (task.tag == 'planner_focus_block' || task.tag == 'planner_subject') {
+            ref.invalidate(todayFocusBlocksProvider);
+            ref.invalidate(focusBlockNotifierProvider);
+            ref.invalidate(allSubjectsProvider);
+            ref.invalidate(subjectNotifierProvider);
+            ref.invalidate(semesterHealthProvider);
+            if (linkedSubjectId != null) {
+              ref.invalidate(subjectHoursProvider(linkedSubjectId));
+            }
           }
         }
       }
@@ -785,11 +813,7 @@ class TimerNotifier extends Notifier<TimerState> {
         .length;
   }
 
-  String _mmss(int totalSeconds) {
-    final m = totalSeconds ~/ 60;
-    final s = totalSeconds % 60;
-    return '${m.toString().padLeft(2, '0')}:${s.toString().padLeft(2, '0')}';
-  }
+  String _mmss(int totalSeconds) => formatDurationMmSs(totalSeconds);
 }
 
 extension on Iterable<Task> {

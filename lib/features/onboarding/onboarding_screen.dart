@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -21,7 +22,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 
   // Step 1 — Name + Avatar
   final _nameController = TextEditingController();
-  String _selectedAvatar = '👨‍💻';
+  String _selectedAvatar = 'assets/avatars/cyberpunk.svg';
 
   // Step 2 — Semester Info
   final _semesterController = TextEditingController(text: 'Semester 7');
@@ -34,8 +35,18 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   int _dailyCodingHours = 3;
 
   static const _avatarOptions = [
-    '👨‍💻', '👩‍💻', '🧑‍💻', '👾', '🤖', '🦊',
-    '🐼', '🦁', '🐉', '🚀', '⚡', '🎯',
+    'assets/avatars/cyberpunk.svg',
+    'assets/avatars/robot.svg',
+    'assets/avatars/coffee.svg',
+    'assets/avatars/ninja.svg',
+    'assets/avatars/wizard.svg',
+    'assets/avatars/rocket.svg',
+    'assets/avatars/coder_cat.svg',
+    'assets/avatars/coder_owl.svg',
+    'assets/avatars/battery.svg',
+    'assets/avatars/gamepad.svg',
+    'assets/avatars/dragon.svg',
+    'assets/avatars/brain.svg',
   ];
 
   static const _languageOptions = [
@@ -227,9 +238,11 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
           itemBuilder: (context, index) {
             final avatar = _avatarOptions[index];
             final isSelected = _selectedAvatar == avatar;
+            final isSvg = avatar.startsWith('assets/') || avatar.endsWith('.svg');
             return GestureDetector(
               onTap: () => setState(() => _selectedAvatar = avatar),
               child: Container(
+                clipBehavior: Clip.antiAlias,
                 decoration: BoxDecoration(
                   color: isSelected
                       ? AppTheme.primarySubtle
@@ -241,9 +254,25 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                         : AppTheme.surfaceBorder,
                     width: isSelected ? 2 : 1,
                   ),
+                  boxShadow: isSelected
+                      ? [
+                          BoxShadow(
+                            color: AppTheme.primaryGlow,
+                            blurRadius: 8,
+                            spreadRadius: 1,
+                          )
+                        ]
+                      : null,
                 ),
                 child: Center(
-                  child: Text(avatar, style: const TextStyle(fontSize: 24)),
+                  child: isSvg
+                      ? SvgPicture.asset(
+                          avatar,
+                          width: 32,
+                          height: 32,
+                          fit: BoxFit.contain,
+                        )
+                      : Text(avatar, style: const TextStyle(fontSize: 24)),
                 ),
               ),
             );

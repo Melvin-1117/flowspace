@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="coffeeBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3D1F00"/>
+      <stop offset="100%" stop-color="#080C14"/>
+    </linearGradient>
+    <linearGradient id="cupGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFB800"/>
+      <stop offset="100%" stop-color="#FF8C00"/>
+    </linearGradient>
+  </defs>
+  <!-- Background Circle -->
+  <circle cx="50" cy="50" r="48" fill="url(#coffeeBg)" stroke="#1A2640" stroke-width="2"/>
+
+  <!-- Steam as curly brackets -->
+  <path d="M 40 28 Q 36 20 40 14 T 36 8" fill="none" stroke="#FFB800" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+  <path d="M 60 28 Q 64 20 60 14 T 64 8" fill="none" stroke="#FFB800" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+  <path d="M 50 26 Q 48 18 52 12 T 48 6" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" opacity="0.8"/>
+
+  <!-- Mug Handle -->
+  <path d="M 62 42 C 78 42, 78 62, 62 62" fill="none" stroke="url(#cupGrad)" stroke-width="6.5" stroke-linecap="round"/>
+
+  <!-- Mug Body -->
+  <path d="M 28 36 L 62 36 C 62 36, 64 66, 50 66 C 36 66, 28 36, 28 36 Z" fill="url(#cupGrad)"/>
+  
+  <!-- Smiling Face on Mug -->
+  <!-- Eyes -->
+  <circle cx="40" cy="46" r="2.5" fill="#0D1520"/>
+  <circle cx="50" cy="46" r="2.5" fill="#0D1520"/>
+  <!-- Smile -->
+  <path d="M 42 52 Q 45 56 48 52" fill="none" stroke="#0D1520" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- Code text on Mug -->
+  <text x="35" y="60" font-family="Courier, monospace" font-weight="bold" font-size="6" fill="#FFFFFF" opacity="0.9">CODE</text>
+  
+  <!-- Spoon sticking out -->
+  <path d="M 32 38 L 22 24 C 20 21, 23 18, 25 21 L 34 33 Z" fill="#6B8CAE"/>
+</svg>

@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="brainBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00152D"/>
+      <stop offset="100%" stop-color="#080C14"/>
+    </linearGradient>
+    <linearGradient id="circGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00B4FF"/>
+      <stop offset="100%" stop-color="#00D4AA"/>
+    </linearGradient>
+  </defs>
+  <!-- Background Circle -->
+  <circle cx="50" cy="50" r="48" fill="url(#brainBg)" stroke="#1A2640" stroke-width="2"/>
+
+  <!-- Brain Silhouette background -->
+  <!-- Left hemisphere -->
+  <path d="M 50 22 C 34 22, 22 32, 22 46 C 22 56, 28 62, 36 66 C 36 78, 50 82, 50 82 Z" fill="#1A2640" opacity="0.4"/>
+  <!-- Right hemisphere -->
+  <path d="M 50 22 C 66 22, 78 32, 78 46 C 78 56, 72 62, 64 66 C 64 78, 50 82, 50 82 Z" fill="#1A2640" opacity="0.4"/>
+
+  <!-- Circuit lines representing the folds -->
+  <!-- Left Side -->
+  <path d="M 50 30 Q 34 30 34 46 T 42 66" fill="none" stroke="url(#circGrad)" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M 34 46 H 44" fill="none" stroke="url(#circGrad)" stroke-width="1.8" stroke-linecap="round"/>
+  <circle cx="44" cy="46" r="2.5" fill="#FFFFFF"/>
+  <circle cx="34" cy="30" r="2" fill="#00D4AA"/>
+  <circle cx="42" cy="66" r="2" fill="#00B4FF"/>
+
+  <!-- Right Side -->
+  <path d="M 50 30 Q 66 30 66 46 T 58 66" fill="none" stroke="url(#circGrad)" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M 66 46 H 56" fill="none" stroke="url(#circGrad)" stroke-width="1.8" stroke-linecap="round"/>
+  <circle cx="56" cy="46" r="2.5" fill="#FFFFFF"/>
+  <circle cx="66" cy="30" r="2" fill="#00D4AA"/>
+  <circle cx="58" cy="66" r="2" fill="#00B4FF"/>
+
+  <!-- Center divider (glowing spine line) -->
+  <line x1="50" y1="22" x2="50" y2="82" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" opacity="0.8"/>
+  <circle cx="50" cy="22" r="3" fill="#00B4FF" filter="drop-shadow(0px 0px 3px #00B4FF)"/>
+  <circle cx="50" cy="52" r="3" fill="#00D4AA" filter="drop-shadow(0px 0px 3px #00D4AA)"/>
+  <circle cx="50" cy="82" r="3" fill="#00B4FF" filter="drop-shadow(0px 0px 3px #00B4FF)"/>
+
+  <!-- Binary floating text around -->
+  <text x="12" y="44" font-family="Courier, monospace" font-size="6" fill="#00D4AA" opacity="0.4">1</text>
+  <text x="82" y="44" font-family="Courier, monospace" font-size="6" fill="#00B4FF" opacity="0.4">0</text>
+  <text x="18" y="68" font-family="Courier, monospace" font-size="6" fill="#00B4FF" opacity="0.4">0</text>
+  <text x="76" y="68" font-family="Courier, monospace" font-size="6" fill="#00D4AA" opacity="0.4">1</text>
+</svg>

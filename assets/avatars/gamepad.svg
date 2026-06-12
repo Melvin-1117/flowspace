@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="gameBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#080C14"/>
+      <stop offset="100%" stop-color="#0D1520"/>
+    </linearGradient>
+    <linearGradient id="controllerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2D4A6B"/>
+      <stop offset="100%" stop-color="#1A2640"/>
+    </linearGradient>
+  </defs>
+  <!-- Background Circle -->
+  <circle cx="50" cy="50" r="48" fill="url(#gameBg)" stroke="#1A2640" stroke-width="2"/>
+
+  <!-- Gamepad Body -->
+  <path d="M 24 38 C 24 38, 30 32, 50 32 C 70 32, 76 38, 76 38 C 84 38, 86 52, 82 68 C 80 76, 70 76, 64 68 L 58 60 H 42 L 36 68 C 30 76, 20 76, 18 68 C 14 52, 16 38, 24 38 Z" fill="url(#controllerGrad)" stroke="#6B8CAE" stroke-width="2"/>
+
+  <!-- Directional Pad (D-pad) -->
+  <path d="M 32 44 H 36 V 40 H 40 V 44 H 44 V 48 H 40 V 52 H 36 V 48 H 32 Z" fill="#0D1520"/>
+  <circle cx="38" cy="46" r="1" fill="#FFFFFF"/>
+
+  <!-- Action Buttons (Neon Brackets/Letters style) -->
+  <!-- X button -->
+  <circle cx="68" cy="44" r="3.5" fill="#FF3B5C"/>
+  <!-- Y button -->
+  <circle cx="60" cy="50" r="3.5" fill="#00D4AA"/>
+  
+  <!-- Select/Start small buttons -->
+  <rect x="44" y="48" width="5" height="2" rx="1" fill="#0D1520" transform="rotate(-15 44 48)"/>
+  <rect x="51" y="48" width="5" height="2" rx="1" fill="#0D1520" transform="rotate(-15 51 48)"/>
+
+  <!-- Screen/Logo details -->
+  <!-- Cute glowing design in the center -->
+  <path d="M 46 38 Q 50 42 54 38" fill="none" stroke="#00B4FF" stroke-width="1.5" stroke-linecap="round"/>
+</svg>

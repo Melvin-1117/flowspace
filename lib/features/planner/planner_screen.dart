@@ -14,7 +14,6 @@ import '../../widgets/app_drawer.dart';
 import '../../widgets/app_top_bar.dart';
 import '../../core/widgets/user_avatar.dart';
 import 'providers/planner_providers.dart';
-import 'providers/planner_storage.dart';
 import 'widgets/add_focus_block_sheet.dart';
 import 'widgets/add_subject_sheet.dart';
 import 'widgets/focus_block_planner.dart';
@@ -95,7 +94,10 @@ class _PlannerScreenState extends ConsumerState<PlannerScreen> {
                           ),
                         ),
                       ),
-                    ).animate().fadeIn().scale(begin: const Offset(0.8, 0.8)),
+                    )
+                        .animate()
+                        .fadeIn(duration: kPageEntryDuration, curve: kPageEntryCurve)
+                        .slideY(begin: 0.06, end: 0, duration: kPageEntryDuration, curve: kPageEntryCurve),
                     const SizedBox(height: 20),
                     Container(
                           key: _milestoneSectionKey,
@@ -116,8 +118,8 @@ class _PlannerScreenState extends ConsumerState<PlannerScreen> {
                           ),
                         )
                         .animate()
-                        .fadeIn(delay: 100.ms)
-                        .slideY(begin: 0.1, end: 0),
+                        .fadeIn(duration: kPageEntryDuration, delay: kPageStaggerStep, curve: kPageEntryCurve)
+                        .slideY(begin: 0.06, end: 0, duration: kPageEntryDuration, delay: kPageStaggerStep, curve: kPageEntryCurve),
                     const SizedBox(height: 24),
                     Row(
                       key: _subjectsSectionKey,
@@ -176,13 +178,25 @@ class _PlannerScreenState extends ConsumerState<PlannerScreen> {
                                   )
                                   .animate()
                                   .fadeIn(
+                                    duration: kPageEntryDuration,
                                     delay: Duration(
                                       milliseconds:
                                           kPageStaggerStep.inMilliseconds * 2 +
                                           (i * kPageStaggerStep.inMilliseconds),
                                     ),
+                                    curve: kPageEntryCurve,
                                   )
-                                  .slideY(begin: 0.1, end: 0),
+                                  .slideY(
+                                    begin: 0.06,
+                                    end: 0,
+                                    duration: kPageEntryDuration,
+                                    delay: Duration(
+                                      milliseconds:
+                                          kPageStaggerStep.inMilliseconds * 2 +
+                                          (i * kPageStaggerStep.inMilliseconds),
+                                    ),
+                                    curve: kPageEntryCurve,
+                                  ),
                               const SizedBox(height: 12),
                             ],
                           ],
@@ -219,8 +233,18 @@ class _PlannerScreenState extends ConsumerState<PlannerScreen> {
                           onOpenBlock: _openBlockDetails,
                         )
                         .animate()
-                        .fadeIn(delay: kPageStaggerStep * 6)
-                        .slideY(begin: 0.1, end: 0),
+                        .fadeIn(
+                          duration: const Duration(milliseconds: 300),
+                          delay: const Duration(milliseconds: 500),
+                          curve: Curves.easeInOut,
+                        )
+                        .slideY(
+                          begin: 0.06,
+                          end: 0,
+                          duration: const Duration(milliseconds: 300),
+                          delay: const Duration(milliseconds: 500),
+                          curve: Curves.easeInOut,
+                        ),
                   ],
                 ),
               ),
@@ -237,6 +261,7 @@ class _PlannerScreenState extends ConsumerState<PlannerScreen> {
     final allSubjects = await ref.read(allSubjectsProvider.future);
     final allMilestones = await ref.read(allMilestonesProvider.future);
     final allBlocks = await ref.read(todayFocusBlocksProvider.future);
+    if (!mounted) return;
     await showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,

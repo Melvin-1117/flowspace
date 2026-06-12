@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="cyberBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#001A3D"/>
+      <stop offset="100%" stop-color="#001520"/>
+    </linearGradient>
+    <linearGradient id="visorGlow" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#FF3B5C"/>
+      <stop offset="50%" stop-color="#8B5CF6"/>
+      <stop offset="100%" stop-color="#00B4FF"/>
+    </linearGradient>
+  </defs>
+  <!-- Background Circle -->
+  <circle cx="50" cy="50" r="48" fill="url(#cyberBg)" stroke="#1A2640" stroke-width="2"/>
+  
+  <!-- Tech lines/binary in background -->
+  <text x="15" y="30" font-family="Courier, monospace" font-size="8" fill="#006EE6" opacity="0.3">1010</text>
+  <text x="70" y="35" font-family="Courier, monospace" font-size="8" fill="#00B4FF" opacity="0.3">&lt;/&gt;</text>
+  <text x="18" y="70" font-family="Courier, monospace" font-size="8" fill="#FF3B5C" opacity="0.2">{}</text>
+  <path d="M 10 50 Q 30 40 50 50 T 90 50" fill="none" stroke="#00B4FF" stroke-width="0.5" opacity="0.2"/>
+
+  <!-- Character Silhouette -->
+  <!-- Hoodie/Shoulders -->
+  <path d="M25 88 C25 75, 35 68, 50 68 C65 68, 75 75, 75 88 Z" fill="#1A2640"/>
+  <!-- Inner hoodie -->
+  <path d="M35 88 C35 78, 42 74, 50 74 C58 74, 65 78, 65 88 Z" fill="#0D1520"/>
+  
+  <!-- Face/Neck -->
+  <path d="M44 65 L44 72 L56 72 L56 65 Z" fill="#FFCBB2"/>
+  <circle cx="50" cy="48" r="18" fill="#FFCBB2"/>
+  
+  <!-- Hair (Cool spiky cyberpunk style) -->
+  <path d="M32 45 C30 38, 35 30, 42 28 C45 25, 52 26, 56 28 C62 27, 68 33, 68 40 C70 45, 66 48, 66 48 C68 42, 64 36, 58 35 C58 35, 54 30, 48 32 C42 34, 38 38, 38 42 C38 44, 34 46, 32 45 Z" fill="#00B4FF"/>
+  <path d="M32 45 C35 48, 34 52, 34 52 L37 49 C37 49, 39 54, 42 50 C44 54, 46 51, 46 51 Z" fill="#00B4FF"/>
+
+  <!-- Glowing Cyber Visor/Glasses -->
+  <rect x="34" y="42" width="32" height="8" rx="4" fill="url(#visorGlow)" filter="drop-shadow(0px 0px 4px #00B4FF)"/>
+  <path d="M36 46 H64" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round" opacity="0.8"/>
+  
+  <!-- Subtle reflection/highlights on head -->
+  <path d="M32 38 A 18 18 0 0 1 50 30" fill="none" stroke="#FFFFFF" stroke-width="1" opacity="0.3"/>
+</svg>

@@ -5,6 +5,7 @@ import 'package:isar/isar.dart';
 import '../../core/models/pomodoro_session.dart';
 import '../../core/providers/isar_provider.dart';
 import 'providers/planner_providers.dart';
+import 'widgets/add_subject_sheet.dart';
 import '../../app/theme.dart';
 
 class SubjectDetailScreen extends ConsumerWidget {
@@ -57,10 +58,12 @@ class SubjectDetailScreen extends ConsumerWidget {
                   children: [
                     CheckboxListTile(
                       value: module.isCompleted,
-                      onChanged: (_) {
-                        ref
-                            .read(subjectNotifierProvider.notifier)
-                            .incrementModule(subject.uuid);
+                      onChanged: (val) {
+                        if (val != null) {
+                          ref
+                              .read(subjectNotifierProvider.notifier)
+                              .toggleModuleCompletion(subject.uuid, module.uuid, val);
+                        }
                       },
                       title: const Text('Completed'),
                     ),
@@ -102,13 +105,66 @@ class SubjectDetailScreen extends ConsumerWidget {
               ),
               const SizedBox(height: 12),
               OutlinedButton.icon(
-                onPressed: () {},
+                onPressed: () async {
+                  final textController = TextEditingController();
+                  final name = await showDialog<String>(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      backgroundColor: AppTheme.surfaceCard,
+                      title: const Text('Add New Module'),
+                      content: TextField(
+                        controller: textController,
+                        autofocus: true,
+                        decoration: const InputDecoration(
+                          hintText: 'Module name',
+                        ),
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: const Text('Cancel'),
+                        ),
+                        FilledButton(
+                          onPressed: () => Navigator.pop(context, textController.text.trim()),
+                          style: FilledButton.styleFrom(
+                            backgroundColor: AppTheme.primary,
+                          ),
+                          child: const Text('Add'),
+                        ),
+                      ],
+                    ),
+                  );
+                  if (name != null && name.isNotEmpty) {
+                    await ref
+                        .read(subjectNotifierProvider.notifier)
+                        .addModule(subject.uuid, name);
+                  }
+                },
                 icon: const Icon(Icons.add),
                 label: const Text('Add new module'),
               ),
               const SizedBox(height: 8),
               FilledButton(
-                onPressed: () {},
+                onPressed: () {
+                  showModalBottomSheet<void>(
+                    context: context,
+                    isScrollControlled: true,
+                    backgroundColor: AppTheme.surfaceCard,
+                    builder: (_) => AddSubjectSheet(
+                      initialSubject: subject,
+                      onSubmit: (updatedSubject, examMilestone) async {
+                        await ref
+                            .read(subjectNotifierProvider.notifier)
+                            .updateSubject(updatedSubject);
+                        if (examMilestone != null) {
+                          await ref
+                              .read(milestoneNotifierProvider.notifier)
+                              .addMilestone(examMilestone);
+                        }
+                      },
+                    ),
+                  );
+                },
                 style: FilledButton.styleFrom(
                   backgroundColor: AppTheme.primary,
                 ),
@@ -129,7 +185,18 @@ final _subjectSessionsProvider =
     ) async {
       final isar = await ref.read(isarProvider.future);
       final all = await isar.collection<PomodoroSession>().where().findAll();
-      return all.where((session) => session.linkedTaskId == subjectId).toList()
+      // Handle sessions linked directly or linked through focus blocks that target this subject
+      final blocks = await ref.watch(focusBlockNotifierProvider.future);
+      final linkedBlockIds = blocks
+          .where((block) => block.linkedSubjectId == subjectId)
+          .map((block) => block.uuid)
+          .toSet();
+
+      return all
+          .where((session) =>
+              session.linkedTaskId == subjectId ||
+              linkedBlockIds.contains(session.linkedTaskId))
+          .toList()
         ..sort((a, b) => b.startTime.compareTo(a.startTime));
     });
 

@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 
 import '../../../app/theme.dart';
 import '../providers/dashboard_providers.dart';
-import 'shimmer/quick_stats_shimmer.dart';
 
 class QuickStatsRow extends ConsumerWidget {
   const QuickStatsRow({super.key});

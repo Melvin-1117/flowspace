@@ -3,9 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../app/theme.dart';
-import '../../../core/models/analytics_models.dart';
+import '../../../core/widgets/shimmer_box.dart';
 import '../../analytics/providers/analytics_providers.dart';
-import 'shimmer/chart_shimmer.dart';
 
 class WeeklyVelocitySnapshot extends ConsumerWidget {
   const WeeklyVelocitySnapshot({super.key});
@@ -18,7 +17,7 @@ class WeeklyVelocitySnapshot extends ConsumerWidget {
     final changeAsync = ref.watch(velocityChangeProvider);
 
     return velocityAsync.when(
-      loading: () => const ChartShimmer(),
+      loading: () => const ShimmerBox.chart(),
       error: (_, __) => const SizedBox.shrink(),
       data: (velocity) {
         final change = changeAsync.valueOrNull ?? double.nan;

@@ -34,13 +34,20 @@ PreferredSizeWidget buildFlowSpaceAppBar({
     elevation: 0,
     scrolledUnderElevation: 0,
     leading: _MenuButton(scaffoldKey: scaffoldKey),
-    title: Text(
-      title,
-      style: const TextStyle(
-        color: kAppBarTitleColor,
-        fontWeight: kAppBarTitleWeight,
-        fontSize: kAppBarTitleSize,
-      ),
+    title: Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const Icon(Icons.bolt_rounded, color: AppTheme.primary, size: 24),
+        const SizedBox(width: 8),
+        Text(
+          title,
+          style: const TextStyle(
+            color: kAppBarTitleColor,
+            fontWeight: kAppBarTitleWeight,
+            fontSize: kAppBarTitleSize,
+          ),
+        ),
+      ],
     ),
     actions: actions,
   );

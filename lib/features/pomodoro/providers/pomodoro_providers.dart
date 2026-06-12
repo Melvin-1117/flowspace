@@ -5,8 +5,8 @@ import 'package:isar/isar.dart';
 
 import '../../../core/models/focus_goal_settings.dart';
 import '../../../core/models/pomodoro_session.dart';
-import '../../../core/models/task.dart';
 import '../../../core/providers/isar_provider.dart';
+import '../../../core/utils/formatters.dart';
 import 'ambient_sound_notifier.dart';
 import 'music_player_notifier.dart';
 import 'pomodoro_web_store.dart';
@@ -99,7 +99,7 @@ final focusGoalSettingsProvider = FutureProvider<FocusGoalSettings>((
   }
   final isar = await ref.watch(isarProvider.future);
   final settings = await isar.collection<FocusGoalSettings>().get(1);
-  if (settings != null) return settings as FocusGoalSettings;
+  if (settings != null) return settings;
 
   final defaults = FocusGoalSettings()
     ..id = 1
@@ -142,9 +142,7 @@ final remainingSecondsProvider = Provider<int>(
 
 final formattedTimeProvider = Provider<String>((ref) {
   final seconds = ref.watch(remainingSecondsProvider);
-  final minutes = seconds ~/ 60;
-  final secs = seconds % 60;
-  return '${minutes.toString().padLeft(2, '0')}:${secs.toString().padLeft(2, '0')}';
+  return formatDurationMmSs(seconds);
 });
 
 final sessionCountProvider = Provider<int>(
@@ -208,7 +206,7 @@ final weeklyHeatmapProvider = FutureProvider<List<DayHeatmapData>>((ref) async {
     final dayEnd = dayStart.add(const Duration(days: 1));
     final all = kIsWeb
         ? PomodoroWebStore.instance.sessions
-        : await (isar as Isar).collection<PomodoroSession>().where().findAll();
+        : await isar!.collection<PomodoroSession>().where().findAll();
     final sessions = all
         .where(
           (s) =>
@@ -220,7 +218,7 @@ final weeklyHeatmapProvider = FutureProvider<List<DayHeatmapData>>((ref) async {
         .toList();
     final settings = kIsWeb
         ? PomodoroWebStore.instance.ensureSettings()
-        : await (isar as Isar).collection<FocusGoalSettings>().get(1) as FocusGoalSettings?;
+        : await isar!.collection<FocusGoalSettings>().get(1);
     final goal = settings?.dailySessionGoal ?? 4;
     final completed = sessions.length;
 
@@ -249,7 +247,7 @@ final goalStreakProvider = FutureProvider<int>((ref) async {
     final dayEnd = dayStart.add(const Duration(days: 1));
     final all = kIsWeb
         ? PomodoroWebStore.instance.sessions
-        : await (isar as Isar).collection<PomodoroSession>().where().findAll();
+        : await isar!.collection<PomodoroSession>().where().findAll();
     final sessions = all
         .where(
           (s) =>
@@ -261,7 +259,7 @@ final goalStreakProvider = FutureProvider<int>((ref) async {
         .toList();
     final settings = kIsWeb
         ? PomodoroWebStore.instance.ensureSettings()
-        : await (isar as Isar).collection<FocusGoalSettings>().get(1) as FocusGoalSettings?;
+        : await isar!.collection<FocusGoalSettings>().get(1);
     final goal = settings?.dailySessionGoal ?? 4;
     if (sessions.length >= goal) {
       streak++;
@@ -277,7 +275,7 @@ final bestGoalStreakProvider = FutureProvider<int>((ref) async {
   final isar = kIsWeb ? null : await ref.watch(isarProvider.future);
   final settings = kIsWeb
       ? PomodoroWebStore.instance.ensureSettings()
-      : await (isar as Isar).collection<FocusGoalSettings>().get(1) as FocusGoalSettings?;
+      : await isar!.collection<FocusGoalSettings>().get(1);
   final goal = settings?.dailySessionGoal ?? 4;
 
   var best = 0;
@@ -288,7 +286,7 @@ final bestGoalStreakProvider = FutureProvider<int>((ref) async {
     final dayEnd = dayStart.add(const Duration(days: 1));
     final all = kIsWeb
         ? PomodoroWebStore.instance.sessions
-        : await (isar as Isar).collection<PomodoroSession>().where().findAll();
+        : await isar!.collection<PomodoroSession>().where().findAll();
     final sessions = all
         .where(
           (s) =>

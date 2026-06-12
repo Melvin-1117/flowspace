@@ -7,6 +7,7 @@ import 'analytics_empty_state.dart';
 import '../providers/analytics_providers.dart';
 import 'stat_progress_bar.dart';
 import '../../../app/theme.dart';
+import '../../../core/utils/formatters.dart';
 
 const Color _cardBackground = AppTheme.surfaceCard;
 const Color _cardBorder = Color(0x0DFFFFFF);
@@ -72,7 +73,7 @@ class AvgSessionCard extends ConsumerWidget {
                           Row(
                             children: [
                               Text(
-                                _formatDuration(data.avgSeconds),
+                                formatDurationMinutes((data.avgSeconds / 60).round(), showZeroMinutes: true),
                                 style: const TextStyle(
                                   color: _textPrimary,
                                   fontSize: 24,
@@ -134,13 +135,6 @@ class AvgSessionCard extends ConsumerWidget {
     );
   }
 
-  String _formatDuration(int seconds) {
-    final minutes = (seconds / 60).round();
-    if (minutes < 60) return '${minutes}m';
-    final hours = minutes ~/ 60;
-    final remaining = minutes % 60;
-    return '${hours}h ${remaining}m';
-  }
 
   Future<void> _showMonthlyBreakdown(
     BuildContext context,

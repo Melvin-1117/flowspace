@@ -13,6 +13,7 @@ import '../../../core/providers/isar_provider.dart';
 import '../../pomodoro/providers/pomodoro_web_store.dart';
 import '../../tasks/providers/task_providers.dart';
 import '../analytics_payload.dart';
+import '../../devtrack/providers/devtrack_providers.dart';
 
 const int _daysInWeek = 7;
 const int _archiveDays = 90;
@@ -407,7 +408,7 @@ final analyticsTargetDurationProvider = FutureProvider<int>((ref) async {
     return PomodoroWebStore.instance.ensureSettings().focusDuration;
   }
   final isar = await ref.watch(isarProvider.future);
-  final settings = await isar.collection<FocusGoalSettings>().get(1) as FocusGoalSettings?;
+  final settings = await isar.collection<FocusGoalSettings>().get(1);
   return settings?.focusDuration ?? 1500;
 });
 
@@ -428,15 +429,32 @@ Future<List<PomodoroSession>> _loadFocusCompletedSessionsInRange(
 }
 
 Future<List<PomodoroSession>> _loadCompletedSessions(Ref ref) async {
-  // Pulls completed sessions from the platform-specific persistence layer.
+  final List<PomodoroSession> pomodoros = [];
   if (kIsWeb) {
-    return PomodoroWebStore.instance.sessions
-        .where((s) => s.isCompleted)
-        .toList();
+    pomodoros.addAll(PomodoroWebStore.instance.sessions.where((s) => s.isCompleted));
+  } else {
+    final isar = await ref.watch(isarProvider.future);
+    final all = await isar.collection<PomodoroSession>().where().findAll();
+    pomodoros.addAll(all.where((s) => s.isCompleted));
   }
-  final isar = await ref.watch(isarProvider.future);
-  final all = await isar.collection<PomodoroSession>().where().findAll();
-  return all.where((s) => s.isCompleted).toList();
+
+  // Map DevTrack coding sessions as completed focus sessions
+  final codingSessions = await ref.watch(allCodingSessionsProvider.future);
+  for (final cs in codingSessions) {
+    pomodoros.add(
+      PomodoroSession()
+        ..uuid = cs.uuid
+        ..sessionType = 'focus'
+        ..startTime = cs.startTime
+        ..plannedDurationSeconds = cs.durationMinutes * 60
+        ..actualDurationSeconds = cs.durationMinutes * 60
+        ..isCompleted = true
+        ..isAbandoned = false
+        ..linkedTaskId = cs.projectId
+        ..linkedTaskTitle = cs.notes.isNotEmpty ? cs.notes : 'Coding Session (${cs.language})',
+    );
+  }
+  return pomodoros;
 }
 
 Future<List<PomodoroSession>> _loadCompletedSessionsInRange(
@@ -444,25 +462,46 @@ Future<List<PomodoroSession>> _loadCompletedSessionsInRange(
   DateTime start,
   DateTime end,
 ) async {
-  // Keeps date-window semantics consistent (start inclusive, end exclusive).
+  final List<PomodoroSession> pomodoros = [];
   if (kIsWeb) {
-    return PomodoroWebStore.instance.sessions
-        .where(
-          (s) =>
-              s.isCompleted &&
-              !s.startTime.isBefore(start) &&
-              s.startTime.isBefore(end),
-        )
-        .toList();
-  }
-  final isar = await ref.watch(isarProvider.future);
-  final all = await isar.collection<PomodoroSession>().where().findAll();
-  return all
-      .where((s) =>
+    pomodoros.addAll(
+      PomodoroWebStore.instance.sessions.where(
+        (s) =>
+            s.isCompleted &&
+            !s.startTime.isBefore(start) &&
+            s.startTime.isBefore(end),
+      ),
+    );
+  } else {
+    final isar = await ref.watch(isarProvider.future);
+    final all = await isar.collection<PomodoroSession>().where().findAll();
+    pomodoros.addAll(
+      all.where((s) =>
           s.isCompleted &&
           !s.startTime.isBefore(start) &&
-          s.startTime.isBefore(end))
-      .toList();
+          s.startTime.isBefore(end)),
+    );
+  }
+
+  // Map DevTrack coding sessions in range as completed focus sessions
+  final codingSessions = await ref.watch(allCodingSessionsProvider.future);
+  for (final cs in codingSessions) {
+    if (!cs.startTime.isBefore(start) && cs.startTime.isBefore(end)) {
+      pomodoros.add(
+        PomodoroSession()
+          ..uuid = cs.uuid
+          ..sessionType = 'focus'
+          ..startTime = cs.startTime
+          ..plannedDurationSeconds = cs.durationMinutes * 60
+          ..actualDurationSeconds = cs.durationMinutes * 60
+          ..isCompleted = true
+          ..isAbandoned = false
+          ..linkedTaskId = cs.projectId
+          ..linkedTaskTitle = cs.notes.isNotEmpty ? cs.notes : 'Coding Session (${cs.language})',
+      );
+    }
+  }
+  return pomodoros;
 }
 
 Future<List<Task>> _loadTasks(Ref ref) async {

@@ -9,10 +9,14 @@ import '../providers/planner_providers.dart';
 import '../../../app/theme.dart';
 
 class AddSubjectSheet extends StatefulWidget {
-  const AddSubjectSheet({required this.onSubmit, super.key});
+  const AddSubjectSheet({
+    required this.onSubmit,
+    this.initialSubject,
+    super.key,
+  });
 
-  final Future<void> Function(Subject subject, Milestone? examMilestone)
-  onSubmit;
+  final Future<void> Function(Subject subject, Milestone? examMilestone) onSubmit;
+  final Subject? initialSubject;
 
   @override
   State<AddSubjectSheet> createState() => _AddSubjectSheetState();
@@ -52,6 +56,26 @@ class _AddSubjectSheetState extends State<AddSubjectSheet> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    if (widget.initialSubject != null) {
+      final sub = widget.initialSubject!;
+      _nameController.text = sub.name;
+      _modules = sub.totalModules;
+      _goalHours = sub.weeklyGoalHours;
+      _examDate = sub.examDate;
+      _iconName = sub.iconName;
+      _colorHex = sub.colorHex;
+    }
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Padding(
@@ -67,9 +91,9 @@ class _AddSubjectSheetState extends State<AddSubjectSheet> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Add New Subject',
-                  style: TextStyle(
+                Text(
+                  widget.initialSubject == null ? 'Add New Subject' : 'Edit Subject',
+                  style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: AppTheme.textPrimary,
@@ -209,7 +233,7 @@ class _AddSubjectSheetState extends State<AddSubjectSheet> {
                           backgroundColor: AppTheme.primary,
                         ),
                         onPressed: _save,
-                        child: const Text('Add Subject'),
+                        child: Text(widget.initialSubject == null ? 'Add Subject' : 'Save Changes'),
                       ),
                     ),
                   ],
@@ -224,8 +248,8 @@ class _AddSubjectSheetState extends State<AddSubjectSheet> {
 
   Future<void> _save() async {
     if (!_formKey.currentState!.validate()) return;
-    final subjectId = const Uuid().v4();
-    final modules = List<SubjectModule>.generate(
+    final subjectId = widget.initialSubject?.uuid ?? const Uuid().v4();
+    final modules = widget.initialSubject?.modules ?? List<SubjectModule>.generate(
       _modules,
       (index) => SubjectModule(
         uuid: const Uuid().v4(),
@@ -237,21 +261,42 @@ class _AddSubjectSheetState extends State<AddSubjectSheet> {
         linkedNoteIds: const <String>[],
       ),
     );
+
+    var finalModules = [...modules];
+    if (widget.initialSubject != null) {
+      if (_modules > finalModules.length) {
+        for (var i = finalModules.length; i < _modules; i++) {
+          finalModules.add(SubjectModule(
+            uuid: const Uuid().v4(),
+            subjectId: subjectId,
+            name: 'Module ${i + 1}',
+            moduleNumber: i + 1,
+            isCompleted: false,
+            completedAt: null,
+            linkedNoteIds: const <String>[],
+          ));
+        }
+      } else if (_modules < finalModules.length) {
+        finalModules = finalModules.take(_modules).toList();
+      }
+    }
+
     final subject = Subject(
+      id: widget.initialSubject?.id ?? 0,
       uuid: subjectId,
       name: _nameController.text.trim(),
       iconName: _iconName,
       colorHex: _colorHex,
       totalModules: _modules,
-      completedModules: 0,
+      completedModules: finalModules.where((m) => m.isCompleted).length,
       examDate: _examDate,
       weeklyGoalHours: _goalHours,
-      createdAt: DateTime.now(),
-      modules: modules,
+      createdAt: widget.initialSubject?.createdAt ?? DateTime.now(),
+      modules: finalModules,
     );
 
     Milestone? examMilestone;
-    if (_examDate != null) {
+    if (_examDate != null && widget.initialSubject == null) {
       examMilestone = Milestone(
         uuid: 'exam-$subjectId',
         title: '${subject.name} Exam',

@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="rocketBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#000C1A"/>
+      <stop offset="100%" stop-color="#001A3D"/>
+    </linearGradient>
+    <linearGradient id="bodyGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#D0DDF0"/>
+    </linearGradient>
+    <linearGradient id="fireGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFB800"/>
+      <stop offset="100%" stop-color="#FF3B5C"/>
+    </linearGradient>
+  </defs>
+  <!-- Background Circle -->
+  <circle cx="50" cy="50" r="48" fill="url(#rocketBg)" stroke="#1A2640" stroke-width="2"/>
+
+  <!-- Stars/Bits in background -->
+  <circle cx="25" cy="22" r="1" fill="#FFFFFF" opacity="0.8"/>
+  <circle cx="75" cy="30" r="0.8" fill="#FFFFFF" opacity="0.6"/>
+  <circle cx="20" cy="55" r="1.2" fill="#00B4FF" opacity="0.4"/>
+  <circle cx="78" cy="62" r="1" fill="#FFB800" opacity="0.5"/>
+
+  <!-- Rocket Fire Thrust -->
+  <path d="M 44 64 Q 50 88 56 64 C 53 74, 47 74, 44 64 Z" fill="url(#fireGrad)" filter="drop-shadow(0px 0px 4px #FF3B5C)"/>
+  
+  <!-- Rocket Body -->
+  <!-- Fins -->
+  <path d="M 33 62 C 33 50, 42 50, 42 62 Z" fill="#FF3B5C"/>
+  <path d="M 67 62 C 67 50, 58 50, 58 62 Z" fill="#FF3B5C"/>
+  
+  <!-- Main Rocket Capsule -->
+  <path d="M 42 62 L 42 36 C 42 22, 50 12, 50 12 C 50 12, 58 22, 58 36 L 58 62 Z" fill="url(#bodyGrad)"/>
+  
+  <!-- Cone Tip -->
+  <path d="M 44 26 C 47 20, 50 12, 50 12 C 50 12, 53 20, 56 26 Z" fill="#FF3B5C"/>
+  
+  <!-- Window & Coder inside (Subtle representation) -->
+  <circle cx="50" cy="36" r="5" fill="#001A3D" stroke="#6B8CAE" stroke-width="1.5"/>
+  <circle cx="50" cy="36" r="3" fill="#00B4FF"/>
+
+  <!-- Deploy Status Indicator -->
+  <circle cx="50" cy="52" r="2" fill="#00D4AA"/>
+</svg>

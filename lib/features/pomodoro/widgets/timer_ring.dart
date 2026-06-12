@@ -97,6 +97,23 @@ class _TimerRingState extends ConsumerState<TimerRing>
                   fontFeatures: [FontFeature.tabularFigures()],
                 ),
               ),
+              if (timerState.linkedTaskTitle != null) ...[
+                const SizedBox(height: 8),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: Text(
+                    timerState.linkedTaskTitle!,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      color: AppTheme.textSecondary,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
             ],
           ),
         ],

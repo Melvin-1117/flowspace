@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../app/theme.dart';
 import '../../tasks/providers/task_providers.dart';
-import 'shimmer/task_summary_shimmer.dart';
+import '../../../core/widgets/shimmer_box.dart';
 
 class TaskSummaryCard extends ConsumerWidget {
   const TaskSummaryCard({super.key});
@@ -14,7 +14,7 @@ class TaskSummaryCard extends ConsumerWidget {
     final tasksAsync = ref.watch(allTasksProvider);
 
     return tasksAsync.when(
-      loading: () => const TaskSummaryShimmer(),
+      loading: () => const ShimmerBox.taskSummary(),
       error: (_, __) => const SizedBox.shrink(),
       data: (allTasks) {
         if (allTasks.isEmpty) {

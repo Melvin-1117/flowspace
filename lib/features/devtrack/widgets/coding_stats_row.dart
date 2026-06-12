@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../app/theme.dart';
+import '../../../core/utils/formatters.dart';
 import '../providers/devtrack_providers.dart';
 
 /// 3-stat card row: Today's Coding, Total Hours, Streak.
@@ -25,7 +26,7 @@ class CodingStatsRow extends ConsumerWidget {
           child: _StatCard(
             icon: Icons.code_rounded,
             iconColor: AppTheme.primary,
-            value: _formatMinutes(todayMinutes),
+            value: formatDurationMinutes(todayMinutes, showZeroMinutes: false),
             label: 'Coded Today',
           ),
         ),
@@ -51,12 +52,6 @@ class CodingStatsRow extends ConsumerWidget {
     );
   }
 
-  String _formatMinutes(int minutes) {
-    if (minutes < 60) return '${minutes}m';
-    final h = minutes ~/ 60;
-    final m = minutes % 60;
-    return m > 0 ? '${h}h ${m}m' : '${h}h';
-  }
 }
 
 class _StatCard extends StatelessWidget {

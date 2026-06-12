@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import '../../core/constants/animation_tokens.dart';
 import '../../core/models/task.dart';
 import '../../widgets/app_bottom_nav.dart';
 import '../../widgets/app_drawer.dart';
@@ -161,7 +162,10 @@ class _TaskBoardScreenState extends ConsumerState<TaskBoardScreen> {
                                 ),
                               ),
                             ],
-                          ),
+                          )
+                              .animate()
+                              .fadeIn(duration: kPageEntryDuration, curve: kPageEntryCurve)
+                              .slideY(begin: 0.06, end: 0, duration: kPageEntryDuration, curve: kPageEntryCurve),
                           const SizedBox(height: 10),
                           Row(
                             children: [
@@ -228,7 +232,10 @@ class _TaskBoardScreenState extends ConsumerState<TaskBoardScreen> {
                                   ),
                                 ),
                             ],
-                          ),
+                          )
+                              .animate()
+                              .fadeIn(duration: kPageEntryDuration, delay: kPageStaggerStep, curve: kPageEntryCurve)
+                              .slideY(begin: 0.06, end: 0, duration: kPageEntryDuration, delay: kPageStaggerStep, curve: kPageEntryCurve),
                           const SizedBox(height: 14),
                           LayoutBuilder(
                             builder: (context, constraints) {
@@ -368,7 +375,10 @@ class _TaskBoardScreenState extends ConsumerState<TaskBoardScreen> {
                                 ],
                               );
                             },
-                          ),
+                          )
+                              .animate()
+                              .fadeIn(duration: kPageEntryDuration, delay: kPageStaggerStep * 2, curve: kPageEntryCurve)
+                              .slideY(begin: 0.06, end: 0, duration: kPageEntryDuration, delay: kPageStaggerStep * 2, curve: kPageEntryCurve),
                         ],
                       ),
                     ),
@@ -387,7 +397,10 @@ class _TaskBoardScreenState extends ConsumerState<TaskBoardScreen> {
                         }
                         return TaskListView(tasks: searchedTasks);
                       },
-                    ),
+                    )
+                        .animate()
+                        .fadeIn(duration: kPageEntryDuration, delay: kPageStaggerStep * 3, curve: kPageEntryCurve)
+                        .slideY(begin: 0.06, end: 0, duration: kPageEntryDuration, delay: kPageStaggerStep * 3, curve: kPageEntryCurve),
                   ),
                 ],
               ),

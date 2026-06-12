@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="batBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#001F3D"/>
+      <stop offset="100%" stop-color="#080C14"/>
+    </linearGradient>
+    <linearGradient id="batFill" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00D4AA"/>
+      <stop offset="100%" stop-color="#00B4FF"/>
+    </linearGradient>
+  </defs>
+  <!-- Background Circle -->
+  <circle cx="50" cy="50" r="48" fill="url(#batBg)" stroke="#1A2640" stroke-width="2"/>
+
+  <!-- Battery Outer Shell -->
+  <rect x="32" y="26" width="36" height="54" rx="8" fill="none" stroke="#2D4A6B" stroke-width="3"/>
+  <!-- Battery Tip -->
+  <path d="M 44 26 L 44 21 C 44 19, 56 19, 56 21 L 56 26 Z" fill="#2D4A6B"/>
+
+  <!-- Glowing Charge Cells (Fully Charged) -->
+  <!-- Cell 1 -->
+  <rect x="37" y="68" width="26" height="8" rx="2" fill="url(#batFill)"/>
+  <!-- Cell 2 -->
+  <rect x="37" y="56" width="26" height="8" rx="2" fill="url(#batFill)"/>
+  <!-- Cell 3 -->
+  <rect x="37" y="44" width="26" height="8" rx="2" fill="url(#batFill)"/>
+  <!-- Cell 4 -->
+  <rect x="37" y="32" width="26" height="8" rx="2" fill="url(#batFill)"/>
+
+  <!-- Lightning Bolt overlay (glowing white) -->
+  <path d="M 52 38 L 42 50 H 50 L 48 64 L 58 52 H 50 Z" fill="#FFFFFF" filter="drop-shadow(0px 0px 3px #00B4FF)"/>
+</svg>

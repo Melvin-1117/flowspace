@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/models/focus_block.dart';
 import '../../../core/models/subject.dart';
-import '../providers/focus_block_notifier.dart';
 import '../providers/planner_providers.dart';
 import 'focus_block_item.dart';
 import 'focus_block_options_menu.dart';
