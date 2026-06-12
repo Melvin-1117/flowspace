@@ -1,8 +1,4 @@
 <div align="center">
-  <img src="assets/banner.png" alt="FlowSpace Banner" width="100%" style="border-radius: 8px;">
-  
-  <br/>
-  
   # 🌌 FlowSpace
   
   **The ultimate developer-focused workspace, pomodoro scheduler, and activity tracker.**
