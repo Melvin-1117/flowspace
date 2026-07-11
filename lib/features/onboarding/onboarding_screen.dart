@@ -20,17 +20,17 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   int _currentStep = 0;
   bool _isLoading = false;
 
-  // Step 1 — Name + Avatar
+  // Step 1 â€” Name + Avatar
   final _nameController = TextEditingController();
   String _selectedAvatar = 'assets/avatars/cyberpunk.svg';
 
-  // Step 2 — Semester Info
+  // Step 2 â€” Semester Info
   final _semesterController = TextEditingController(text: 'Semester 7');
   final _courseController = TextEditingController(text: 'B.Tech CSE');
   DateTime? _semesterEndDate;
   final List<String> _selectedLanguages = [];
 
-  // Step 3 — Daily Goals
+  // Step 3 â€” Daily Goals
   int _dailySessions = 4;
   int _dailyCodingHours = 3;
 
@@ -102,7 +102,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     );
   }
 
-  // ── Step Indicator ────────────────────────────────────────────────────────
+  // â”€â”€ Step Indicator â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   Widget _buildStepIndicator() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -117,7 +117,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
             color: isActive
                 ? AppTheme.primary
                 : isComplete
-                    ? AppTheme.primary.withOpacity(0.5)
+                    ? AppTheme.primary.withValues(alpha: 0.5)
                     : AppTheme.surfaceBorder,
             borderRadius: BorderRadius.circular(5),
           ),
@@ -126,7 +126,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     );
   }
 
-  // ── Step 1: Name + Avatar ─────────────────────────────────────────────────
+  // â”€â”€ Step 1: Name + Avatar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   Widget _buildStep1() {
     return Column(
       key: const ValueKey('step1'),
@@ -140,7 +140,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
             color: AppTheme.primary,
             borderRadius: BorderRadius.circular(AppTheme.radiusMD),
             boxShadow: [
-              BoxShadow(color: AppTheme.primaryGlow, blurRadius: 20),
+              const BoxShadow(color: AppTheme.primaryGlow, blurRadius: 20),
             ],
           ),
           child: const Icon(
@@ -256,7 +256,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                   ),
                   boxShadow: isSelected
                       ? [
-                          BoxShadow(
+                          const BoxShadow(
                             color: AppTheme.primaryGlow,
                             blurRadius: 8,
                             spreadRadius: 1,
@@ -282,7 +282,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     );
   }
 
-  // ── Step 2: Semester Info ─────────────────────────────────────────────────
+  // â”€â”€ Step 2: Semester Info â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   Widget _buildStep2() {
     return Column(
       key: const ValueKey('step2'),
@@ -416,7 +416,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     );
   }
 
-  // ── Step 3: Daily Goals ───────────────────────────────────────────────────
+  // â”€â”€ Step 3: Daily Goals â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   Widget _buildStep3() {
     return Column(
       key: const ValueKey('step3'),
@@ -478,7 +478,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
             color: AppTheme.primarySubtle,
             borderRadius: BorderRadius.circular(AppTheme.radiusSM),
             border: Border.all(
-              color: AppTheme.primary.withOpacity(0.2),
+              color: AppTheme.primary.withValues(alpha: 0.2),
             ),
           ),
           child: Row(
@@ -506,7 +506,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     );
   }
 
-  // ── Navigation Buttons ────────────────────────────────────────────────────
+  // â”€â”€ Navigation Buttons â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   Widget _buildNavigationButtons() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppTheme.spaceXL),
@@ -575,7 +575,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     );
   }
 
-  // ── Helpers ───────────────────────────────────────────────────────────────
+  // â”€â”€ Helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   Widget _buildLabel(String text) {
     return Text(
       text,
@@ -651,7 +651,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
               activeTrackColor: AppTheme.primary,
               inactiveTrackColor: AppTheme.surfaceBorder,
               thumbColor: AppTheme.primary,
-              overlayColor: AppTheme.primary.withOpacity(0.1),
+              overlayColor: AppTheme.primary.withValues(alpha: 0.1),
               trackHeight: 4,
             ),
             child: Slider(
@@ -766,7 +766,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            'Something went wrong — please try again',
+            'Something went wrong â€” please try again',
             style: GoogleFonts.spaceGrotesk(color: AppTheme.textPrimary),
           ),
           backgroundColor: AppTheme.danger,

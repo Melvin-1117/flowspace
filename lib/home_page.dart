@@ -31,16 +31,16 @@ class _HomePageState extends ConsumerState<HomePage> {
         scaffoldKey: _scaffoldKey,
         useTransparentBackground: true,
         actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 16.0),
-            child: const Icon(
+          const Padding(
+            padding: EdgeInsets.only(right: 16.0),
+            child: Icon(
               Icons.notifications_none,
               color: Colors.white,
               size: 24,
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(right: 16.0),
+          const Padding(
+            padding: EdgeInsets.only(right: 16.0),
             child: UserAvatar(size: 36),
           ),
         ],
@@ -223,9 +223,9 @@ class _HomePageState extends ConsumerState<HomePage> {
             circularStrokeCap: CircularStrokeCap.round,
             backgroundColor: AppTheme.surfaceBorder,
             progressColor: AppTheme.primary,
-            center: Column(
+            center: const Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
+              children: [
                 Text(
                   '75%',
                   style: TextStyle(
@@ -243,11 +243,11 @@ class _HomePageState extends ConsumerState<HomePage> {
             ),
           ),
           const SizedBox(height: 24),
-          Row(
+          const Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               Column(
-                children: const [
+                children: [
                   Text(
                     '6h 15m',
                     style: TextStyle(
@@ -268,7 +268,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                 ],
               ),
               Column(
-                children: const [
+                children: [
                   Text(
                     '12',
                     style: TextStyle(

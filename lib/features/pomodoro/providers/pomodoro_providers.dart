@@ -28,7 +28,7 @@ extension SessionTypeX on SessionType {
   };
 
   Color get color => switch (this) {
-    SessionType.focus => const Color(0xFF7C3AED),
+    SessionType.focus => const Color(0xFF006EE6),
     SessionType.shortBreak => const Color(0xFF06B6D4),
     SessionType.longBreak => const Color(0xFF10B981),
   };
@@ -142,7 +142,7 @@ final remainingSecondsProvider = Provider<int>(
 
 final formattedTimeProvider = Provider<String>((ref) {
   final seconds = ref.watch(remainingSecondsProvider);
-  return formatDurationMmSs(seconds);
+  return formatMMSS(seconds);
 });
 
 final sessionCountProvider = Provider<int>(
@@ -309,9 +309,9 @@ final bestGoalStreakProvider = FutureProvider<int>((ref) async {
 Color heatmapCellColor(DayHeatmapData data) {
   if (data.completedSessions == 0) return const Color(0xFF0D0D0D);
   final ratio = data.completedSessions / data.goalSessions;
-  if (ratio >= 1.0) return const Color(0xFF7C3AED);
-  if (ratio >= 0.5) return const Color(0xFF4C1D95);
-  return const Color(0xFF2D1B69);
+  if (ratio >= 1.0) return const Color(0xFF006EE6);
+  if (ratio >= 0.5) return const Color(0xFF004499);
+  return const Color(0xFF001A55);
 }
 
 class FocusGoalSettingsUpdater extends AsyncNotifier<void> {

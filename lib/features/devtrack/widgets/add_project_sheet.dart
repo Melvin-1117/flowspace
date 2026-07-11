@@ -21,6 +21,7 @@ class _AddProjectSheetState extends ConsumerState<AddProjectSheet> {
   final List<String> _techStack = [];
   String _status = 'active';
   String _colorHex = '#006EE6';
+  // ignore: prefer_final_fields
   int _completionPercent = 0;
 
   static const _projectColors = [

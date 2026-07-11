@@ -12,14 +12,19 @@ class TrialIndicator extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(timerNotifierProvider);
+    // .select() — only rebuild when sessionType or trialsUsed changes,
+    // not on every timer tick (remainingSeconds).
+    final sessionType = ref.watch(
+      timerNotifierProvider.select((s) => s.sessionType),
+    );
+    final trialsRemaining = ref.watch(
+      timerNotifierProvider.select((s) => s.trialsRemaining),
+    );
 
     // Hide during break sessions
-    if (state.sessionType != SessionType.focus) {
+    if (sessionType != SessionType.focus) {
       return const SizedBox.shrink();
     }
-
-    final trialsRemaining = state.trialsRemaining;
 
     return Column(
       mainAxisSize: MainAxisSize.min,

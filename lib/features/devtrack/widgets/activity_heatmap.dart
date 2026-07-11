@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -19,9 +19,9 @@ class _ActivityHeatmapState extends ConsumerState<ActivityHeatmap> {
 
   Color _getCellColor(int minutes) {
     if (minutes == 0) return AppTheme.surfaceElevated;
-    if (minutes <= 30) return AppTheme.primary.withOpacity(0.25);
-    if (minutes <= 90) return AppTheme.primary.withOpacity(0.5);
-    if (minutes <= 180) return AppTheme.primary.withOpacity(0.75);
+    if (minutes <= 30) return AppTheme.primary.withValues(alpha: 0.25);
+    if (minutes <= 90) return AppTheme.primary.withValues(alpha: 0.5);
+    if (minutes <= 180) return AppTheme.primary.withValues(alpha: 0.75);
     return AppTheme.primary;
   }
 

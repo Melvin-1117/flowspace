@@ -73,7 +73,7 @@ class AvgSessionCard extends ConsumerWidget {
                           Row(
                             children: [
                               Text(
-                                formatDurationMinutes((data.avgSeconds / 60).round(), showZeroMinutes: true),
+                                formatDurationMinutes(data.avgSeconds.round()),
                                 style: const TextStyle(
                                   color: _textPrimary,
                                   fontSize: 24,

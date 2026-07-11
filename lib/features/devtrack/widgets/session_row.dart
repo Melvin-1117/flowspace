@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../app/theme.dart';
@@ -52,9 +52,9 @@ class SessionRow extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: sessionColor.withOpacity(0.1),
+              color: sessionColor.withValues(alpha: 0.1),
               shape: BoxShape.circle,
-              border: Border.all(color: sessionColor.withOpacity(0.3)),
+              border: Border.all(color: sessionColor.withValues(alpha: 0.3)),
             ),
             child: Icon(sessionIcon, color: sessionColor, size: 18),
           ),
@@ -89,7 +89,7 @@ class SessionRow extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      '${session.language} • ${session.sessionType.toUpperCase()}',
+                      '${session.language} â€¢ ${session.sessionType.toUpperCase()}',
                       style: GoogleFonts.spaceGrotesk(
                         fontSize: 11,
                         fontWeight: FontWeight.w500,

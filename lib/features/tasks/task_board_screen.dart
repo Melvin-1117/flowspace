@@ -109,9 +109,9 @@ class _TaskBoardScreenState extends ConsumerState<TaskBoardScreen> {
                         ),
                     ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 16),
-                    child: const UserAvatar(size: 36),
+                  const Padding(
+                    padding: EdgeInsets.only(right: 16),
+                    child: UserAvatar(size: 36),
                   ),
                 ],
               ),

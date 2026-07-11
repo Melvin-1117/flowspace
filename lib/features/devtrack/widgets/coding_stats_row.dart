@@ -26,7 +26,7 @@ class CodingStatsRow extends ConsumerWidget {
           child: _StatCard(
             icon: Icons.code_rounded,
             iconColor: AppTheme.primary,
-            value: formatDurationMinutes(todayMinutes, showZeroMinutes: false),
+            value: formatDurationMinutes(todayMinutes * 60),
             label: 'Coded Today',
           ),
         ),

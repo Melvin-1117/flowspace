@@ -15,6 +15,9 @@ import '../pomodoro/providers/pomodoro_providers.dart';
 import '../pomodoro/services/alarm_service.dart';
 import '../pomodoro/widgets/session_alarm_overlay.dart';
 import '../../core/providers/calendar_providers.dart';
+import '../../core/models/pomodoro_session.dart';
+import '../../core/models/subject.dart';
+import '../../core/models/task.dart';
 import '../tasks/providers/task_providers.dart';
 import '../planner/providers/planner_providers.dart';
 import '../analytics/providers/analytics_providers.dart';
@@ -87,10 +90,10 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
               ref.invalidate(semesterHealthProvider);
 
               await Future.wait([
-                ref.read(allTasksProvider.future).catchError((_) => []),
-                ref.read(todaySessionsProvider.future).catchError((_) => []),
-                ref.read(streakDaysProvider.future).catchError((_) => []),
-                ref.read(allSubjectsProvider.future).catchError((_) => []),
+                ref.read(allTasksProvider.future).catchError((_) => <Task>[]),
+                ref.read(todaySessionsProvider.future).catchError((_) => <PomodoroSession>[]),
+                ref.read(streakDaysProvider.future).catchError((_) => <DateTime>[]),
+                ref.read(allSubjectsProvider.future).catchError((_) => <Subject>[]),
                 ref.read(nextMilestoneProvider.future).catchError((_) => null),
               ]);
             },

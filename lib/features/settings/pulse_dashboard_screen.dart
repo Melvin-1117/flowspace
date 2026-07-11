@@ -62,7 +62,7 @@ class _PulseDashboardScreenState extends State<PulseDashboardScreen> {
             ),
           ),
           const SizedBox(height: 14),
-          Row(
+          const Row(
             children: [
               Expanded(
                 child: _ActionChip(
@@ -71,7 +71,7 @@ class _PulseDashboardScreenState extends State<PulseDashboardScreen> {
                   filled: false,
                 ),
               ),
-              const SizedBox(width: 10),
+              SizedBox(width: 10),
               Expanded(
                 child: _ActionChip(
                   icon: Icons.refresh,
@@ -240,8 +240,8 @@ class _ContributionCard extends StatelessWidget {
               style: GoogleFonts.spaceGrotesk(color: _muted, fontSize: 10),
             ),
             const SizedBox(width: 4),
-            Row(
-              children: const [
+            const Row(
+              children: [
                 _LevelCell(color: AppTheme.surfaceElevated),
                 _LevelCell(color: Color(0xFF001A3D)),
                 _LevelCell(color: Color(0xFF003380)),
@@ -325,25 +325,25 @@ class _LanguageCard extends StatelessWidget {
           child: Stack(
             alignment: Alignment.center,
             children: [
-              SizedBox(
+              const SizedBox(
                 width: 126,
                 height: 126,
                 child: CircularProgressIndicator(
                   value: 1,
                   strokeWidth: 16,
-                  valueColor: const AlwaysStoppedAnimation(
+                  valueColor: AlwaysStoppedAnimation(
                     AppTheme.surfaceBorder,
                   ),
                   backgroundColor: Colors.transparent,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 126,
                 height: 126,
                 child: CircularProgressIndicator(
                   value: 0.65,
                   strokeWidth: 16,
-                  valueColor: const AlwaysStoppedAnimation(_primary),
+                  valueColor: AlwaysStoppedAnimation(_primary),
                   backgroundColor: Colors.transparent,
                 ),
               ),
@@ -352,10 +352,10 @@ class _LanguageCard extends StatelessWidget {
                 height: 126,
                 child: Transform.rotate(
                   angle: 4.084,
-                  child: CircularProgressIndicator(
+                  child: const CircularProgressIndicator(
                     value: 0.2,
                     strokeWidth: 16,
-                    valueColor: const AlwaysStoppedAnimation(_secondary),
+                    valueColor: AlwaysStoppedAnimation(_secondary),
                     backgroundColor: Colors.transparent,
                   ),
                 ),
@@ -477,26 +477,26 @@ class _TerminalCard extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 10),
-        _TerminalLine(
+        const _TerminalLine(
           stamp: '[2023-10-24 09:12:44]',
           tag: 'PUSH',
           message: 'feat(auth): implement oauth2 flow',
           detail: '↳ core-api:main @d23f5a1',
         ),
-        _TerminalLine(
+        const _TerminalLine(
           stamp: '[2023-10-24 10:05:01]',
           tag: 'MERGE',
           message: 'Merge pull request #128 from dev/hotfix-ui',
           detail: '↳ ui-shell:staging @f98a21b',
         ),
-        _TerminalLine(
+        const _TerminalLine(
           stamp: '[2023-10-24 11:45:12]',
           tag: 'RELEASE',
           message: 'v2.4.0-stable successfully deployed',
           detail: '↳ prod-cluster-01',
           messageColor: _primary,
         ),
-        _TerminalLine(
+        const _TerminalLine(
           stamp: '[2023-10-24 12:01:33]',
           tag: 'ISSUE',
           message: 'Opened: "Memory leak in socket handler"',

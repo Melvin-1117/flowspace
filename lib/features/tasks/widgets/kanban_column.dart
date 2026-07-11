@@ -97,12 +97,12 @@ class _EmptyState extends StatelessWidget {
           style: BorderStyle.solid,
         ),
       ),
-      child: Center(
+      child: const Center(
         child: Padding(
-          padding: const EdgeInsets.all(20),
+          padding: EdgeInsets.all(20),
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            children: const [
+            children: [
               Icon(Icons.inbox_outlined, color: AppTheme.textSecondary),
               SizedBox(height: 8),
               Text(

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -58,7 +58,7 @@ class TaskSummaryCard extends ConsumerWidget {
                       style: Theme.of(context).textTheme.labelMedium,
                     ),
                     Text(
-                      'View All →',
+                      'View All â†’',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             color: AppTheme.primary,
                             fontWeight: FontWeight.w600,
@@ -153,7 +153,7 @@ class _StatusChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.12),
+        color: color.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
@@ -203,7 +203,7 @@ class _EmptyTaskCard extends StatelessWidget {
               color: AppTheme.textMuted, size: 32),
           const SizedBox(height: 12),
           Text(
-            'No tasks yet — add your first task',
+            'No tasks yet â€” add your first task',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: AppTheme.textSecondary,
                 ),

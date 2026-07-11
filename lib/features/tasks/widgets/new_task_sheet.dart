@@ -240,7 +240,7 @@ class _NewTaskSheetState extends ConsumerState<NewTaskSheet> {
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount: _subtaskControllers.length,
-                      onReorder: (oldIndex, newIndex) {
+                      onReorderItem: (oldIndex, newIndex) {
                         setState(() {
                           if (newIndex > oldIndex) newIndex--;
                           final item = _subtaskControllers.removeAt(oldIndex);

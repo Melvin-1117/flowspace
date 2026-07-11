@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -51,7 +51,7 @@ class UpcomingBlocksCard extends ConsumerWidget {
                   GestureDetector(
                     onTap: () => context.go('/planner'),
                     child: Text(
-                      'View All →',
+                      'View All â†’',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             color: AppTheme.primary,
                             fontWeight: FontWeight.w600,
@@ -141,7 +141,7 @@ class _BlockRow extends StatelessWidget {
             child: TextButton(
               onPressed: onStart,
               style: TextButton.styleFrom(
-                backgroundColor: AppTheme.primary.withOpacity(0.15),
+                backgroundColor: AppTheme.primary.withValues(alpha: 0.15),
                 foregroundColor: AppTheme.primary,
                 padding: const EdgeInsets.symmetric(horizontal: 12),
                 shape: RoundedRectangleBorder(

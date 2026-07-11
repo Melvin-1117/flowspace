@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -62,7 +62,7 @@ class SemesterSnapshotCard extends ConsumerWidget {
                       style: Theme.of(context).textTheme.labelMedium,
                     ),
                     Text(
-                      'View Planner →',
+                      'View Planner â†’',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             color: AppTheme.primary,
                             fontWeight: FontWeight.w600,
@@ -109,7 +109,7 @@ class SemesterSnapshotCard extends ConsumerWidget {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 8, vertical: 3),
                           decoration: BoxDecoration(
-                            color: statusColor.withOpacity(0.15),
+                            color: statusColor.withValues(alpha: 0.15),
                             borderRadius: BorderRadius.circular(6),
                           ),
                           child: Text(

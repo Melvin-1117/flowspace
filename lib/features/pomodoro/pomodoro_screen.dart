@@ -98,6 +98,7 @@ class _PomodoroScreenState extends ConsumerState<PomodoroScreen>
             builder: (_) => const LinkTaskSheet(),
           );
         },
+        tooltip: 'Link a task to this session',
         backgroundColor: AppTheme.primary,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
         child: const Icon(Icons.link, color: Colors.white),

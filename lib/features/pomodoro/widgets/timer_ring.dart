@@ -113,6 +113,17 @@ class _TimerRingState extends ConsumerState<TimerRing>
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
+              ] else ...[
+                const SizedBox(height: 8),
+                const Text(
+                  'Tap + to link a task',
+                  style: TextStyle(
+                    color: Color(0xFF2D4A6B),
+                    fontSize: 11,
+                    fontWeight: FontWeight.w500,
+                    letterSpacing: 0.2,
+                  ),
+                ),
               ],
             ],
           ),

@@ -28,7 +28,7 @@ class UserAvatar extends ConsumerWidget {
           shape: BoxShape.circle,
           color: AppTheme.primarySubtle,
           border: Border.all(
-            color: AppTheme.primary.withOpacity(0.5),
+            color: AppTheme.primary.withValues(alpha: 0.5),
             width: 2,
           ),
         ),

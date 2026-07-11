@@ -45,12 +45,12 @@ class LinkTaskSheet extends ConsumerWidget {
               ),
             ),
             const SizedBox(height: 16),
-            TabBar(
+            const TabBar(
               labelColor: AppTheme.primary,
               unselectedLabelColor: AppTheme.textSecondary,
               indicatorColor: AppTheme.primary,
               dividerColor: Colors.transparent,
-              tabs: const [
+              tabs: [
                 Tab(text: 'Focus Blocks'),
                 Tab(text: 'Subjects'),
                 Tab(text: 'Tasks'),

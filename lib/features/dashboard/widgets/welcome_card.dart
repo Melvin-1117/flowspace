@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../app/theme.dart';
@@ -12,28 +13,55 @@ class WelcomeCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        gradient: AppTheme.cardGradient,
-        borderRadius: BorderRadius.circular(AppTheme.radiusMD),
-        border: Border.all(color: AppTheme.primary.withOpacity(0.3)),
+        color: const Color(0xFF006EE6).withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: const Color(0xFF006EE6).withValues(alpha: 0.3),
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Icon(Icons.rocket_launch_rounded,
-              color: AppTheme.primary, size: 36),
-          const SizedBox(height: 16),
-          Text(
-            'Welcome to FlowSpace!',
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  color: AppTheme.textPrimary,
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: AppTheme.primary.withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(12),
                 ),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            'Get started by adding your first task',
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: AppTheme.textSecondary,
+                child: const Icon(
+                  Icons.rocket_launch_rounded,
+                  color: AppTheme.primary,
+                  size: 24,
                 ),
+              ),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Welcome to FlowSpace! 👋',
+                      style: GoogleFonts.spaceGrotesk(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                        color: AppTheme.textPrimary,
+                        letterSpacing: -0.3,
+                      ),
+                    ),
+                    const SizedBox(height: 3),
+                    Text(
+                      'Here\'s how to get started',
+                      style: GoogleFonts.spaceGrotesk(
+                        fontSize: 13,
+                        color: const Color(0xFF6B8CAE),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: 20),
           Wrap(
@@ -42,18 +70,23 @@ class WelcomeCard extends StatelessWidget {
             children: [
               _ActionChip(
                 icon: Icons.check_circle_outline_rounded,
-                label: 'Add a task',
+                label: 'Add your first task',
                 onTap: () => context.go('/tasks'),
               ),
               _ActionChip(
                 icon: Icons.timer_rounded,
-                label: 'Start a session',
+                label: 'Start a focus session',
                 onTap: () => context.go('/pomodoro'),
               ),
               _ActionChip(
                 icon: Icons.school_rounded,
                 label: 'Add a subject',
                 onTap: () => context.go('/planner'),
+              ),
+              _ActionChip(
+                icon: Icons.developer_board_rounded,
+                label: 'Log a coding session',
+                onTap: () => context.go('/devtrack'),
               ),
             ],
           ),
@@ -63,7 +96,7 @@ class WelcomeCard extends StatelessWidget {
   }
 }
 
-class _ActionChip extends StatelessWidget {
+class _ActionChip extends StatefulWidget {
   const _ActionChip({
     required this.icon,
     required this.label,
@@ -75,27 +108,44 @@ class _ActionChip extends StatelessWidget {
   final VoidCallback onTap;
 
   @override
+  State<_ActionChip> createState() => _ActionChipState();
+}
+
+class _ActionChipState extends State<_ActionChip> {
+  bool _pressed = false;
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
-      child: Container(
+      onTap: widget.onTap,
+      onTapDown: (_) => setState(() => _pressed = true),
+      onTapUp: (_) => setState(() => _pressed = false),
+      onTapCancel: () => setState(() => _pressed = false),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 120),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
-          color: AppTheme.primary.withOpacity(0.12),
+          color: _pressed
+              ? AppTheme.primary.withValues(alpha: 0.22)
+              : AppTheme.primary.withValues(alpha: 0.12),
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: AppTheme.primary.withOpacity(0.3)),
+          border: Border.all(
+            color: _pressed
+                ? AppTheme.primary.withValues(alpha: 0.5)
+                : AppTheme.primary.withValues(alpha: 0.3),
+          ),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, color: AppTheme.primary, size: 16),
+            Icon(widget.icon, color: AppTheme.primary, size: 15),
             const SizedBox(width: 6),
             Text(
-              label,
+              widget.label,
               style: const TextStyle(
-                color: AppTheme.primary,
+                color: Colors.white,
                 fontSize: 13,
-                fontWeight: FontWeight.w600,
+                fontWeight: FontWeight.w500,
               ),
             ),
           ],

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -9,7 +11,9 @@ import '../services/alarm_service.dart';
 /// Full-screen alarm overlay displayed when a session completes.
 /// Shows session count, a perfect-session badge when no pauses were used,
 /// and buttons to start break / skip break / dismiss alarm.
-class SessionAlarmOverlay extends ConsumerWidget {
+///
+/// "Dismiss Alarm" shows a 3-second countdown then auto-closes the overlay.
+class SessionAlarmOverlay extends ConsumerStatefulWidget {
   const SessionAlarmOverlay({
     required this.sessionNumber,
     required this.isLastBeforeLong,
@@ -20,7 +24,13 @@ class SessionAlarmOverlay extends ConsumerWidget {
   final bool isLastBeforeLong;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<SessionAlarmOverlay> createState() =>
+      _SessionAlarmOverlayState();
+}
+
+class _SessionAlarmOverlayState extends ConsumerState<SessionAlarmOverlay> {
+  @override
+  Widget build(BuildContext context) {
     final trialsUsed = ref.watch(
       timerNotifierProvider.select((s) => s.trialsUsed),
     );
@@ -57,7 +67,7 @@ class SessionAlarmOverlay extends ConsumerWidget {
 
                 // Session number
                 Text(
-                  'Focus Session $sessionNumber of $longBreakInterval',
+                  'Focus Session ${widget.sessionNumber} of $longBreakInterval',
                   style: GoogleFonts.spaceGrotesk(
                     fontSize: 15,
                     color: AppTheme.textSecondary,
@@ -101,7 +111,7 @@ class SessionAlarmOverlay extends ConsumerWidget {
 
                 // Next session hint
                 Text(
-                  isLastBeforeLong
+                  widget.isLastBeforeLong
                       ? 'Time for a long break! 🎉'
                       : 'Time for a short break ☕',
                   style: GoogleFonts.spaceGrotesk(
@@ -133,7 +143,7 @@ class SessionAlarmOverlay extends ConsumerWidget {
                       elevation: 0,
                     ),
                     child: Text(
-                      isLastBeforeLong
+                      widget.isLastBeforeLong
                           ? 'Start Long Break'
                           : 'Start Short Break',
                       style: GoogleFonts.spaceGrotesk(
@@ -179,22 +189,71 @@ class SessionAlarmOverlay extends ConsumerWidget {
 
                 const SizedBox(height: 12),
 
-                // Dismiss alarm only
-                TextButton(
-                  onPressed: () {
-                    ref.read(alarmServiceProvider).dismissAlarm();
-                    // Overlay stays — user chooses next action manually
-                  },
-                  child: Text(
-                    'Dismiss Alarm',
-                    style: GoogleFonts.spaceGrotesk(
-                      fontSize: 13,
-                      color: AppTheme.textMuted,
-                    ),
-                  ),
-                ),
+                // Dismiss alarm — shows countdown after tap
+                _DismissButton(),
               ],
             ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ── Dismiss Button with countdown ──────────────────────────────────────────
+class _DismissButton extends ConsumerStatefulWidget {
+  @override
+  ConsumerState<_DismissButton> createState() => _DismissButtonState();
+}
+
+class _DismissButtonState extends ConsumerState<_DismissButton> {
+  Timer? _timer;
+  int _countdown = 3;
+  bool _dismissed = false;
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  void _onTap() {
+    if (_dismissed) return;
+    setState(() => _dismissed = true);
+
+    // Stop alarm sound immediately
+    ref.read(alarmServiceProvider).dismissAlarm();
+
+    // Start countdown then hide overlay
+    _timer = Timer.periodic(const Duration(seconds: 1), (t) {
+      if (!mounted) {
+        t.cancel();
+        return;
+      }
+      setState(() => _countdown--);
+      if (_countdown <= 0) {
+        t.cancel();
+        if (mounted) {
+          ref.read(alarmOverlayVisibleProvider.notifier).state = false;
+        }
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: _dismissed ? null : _onTap,
+      child: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 200),
+        child: Text(
+          _dismissed ? 'Closing in $_countdown…' : 'Dismiss Alarm',
+          key: ValueKey(_dismissed ? _countdown : 'dismiss'),
+          style: GoogleFonts.spaceGrotesk(
+            fontSize: 13,
+            color: _dismissed ? AppTheme.primary : AppTheme.textMuted,
+            fontWeight:
+                _dismissed ? FontWeight.w600 : FontWeight.w400,
           ),
         ),
       ),

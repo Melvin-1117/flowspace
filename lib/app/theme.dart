@@ -80,7 +80,7 @@ class AppTheme {
         border: Border.all(color: surfaceBorder, width: 1.0),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.4),
+            color: Colors.black.withValues(alpha: 0.4),
             blurRadius: 24,
             offset: const Offset(0, 8),
           ),
@@ -89,12 +89,12 @@ class AppTheme {
 
   // ── GLASSMORPHISM CARD ──────────────────────────────────────────────────────
   static BoxDecoration get glassDecoration => BoxDecoration(
-        color: const Color(0xFF080C14).withOpacity(0.85),
+        color: const Color(0xFF080C14).withValues(alpha: 0.85),
         borderRadius: BorderRadius.circular(radiusLG),
         border: Border.all(color: const Color(0xFF1A2640), width: 1.0),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF006EE6).withOpacity(0.08),
+            color: const Color(0xFF006EE6).withValues(alpha: 0.08),
             blurRadius: 32,
             offset: const Offset(0, 8),
           ),
@@ -116,7 +116,7 @@ class AppTheme {
         shadowColor: primaryGlow,
       ).copyWith(
         overlayColor: WidgetStateProperty.all(
-          primaryLight.withOpacity(0.15),
+          primaryLight.withValues(alpha: 0.15),
         ),
       );
 

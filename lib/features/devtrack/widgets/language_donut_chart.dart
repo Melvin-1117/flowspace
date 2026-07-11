@@ -1,4 +1,4 @@
-import 'package:fl_chart/fl_chart.dart';
+﻿import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -39,7 +39,7 @@ class _LanguageDonutChartState extends ConsumerState<LanguageDonutChart> {
     }
     // Generate a deterministic color based on hashcode
     final hash = language.hashCode;
-    return Color(0xFF000000 | (hash & 0xFFFFFF)).withOpacity(0.9);
+    return Color(0xFF000000 | (hash & 0xFFFFFF)).withValues(alpha: 0.9);
   }
 
   @override

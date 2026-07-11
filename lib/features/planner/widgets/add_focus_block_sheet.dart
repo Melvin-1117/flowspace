@@ -64,7 +64,7 @@ class _AddFocusBlockSheetState extends State<AddFocusBlockSheet> {
                 ),
                 const SizedBox(height: 12),
                 DropdownButtonFormField<String?>(
-                  value: _subjectId,
+                  initialValue: _subjectId,
                   decoration: const InputDecoration(
                     labelText: 'Linked Subject',
                   ),
@@ -84,7 +84,7 @@ class _AddFocusBlockSheetState extends State<AddFocusBlockSheet> {
                 ),
                 const SizedBox(height: 12),
                 DropdownButtonFormField<String>(
-                  value: _sessionType,
+                  initialValue: _sessionType,
                   decoration: const InputDecoration(labelText: 'Session Type'),
                   items: const [
                     DropdownMenuItem(
@@ -137,7 +137,7 @@ class _AddFocusBlockSheetState extends State<AddFocusBlockSheet> {
                 ),
                 const SizedBox(height: 12),
                 DropdownButtonFormField<String>(
-                  value: _repeatRule,
+                  initialValue: _repeatRule,
                   decoration: const InputDecoration(labelText: 'Repeat'),
                   items: const [
                     DropdownMenuItem(value: 'none', child: Text('None')),

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -115,7 +115,7 @@ class WeeklyVelocitySnapshot extends ConsumerWidget {
                           ),
                     ),
                     Text(
-                      'View Analytics →',
+                      'View Analytics â†’',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             color: AppTheme.primary,
                             fontWeight: FontWeight.w600,
@@ -145,7 +145,7 @@ class _ChangeBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.15),
+        color: color.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(6),
       ),
       child: Text(

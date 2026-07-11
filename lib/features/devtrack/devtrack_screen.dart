@@ -82,9 +82,9 @@ class DevTrackScreen extends ConsumerWidget {
             builder: (context) => const LogSessionSheet(),
           );
         },
-        label: Text(
+        label: const Text(
           'Log Session',
-          style: const TextStyle(
+          style: TextStyle(
             fontWeight: FontWeight.w700,
             color: Colors.white,
           ),

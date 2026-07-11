@@ -100,7 +100,7 @@ class _AddMilestoneSheetState extends State<AddMilestoneSheet> {
                 ),
                 const SizedBox(height: 12),
                 DropdownButtonFormField<String?>(
-                  value: _subjectId,
+                  initialValue: _subjectId,
                   decoration: const InputDecoration(
                     labelText: 'Linked Subject',
                   ),

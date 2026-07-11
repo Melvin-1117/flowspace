@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../app/theme.dart';
 import '../../pomodoro/providers/pomodoro_providers.dart';
+import 'quick_note_sheet.dart';
 
 class QuickActionSheet extends ConsumerWidget {
   const QuickActionSheet({super.key});
@@ -63,13 +64,17 @@ class QuickActionSheet extends ConsumerWidget {
           const SizedBox(height: 8),
 
           _QuickActionTile(
-            icon: Icons.note_add_rounded,
-            label: 'Add Note',
-            color: AppTheme.textSecondary,
+            icon: Icons.book_rounded,
+            label: 'Add Journal Entry',
+            color: AppTheme.accent,
             onTap: () {
               Navigator.pop(context);
-              // Notes feature not yet routed — navigate to planner
-              context.go('/planner');
+              showModalBottomSheet<void>(
+                context: context,
+                isScrollControlled: true,
+                backgroundColor: Colors.transparent,
+                builder: (_) => const QuickNoteSheet(),
+              );
             },
           ),
           const SizedBox(height: 8),
@@ -110,9 +115,9 @@ class _QuickActionTile extends StatelessWidget {
         width: double.infinity,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         decoration: BoxDecoration(
-          color: color.withOpacity(0.08),
+          color: color.withValues(alpha: 0.08),
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: color.withOpacity(0.15)),
+          border: Border.all(color: color.withValues(alpha: 0.15)),
         ),
         child: Row(
           children: [
@@ -126,7 +131,7 @@ class _QuickActionTile extends StatelessWidget {
                   ),
             ),
             const Spacer(),
-            Icon(Icons.chevron_right_rounded,
+            const Icon(Icons.chevron_right_rounded,
                 color: AppTheme.textMuted, size: 20),
           ],
         ),

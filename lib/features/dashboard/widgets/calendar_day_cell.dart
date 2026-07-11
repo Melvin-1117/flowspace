@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../core/providers/calendar_providers.dart';
 import '../../../app/theme.dart';
+import '../../../core/utils/formatters.dart';
 
 class CalendarDayCell extends ConsumerWidget {
   final DateTime day;
@@ -85,12 +86,12 @@ class CalendarDayCell extends ConsumerWidget {
     // Determine circular styling priority
     BoxDecoration? circularDeco;
     if (isSelected) {
-      circularDeco = BoxDecoration(
+      circularDeco = const BoxDecoration(
         color: AppTheme.accent, // Cyan for selected
         shape: BoxShape.circle,
       );
     } else if (isToday) {
-      circularDeco = BoxDecoration(
+      circularDeco = const BoxDecoration(
         color: AppTheme.primary, // Purple for today
         shape: BoxShape.circle,
       );
@@ -177,9 +178,5 @@ class CalendarDayCell extends ConsumerWidget {
         ],
       ),
     );
-  }
-
-  bool isSameDay(DateTime a, DateTime b) {
-    return a.year == b.year && a.month == b.month && a.day == b.day;
   }
 }

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../app/theme.dart';
@@ -49,7 +49,7 @@ class SkillCard extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: AppTheme.primarySubtle,
                     borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: AppTheme.primary.withOpacity(0.3)),
+                    border: Border.all(color: AppTheme.primary.withValues(alpha: 0.3)),
                   ),
                   child: Text(
                     skill.category.toUpperCase(),

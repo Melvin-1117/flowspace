@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../features/pomodoro/providers/pomodoro_providers.dart'
     hide formattedTimeProvider, remainingSecondsProvider;
 import '../models/pomodoro_session.dart';
+import '../utils/formatters.dart';
 
 // Compatibility provider for existing dashboard/task widgets.
 final activeSessionProvider = Provider<PomodoroSession?>((ref) {
@@ -37,9 +38,7 @@ final remainingSecondsProviderFromPomodoro = Provider<int>((ref) {
 
 final formattedTimeProvider = Provider<String>((ref) {
   final seconds = ref.watch(remainingSecondsProviderFromPomodoro);
-  final minutes = seconds ~/ 60;
-  final secs = seconds % 60;
-  return '${minutes.toString().padLeft(2, '0')}:${secs.toString().padLeft(2, '0')}';
+  return formatMMSS(seconds);
 });
 
 class SessionTimerNotifier extends Notifier<void> {

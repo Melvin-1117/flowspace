@@ -75,7 +75,7 @@ class ForegroundTimerService {
         priority: NotificationPriority.HIGH,
         onlyAlertOnce: true,
       ),
-      iosNotificationOptions: IOSNotificationOptions(
+      iosNotificationOptions: const IOSNotificationOptions(
         showNotification: true,
         playSound: false,
       ),

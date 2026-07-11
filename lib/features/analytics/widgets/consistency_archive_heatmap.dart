@@ -182,7 +182,7 @@ class ConsistencyArchiveHeatmap extends ConsumerWidget {
           backgroundColor: AppTheme.surfaceElevated,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
-            side: BorderSide(color: AppTheme.surfaceBorder),
+            side: const BorderSide(color: AppTheme.surfaceBorder),
           ),
           title: Text(
             DateFormat('EEE, MMM d').format(day.date),

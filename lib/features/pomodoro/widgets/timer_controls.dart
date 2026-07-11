@@ -10,14 +10,20 @@ class TimerControls extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final timerState = ref.watch(timerNotifierProvider);
-    final isRunning = timerState.isRunning;
+    // .select() — only rebuild when isRunning, sessionType, or trialsUsed
+    // changes. Prevents rebuilds on every 1-second remainingSeconds tick.
+    final isRunning = ref.watch(
+      timerNotifierProvider.select((s) => s.isRunning),
+    );
+    final isLocked = ref.watch(
+      timerNotifierProvider.select(
+        (s) =>
+            s.sessionType == SessionType.focus &&
+            s.trialsRemaining <= 0 &&
+            s.isRunning,
+      ),
+    );
     final notifier = ref.read(timerNotifierProvider.notifier);
-
-    // Locked when running a focus session with 0 trials remaining
-    final isLocked = timerState.sessionType == SessionType.focus &&
-        timerState.trialsRemaining <= 0 &&
-        isRunning;
 
     return Row(
       mainAxisSize: MainAxisSize.min,

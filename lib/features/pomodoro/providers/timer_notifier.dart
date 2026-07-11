@@ -18,6 +18,7 @@ import '../../../core/services/foreground_timer_service.dart';
 import '../../../core/services/notification_service.dart';
 import '../../tasks/providers/task_providers.dart';
 import '../../planner/providers/planner_providers.dart';
+import '../services/alarm_service.dart';
 import 'pomodoro_providers.dart';
 import 'pomodoro_web_store.dart';
 import '../../../core/utils/formatters.dart';
@@ -493,6 +494,9 @@ class TimerNotifier extends Notifier<TimerState> {
       for (var i = 0; i < 3; i++) {
         await HapticFeedback.heavyImpact();
       }
+      // Trigger alarm: start looping alarm sound and show full-screen overlay.
+      await ref.read(alarmServiceProvider).startAlarm();
+      ref.read(alarmOverlayVisibleProvider.notifier).state = true;
     }
 
     await ForegroundTimerService.stop();
@@ -813,7 +817,7 @@ class TimerNotifier extends Notifier<TimerState> {
         .length;
   }
 
-  String _mmss(int totalSeconds) => formatDurationMmSs(totalSeconds);
+  String _mmss(int totalSeconds) => formatMMSS(totalSeconds);
 }
 
 extension on Iterable<Task> {

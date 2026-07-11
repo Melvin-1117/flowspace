@@ -177,7 +177,7 @@ class UserProfileSheet extends ConsumerWidget {
                           color: AppTheme.primarySubtle,
                           borderRadius: BorderRadius.circular(16),
                           border: Border.all(
-                            color: AppTheme.primary.withOpacity(0.3),
+                            color: AppTheme.primary.withValues(alpha: 0.3),
                           ),
                         ),
                         child: Text(
@@ -204,7 +204,7 @@ class UserProfileSheet extends ConsumerWidget {
                     color: AppTheme.primarySubtle,
                     borderRadius: BorderRadius.circular(AppTheme.radiusSM),
                     border: Border.all(
-                      color: AppTheme.primary.withOpacity(0.2),
+                      color: AppTheme.primary.withValues(alpha: 0.2),
                     ),
                   ),
                   child: Row(
@@ -414,7 +414,7 @@ class _EditProfileSheetState extends ConsumerState<_EditProfileSheet> {
                         ),
                         boxShadow: isSelected
                             ? [
-                                BoxShadow(
+                                const BoxShadow(
                                   color: AppTheme.primaryGlow,
                                   blurRadius: 8,
                                   spreadRadius: 1,
@@ -632,9 +632,9 @@ class _ProfileShimmer extends StatelessWidget {
             ),
           ),
           const SizedBox(height: AppTheme.spaceLG),
-          Row(
+          const Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: const [
+            children: [
               _ShimmerStat(),
               _StatDivider(),
               _ShimmerStat(),

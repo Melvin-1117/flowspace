@@ -11,9 +11,9 @@ class DevTrackSnapshotCard extends ConsumerWidget {
 
   Color _getCellColor(int minutes) {
     if (minutes == 0) return AppTheme.surfaceElevated;
-    if (minutes <= 30) return AppTheme.primary.withOpacity(0.25);
-    if (minutes <= 90) return AppTheme.primary.withOpacity(0.5);
-    if (minutes <= 180) return AppTheme.primary.withOpacity(0.75);
+    if (minutes <= 30) return AppTheme.primary.withValues(alpha: 0.25);
+    if (minutes <= 90) return AppTheme.primary.withValues(alpha: 0.5);
+    if (minutes <= 180) return AppTheme.primary.withValues(alpha: 0.75);
     return AppTheme.primary;
   }
 
@@ -23,6 +23,26 @@ class DevTrackSnapshotCard extends ConsumerWidget {
     final todaySessionsAsync = ref.watch(todayCodingSessionsProvider);
     final streakAsync = ref.watch(codingStreakProvider);
     final projectsAsync = ref.watch(activeProjectsProvider);
+
+    // Show empty state when there is genuinely no devtrack data yet
+    final heatmapEmpty = heatmapAsync.valueOrNull?.isEmpty ?? true;
+    final sessionsEmpty =
+        todaySessionsAsync.valueOrNull?.isEmpty ?? true;
+    final streakZero = (streakAsync.valueOrNull ?? 0) == 0;
+    final projectsEmpty = projectsAsync.valueOrNull?.isEmpty ?? true;
+
+    final isLoading = heatmapAsync.isLoading ||
+        todaySessionsAsync.isLoading ||
+        streakAsync.isLoading ||
+        projectsAsync.isLoading;
+
+    if (!isLoading &&
+        heatmapEmpty &&
+        sessionsEmpty &&
+        streakZero &&
+        projectsEmpty) {
+      return _DevTrackEmptyState(onTap: () => context.go('/devtrack'));
+    }
 
     return Container(
       decoration: AppTheme.cardDecoration,
@@ -250,6 +270,99 @@ class DevTrackSnapshotCard extends ConsumerWidget {
                 ),
               ),
             ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ── Empty state shown when no devtrack data exists yet ─────────────────────
+class _DevTrackEmptyState extends StatelessWidget {
+  const _DevTrackEmptyState({required this.onTap});
+
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: AppTheme.cardDecoration,
+      padding: const EdgeInsets.all(AppTheme.spaceMD),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'DEVTRACK SNAPSHOT',
+            style: GoogleFonts.spaceGrotesk(
+              fontSize: 11,
+              fontWeight: FontWeight.w600,
+              color: AppTheme.textSecondary,
+              letterSpacing: 1.2,
+            ),
+          ),
+          const SizedBox(height: 20),
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: AppTheme.primary.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: const Icon(
+                  Icons.developer_board_rounded,
+                  color: AppTheme.primary,
+                  size: 28,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Log your first coding session',
+                      style: GoogleFonts.spaceGrotesk(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: AppTheme.textPrimary,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'Track time, projects, and your coding streak',
+                      style: GoogleFonts.spaceGrotesk(
+                        fontSize: 12,
+                        color: AppTheme.textSecondary,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          GestureDetector(
+            onTap: onTap,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'View DevTrack',
+                  style: GoogleFonts.spaceGrotesk(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                    color: AppTheme.primaryLight,
+                  ),
+                ),
+                const SizedBox(width: 4),
+                const Icon(
+                  Icons.arrow_forward_ios_rounded,
+                  size: 11,
+                  color: AppTheme.primaryLight,
+                ),
+              ],
+            ),
           ),
         ],
       ),

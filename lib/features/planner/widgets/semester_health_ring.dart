@@ -49,7 +49,8 @@ class SemesterHealthRing extends StatelessWidget {
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  SizedBox(
+                  // Track ring (const — static value=1)
+                  const SizedBox(
                     width: 160,
                     height: 160,
                     child: CircularProgressIndicator(
@@ -58,6 +59,7 @@ class SemesterHealthRing extends StatelessWidget {
                       color: AppTheme.surfaceElevated,
                     ),
                   ),
+                  // Progress ring (non-const — ratio is computed at runtime)
                   SizedBox(
                     width: 160,
                     height: 160,
