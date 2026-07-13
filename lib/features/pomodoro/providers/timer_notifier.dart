@@ -117,6 +117,9 @@ class TimerNotifier extends Notifier<TimerState> {
   bool _foregroundActionsRegistered = false;
   final AudioPlayer _sfxPlayer = AudioPlayer();
 
+  // ── Edge 2: Debounce guard for rapid play/pause taps ─────────────────
+  bool _isProcessingAction = false;
+
   @override
   TimerState build() {
     ref.onDispose(() {
@@ -222,6 +225,11 @@ class TimerNotifier extends Notifier<TimerState> {
 
   Future<void> start({String? linkedTaskId, String? linkedTaskTitle}) async {
     if (state.isRunning) return;
+
+    // ── HARDEN 5.3: Request notification permission on first start ────────
+    // Non-blocking: timer always starts regardless of permission result.
+    unawaited(NotificationService.requestPermissionIfNeeded());
+
     final now = DateTime.now();
     _activeSession ??= PomodoroSession()
       ..uuid = const Uuid().v4()
@@ -359,10 +367,20 @@ class TimerNotifier extends Notifier<TimerState> {
   }
 
   Future<void> togglePauseResume() async {
-    if (state.isRunning) {
-      await pause();
-    } else {
-      await resume();
+    // ── HARDEN 5.2 Edge 2: Debounce rapid tap (300 ms cooldown) ──────────
+    if (_isProcessingAction) return;
+    _isProcessingAction = true;
+    try {
+      if (state.isRunning) {
+        await pause();
+      } else {
+        await resume();
+      }
+    } finally {
+      Future.delayed(
+        const Duration(milliseconds: 300),
+        () => _isProcessingAction = false,
+      );
     }
   }
 
@@ -429,12 +447,15 @@ class TimerNotifier extends Notifier<TimerState> {
   Future<void> syncWithClock() async {
     if (!state.isRunning) return;
     final elapsed = elapsedSecondsAtNow();
-    final nextRemaining = math.max(0, state.totalDurationSeconds - elapsed);
+    // ── HARDEN 5.2 Edge 1: Clamp to valid range to survive system clock jumps
+    final maxDuration = state.totalDurationSeconds;
+    final rawRemaining = state.totalDurationSeconds - elapsed;
+    final nextRemaining = rawRemaining.clamp(0, maxDuration);
     state = state.copyWith(
       remainingSeconds: nextRemaining,
       lastTickAt: DateTime.now(),
     );
-    if (nextRemaining == 0) {
+    if (nextRemaining <= 0) {
       await complete();
       return;
     }
@@ -442,6 +463,9 @@ class TimerNotifier extends Notifier<TimerState> {
   }
 
   Future<void> complete({bool fromRestore = false}) async {
+    // ── HARDEN 5.2 Edge 3: Prevent double-trigger if alarm is already ringing
+    if (!fromRestore && ref.read(alarmOverlayVisibleProvider)) return;
+
     _ticker?.cancel();
     _runStartedAt = null;
 

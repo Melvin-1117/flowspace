@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../app/theme.dart';
+import '../../../core/widgets/error_card.dart';
 import '../providers/devtrack_providers.dart';
 import 'session_row.dart';
 
@@ -72,10 +73,11 @@ class RecentSessionsSection extends ConsumerWidget {
               child: CircularProgressIndicator(strokeWidth: 2),
             ),
           ),
-          error: (err, stack) => Center(
-            child: Text(
-              'Error loading recent sessions',
-              style: GoogleFonts.spaceGrotesk(color: AppTheme.danger),
+          error: (err, stack) => Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: ErrorCard(
+              message: 'Could not load recent sessions',
+              onRetry: () => ref.invalidate(allCodingSessionsProvider),
             ),
           ),
         ),

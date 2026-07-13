@@ -7,6 +7,7 @@ import '../providers/pomodoro_providers.dart';
 import '../../analytics/analytics_payload.dart';
 import 'session_history_item.dart';
 import '../../../app/theme.dart';
+import '../../../core/widgets/error_card.dart';
 
 class SessionHistoryCard extends ConsumerWidget {
   const SessionHistoryCard({super.key});
@@ -55,9 +56,9 @@ class SessionHistoryCard extends ConsumerWidget {
             },
             loading: () =>
                 const Center(child: CircularProgressIndicator(strokeWidth: 2)),
-            error: (_, __) => const Text(
-              'Could not load history',
-              style: TextStyle(color: AppTheme.textSecondary),
+            error: (_, __) => ErrorCard(
+              message: 'Could not load session history',
+              onRetry: () => ref.invalidate(todaySessionsProvider),
             ),
           ),
           const SizedBox(height: 14),

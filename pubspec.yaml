@@ -1,5 +1,5 @@
 name: flowspace
-description: "A new Flutter project."
+description: "Pomodoro timer, task board & dev tracker for CS students. Offline-first productivity with flip-to-pause, Disney Blue UI, and deep analytics."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -76,6 +76,8 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
+  flutter_launcher_icons: ^0.13.1
+  flutter_native_splash: ^2.4.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -91,6 +93,8 @@ flutter:
     - assets/audio/sfx/complete.mp3
     - assets/audio/sfx/alarm.mp3
     - assets/avatars/
+    - assets/icons/
+    - assets/store/
 
   # To add assets to your application, add an assets section, like this:
   # assets:
@@ -122,3 +126,26 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+# ── flutter_launcher_icons config ────────────────────────────────────────────
+flutter_launcher_icons:
+  android: true
+  ios: false
+  image_path: "assets/icons/app_icon.png"
+  adaptive_icon_background: "#006EE6"
+  adaptive_icon_foreground: "assets/icons/app_icon_fg.png"
+  min_sdk_android: 21
+  web:
+    generate: false
+
+# ── flutter_native_splash config ─────────────────────────────────────────────
+flutter_native_splash:
+  color: "#000000"
+  image: assets/icons/splash_logo.png
+  android_12:
+    color: "#000000"
+    image: assets/icons/splash_logo.png
+    icon_background_color: "#006EE6"
+  fullscreen: true
+  android: true
+  ios: false

@@ -4,6 +4,7 @@ import 'package:isar/isar.dart';
 
 import '../../core/models/pomodoro_session.dart';
 import '../../core/providers/isar_provider.dart';
+import '../../core/widgets/error_card.dart';
 import 'providers/planner_providers.dart';
 import 'widgets/add_subject_sheet.dart';
 import '../../app/theme.dart';
@@ -24,7 +25,15 @@ class SubjectDetailScreen extends ConsumerWidget {
       ),
       body: subjects.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (_, __) => const Center(child: Text('Failed to load subject')),
+        error: (_, __) => Center(
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: ErrorCard(
+              message: 'Failed to load subject',
+              onRetry: () => ref.invalidate(allSubjectsProvider),
+            ),
+          ),
+        ),
         data: (items) {
           final subject = items.where((s) => s.uuid == subjectId).firstOrNull;
           if (subject == null) {
@@ -79,7 +88,10 @@ class SubjectDetailScreen extends ConsumerWidget {
               const SizedBox(height: 12),
               sessionsAsync.when(
                 loading: () => const CircularProgressIndicator(),
-                error: (_, __) => const Text('Failed to load session data'),
+                error: (_, __) => ErrorCard(
+                  message: 'Failed to load session data',
+                  onRetry: () => ref.invalidate(_subjectSessionsProvider(subjectId)),
+                ),
                 data: (sessions) => Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
@@ -14,6 +16,40 @@ class NotificationService {
     const settings = InitializationSettings(android: android);
     await _plugin.initialize(settings);
     _initialized = true;
+  }
+
+  /// Requests notification permission on first use.
+  ///
+  /// Android 13+ (API 33): uses the built-in flutter_local_notifications
+  /// permission request — no permission_handler package needed.
+  /// iOS: requests alert + sound + badge via the plugin.
+  ///
+  /// Returns [true] if permission was granted. The caller should
+  /// never block the timer on a denial.
+  static Future<bool> requestPermissionIfNeeded() async {
+    if (kIsWeb) return true;
+    if (Platform.isAndroid) {
+      final androidPlugin = _plugin
+          .resolvePlatformSpecificImplementation<
+              AndroidFlutterLocalNotificationsPlugin>();
+      if (androidPlugin == null) return true;
+      final granted =
+          await androidPlugin.requestNotificationsPermission() ?? false;
+      return granted;
+    }
+    if (Platform.isIOS) {
+      final iosPlugin = _plugin
+          .resolvePlatformSpecificImplementation<
+              IOSFlutterLocalNotificationsPlugin>();
+      if (iosPlugin == null) return true;
+      final granted = await iosPlugin.requestPermissions(
+        alert: true,
+        sound: true,
+        badge: true,
+      );
+      return granted ?? false;
+    }
+    return true;
   }
 
   static Future<void> showSessionComplete(String body) async {

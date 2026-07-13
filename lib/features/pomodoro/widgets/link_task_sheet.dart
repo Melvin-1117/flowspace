@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../app/theme.dart';
+import '../../../core/widgets/error_card.dart';
 import '../../planner/providers/planner_providers.dart';
 import '../../tasks/providers/task_providers.dart';
 import '../providers/pomodoro_providers.dart';
@@ -63,7 +64,10 @@ class LinkTaskSheet extends ConsumerWidget {
                   // Focus Blocks Tab
                   focusBlocksAsync.when(
                     loading: () => const Center(child: CircularProgressIndicator()),
-                    error: (err, _) => Center(child: Text('Error loading blocks: $err')),
+                    error: (err, _) => ErrorCard(
+                      message: 'Could not load focus blocks',
+                      onRetry: () => ref.invalidate(todayFocusBlocksProvider),
+                    ),
                     data: (blocks) {
                       final pending = blocks.where((b) => !b.isCompleted).toList();
                       if (pending.isEmpty) {
@@ -104,7 +108,10 @@ class LinkTaskSheet extends ConsumerWidget {
                   // Subjects Tab
                   subjectsAsync.when(
                     loading: () => const Center(child: CircularProgressIndicator()),
-                    error: (err, _) => Center(child: Text('Error loading subjects: $err')),
+                    error: (err, _) => ErrorCard(
+                      message: 'Could not load subjects',
+                      onRetry: () => ref.invalidate(allSubjectsProvider),
+                    ),
                     data: (subjects) {
                       if (subjects.isEmpty) {
                         return const _EmptyListPlaceholder(
@@ -144,7 +151,10 @@ class LinkTaskSheet extends ConsumerWidget {
                   // Tasks Tab
                   tasksAsync.when(
                     loading: () => const Center(child: CircularProgressIndicator()),
-                    error: (err, _) => Center(child: Text('Error loading tasks: $err')),
+                    error: (err, _) => ErrorCard(
+                      message: 'Could not load tasks',
+                      onRetry: () => ref.invalidate(allTasksProvider),
+                    ),
                     data: (tasks) {
                       final pendingTasks = tasks.where((t) => t.status != 'done').toList();
                       if (pendingTasks.isEmpty) {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/widgets/error_card.dart';
 import '../../widgets/app_drawer.dart';
 import 'providers/planner_providers.dart';
 import 'widgets/subject_mastery_card.dart';
@@ -34,7 +35,15 @@ class _SubjectListScreenState extends ConsumerState<SubjectListScreen> {
       ),
       body: subjects.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (_, __) => const Center(child: Text('Failed to load subjects')),
+        error: (_, __) => Center(
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: ErrorCard(
+              message: 'Failed to load subjects',
+              onRetry: () => ref.invalidate(allSubjectsProvider),
+            ),
+          ),
+        ),
         data: (items) {
           if (items.isEmpty) {
             return const Center(

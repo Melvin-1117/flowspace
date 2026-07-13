@@ -31,6 +31,12 @@ class _AddFocusBlockSheetState extends State<AddFocusBlockSheet> {
   int _reminderMinutes = 15;
 
   @override
+  void dispose() {
+    _titleController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Padding(

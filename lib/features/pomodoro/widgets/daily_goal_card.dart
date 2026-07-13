@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 
 import '../providers/pomodoro_providers.dart';
 import '../../../app/theme.dart';
+import '../../../core/widgets/error_card.dart';
 
 class DailyGoalCard extends ConsumerWidget {
   const DailyGoalCard({super.key});
@@ -98,9 +99,9 @@ class DailyGoalCard extends ConsumerWidget {
             height: 40,
             child: Center(child: CircularProgressIndicator(strokeWidth: 2)),
           ),
-          error: (_, __) => const Text(
-            'Daily goal unavailable',
-            style: TextStyle(color: AppTheme.textSecondary),
+          error: (_, __) => ErrorCard(
+            message: 'Daily goal unavailable',
+            onRetry: () => ref.invalidate(dailyGoalProvider),
           ),
         ),
       ),

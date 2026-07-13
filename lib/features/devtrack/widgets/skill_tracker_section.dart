@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../app/theme.dart';
+import '../../../core/widgets/error_card.dart';
 import '../providers/devtrack_providers.dart';
 import 'add_skill_sheet.dart';
 import 'skill_card.dart';
@@ -100,10 +101,11 @@ class SkillTrackerSection extends ConsumerWidget {
               child: CircularProgressIndicator(strokeWidth: 2),
             ),
           ),
-          error: (err, stack) => Center(
-            child: Text(
-              'Error loading skills',
-              style: GoogleFonts.spaceGrotesk(color: AppTheme.danger),
+          error: (err, stack) => Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: ErrorCard(
+              message: 'Could not load skills',
+              onRetry: () => ref.invalidate(allSkillsProvider),
             ),
           ),
         ),
