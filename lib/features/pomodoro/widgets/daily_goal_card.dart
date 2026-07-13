@@ -1,6 +1,8 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 import '../providers/pomodoro_providers.dart';
@@ -12,98 +14,138 @@ class DailyGoalCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final goalProgress = ref.watch(dailyGoalProvider);
-    return _sectionCard(
-      child: InkWell(
-        onTap: () => _showGoalSheet(context, ref),
-        borderRadius: BorderRadius.circular(12),
-        child: goalProgress.when(
-          data: (progress) {
-            final color = progress.isReached
-                ? AppTheme.success
-                : AppTheme.primary;
-            return Row(
-              children: [
-                SizedBox(
-                  width: 40,
-                  height: 40,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      CircularProgressIndicator(
-                        value: progress.percent,
-                        strokeWidth: 4,
-                        backgroundColor: AppTheme.surfaceElevated,
-                        valueColor: AlwaysStoppedAnimation<Color>(color),
-                      ),
-                      Text(
-                        '${progress.completedSessions}/${progress.goalSessions}',
-                        style: const TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ],
-                  ),
+    final settingsAsync = ref.watch(focusGoalSettingsProvider);
+    final sessionsAsync = ref.watch(todaySessionsProvider);
+
+    return settingsAsync.when(
+      data: (settings) => sessionsAsync.when(
+        data: (sessions) {
+          final completed = sessions
+              .where((s) => s.isCompleted && s.sessionType == 'focus')
+              .length;
+          final goal = settings.dailySessionGoal;
+          final percent = (completed / goal).clamp(0.0, 1.0);
+          final isGoalMet = completed >= goal;
+
+          return GestureDetector(
+            onTap: () => _showGoalSheet(context, ref),
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 24),
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: AppTheme.surfaceCard,
+                borderRadius: BorderRadius.circular(14),
+                border: Border.all(
+                  color: isGoalMet
+                      ? AppTheme.success.withValues(alpha: 0.4)
+                      : AppTheme.surfaceBorder,
                 ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+              ),
+              child: Column(
+                children: [
+                  Row(
                     children: [
-                      const Text(
-                        'DAILY FOCUS GOAL',
-                        style: TextStyle(
-                          color: AppTheme.textSecondary,
-                          fontSize: 11,
-                          letterSpacing: 1.3,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      const SizedBox(height: 2),
-                      Row(
-                        children: [
-                          Text(
-                            progress.isReached
-                                ? 'Goal Reached! 🎉'
-                                : '${progress.percentValue}% Complete',
-                            style: const TextStyle(
-                              color: AppTheme.textPrimary,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
+                      // Mini ring
+                      SizedBox(
+                        width: 48,
+                        height: 48,
+                        child: CustomPaint(
+                          painter: GoalRingPainter(
+                            progress: percent,
+                            color: isGoalMet ? AppTheme.success : AppTheme.primary,
+                          ),
+                          child: Center(
+                            child: Text(
+                              '$completed/$goal',
+                              style: GoogleFonts.spaceGrotesk(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w700,
+                                color: isGoalMet ? AppTheme.success : AppTheme.primary,
+                              ),
                             ),
                           ),
-                          if (progress.isReached) ...[
-                            const SizedBox(width: 8),
-                            const Icon(
-                                  Icons.celebration,
-                                  color: AppTheme.success,
-                                  size: 18,
-                                )
-                                .animate(onPlay: (c) => c.repeat(reverse: true))
-                                .scale(
-                                  begin: const Offset(0.9, 0.9),
-                                  end: const Offset(1.1, 1.1),
-                                  duration: 900.ms,
-                                ),
+                        ),
+                      ),
+
+                      const SizedBox(width: 12),
+
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'DAILY FOCUS GOAL',
+                              style: GoogleFonts.spaceGrotesk(
+                                fontSize: 10,
+                                fontWeight: FontWeight.w700,
+                                color: AppTheme.textSecondary,
+                                letterSpacing: 1.0,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              isGoalMet
+                                  ? 'Goal Reached! 🎯'
+                                  : '${(percent * 100).round()}% Complete',
+                              style: GoogleFonts.spaceGrotesk(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: isGoalMet ? AppTheme.success : AppTheme.textPrimary,
+                              ),
+                            ),
                           ],
-                        ],
+                        ),
+                      ),
+
+                      const Icon(
+                        Icons.chevron_right_rounded,
+                        color: AppTheme.textMuted,
+                        size: 20,
                       ),
                     ],
                   ),
-                ),
-              ],
-            );
-          },
-          loading: () => const SizedBox(
-            height: 40,
-            child: Center(child: CircularProgressIndicator(strokeWidth: 2)),
-          ),
-          error: (_, __) => ErrorCard(
-            message: 'Daily goal unavailable',
-            onRetry: () => ref.invalidate(dailyGoalProvider),
-          ),
+
+                  const SizedBox(height: 12),
+
+                  // Session dots row (visual progress)
+                  Row(
+                    children: List.generate(goal, (i) {
+                      final isComplete = i < completed;
+                      return Expanded(
+                        child: Container(
+                          margin: EdgeInsets.only(right: i < goal - 1 ? 4 : 0),
+                          height: 4,
+                          decoration: BoxDecoration(
+                            color: isComplete
+                                ? (isGoalMet ? AppTheme.success : AppTheme.primary)
+                                : AppTheme.surfaceBorder,
+                            borderRadius: BorderRadius.circular(2),
+                          ),
+                        ),
+                      );
+                    }),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+        loading: () => const SizedBox(
+          height: 90,
+          child: Center(child: CircularProgressIndicator(strokeWidth: 2)),
         ),
+        error: (err, _) => ErrorCard(
+          message: 'Could not load sessions',
+          onRetry: () => ref.invalidate(todaySessionsProvider),
+        ),
+      ),
+      loading: () => const SizedBox(
+        height: 90,
+        child: Center(child: CircularProgressIndicator(strokeWidth: 2)),
+      ),
+      error: (err, _) => ErrorCard(
+        message: 'Could not load goal settings',
+        onRetry: () => ref.invalidate(focusGoalSettingsProvider),
       ),
     );
   }
@@ -119,91 +161,70 @@ class DailyGoalCard extends ConsumerWidget {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
-      builder: (_) {
+      builder: (context) {
         return StatefulBuilder(
-          builder: (context, setState) {
-            final todayProgress = ref.watch(dailyGoalProvider);
+          builder: (context, setModalState) {
             final weekly = ref.watch(weeklyHeatmapProvider);
             final streak = ref.watch(goalStreakProvider);
             final bestStreak = ref.watch(bestGoalStreakProvider);
 
-            return Padding(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
-              child: SingleChildScrollView(
+            return SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(24),
                 child: Column(
-                  mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Text(
-                      'Daily Focus Goal',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+                    // Header
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'DAILY FOCUS GOAL',
+                          style: GoogleFonts.spaceGrotesk(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                            color: AppTheme.textSecondary,
+                            letterSpacing: 1.6,
+                          ),
+                        ),
+                        Text(
+                          '${sliderValue.round()} sessions',
+                          style: GoogleFonts.spaceGrotesk(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                            color: AppTheme.primary,
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 16),
 
-                    // Row 1: Goal setting slider
-                    Text(
-                      '${sliderValue.round()} sessions',
-                      style: const TextStyle(
-                        color: AppTheme.textPrimary,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
+                    // Slider
                     Slider(
                       value: sliderValue,
                       min: 1,
                       max: 12,
                       divisions: 11,
-                      onChanged: (value) => setState(() => sliderValue = value),
+                      activeColor: AppTheme.primary,
+                      inactiveColor: AppTheme.surfaceBorder,
+                      onChanged: (val) {
+                        setModalState(() => sliderValue = val);
+                      },
+                    ),
+                    const SizedBox(height: 24),
+
+                    // Weekly Heatmap
+                    Text(
+                      'WEEKLY HEATMAP',
+                      style: GoogleFonts.spaceGrotesk(
+                        fontSize: 10,
+                        fontWeight: FontWeight.w700,
+                        color: AppTheme.textSecondary,
+                        letterSpacing: 1.2,
+                      ),
                     ),
                     const SizedBox(height: 12),
-
-                    // Row 2: Today's progress ring + text
-                    todayProgress.when(
-                      data: (progress) => Row(
-                        children: [
-                          SizedBox(
-                            width: 52,
-                            height: 52,
-                            child: Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                CircularProgressIndicator(
-                                  value: progress.percent,
-                                  strokeWidth: 4,
-                                  backgroundColor: AppTheme.surfaceElevated,
-                                  valueColor: const AlwaysStoppedAnimation<Color>(
-                                    AppTheme.primary,
-                                  ),
-                                ),
-                                Text(
-                                  '${progress.completedSessions}',
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Text(
-                            '${progress.completedSessions} of ${sliderValue.round()} sessions',
-                            style: const TextStyle(color: AppTheme.textPrimary),
-                          ),
-                        ],
-                      ),
-                      loading: () =>
-                          const CircularProgressIndicator(strokeWidth: 2),
-                      error: (_, __) =>
-                          const Text('Progress unavailable'),
-                    ),
-                    const SizedBox(height: 16),
-
-                    // Row 3: Weekly heatmap
-                    const Text(
-                      'Weekly heatmap',
-                      style: TextStyle(color: AppTheme.textSecondary, fontSize: 12),
-                    ),
-                    const SizedBox(height: 8),
                     weekly.when(
                       data: (days) => Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -219,10 +240,10 @@ class DailyGoalCard extends ConsumerWidget {
                                   color: heatmapCellColor(day),
                                 ),
                               ),
-                              const SizedBox(height: 4),
+                              const SizedBox(height: 6),
                               Text(
                                 label,
-                                style: const TextStyle(
+                                style: GoogleFonts.spaceGrotesk(
                                   color: AppTheme.textSecondary,
                                   fontSize: 10,
                                 ),
@@ -231,66 +252,95 @@ class DailyGoalCard extends ConsumerWidget {
                           );
                         }).toList(),
                       ),
-                      loading: () =>
-                          const CircularProgressIndicator(strokeWidth: 2),
+                      loading: () => const Center(
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      ),
                       error: (_, __) => const Text('Heatmap unavailable'),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 24),
 
-                    // Row 4: current streak
-                    streak.when(
-                      data: (value) => Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 8,
+                    // Streaks
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        streak.when(
+                          data: (val) => Row(
+                            children: [
+                              const Icon(Icons.local_fire_department_rounded,
+                                  color: AppTheme.warning, size: 20),
+                              const SizedBox(width: 6),
+                              Text(
+                                '$val day streak',
+                                style: GoogleFonts.spaceGrotesk(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppTheme.textPrimary,
+                                ),
+                              ),
+                            ],
+                          ),
+                          loading: () => const SizedBox.shrink(),
+                          error: (_, __) => const SizedBox.shrink(),
                         ),
-                        decoration: BoxDecoration(
-                          color: AppTheme.surfaceCard,
-                          borderRadius: BorderRadius.circular(8),
+                        bestStreak.when(
+                          data: (val) => Text(
+                            'Best: $val days',
+                            style: GoogleFonts.spaceGrotesk(
+                              fontSize: 12,
+                              color: AppTheme.textSecondary,
+                            ),
+                          ),
+                          loading: () => const SizedBox.shrink(),
+                          error: (_, __) => const SizedBox.shrink(),
                         ),
-                        child: Text(
-                          '🔥 $value day streak',
-                          style: const TextStyle(color: AppTheme.textPrimary),
-                        ),
-                      ),
-                      loading: () =>
-                          const CircularProgressIndicator(strokeWidth: 2),
-                      error: (_, __) => const Text('Streak unavailable'),
+                      ],
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 24),
 
-                    // Row 5: best streak
-                    bestStreak.when(
-                      data: (value) => Text(
-                        'Best streak: $value days',
-                        style: const TextStyle(color: AppTheme.textSecondary),
-                      ),
-                      loading: () => const SizedBox.shrink(),
-                      error: (_, __) => const SizedBox.shrink(),
-                    ),
-                    const SizedBox(height: 16),
-
-                    SizedBox(
-                      width: double.infinity,
-                      child: FilledButton(
-                        onPressed: () async {
-                          final existing =
-                              await ref.read(focusGoalSettingsProvider.future);
-                          existing.dailySessionGoal =
-                              sliderValue.round().clamp(1, 12);
-                          await ref
-                              .read(focusGoalSettingsUpdaterProvider.notifier)
-                              .updateSettings(existing);
-                          ref.invalidate(dailyGoalProvider);
-                          ref.invalidate(weeklyHeatmapProvider);
-                          ref.invalidate(goalStreakProvider);
-                          if (context.mounted) Navigator.pop(context);
-                        },
-                        style: FilledButton.styleFrom(
-                          backgroundColor: AppTheme.primary,
+                    // Action buttons
+                    Row(
+                      children: [
+                        Expanded(
+                          child: OutlinedButton(
+                            onPressed: () => Navigator.pop(context),
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor: AppTheme.textSecondary,
+                              side: const BorderSide(color: AppTheme.surfaceBorder),
+                              padding: const EdgeInsets.symmetric(vertical: 16),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                            child: const Text('Cancel'),
+                          ),
                         ),
-                        child: const Text('Save Goal'),
-                      ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: FilledButton(
+                            onPressed: () async {
+                              final existing = await ref
+                                  .read(focusGoalSettingsProvider.future);
+                              existing.dailySessionGoal =
+                                  sliderValue.round().clamp(1, 12);
+                              await ref
+                                  .read(focusGoalSettingsUpdaterProvider.notifier)
+                                  .updateSettings(existing);
+                              ref.invalidate(dailyGoalProvider);
+                              ref.invalidate(weeklyHeatmapProvider);
+                              ref.invalidate(goalStreakProvider);
+                              if (context.mounted) Navigator.pop(context);
+                            },
+                            style: FilledButton.styleFrom(
+                              backgroundColor: AppTheme.primary,
+                              padding: const EdgeInsets.symmetric(vertical: 16),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                            child: const Text('Save Goal'),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -303,15 +353,36 @@ class DailyGoalCard extends ConsumerWidget {
   }
 }
 
-Widget _sectionCard({required Widget child}) {
-  return Container(
-    width: double.infinity,
-    padding: const EdgeInsets.all(16),
-    decoration: BoxDecoration(
-      color: AppTheme.surfaceCard,
-      borderRadius: BorderRadius.circular(16),
-      border: Border.all(color: const Color(0x1AFFFFFF)),
-    ),
-    child: child,
-  );
+class GoalRingPainter extends CustomPainter {
+  GoalRingPainter({required this.progress, required this.color});
+
+  final double progress;
+  final Color color;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final center = Offset(size.width / 2, size.height / 2);
+    final radius = (size.width - 3) / 2;
+    final rect = Rect.fromCircle(center: center, radius: radius);
+
+    final trackPaint = Paint()
+      ..color = const Color(0xFF1A2640)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 3;
+    canvas.drawCircle(center, radius, trackPaint);
+
+    if (progress <= 0.001) return;
+
+    final progressPaint = Paint()
+      ..color = color
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 3
+      ..strokeCap = StrokeCap.round;
+    canvas.drawArc(rect, -math.pi / 2, 2 * math.pi * progress.clamp(0.0, 1.0),
+        false, progressPaint);
+  }
+
+  @override
+  bool shouldRepaint(covariant GoalRingPainter oldDelegate) =>
+      oldDelegate.progress != progress || oldDelegate.color != color;
 }

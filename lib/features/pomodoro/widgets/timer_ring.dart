@@ -1,8 +1,8 @@
-import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../providers/pomodoro_providers.dart';
 import 'timer_ring_painter.dart';
@@ -18,7 +18,6 @@ class TimerRing extends ConsumerStatefulWidget {
 class _TimerRingState extends ConsumerState<TimerRing>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
-  Timer? _overlayAutoDismiss;
 
   @override
   void initState() {
@@ -31,7 +30,6 @@ class _TimerRingState extends ConsumerState<TimerRing>
 
   @override
   void dispose() {
-    _overlayAutoDismiss?.cancel();
     _controller.dispose();
     super.dispose();
   }
@@ -39,7 +37,8 @@ class _TimerRingState extends ConsumerState<TimerRing>
   @override
   Widget build(BuildContext context) {
     final timerState = ref.watch(timerNotifierProvider);
-    final sessionColor = timerState.sessionType.color;
+    final sessionType = timerState.sessionType;
+    final sessionColor = sessionType.color;
 
     // Render smooth decay between one-second state commits.
     final drift = timerState.isRunning
@@ -62,69 +61,103 @@ class _TimerRingState extends ConsumerState<TimerRing>
 
     final minutes = (smoothRemaining ~/ 60).toString().padLeft(2, '0');
     final seconds = (smoothRemaining.toInt() % 60).toString().padLeft(2, '0');
+    final formattedTime = '$minutes:$seconds';
+    final progressPercent = (smoothProgress * 100).round();
 
-    if (timerState.completionOverlay != null) {
-      _overlayAutoDismiss ??= Timer(const Duration(seconds: 5), () {
-        ref.read(timerNotifierProvider.notifier).dismissCompletionOverlay();
-      });
-    } else {
-      _overlayAutoDismiss?.cancel();
-      _overlayAutoDismiss = null;
-    }
+    final sessionCount = ref.watch(sessionCountProvider);
+    final settings = ref.watch(focusGoalSettingsProvider).value;
+    final longBreakInterval = settings?.longBreakInterval ?? 4;
 
-    return SizedBox(
-      width: 300,
-      height: 300,
+    return Container(
+      width: 260,
+      height: 260,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        boxShadow: [
+          BoxShadow(
+            color: sessionColor.withValues(alpha: 0.12),
+            blurRadius: 60,
+            spreadRadius: 20,
+          ),
+        ],
+      ),
       child: Stack(
         alignment: Alignment.center,
         children: [
+          // Background track and progress ring in one painter
           CustomPaint(
-            size: const Size.square(300),
+            size: const Size(260, 260),
             painter: TimerRingPainter(
               progress: smoothProgress,
               sessionColor: sessionColor,
+              strokeWidth: 8,
             ),
           ),
+
+          // Center content
           Column(
-            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              // Session type label
               Text(
-                '$minutes:$seconds',
-                style: const TextStyle(
-                  color: AppTheme.textPrimary,
-                  fontSize: 52,
+                sessionType.label.toUpperCase(),
+                style: GoogleFonts.spaceGrotesk(
+                  fontSize: 11,
                   fontWeight: FontWeight.w700,
-                  fontFeatures: [FontFeature.tabularFigures()],
+                  color: AppTheme.textSecondary,
+                  letterSpacing: 1.2,
                 ),
               ),
-              if (timerState.linkedTaskTitle != null) ...[
-                const SizedBox(height: 8),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: Text(
-                    timerState.linkedTaskTitle!,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      color: AppTheme.textSecondary,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
+
+              const SizedBox(height: 8),
+
+              // Main countdown
+              Text(
+                formattedTime,
+                style: GoogleFonts.spaceGrotesk(
+                  fontSize: 52,
+                  fontWeight: FontWeight.w700,
+                  color: AppTheme.textPrimary,
+                  letterSpacing: -2,
+                  fontFeatures: const [FontFeature.tabularFigures()],
+                ),
+              ),
+
+              const SizedBox(height: 8),
+
+              // Progress percentage
+              Text(
+                '$progressPercent%',
+                style: GoogleFonts.spaceGrotesk(
+                  fontSize: 14,
+                  color: AppTheme.textSecondary,
+                ),
+              ),
+
+              const SizedBox(height: 12),
+
+              // Session count badge
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 4,
+                ),
+                decoration: BoxDecoration(
+                  color: sessionColor.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(
+                    color: sessionColor.withValues(alpha: 0.3),
                   ),
                 ),
-              ] else ...[
-                const SizedBox(height: 8),
-                const Text(
-                  'Tap + to link a task',
-                  style: TextStyle(
-                    color: Color(0xFF2D4A6B),
+                child: Text(
+                  'Session $sessionCount of $longBreakInterval',
+                  style: GoogleFonts.spaceGrotesk(
                     fontSize: 11,
-                    fontWeight: FontWeight.w500,
-                    letterSpacing: 0.2,
+                    fontWeight: FontWeight.w600,
+                    color: sessionColor,
                   ),
                 ),
-              ],
+              ),
             ],
           ),
         ],

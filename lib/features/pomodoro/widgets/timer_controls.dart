@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-import '../../../core/constants/animation_tokens.dart';
 import '../providers/pomodoro_providers.dart';
 import '../../../app/theme.dart';
 
@@ -10,156 +11,246 @@ class TimerControls extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // .select() — only rebuild when isRunning, sessionType, or trialsUsed
-    // changes. Prevents rebuilds on every 1-second remainingSeconds tick.
-    final isRunning = ref.watch(
-      timerNotifierProvider.select((s) => s.isRunning),
-    );
-    final isLocked = ref.watch(
-      timerNotifierProvider.select(
-        (s) =>
-            s.sessionType == SessionType.focus &&
-            s.trialsRemaining <= 0 &&
-            s.isRunning,
-      ),
-    );
-    final notifier = ref.read(timerNotifierProvider.notifier);
+    final timerState = ref.watch(timerNotifierProvider);
+    final sessionColor = timerState.sessionType.color;
+    final isLocked = timerState.sessionType == SessionType.focus &&
+        timerState.trialsRemaining <= 0 &&
+        timerState.isRunning;
 
     return Row(
-      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        _ScaleTapButton(
-          onTap: () async {
+        // ── Skip Back Button (Restart) ──────────────────────────
+        _ControlButton(
+          icon: Icons.skip_previous_rounded,
+          size: 48,
+          backgroundColor: AppTheme.surfaceCard,
+          iconColor: AppTheme.textSecondary,
+          borderColor: AppTheme.surfaceBorder,
+          tooltip: 'Restart session',
+          onTap: () {
+            if (timerState.isRunning) {
+              _showRestartConfirm(context, ref);
+            } else {
+              ref.read(timerNotifierProvider.notifier).reset();
+            }
+          },
+        ),
+
+        const SizedBox(width: 16),
+
+        // ── Main Play/Pause Button ────────────────────
+        GestureDetector(
+          onTap: () {
             if (isLocked) {
-              // Show snackbar — do NOT pause
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    '🔒  No pauses remaining — stay focused!',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 13,
-                      fontFamily:
-                          Theme.of(context).textTheme.bodyMedium?.fontFamily,
-                    ),
-                  ),
-                  backgroundColor: AppTheme.danger,
-                  duration: const Duration(seconds: 2),
-                  behavior: SnackBarBehavior.floating,
-                  margin: const EdgeInsets.all(16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-              );
+              _showNoTrialsSnackbar(context);
               return;
             }
-            if (isRunning) {
-              await notifier.pause();
+            if (timerState.isRunning) {
+              ref.read(timerNotifierProvider.notifier).pause();
             } else {
-              await notifier.start();
+              ref.read(timerNotifierProvider.notifier).start();
             }
           },
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 200),
-            width: 56,
-            height: 56,
+            width: 72,
+            height: 72,
             decoration: BoxDecoration(
-              color: isLocked ? AppTheme.dangerSubtle : AppTheme.primary,
-              borderRadius: BorderRadius.circular(14),
+              shape: BoxShape.circle,
+              color: isLocked ? AppTheme.dangerSubtle : sessionColor,
               boxShadow: [
                 BoxShadow(
-                  color: (isLocked ? AppTheme.danger : AppTheme.primary)
-                      .withValues(alpha: 0.35),
-                  blurRadius: 16,
+                  color: (isLocked ? AppTheme.danger : sessionColor)
+                      .withValues(alpha: 0.4),
+                  blurRadius: 24,
+                  spreadRadius: 4,
                 ),
               ],
             ),
             child: Icon(
               isLocked
                   ? Icons.lock_rounded
-                  : (isRunning ? Icons.pause : Icons.play_arrow),
+                  : timerState.isRunning
+                      ? Icons.pause_rounded
+                      : Icons.play_arrow_rounded,
               color: Colors.white,
-              size: 24,
+              size: 32,
             ),
-          ),
+          )
+              .animate(target: timerState.isRunning ? 1 : 0)
+              .scaleXY(
+                begin: 1.0,
+                end: 0.95,
+                duration: 100.ms,
+              ),
         ),
-        const SizedBox(width: 12),
-        _ScaleTapButton(
-          onTap: () async {
-            if (isRunning) {
-              final confirmed = await showDialog<bool>(
-                context: context,
-                builder: (_) => AlertDialog(
-                  backgroundColor: AppTheme.surfaceCard,
-                  title: const Text('Reset timer?'),
-                  content: const Text('Current progress will be lost.'),
-                  actions: [
-                    TextButton(
-                      onPressed: () => Navigator.of(context).pop(false),
-                      child: const Text('Cancel'),
-                    ),
-                    FilledButton(
-                      onPressed: () => Navigator.of(context).pop(true),
-                      style: FilledButton.styleFrom(
-                        backgroundColor: AppTheme.primary,
-                      ),
-                      child: const Text('Reset'),
-                    ),
-                  ],
-                ),
-              );
-              if (confirmed != true) return;
-            }
-            await notifier.reset();
-          },
-          child: Container(
-            width: 56,
-            height: 56,
-            decoration: BoxDecoration(
-              color: AppTheme.surfaceElevated,
-              borderRadius: BorderRadius.circular(14),
-              border: Border.all(color: AppTheme.surfaceBorder),
-            ),
-            child: const Icon(
-              Icons.refresh,
-              color: AppTheme.textPrimary,
-              size: 20,
-            ),
-          ),
+
+        const SizedBox(width: 16),
+
+        // ── Skip Forward Button (Skip to next) ───────────────────────
+        _ControlButton(
+          icon: Icons.skip_next_rounded,
+          size: 48,
+          backgroundColor: AppTheme.surfaceCard,
+          iconColor: AppTheme.textSecondary,
+          borderColor: AppTheme.surfaceBorder,
+          tooltip: 'Skip to next session',
+          onTap: () => _onSkipNext(context, ref),
         ),
       ],
     );
   }
+
+  void _showRestartConfirm(BuildContext context, WidgetRef ref) {
+    showDialog<bool>(
+      context: context,
+      builder: (_) => AlertDialog(
+        backgroundColor: AppTheme.surfaceCard,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+          side: const BorderSide(color: AppTheme.surfaceBorder),
+        ),
+        title: Text(
+          'Restart Session?',
+          style: GoogleFonts.spaceGrotesk(
+            fontWeight: FontWeight.w700,
+            color: AppTheme.textPrimary,
+          ),
+        ),
+        content: Text(
+          'Current session progress will be reset to the beginning.',
+          style: GoogleFonts.spaceGrotesk(
+            color: AppTheme.textSecondary,
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel', style: TextStyle(color: AppTheme.textSecondary)),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              ref.read(timerNotifierProvider.notifier).reset();
+              Navigator.pop(context);
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppTheme.primary,
+            ),
+            child: const Text('Restart'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _onSkipNext(BuildContext context, WidgetRef ref) async {
+    final timerState = ref.read(timerNotifierProvider);
+    if (timerState.isRunning) {
+      final confirmed = await showDialog<bool>(
+        context: context,
+        builder: (_) => AlertDialog(
+          backgroundColor: AppTheme.surfaceCard,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+            side: const BorderSide(color: AppTheme.surfaceBorder),
+          ),
+          title: Text(
+            'Skip Session?',
+            style: GoogleFonts.spaceGrotesk(
+              fontWeight: FontWeight.w700,
+              color: AppTheme.textPrimary,
+            ),
+          ),
+          content: Text(
+            'This session will be marked as incomplete.',
+            style: GoogleFonts.spaceGrotesk(
+              color: AppTheme.textSecondary,
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text('Cancel', style: TextStyle(color: AppTheme.textSecondary)),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.pop(context, true),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppTheme.primary,
+              ),
+              child: const Text('Skip'),
+            ),
+          ],
+        ),
+      );
+      if (confirmed != true) return;
+    }
+    await ref.read(timerNotifierProvider.notifier).skipToNext();
+  }
+
+  void _showNoTrialsSnackbar(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          '🔒  No pauses remaining — stay focused!',
+          style: GoogleFonts.spaceGrotesk(
+            color: Colors.white,
+            fontSize: 13,
+          ),
+        ),
+        backgroundColor: AppTheme.danger,
+        duration: const Duration(seconds: 2),
+        behavior: SnackBarBehavior.floating,
+        margin: const EdgeInsets.all(16),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+      ),
+    );
+  }
 }
 
-class _ScaleTapButton extends StatefulWidget {
-  const _ScaleTapButton({required this.child, required this.onTap});
+class _ControlButton extends StatelessWidget {
+  const _ControlButton({
+    required this.icon,
+    required this.size,
+    required this.backgroundColor,
+    required this.iconColor,
+    required this.borderColor,
+    required this.tooltip,
+    required this.onTap,
+  });
 
-  final Widget child;
+  final IconData icon;
+  final double size;
+  final Color backgroundColor;
+  final Color iconColor;
+  final Color borderColor;
+  final String tooltip;
   final VoidCallback onTap;
 
   @override
-  State<_ScaleTapButton> createState() => _ScaleTapButtonState();
-}
-
-class _ScaleTapButtonState extends State<_ScaleTapButton> {
-  bool _pressed = false;
-
-  @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTapDown: (_) => setState(() => _pressed = true),
-      onTapCancel: () => setState(() => _pressed = false),
-      onTapUp: (_) {
-        setState(() => _pressed = false);
-        widget.onTap();
-      },
-      child: AnimatedScale(
-        scale: _pressed ? 0.94 : 1,
-        duration: kMicroDuration,
-        curve: kMicroCurve,
-        child: widget.child,
+    return Tooltip(
+      message: tooltip,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          width: size,
+          height: size,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: backgroundColor,
+            border: Border.all(color: borderColor),
+          ),
+          child: Icon(icon, color: iconColor, size: 20),
+        )
+            .animate()
+            .scaleXY(
+              begin: 1.0,
+              end: 0.94,
+              duration: 100.ms,
+            ),
       ),
     );
   }

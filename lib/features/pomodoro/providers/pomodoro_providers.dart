@@ -350,3 +350,19 @@ final ambientSoundProvider =
     StateNotifierProvider<AmbientSoundNotifier, AmbientState>(
       (ref) => AmbientSoundNotifier(),
     );
+
+// ── NEW: Phase 7 providers ──────────────────────────────────────────────────
+
+/// Whether the editable timing card is in edit mode.
+final isEditingTimerProvider = StateProvider<bool>((ref) => false);
+
+/// Today's total focus minutes for the stats row.
+final todayFocusMinutesProvider = FutureProvider<int>((ref) async {
+  final sessions = await ref.watch(todaySessionsProvider.future);
+  return sessions
+      .where((s) => s.isCompleted && s.sessionType == 'focus')
+      .fold<int>(0, (sum, s) => sum + (s.actualDurationSeconds ~/ 60));
+});
+
+/// Whether to show the completion celebration overlay.
+final showCompletionCelebrationProvider = StateProvider<bool>((ref) => false);

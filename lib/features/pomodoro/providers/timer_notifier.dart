@@ -418,6 +418,10 @@ class TimerNotifier extends Notifier<TimerState> {
     await switchType(next, force: true);
   }
 
+  Future<void> skipToNext() async {
+    await skip();
+  }
+
   Future<void> switchType(SessionType type, {bool force = false}) async {
     if (!force && type == state.sessionType) return;
     if (_activeSession != null && elapsedSecondsAtNow() > 0) {
@@ -518,9 +522,8 @@ class TimerNotifier extends Notifier<TimerState> {
       for (var i = 0; i < 3; i++) {
         await HapticFeedback.heavyImpact();
       }
-      // Trigger alarm: start looping alarm sound and show full-screen overlay.
-      await ref.read(alarmServiceProvider).startAlarm();
-      ref.read(alarmOverlayVisibleProvider.notifier).state = true;
+      // Show completion celebration overlay
+      ref.read(showCompletionCelebrationProvider.notifier).state = true;
     }
 
     await ForegroundTimerService.stop();
