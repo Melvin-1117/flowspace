@@ -19,6 +19,7 @@ class SplashScreen extends ConsumerStatefulWidget {
 
 class _SplashScreenState extends ConsumerState<SplashScreen> {
   String? _error;
+  bool _isChecking = true;
 
   @override
   void initState() {
@@ -31,17 +32,17 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
       // On web: Isar is not supported — just wait the minimum splash duration.
       // On native: wait for both Isar to be ready AND the minimum splash duration.
       if (kIsWeb) {
-        await Future.delayed(const Duration(seconds: 2));
+        await Future.delayed(const Duration(seconds: 1));
       } else {
         await Future.wait([
-          Future.delayed(const Duration(seconds: 2)),
+          Future.delayed(const Duration(seconds: 1)),
           ref.read(isarProvider.future), // ensures Isar is fully open
         ]);
       }
 
       if (!mounted) return;
 
-      // Check if onboarding is complete (Isar is now loaded)
+      // Check if onboarding is complete
       final isComplete = await ref
           .read(onboardingServiceProvider)
           .isOnboardingComplete();
@@ -54,18 +55,34 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
         if (!mounted) return;
         context.go('/dashboard');
       } else {
-        context.go('/onboarding');
+        setState(() => _isChecking = false);
       }
     } catch (e, stack) {
       debugPrint('SplashScreen error: $e\n$stack');
       if (!mounted) return;
-      // Show the error on-screen so you can read it without ADB logs
-      setState(() => _error = '$e');
+      // Show the error on-screen so we can read it without ADB logs
+      setState(() {
+        _error = '$e';
+        _isChecking = false;
+      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    // If we're still checking the onboarding status, show a clean loading screen
+    if (_isChecking) {
+      return const Scaffold(
+        backgroundColor: Colors.black,
+        body: Center(
+          child: CircularProgressIndicator(
+            color: AppTheme.primary,
+            strokeWidth: 2,
+          ),
+        ),
+      );
+    }
+
     // If there was a startup error, show it so we can diagnose
     if (_error != null) {
       return Scaffold(
@@ -106,7 +123,10 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
                 const SizedBox(height: 16),
                 TextButton(
                   onPressed: () {
-                    setState(() => _error = null);
+                    setState(() {
+                      _error = null;
+                      _isChecking = true;
+                    });
                     _checkAndNavigate();
                   },
                   child: const Text('Retry', style: TextStyle(color: AppTheme.primary)),
@@ -119,81 +139,281 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
     }
 
     return Scaffold(
-      backgroundColor: AppTheme.background,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // App logo/icon
-            Container(
-              width: 80,
-              height: 80,
+      backgroundColor: const Color(0xFF000000),
+      body: Stack(
+        children: [
+          // ── Animated background gradient ─────────────
+          // Subtle radial glow from center
+          Positioned.fill(
+            child: Container(
               decoration: BoxDecoration(
-                color: AppTheme.primary,
-                borderRadius: BorderRadius.circular(AppTheme.radiusLG),
-                boxShadow: [
-                  const BoxShadow(
-                    color: AppTheme.primaryGlow,
-                    blurRadius: 32,
-                    spreadRadius: 4,
+                gradient: RadialGradient(
+                  center: const Alignment(0, -0.3),
+                  radius: 1.2,
+                  colors: [
+                    AppTheme.primary.withValues(alpha: 0.08),
+                    Colors.transparent,
+                  ],
+                ),
+              ),
+            ),
+          ),
+
+          // ── Grid dot pattern (subtle background) ─────
+          Positioned.fill(
+            child: CustomPaint(
+              painter: DotGridPainter(
+                dotColor: AppTheme.surfaceBorder,
+                spacing: 24,
+                dotRadius: 1,
+              ),
+            ),
+          ),
+
+          // ── Main content ─────────────────────────────
+          SafeArea(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Spacer(flex: 2),
+
+                // App logo
+                Container(
+                  width: 88,
+                  height: 88,
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      colors: [
+                        AppTheme.primary,
+                        AppTheme.accent,
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(24),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppTheme.primary.withValues(alpha: 0.4),
+                        blurRadius: 40,
+                        spreadRadius: 8,
+                      ),
+                    ],
                   ),
-                ],
-              ),
-              child: const Icon(
-                Icons.bolt_rounded,
-                color: AppTheme.textPrimary,
-                size: 48,
-              ),
-            ).animate().scaleXY(
-              begin: 0.8,
-              end: 1.0,
-              duration: const Duration(milliseconds: 600),
-              curve: Curves.easeOutBack,
+                  child: const Icon(
+                    Icons.bolt_rounded,
+                    color: Colors.white,
+                    size: 52,
+                  ),
+                )
+                    .animate()
+                    .scaleXY(
+                      begin: 0.7,
+                      end: 1.0,
+                      duration: 700.ms,
+                      curve: Curves.easeOutBack,
+                    )
+                    .fadeIn(duration: 500.ms),
+
+                const SizedBox(height: 28),
+
+                // App name
+                Text(
+                  'FlowSpace',
+                  style: GoogleFonts.spaceGrotesk(
+                    fontSize: 40,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.white,
+                    letterSpacing: -1.5,
+                  ),
+                )
+                    .animate()
+                    .fadeIn(
+                      delay: 300.ms,
+                      duration: 500.ms,
+                    )
+                    .slideY(begin: 0.2, end: 0),
+
+                const SizedBox(height: 8),
+
+                // Tagline
+                Text(
+                  'Built for developers who ship',
+                  style: GoogleFonts.spaceGrotesk(
+                    fontSize: 16,
+                    color: AppTheme.textSecondary,
+                    letterSpacing: 0.2,
+                  ),
+                )
+                    .animate()
+                    .fadeIn(delay: 500.ms, duration: 500.ms),
+
+                const Spacer(flex: 2),
+
+                // Feature pills row
+                const SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  padding: EdgeInsets.symmetric(horizontal: 24),
+                  child: Row(
+                    children: [
+                      _FeaturePill(
+                        icon: Icons.timer_rounded,
+                        label: 'Pomodoro',
+                      ),
+                      SizedBox(width: 8),
+                      _FeaturePill(
+                        icon: Icons.task_alt_rounded,
+                        label: 'Tasks',
+                      ),
+                      SizedBox(width: 8),
+                      _FeaturePill(
+                        icon: Icons.school_rounded,
+                        label: 'Planner',
+                      ),
+                      SizedBox(width: 8),
+                      _FeaturePill(
+                        icon: Icons.analytics_rounded,
+                        label: 'Analytics',
+                      ),
+                      SizedBox(width: 8),
+                      _FeaturePill(
+                        icon: Icons.developer_board_rounded,
+                        label: 'DevTrack',
+                      ),
+                    ],
+                  ),
+                )
+                    .animate()
+                    .fadeIn(delay: 700.ms, duration: 500.ms),
+
+                const SizedBox(height: 48),
+
+                // Get Started button
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () => context.go('/onboarding'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppTheme.primary,
+                        padding: const EdgeInsets.symmetric(vertical: 18),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                        elevation: 0,
+                      ).copyWith(
+                        overlayColor: WidgetStateProperty.all(
+                            AppTheme.primaryLight.withValues(alpha: 0.2)),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Get Started',
+                            style: GoogleFonts.spaceGrotesk(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          const Icon(
+                            Icons.arrow_forward_rounded,
+                            color: Colors.white,
+                            size: 20,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                )
+                    .animate()
+                    .fadeIn(delay: 900.ms, duration: 500.ms)
+                    .slideY(begin: 0.3, end: 0),
+
+                const SizedBox(height: 16),
+
+                // Privacy note
+                Text(
+                  '🔒  All data stored locally on your device',
+                  style: GoogleFonts.spaceGrotesk(
+                    fontSize: 12,
+                    color: AppTheme.textMuted,
+                  ),
+                )
+                    .animate()
+                    .fadeIn(delay: 1000.ms),
+
+                const SizedBox(height: 32),
+              ],
             ),
-            const SizedBox(height: AppTheme.spaceLG),
-
-            // App name
-            Text(
-              'FlowSpace',
-              style: GoogleFonts.spaceGrotesk(
-                fontSize: 32,
-                fontWeight: FontWeight.w700,
-                color: AppTheme.textPrimary,
-                letterSpacing: -1.0,
-              ),
-            ).animate().fadeIn(
-              delay: const Duration(milliseconds: 300),
-              duration: const Duration(milliseconds: 500),
-            ),
-
-            const SizedBox(height: AppTheme.spaceSM),
-
-            // Tagline
-            Text(
-              'Built for developers',
-              style: GoogleFonts.spaceGrotesk(
-                fontSize: 14,
-                color: AppTheme.textSecondary,
-              ),
-            ).animate().fadeIn(
-              delay: const Duration(milliseconds: 500),
-              duration: const Duration(milliseconds: 500),
-            ),
-
-            const SizedBox(height: AppTheme.spaceXXL),
-
-            // Loading indicator
-            const SizedBox(
-              width: 24,
-              height: 24,
-              child: CircularProgressIndicator(
-                color: AppTheme.primary,
-                strokeWidth: 2,
-              ),
-            ).animate().fadeIn(delay: const Duration(milliseconds: 800)),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
+}
+
+// _FeaturePill widget
+class _FeaturePill extends StatelessWidget {
+  final IconData icon;
+  final String label;
+
+  const _FeaturePill({
+    required this.icon,
+    required this.label,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(
+        color: AppTheme.surfaceCard,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppTheme.surfaceBorder),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, color: AppTheme.primary, size: 14),
+          const SizedBox(width: 6),
+          Text(
+            label,
+            style: GoogleFonts.spaceGrotesk(
+              fontSize: 12,
+              color: AppTheme.textSecondary,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// DotGridPainter
+class DotGridPainter extends CustomPainter {
+  final Color dotColor;
+  final double spacing;
+  final double dotRadius;
+
+  DotGridPainter({
+    required this.dotColor,
+    required this.spacing,
+    required this.dotRadius,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()..color = dotColor;
+    for (double x = 0; x < size.width; x += spacing) {
+      for (double y = 0; y < size.height; y += spacing) {
+        canvas.drawCircle(Offset(x, y), dotRadius, paint);
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
