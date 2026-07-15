@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -29,10 +30,33 @@ import 'features/dashboard/dashboard_screen.dart';
 import 'widgets/app_drawer.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await NotificationService.initialize();
-  await ForegroundTimerService.initialize();
-  runApp(const ProviderScope(child: FlowSpaceApp()));
+  // Catch Flutter framework errors and show them on screen
+  FlutterError.onError = (details) {
+    FlutterError.presentError(details);
+  };
+
+  // Catch async/platform errors
+  PlatformDispatcher.instance.onError = (error, stack) {
+    debugPrint('FATAL ERROR: $error\n$stack');
+    return true;
+  };
+
+  runZonedGuarded(() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    try {
+      await NotificationService.initialize();
+    } catch (e) {
+      debugPrint('NotificationService init error: $e');
+    }
+    try {
+      await ForegroundTimerService.initialize();
+    } catch (e) {
+      debugPrint('ForegroundTimerService init error: $e');
+    }
+    runApp(const ProviderScope(child: FlowSpaceApp()));
+  }, (error, stack) {
+    debugPrint('ZONE ERROR: $error\n$stack');
+  });
 }
 
 class FlowSpaceApp extends ConsumerStatefulWidget {
