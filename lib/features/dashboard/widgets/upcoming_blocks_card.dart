@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -20,10 +20,11 @@ class UpcomingBlocksCard extends ConsumerWidget {
       error: (_, __) => const SizedBox.shrink(),
       data: (blocks) {
         final now = DateTime.now();
-        final upcoming = blocks
-            .where((b) => !b.isCompleted && b.scheduledTime.isAfter(now))
-            .toList()
-          ..sort((a, b) => a.scheduledTime.compareTo(b.scheduledTime));
+        final upcoming =
+            blocks
+                .where((b) => !b.isCompleted && b.scheduledTime.isAfter(now))
+                .toList()
+              ..sort((a, b) => a.scheduledTime.compareTo(b.scheduledTime));
 
         if (upcoming.isEmpty) return const SizedBox.shrink();
 
@@ -53,9 +54,9 @@ class UpcomingBlocksCard extends ConsumerWidget {
                     child: Text(
                       'View All â†’',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: AppTheme.primary,
-                            fontWeight: FontWeight.w600,
-                          ),
+                        color: AppTheme.primary,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ],
@@ -106,9 +107,9 @@ class _BlockRow extends StatelessWidget {
             child: Text(
               time,
               style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                    color: AppTheme.primary,
-                    fontWeight: FontWeight.w700,
-                  ),
+                color: AppTheme.primary,
+                fontWeight: FontWeight.w700,
+              ),
             ),
           ),
           const SizedBox(width: 12),
@@ -120,17 +121,17 @@ class _BlockRow extends StatelessWidget {
                 Text(
                   block.title,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: AppTheme.textPrimary,
-                        fontWeight: FontWeight.w500,
-                      ),
+                    color: AppTheme.textPrimary,
+                    fontWeight: FontWeight.w500,
+                  ),
                   overflow: TextOverflow.ellipsis,
                 ),
                 Text(
                   '${block.durationMinutes} min',
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: AppTheme.textSecondary,
-                        fontSize: 11,
-                      ),
+                    color: AppTheme.textSecondary,
+                    fontSize: 11,
+                  ),
                 ),
               ],
             ),

@@ -56,9 +56,7 @@ class MilestoneCard extends ConsumerWidget {
                     Expanded(
                       child: Text(
                         milestone.title,
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleMedium
+                        style: Theme.of(context).textTheme.titleMedium
                             ?.copyWith(
                               color: AppTheme.textPrimary,
                               fontWeight: FontWeight.w600,
@@ -70,7 +68,9 @@ class MilestoneCard extends ConsumerWidget {
                     const SizedBox(width: 8),
                     Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 3),
+                        horizontal: 8,
+                        vertical: 3,
+                      ),
                       decoration: BoxDecoration(
                         color: priorityColor.withValues(alpha: 0.15),
                         borderRadius: BorderRadius.circular(6),
@@ -138,9 +138,9 @@ class _CountdownBox extends StatelessWidget {
           Text(
             value,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: AppTheme.textPrimary,
-                  fontWeight: FontWeight.w700,
-                ),
+              color: AppTheme.textPrimary,
+              fontWeight: FontWeight.w700,
+            ),
           ),
           Text(
             label,

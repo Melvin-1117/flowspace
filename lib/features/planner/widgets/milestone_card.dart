@@ -100,7 +100,10 @@ class MilestoneCard extends StatelessWidget {
             const SizedBox(height: 10),
             Text(
               'Due ${DateFormat.yMMMd().add_jm().format(milestone!.dueDate)}',
-              style: const TextStyle(color: AppTheme.textSecondary, fontSize: 12),
+              style: const TextStyle(
+                color: AppTheme.textSecondary,
+                fontSize: 12,
+              ),
             ),
           ],
         ),

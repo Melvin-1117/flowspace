@@ -156,8 +156,7 @@ final allSessionsProvider = FutureProvider<List<PomodoroSession>>((ref) async {
     return sessions;
   }
   final isar = await ref.watch(isarProvider.future);
-  final sessions =
-      await isar.collection<PomodoroSession>().where().findAll();
+  final sessions = await isar.collection<PomodoroSession>().where().findAll();
   sessions.sort((a, b) => b.startTime.compareTo(a.startTime));
   return sessions;
 });
@@ -171,8 +170,8 @@ final todaySessionsProvider = FutureProvider<List<PomodoroSession>>((
   final source = kIsWeb
       ? PomodoroWebStore.instance.sessions
       : await (await ref.watch(
-              isarProvider.future,
-            )).collection<PomodoroSession>().where().findAll();
+          isarProvider.future,
+        )).collection<PomodoroSession>().where().findAll();
   final today = source
       .where(
         (s) => !s.startTime.isBefore(dayStart) && s.startTime.isBefore(dayEnd),

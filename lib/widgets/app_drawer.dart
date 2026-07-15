@@ -270,7 +270,11 @@ class AppDrawer extends ConsumerWidget {
       context: context,
       applicationName: 'FlowSpace',
       applicationVersion: '1.0.0',
-      applicationIcon: const Icon(Icons.bolt_rounded, color: AppTheme.primary, size: 40),
+      applicationIcon: const Icon(
+        Icons.bolt_rounded,
+        color: AppTheme.primary,
+        size: 40,
+      ),
       children: [
         const Text(
           'FlowSpace is your productivity companion for deep work, task management, and focus sessions.',

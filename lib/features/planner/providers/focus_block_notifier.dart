@@ -120,7 +120,8 @@ class FocusBlockNotifier extends AsyncNotifier<List<FocusBlock>> {
 
   Future<List<FocusBlock>> _load() async {
     if (kIsWeb) {
-      return [..._webFocusBlocks]..sort((a, b) => a.scheduledTime.compareTo(b.scheduledTime));
+      return [..._webFocusBlocks]
+        ..sort((a, b) => a.scheduledTime.compareTo(b.scheduledTime));
     }
     final isar = await ref.read(isarProvider.future);
     final tasks = await isar.collection<Task>().where().findAll();

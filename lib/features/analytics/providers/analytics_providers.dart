@@ -431,7 +431,9 @@ Future<List<PomodoroSession>> _loadFocusCompletedSessionsInRange(
 Future<List<PomodoroSession>> _loadCompletedSessions(Ref ref) async {
   final List<PomodoroSession> pomodoros = [];
   if (kIsWeb) {
-    pomodoros.addAll(PomodoroWebStore.instance.sessions.where((s) => s.isCompleted));
+    pomodoros.addAll(
+      PomodoroWebStore.instance.sessions.where((s) => s.isCompleted),
+    );
   } else {
     final isar = await ref.watch(isarProvider.future);
     final all = await isar.collection<PomodoroSession>().where().findAll();
@@ -451,7 +453,9 @@ Future<List<PomodoroSession>> _loadCompletedSessions(Ref ref) async {
         ..isCompleted = true
         ..isAbandoned = false
         ..linkedTaskId = cs.projectId
-        ..linkedTaskTitle = cs.notes.isNotEmpty ? cs.notes : 'Coding Session (${cs.language})',
+        ..linkedTaskTitle = cs.notes.isNotEmpty
+            ? cs.notes
+            : 'Coding Session (${cs.language})',
     );
   }
   return pomodoros;
@@ -476,10 +480,12 @@ Future<List<PomodoroSession>> _loadCompletedSessionsInRange(
     final isar = await ref.watch(isarProvider.future);
     final all = await isar.collection<PomodoroSession>().where().findAll();
     pomodoros.addAll(
-      all.where((s) =>
-          s.isCompleted &&
-          !s.startTime.isBefore(start) &&
-          s.startTime.isBefore(end)),
+      all.where(
+        (s) =>
+            s.isCompleted &&
+            !s.startTime.isBefore(start) &&
+            s.startTime.isBefore(end),
+      ),
     );
   }
 
@@ -497,7 +503,9 @@ Future<List<PomodoroSession>> _loadCompletedSessionsInRange(
           ..isCompleted = true
           ..isAbandoned = false
           ..linkedTaskId = cs.projectId
-          ..linkedTaskTitle = cs.notes.isNotEmpty ? cs.notes : 'Coding Session (${cs.language})',
+          ..linkedTaskTitle = cs.notes.isNotEmpty
+              ? cs.notes
+              : 'Coding Session (${cs.language})',
       );
     }
   }

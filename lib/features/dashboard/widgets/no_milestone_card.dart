@@ -19,14 +19,13 @@ class NoMilestoneCard extends StatelessWidget {
       ),
       child: Column(
         children: [
-          const Icon(Icons.flag_rounded,
-              color: AppTheme.textMuted, size: 32),
+          const Icon(Icons.flag_rounded, color: AppTheme.textMuted, size: 32),
           const SizedBox(height: 12),
           Text(
             'No upcoming milestones',
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: AppTheme.textSecondary,
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.bodyMedium?.copyWith(color: AppTheme.textSecondary),
           ),
           const SizedBox(height: 12),
           TextButton.icon(

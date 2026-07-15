@@ -28,12 +28,9 @@ class AlarmService {
     _vibrate();
 
     // Repeat vibration every 30 seconds if not dismissed
-    _repeatTimer = Timer.periodic(
-      const Duration(seconds: 30),
-      (_) {
-        if (_isRinging) _vibrate();
-      },
-    );
+    _repeatTimer = Timer.periodic(const Duration(seconds: 30), (_) {
+      if (_isRinging) _vibrate();
+    });
   }
 
   void _vibrate() {

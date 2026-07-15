@@ -9,7 +9,8 @@ enum _ShimmerType { chart, healthCard, milestoneCard, quickStats, taskSummary }
 class ShimmerBox extends StatelessWidget {
   const ShimmerBox.chart({super.key}) : _type = _ShimmerType.chart;
   const ShimmerBox.healthCard({super.key}) : _type = _ShimmerType.healthCard;
-  const ShimmerBox.milestoneCard({super.key}) : _type = _ShimmerType.milestoneCard;
+  const ShimmerBox.milestoneCard({super.key})
+    : _type = _ShimmerType.milestoneCard;
   const ShimmerBox.quickStats({super.key}) : _type = _ShimmerType.quickStats;
   const ShimmerBox.taskSummary({super.key}) : _type = _ShimmerType.taskSummary;
 

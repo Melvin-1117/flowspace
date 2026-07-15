@@ -55,16 +55,22 @@ class RecentSessionsSection extends ConsumerWidget {
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: recentSessions.length,
-                  separatorBuilder: (context, index) => const SizedBox(height: AppTheme.spaceSM),
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(height: AppTheme.spaceSM),
                   itemBuilder: (context, index) {
                     final session = recentSessions[index];
-                    final project = projects.where((p) => p.uuid == session.projectId).firstOrNull;
+                    final project = projects
+                        .where((p) => p.uuid == session.projectId)
+                        .firstOrNull;
                     return SessionRow(session: session, project: project);
                   },
                 );
               },
-              loading: () => const Center(child: CircularProgressIndicator(strokeWidth: 2)),
-              error: (err, stack) => const SizedBox.shrink(), // project load error, fallback to null project
+              loading: () => const Center(
+                child: CircularProgressIndicator(strokeWidth: 2),
+              ),
+              error: (err, stack) =>
+                  const SizedBox.shrink(), // project load error, fallback to null project
             );
           },
           loading: () => const Center(

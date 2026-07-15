@@ -86,7 +86,7 @@ const FocusGoalSettingsSchema = CollectionSchema(
       id: 13,
       name: r'wasTimerRunning',
       type: IsarType.bool,
-    )
+    ),
   },
   estimateSize: _focusGoalSettingsEstimateSize,
   serialize: _focusGoalSettingsSerialize,
@@ -210,12 +210,16 @@ Id _focusGoalSettingsGetId(FocusGoalSettings object) {
 }
 
 List<IsarLinkBase<dynamic>> _focusGoalSettingsGetLinks(
-    FocusGoalSettings object) {
+  FocusGoalSettings object,
+) {
   return [];
 }
 
 void _focusGoalSettingsAttach(
-    IsarCollection<dynamic> col, Id id, FocusGoalSettings object) {
+  IsarCollection<dynamic> col,
+  Id id,
+  FocusGoalSettings object,
+) {
   object.id = id;
 }
 
@@ -231,17 +235,14 @@ extension FocusGoalSettingsQueryWhereSort
 extension FocusGoalSettingsQueryWhere
     on QueryBuilder<FocusGoalSettings, FocusGoalSettings, QWhereClause> {
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterWhereClause>
-      idEqualTo(Id id) {
+  idEqualTo(Id id) {
     return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IdWhereClause.between(
-        lower: id,
-        upper: id,
-      ));
+      return query.addWhereClause(IdWhereClause.between(lower: id, upper: id));
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterWhereClause>
-      idNotEqualTo(Id id) {
+  idNotEqualTo(Id id) {
     return QueryBuilder.apply(this, (query) {
       if (query.whereSort == Sort.asc) {
         return query
@@ -264,7 +265,7 @@ extension FocusGoalSettingsQueryWhere
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterWhereClause>
-      idGreaterThan(Id id, {bool include = false}) {
+  idGreaterThan(Id id, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
         IdWhereClause.greaterThan(lower: id, includeLower: include),
@@ -273,7 +274,7 @@ extension FocusGoalSettingsQueryWhere
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterWhereClause>
-      idLessThan(Id id, {bool include = false}) {
+  idLessThan(Id id, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
         IdWhereClause.lessThan(upper: id, includeUpper: include),
@@ -282,19 +283,21 @@ extension FocusGoalSettingsQueryWhere
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterWhereClause>
-      idBetween(
+  idBetween(
     Id lowerId,
     Id upperId, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IdWhereClause.between(
-        lower: lowerId,
-        includeLower: includeLower,
-        upper: upperId,
-        includeUpper: includeUpper,
-      ));
+      return query.addWhereClause(
+        IdWhereClause.between(
+          lower: lowerId,
+          includeLower: includeLower,
+          upper: upperId,
+          includeUpper: includeUpper,
+        ),
+      );
     });
   }
 }
@@ -302,53 +305,56 @@ extension FocusGoalSettingsQueryWhere
 extension FocusGoalSettingsQueryFilter
     on QueryBuilder<FocusGoalSettings, FocusGoalSettings, QFilterCondition> {
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      ambientVolumeEqualTo(
-    double value, {
-    double epsilon = Query.epsilon,
-  }) {
+  ambientVolumeEqualTo(double value, {double epsilon = Query.epsilon}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'ambientVolume',
-        value: value,
-        epsilon: epsilon,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.equalTo(
+          property: r'ambientVolume',
+          value: value,
+          epsilon: epsilon,
+        ),
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      ambientVolumeGreaterThan(
-    double value, {
-    bool include = false,
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'ambientVolume',
-        value: value,
-        epsilon: epsilon,
-      ));
-    });
-  }
-
-  QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      ambientVolumeLessThan(
+  ambientVolumeGreaterThan(
     double value, {
     bool include = false,
     double epsilon = Query.epsilon,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'ambientVolume',
-        value: value,
-        epsilon: epsilon,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'ambientVolume',
+          value: value,
+          epsilon: epsilon,
+        ),
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      ambientVolumeBetween(
+  ambientVolumeLessThan(
+    double value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'ambientVolume',
+          value: value,
+          epsilon: epsilon,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
+  ambientVolumeBetween(
     double lower,
     double upper, {
     bool includeLower = true,
@@ -356,345 +362,344 @@ extension FocusGoalSettingsQueryFilter
     double epsilon = Query.epsilon,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'ambientVolume',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        epsilon: epsilon,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'ambientVolume',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+          epsilon: epsilon,
+        ),
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      autoStartBreaksEqualTo(bool value) {
+  autoStartBreaksEqualTo(bool value) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'autoStartBreaks',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'autoStartBreaks', value: value),
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      autoStartFocusEqualTo(bool value) {
+  autoStartFocusEqualTo(bool value) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'autoStartFocus',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'autoStartFocus', value: value),
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      dailySessionGoalEqualTo(int value) {
+  dailySessionGoalEqualTo(int value) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'dailySessionGoal',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'dailySessionGoal', value: value),
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      dailySessionGoalGreaterThan(
-    int value, {
-    bool include = false,
-  }) {
+  dailySessionGoalGreaterThan(int value, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'dailySessionGoal',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'dailySessionGoal',
+          value: value,
+        ),
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      dailySessionGoalLessThan(
-    int value, {
-    bool include = false,
-  }) {
+  dailySessionGoalLessThan(int value, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'dailySessionGoal',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'dailySessionGoal',
+          value: value,
+        ),
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      dailySessionGoalBetween(
+  dailySessionGoalBetween(
     int lower,
     int upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'dailySessionGoal',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'dailySessionGoal',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+        ),
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      focusDurationEqualTo(int value) {
+  focusDurationEqualTo(int value) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'focusDuration',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'focusDuration', value: value),
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      focusDurationGreaterThan(
-    int value, {
-    bool include = false,
-  }) {
+  focusDurationGreaterThan(int value, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'focusDuration',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'focusDuration',
+          value: value,
+        ),
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      focusDurationLessThan(
-    int value, {
-    bool include = false,
-  }) {
+  focusDurationLessThan(int value, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'focusDuration',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'focusDuration',
+          value: value,
+        ),
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      focusDurationBetween(
+  focusDurationBetween(
     int lower,
     int upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'focusDuration',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'focusDuration',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+        ),
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      idEqualTo(Id value) {
+  idEqualTo(Id value) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'id',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'id', value: value),
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      idGreaterThan(
-    Id value, {
-    bool include = false,
-  }) {
+  idGreaterThan(Id value, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'id',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'id',
+          value: value,
+        ),
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      idLessThan(
-    Id value, {
-    bool include = false,
-  }) {
+  idLessThan(Id value, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'id',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'id',
+          value: value,
+        ),
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      idBetween(
+  idBetween(
     Id lower,
     Id upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'id',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'id',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+        ),
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      killTimestampIsNull() {
+  killTimestampIsNull() {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'killTimestamp',
-      ));
+      return query.addFilterCondition(
+        const FilterCondition.isNull(property: r'killTimestamp'),
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      killTimestampIsNotNull() {
+  killTimestampIsNotNull() {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'killTimestamp',
-      ));
+      return query.addFilterCondition(
+        const FilterCondition.isNotNull(property: r'killTimestamp'),
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      killTimestampEqualTo(DateTime? value) {
+  killTimestampEqualTo(DateTime? value) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'killTimestamp',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'killTimestamp', value: value),
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      killTimestampGreaterThan(
-    DateTime? value, {
-    bool include = false,
-  }) {
+  killTimestampGreaterThan(DateTime? value, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'killTimestamp',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'killTimestamp',
+          value: value,
+        ),
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      killTimestampLessThan(
-    DateTime? value, {
-    bool include = false,
-  }) {
+  killTimestampLessThan(DateTime? value, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'killTimestamp',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'killTimestamp',
+          value: value,
+        ),
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      killTimestampBetween(
+  killTimestampBetween(
     DateTime? lower,
     DateTime? upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'killTimestamp',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'killTimestamp',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+        ),
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      lastAmbientSoundIsNull() {
+  lastAmbientSoundIsNull() {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'lastAmbientSound',
-      ));
+      return query.addFilterCondition(
+        const FilterCondition.isNull(property: r'lastAmbientSound'),
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      lastAmbientSoundIsNotNull() {
+  lastAmbientSoundIsNotNull() {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'lastAmbientSound',
-      ));
+      return query.addFilterCondition(
+        const FilterCondition.isNotNull(property: r'lastAmbientSound'),
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      lastAmbientSoundEqualTo(
-    String? value, {
-    bool caseSensitive = true,
-  }) {
+  lastAmbientSoundEqualTo(String? value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'lastAmbientSound',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.equalTo(
+          property: r'lastAmbientSound',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      lastAmbientSoundGreaterThan(
-    String? value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'lastAmbientSound',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      lastAmbientSoundLessThan(
+  lastAmbientSoundGreaterThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'lastAmbientSound',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'lastAmbientSound',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      lastAmbientSoundBetween(
+  lastAmbientSoundLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'lastAmbientSound',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
+  lastAmbientSoundBetween(
     String? lower,
     String? upper, {
     bool includeLower = true,
@@ -702,247 +707,250 @@ extension FocusGoalSettingsQueryFilter
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'lastAmbientSound',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'lastAmbientSound',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+          caseSensitive: caseSensitive,
+        ),
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      lastAmbientSoundStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
+  lastAmbientSoundStartsWith(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'lastAmbientSound',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.startsWith(
+          property: r'lastAmbientSound',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      lastAmbientSoundEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
+  lastAmbientSoundEndsWith(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'lastAmbientSound',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.endsWith(
+          property: r'lastAmbientSound',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      lastAmbientSoundContains(String value, {bool caseSensitive = true}) {
+  lastAmbientSoundContains(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'lastAmbientSound',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.contains(
+          property: r'lastAmbientSound',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      lastAmbientSoundMatches(String pattern, {bool caseSensitive = true}) {
+  lastAmbientSoundMatches(String pattern, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'lastAmbientSound',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.matches(
+          property: r'lastAmbientSound',
+          wildcard: pattern,
+          caseSensitive: caseSensitive,
+        ),
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      lastAmbientSoundIsEmpty() {
+  lastAmbientSoundIsEmpty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'lastAmbientSound',
-        value: '',
-      ));
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'lastAmbientSound', value: ''),
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      lastAmbientSoundIsNotEmpty() {
+  lastAmbientSoundIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'lastAmbientSound',
-        value: '',
-      ));
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(property: r'lastAmbientSound', value: ''),
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      longBreakDurationEqualTo(int value) {
+  longBreakDurationEqualTo(int value) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'longBreakDuration',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'longBreakDuration', value: value),
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      longBreakDurationGreaterThan(
-    int value, {
-    bool include = false,
-  }) {
+  longBreakDurationGreaterThan(int value, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'longBreakDuration',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'longBreakDuration',
+          value: value,
+        ),
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      longBreakDurationLessThan(
-    int value, {
-    bool include = false,
-  }) {
+  longBreakDurationLessThan(int value, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'longBreakDuration',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'longBreakDuration',
+          value: value,
+        ),
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      longBreakDurationBetween(
+  longBreakDurationBetween(
     int lower,
     int upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'longBreakDuration',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'longBreakDuration',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+        ),
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      longBreakIntervalEqualTo(int value) {
+  longBreakIntervalEqualTo(int value) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'longBreakInterval',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'longBreakInterval', value: value),
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      longBreakIntervalGreaterThan(
-    int value, {
-    bool include = false,
-  }) {
+  longBreakIntervalGreaterThan(int value, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'longBreakInterval',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'longBreakInterval',
+          value: value,
+        ),
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      longBreakIntervalLessThan(
-    int value, {
-    bool include = false,
-  }) {
+  longBreakIntervalLessThan(int value, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'longBreakInterval',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'longBreakInterval',
+          value: value,
+        ),
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      longBreakIntervalBetween(
+  longBreakIntervalBetween(
     int lower,
     int upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'longBreakInterval',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'longBreakInterval',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+        ),
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      musicVolumeEqualTo(
-    double value, {
-    double epsilon = Query.epsilon,
-  }) {
+  musicVolumeEqualTo(double value, {double epsilon = Query.epsilon}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'musicVolume',
-        value: value,
-        epsilon: epsilon,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.equalTo(
+          property: r'musicVolume',
+          value: value,
+          epsilon: epsilon,
+        ),
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      musicVolumeGreaterThan(
-    double value, {
-    bool include = false,
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'musicVolume',
-        value: value,
-        epsilon: epsilon,
-      ));
-    });
-  }
-
-  QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      musicVolumeLessThan(
+  musicVolumeGreaterThan(
     double value, {
     bool include = false,
     double epsilon = Query.epsilon,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'musicVolume',
-        value: value,
-        epsilon: epsilon,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'musicVolume',
+          value: value,
+          epsilon: epsilon,
+        ),
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      musicVolumeBetween(
+  musicVolumeLessThan(
+    double value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'musicVolume',
+          value: value,
+          epsilon: epsilon,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
+  musicVolumeBetween(
     double lower,
     double upper, {
     bool includeLower = true,
@@ -950,121 +958,128 @@ extension FocusGoalSettingsQueryFilter
     double epsilon = Query.epsilon,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'musicVolume',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        epsilon: epsilon,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'musicVolume',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+          epsilon: epsilon,
+        ),
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      remainingSecondsOnKillEqualTo(int value) {
+  remainingSecondsOnKillEqualTo(int value) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'remainingSecondsOnKill',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.equalTo(
+          property: r'remainingSecondsOnKill',
+          value: value,
+        ),
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      remainingSecondsOnKillGreaterThan(
-    int value, {
-    bool include = false,
-  }) {
+  remainingSecondsOnKillGreaterThan(int value, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'remainingSecondsOnKill',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'remainingSecondsOnKill',
+          value: value,
+        ),
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      remainingSecondsOnKillLessThan(
-    int value, {
-    bool include = false,
-  }) {
+  remainingSecondsOnKillLessThan(int value, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'remainingSecondsOnKill',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'remainingSecondsOnKill',
+          value: value,
+        ),
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      remainingSecondsOnKillBetween(
+  remainingSecondsOnKillBetween(
     int lower,
     int upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'remainingSecondsOnKill',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'remainingSecondsOnKill',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+        ),
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      sessionTypeOnKillEqualTo(
-    String value, {
-    bool caseSensitive = true,
-  }) {
+  sessionTypeOnKillEqualTo(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'sessionTypeOnKill',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.equalTo(
+          property: r'sessionTypeOnKill',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      sessionTypeOnKillGreaterThan(
-    String value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'sessionTypeOnKill',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      sessionTypeOnKillLessThan(
+  sessionTypeOnKillGreaterThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'sessionTypeOnKill',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'sessionTypeOnKill',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      sessionTypeOnKillBetween(
+  sessionTypeOnKillLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'sessionTypeOnKill',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
+  sessionTypeOnKillBetween(
     String lower,
     String upper, {
     bool includeLower = true,
@@ -1072,150 +1087,150 @@ extension FocusGoalSettingsQueryFilter
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'sessionTypeOnKill',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'sessionTypeOnKill',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+          caseSensitive: caseSensitive,
+        ),
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      sessionTypeOnKillStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
+  sessionTypeOnKillStartsWith(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'sessionTypeOnKill',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.startsWith(
+          property: r'sessionTypeOnKill',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      sessionTypeOnKillEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
+  sessionTypeOnKillEndsWith(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'sessionTypeOnKill',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.endsWith(
+          property: r'sessionTypeOnKill',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      sessionTypeOnKillContains(String value, {bool caseSensitive = true}) {
+  sessionTypeOnKillContains(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'sessionTypeOnKill',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.contains(
+          property: r'sessionTypeOnKill',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      sessionTypeOnKillMatches(String pattern, {bool caseSensitive = true}) {
+  sessionTypeOnKillMatches(String pattern, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'sessionTypeOnKill',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.matches(
+          property: r'sessionTypeOnKill',
+          wildcard: pattern,
+          caseSensitive: caseSensitive,
+        ),
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      sessionTypeOnKillIsEmpty() {
+  sessionTypeOnKillIsEmpty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'sessionTypeOnKill',
-        value: '',
-      ));
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'sessionTypeOnKill', value: ''),
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      sessionTypeOnKillIsNotEmpty() {
+  sessionTypeOnKillIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'sessionTypeOnKill',
-        value: '',
-      ));
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(property: r'sessionTypeOnKill', value: ''),
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      shortBreakDurationEqualTo(int value) {
+  shortBreakDurationEqualTo(int value) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'shortBreakDuration',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'shortBreakDuration', value: value),
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      shortBreakDurationGreaterThan(
-    int value, {
-    bool include = false,
-  }) {
+  shortBreakDurationGreaterThan(int value, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'shortBreakDuration',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'shortBreakDuration',
+          value: value,
+        ),
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      shortBreakDurationLessThan(
-    int value, {
-    bool include = false,
-  }) {
+  shortBreakDurationLessThan(int value, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'shortBreakDuration',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'shortBreakDuration',
+          value: value,
+        ),
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      shortBreakDurationBetween(
+  shortBreakDurationBetween(
     int lower,
     int upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'shortBreakDuration',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'shortBreakDuration',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+        ),
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterFilterCondition>
-      wasTimerRunningEqualTo(bool value) {
+  wasTimerRunningEqualTo(bool value) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'wasTimerRunning',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'wasTimerRunning', value: value),
+      );
     });
   }
 }
@@ -1229,196 +1244,196 @@ extension FocusGoalSettingsQueryLinks
 extension FocusGoalSettingsQuerySortBy
     on QueryBuilder<FocusGoalSettings, FocusGoalSettings, QSortBy> {
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterSortBy>
-      sortByAmbientVolume() {
+  sortByAmbientVolume() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'ambientVolume', Sort.asc);
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterSortBy>
-      sortByAmbientVolumeDesc() {
+  sortByAmbientVolumeDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'ambientVolume', Sort.desc);
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterSortBy>
-      sortByAutoStartBreaks() {
+  sortByAutoStartBreaks() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'autoStartBreaks', Sort.asc);
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterSortBy>
-      sortByAutoStartBreaksDesc() {
+  sortByAutoStartBreaksDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'autoStartBreaks', Sort.desc);
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterSortBy>
-      sortByAutoStartFocus() {
+  sortByAutoStartFocus() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'autoStartFocus', Sort.asc);
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterSortBy>
-      sortByAutoStartFocusDesc() {
+  sortByAutoStartFocusDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'autoStartFocus', Sort.desc);
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterSortBy>
-      sortByDailySessionGoal() {
+  sortByDailySessionGoal() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'dailySessionGoal', Sort.asc);
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterSortBy>
-      sortByDailySessionGoalDesc() {
+  sortByDailySessionGoalDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'dailySessionGoal', Sort.desc);
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterSortBy>
-      sortByFocusDuration() {
+  sortByFocusDuration() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'focusDuration', Sort.asc);
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterSortBy>
-      sortByFocusDurationDesc() {
+  sortByFocusDurationDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'focusDuration', Sort.desc);
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterSortBy>
-      sortByKillTimestamp() {
+  sortByKillTimestamp() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'killTimestamp', Sort.asc);
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterSortBy>
-      sortByKillTimestampDesc() {
+  sortByKillTimestampDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'killTimestamp', Sort.desc);
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterSortBy>
-      sortByLastAmbientSound() {
+  sortByLastAmbientSound() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'lastAmbientSound', Sort.asc);
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterSortBy>
-      sortByLastAmbientSoundDesc() {
+  sortByLastAmbientSoundDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'lastAmbientSound', Sort.desc);
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterSortBy>
-      sortByLongBreakDuration() {
+  sortByLongBreakDuration() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'longBreakDuration', Sort.asc);
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterSortBy>
-      sortByLongBreakDurationDesc() {
+  sortByLongBreakDurationDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'longBreakDuration', Sort.desc);
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterSortBy>
-      sortByLongBreakInterval() {
+  sortByLongBreakInterval() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'longBreakInterval', Sort.asc);
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterSortBy>
-      sortByLongBreakIntervalDesc() {
+  sortByLongBreakIntervalDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'longBreakInterval', Sort.desc);
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterSortBy>
-      sortByMusicVolume() {
+  sortByMusicVolume() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'musicVolume', Sort.asc);
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterSortBy>
-      sortByMusicVolumeDesc() {
+  sortByMusicVolumeDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'musicVolume', Sort.desc);
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterSortBy>
-      sortByRemainingSecondsOnKill() {
+  sortByRemainingSecondsOnKill() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'remainingSecondsOnKill', Sort.asc);
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterSortBy>
-      sortByRemainingSecondsOnKillDesc() {
+  sortByRemainingSecondsOnKillDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'remainingSecondsOnKill', Sort.desc);
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterSortBy>
-      sortBySessionTypeOnKill() {
+  sortBySessionTypeOnKill() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'sessionTypeOnKill', Sort.asc);
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterSortBy>
-      sortBySessionTypeOnKillDesc() {
+  sortBySessionTypeOnKillDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'sessionTypeOnKill', Sort.desc);
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterSortBy>
-      sortByShortBreakDuration() {
+  sortByShortBreakDuration() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'shortBreakDuration', Sort.asc);
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterSortBy>
-      sortByShortBreakDurationDesc() {
+  sortByShortBreakDurationDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'shortBreakDuration', Sort.desc);
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterSortBy>
-      sortByWasTimerRunning() {
+  sortByWasTimerRunning() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'wasTimerRunning', Sort.asc);
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterSortBy>
-      sortByWasTimerRunningDesc() {
+  sortByWasTimerRunningDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'wasTimerRunning', Sort.desc);
     });
@@ -1428,70 +1443,70 @@ extension FocusGoalSettingsQuerySortBy
 extension FocusGoalSettingsQuerySortThenBy
     on QueryBuilder<FocusGoalSettings, FocusGoalSettings, QSortThenBy> {
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterSortBy>
-      thenByAmbientVolume() {
+  thenByAmbientVolume() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'ambientVolume', Sort.asc);
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterSortBy>
-      thenByAmbientVolumeDesc() {
+  thenByAmbientVolumeDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'ambientVolume', Sort.desc);
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterSortBy>
-      thenByAutoStartBreaks() {
+  thenByAutoStartBreaks() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'autoStartBreaks', Sort.asc);
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterSortBy>
-      thenByAutoStartBreaksDesc() {
+  thenByAutoStartBreaksDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'autoStartBreaks', Sort.desc);
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterSortBy>
-      thenByAutoStartFocus() {
+  thenByAutoStartFocus() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'autoStartFocus', Sort.asc);
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterSortBy>
-      thenByAutoStartFocusDesc() {
+  thenByAutoStartFocusDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'autoStartFocus', Sort.desc);
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterSortBy>
-      thenByDailySessionGoal() {
+  thenByDailySessionGoal() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'dailySessionGoal', Sort.asc);
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterSortBy>
-      thenByDailySessionGoalDesc() {
+  thenByDailySessionGoalDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'dailySessionGoal', Sort.desc);
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterSortBy>
-      thenByFocusDuration() {
+  thenByFocusDuration() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'focusDuration', Sort.asc);
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterSortBy>
-      thenByFocusDurationDesc() {
+  thenByFocusDurationDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'focusDuration', Sort.desc);
     });
@@ -1504,133 +1519,133 @@ extension FocusGoalSettingsQuerySortThenBy
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterSortBy>
-      thenByIdDesc() {
+  thenByIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.desc);
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterSortBy>
-      thenByKillTimestamp() {
+  thenByKillTimestamp() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'killTimestamp', Sort.asc);
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterSortBy>
-      thenByKillTimestampDesc() {
+  thenByKillTimestampDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'killTimestamp', Sort.desc);
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterSortBy>
-      thenByLastAmbientSound() {
+  thenByLastAmbientSound() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'lastAmbientSound', Sort.asc);
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterSortBy>
-      thenByLastAmbientSoundDesc() {
+  thenByLastAmbientSoundDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'lastAmbientSound', Sort.desc);
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterSortBy>
-      thenByLongBreakDuration() {
+  thenByLongBreakDuration() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'longBreakDuration', Sort.asc);
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterSortBy>
-      thenByLongBreakDurationDesc() {
+  thenByLongBreakDurationDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'longBreakDuration', Sort.desc);
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterSortBy>
-      thenByLongBreakInterval() {
+  thenByLongBreakInterval() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'longBreakInterval', Sort.asc);
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterSortBy>
-      thenByLongBreakIntervalDesc() {
+  thenByLongBreakIntervalDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'longBreakInterval', Sort.desc);
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterSortBy>
-      thenByMusicVolume() {
+  thenByMusicVolume() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'musicVolume', Sort.asc);
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterSortBy>
-      thenByMusicVolumeDesc() {
+  thenByMusicVolumeDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'musicVolume', Sort.desc);
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterSortBy>
-      thenByRemainingSecondsOnKill() {
+  thenByRemainingSecondsOnKill() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'remainingSecondsOnKill', Sort.asc);
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterSortBy>
-      thenByRemainingSecondsOnKillDesc() {
+  thenByRemainingSecondsOnKillDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'remainingSecondsOnKill', Sort.desc);
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterSortBy>
-      thenBySessionTypeOnKill() {
+  thenBySessionTypeOnKill() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'sessionTypeOnKill', Sort.asc);
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterSortBy>
-      thenBySessionTypeOnKillDesc() {
+  thenBySessionTypeOnKillDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'sessionTypeOnKill', Sort.desc);
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterSortBy>
-      thenByShortBreakDuration() {
+  thenByShortBreakDuration() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'shortBreakDuration', Sort.asc);
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterSortBy>
-      thenByShortBreakDurationDesc() {
+  thenByShortBreakDurationDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'shortBreakDuration', Sort.desc);
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterSortBy>
-      thenByWasTimerRunning() {
+  thenByWasTimerRunning() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'wasTimerRunning', Sort.asc);
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QAfterSortBy>
-      thenByWasTimerRunningDesc() {
+  thenByWasTimerRunningDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'wasTimerRunning', Sort.desc);
     });
@@ -1640,100 +1655,104 @@ extension FocusGoalSettingsQuerySortThenBy
 extension FocusGoalSettingsQueryWhereDistinct
     on QueryBuilder<FocusGoalSettings, FocusGoalSettings, QDistinct> {
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QDistinct>
-      distinctByAmbientVolume() {
+  distinctByAmbientVolume() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'ambientVolume');
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QDistinct>
-      distinctByAutoStartBreaks() {
+  distinctByAutoStartBreaks() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'autoStartBreaks');
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QDistinct>
-      distinctByAutoStartFocus() {
+  distinctByAutoStartFocus() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'autoStartFocus');
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QDistinct>
-      distinctByDailySessionGoal() {
+  distinctByDailySessionGoal() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'dailySessionGoal');
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QDistinct>
-      distinctByFocusDuration() {
+  distinctByFocusDuration() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'focusDuration');
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QDistinct>
-      distinctByKillTimestamp() {
+  distinctByKillTimestamp() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'killTimestamp');
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QDistinct>
-      distinctByLastAmbientSound({bool caseSensitive = true}) {
+  distinctByLastAmbientSound({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'lastAmbientSound',
-          caseSensitive: caseSensitive);
+      return query.addDistinctBy(
+        r'lastAmbientSound',
+        caseSensitive: caseSensitive,
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QDistinct>
-      distinctByLongBreakDuration() {
+  distinctByLongBreakDuration() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'longBreakDuration');
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QDistinct>
-      distinctByLongBreakInterval() {
+  distinctByLongBreakInterval() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'longBreakInterval');
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QDistinct>
-      distinctByMusicVolume() {
+  distinctByMusicVolume() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'musicVolume');
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QDistinct>
-      distinctByRemainingSecondsOnKill() {
+  distinctByRemainingSecondsOnKill() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'remainingSecondsOnKill');
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QDistinct>
-      distinctBySessionTypeOnKill({bool caseSensitive = true}) {
+  distinctBySessionTypeOnKill({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'sessionTypeOnKill',
-          caseSensitive: caseSensitive);
+      return query.addDistinctBy(
+        r'sessionTypeOnKill',
+        caseSensitive: caseSensitive,
+      );
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QDistinct>
-      distinctByShortBreakDuration() {
+  distinctByShortBreakDuration() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'shortBreakDuration');
     });
   }
 
   QueryBuilder<FocusGoalSettings, FocusGoalSettings, QDistinct>
-      distinctByWasTimerRunning() {
+  distinctByWasTimerRunning() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'wasTimerRunning');
     });
@@ -1749,98 +1768,98 @@ extension FocusGoalSettingsQueryProperty
   }
 
   QueryBuilder<FocusGoalSettings, double, QQueryOperations>
-      ambientVolumeProperty() {
+  ambientVolumeProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'ambientVolume');
     });
   }
 
   QueryBuilder<FocusGoalSettings, bool, QQueryOperations>
-      autoStartBreaksProperty() {
+  autoStartBreaksProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'autoStartBreaks');
     });
   }
 
   QueryBuilder<FocusGoalSettings, bool, QQueryOperations>
-      autoStartFocusProperty() {
+  autoStartFocusProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'autoStartFocus');
     });
   }
 
   QueryBuilder<FocusGoalSettings, int, QQueryOperations>
-      dailySessionGoalProperty() {
+  dailySessionGoalProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'dailySessionGoal');
     });
   }
 
   QueryBuilder<FocusGoalSettings, int, QQueryOperations>
-      focusDurationProperty() {
+  focusDurationProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'focusDuration');
     });
   }
 
   QueryBuilder<FocusGoalSettings, DateTime?, QQueryOperations>
-      killTimestampProperty() {
+  killTimestampProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'killTimestamp');
     });
   }
 
   QueryBuilder<FocusGoalSettings, String?, QQueryOperations>
-      lastAmbientSoundProperty() {
+  lastAmbientSoundProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'lastAmbientSound');
     });
   }
 
   QueryBuilder<FocusGoalSettings, int, QQueryOperations>
-      longBreakDurationProperty() {
+  longBreakDurationProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'longBreakDuration');
     });
   }
 
   QueryBuilder<FocusGoalSettings, int, QQueryOperations>
-      longBreakIntervalProperty() {
+  longBreakIntervalProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'longBreakInterval');
     });
   }
 
   QueryBuilder<FocusGoalSettings, double, QQueryOperations>
-      musicVolumeProperty() {
+  musicVolumeProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'musicVolume');
     });
   }
 
   QueryBuilder<FocusGoalSettings, int, QQueryOperations>
-      remainingSecondsOnKillProperty() {
+  remainingSecondsOnKillProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'remainingSecondsOnKill');
     });
   }
 
   QueryBuilder<FocusGoalSettings, String, QQueryOperations>
-      sessionTypeOnKillProperty() {
+  sessionTypeOnKillProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'sessionTypeOnKill');
     });
   }
 
   QueryBuilder<FocusGoalSettings, int, QQueryOperations>
-      shortBreakDurationProperty() {
+  shortBreakDurationProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'shortBreakDuration');
     });
   }
 
   QueryBuilder<FocusGoalSettings, bool, QQueryOperations>
-      wasTimerRunningProperty() {
+  wasTimerRunningProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'wasTimerRunning');
     });

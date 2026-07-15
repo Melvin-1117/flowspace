@@ -132,7 +132,9 @@ class _AddMilestoneSheetState extends State<AddMilestoneSheet> {
                   onPressed: () async {
                     final picked = await showDatePicker(
                       context: context,
-                      firstDate: DateTime.now().subtract(const Duration(days: 365)),
+                      firstDate: DateTime.now().subtract(
+                        const Duration(days: 365),
+                      ),
                       lastDate: DateTime.now().add(const Duration(days: 3650)),
                       initialDate: _dueDate,
                     );
@@ -175,7 +177,10 @@ class _AddMilestoneSheetState extends State<AddMilestoneSheet> {
                     ),
                     const SizedBox(width: 8),
                     IconButton(
-                      icon: const Icon(Icons.add_circle, color: AppTheme.primary),
+                      icon: const Icon(
+                        Icons.add_circle,
+                        color: AppTheme.primary,
+                      ),
                       onPressed: _addChecklistItem,
                     ),
                   ],
@@ -198,13 +203,24 @@ class _AddMilestoneSheetState extends State<AddMilestoneSheet> {
                       return ListTile(
                         contentPadding: EdgeInsets.zero,
                         dense: true,
-                        leading: const Icon(Icons.circle_outlined, size: 16, color: AppTheme.textMuted),
+                        leading: const Icon(
+                          Icons.circle_outlined,
+                          size: 16,
+                          color: AppTheme.textMuted,
+                        ),
                         title: Text(
                           _checklistItems[index],
-                          style: const TextStyle(color: AppTheme.textPrimary, fontSize: 14),
+                          style: const TextStyle(
+                            color: AppTheme.textPrimary,
+                            fontSize: 14,
+                          ),
                         ),
                         trailing: IconButton(
-                          icon: const Icon(Icons.remove_circle_outline, size: 18, color: AppTheme.danger),
+                          icon: const Icon(
+                            Icons.remove_circle_outline,
+                            size: 18,
+                            color: AppTheme.danger,
+                          ),
                           onPressed: () => _removeChecklistItem(index),
                         ),
                       );
@@ -241,7 +257,7 @@ class _AddMilestoneSheetState extends State<AddMilestoneSheet> {
 
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
-    
+
     final milestone = Milestone(
       uuid: const Uuid().v4(),
       title: _titleController.text.trim(),
@@ -256,7 +272,7 @@ class _AddMilestoneSheetState extends State<AddMilestoneSheet> {
       checklistItems: _checklistItems,
       checklistCompleted: List<bool>.filled(_checklistItems.length, false),
     );
-    
+
     await widget.onSubmit(milestone);
     if (mounted) Navigator.of(context).pop();
   }

@@ -16,7 +16,8 @@ class OnboardingStep2Academic extends StatefulWidget {
   });
 
   @override
-  State<OnboardingStep2Academic> createState() => _OnboardingStep2AcademicState();
+  State<OnboardingStep2Academic> createState() =>
+      _OnboardingStep2AcademicState();
 }
 
 class _OnboardingStep2AcademicState extends State<OnboardingStep2Academic> {
@@ -88,7 +89,9 @@ class _OnboardingStep2AcademicState extends State<OnboardingStep2Academic> {
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 200),
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 16, vertical: 10),
+                    horizontal: 16,
+                    vertical: 10,
+                  ),
                   decoration: BoxDecoration(
                     color: isSelected
                         ? AppTheme.primary.withValues(alpha: 0.15)
@@ -163,8 +166,7 @@ class _OnboardingStep2AcademicState extends State<OnboardingStep2Academic> {
               }
             },
             child: Container(
-              padding: const EdgeInsets.symmetric(
-                  horizontal: 16, vertical: 14),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
               decoration: BoxDecoration(
                 color: AppTheme.surfaceCard,
                 borderRadius: BorderRadius.circular(12),
@@ -186,8 +188,9 @@ class _OnboardingStep2AcademicState extends State<OnboardingStep2Academic> {
                   const SizedBox(width: 12),
                   Text(
                     data.semesterEndDate != null
-                        ? DateFormat('MMMM d, yyyy')
-                            .format(data.semesterEndDate!)
+                        ? DateFormat(
+                            'MMMM d, yyyy',
+                          ).format(data.semesterEndDate!)
                         : 'Pick end date',
                     style: GoogleFonts.spaceGrotesk(
                       fontSize: 14,

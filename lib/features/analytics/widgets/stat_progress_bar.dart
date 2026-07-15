@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../../../core/constants/animation_tokens.dart';
 import '../../../app/theme.dart';
 
-
 class StatProgressBar extends StatelessWidget {
   const StatProgressBar({
     required this.value,

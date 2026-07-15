@@ -7,16 +7,15 @@ import 'onboarding_widgets.dart';
 class OnboardingStep5Personalize extends StatefulWidget {
   final OnboardingData data;
 
-  const OnboardingStep5Personalize({
-    super.key,
-    required this.data,
-  });
+  const OnboardingStep5Personalize({super.key, required this.data});
 
   @override
-  State<OnboardingStep5Personalize> createState() => _OnboardingStep5PersonalizeState();
+  State<OnboardingStep5Personalize> createState() =>
+      _OnboardingStep5PersonalizeState();
 }
 
-class _OnboardingStep5PersonalizeState extends State<OnboardingStep5Personalize> {
+class _OnboardingStep5PersonalizeState
+    extends State<OnboardingStep5Personalize> {
   @override
   Widget build(BuildContext context) {
     final data = widget.data;
@@ -138,7 +137,8 @@ class _OnboardingStep5PersonalizeState extends State<OnboardingStep5Personalize>
                     ),
                   ],
                 ),
-                if (data.primaryLanguages.isNotEmpty || data.techStack.isNotEmpty) ...[
+                if (data.primaryLanguages.isNotEmpty ||
+                    data.techStack.isNotEmpty) ...[
                   const Divider(color: AppTheme.surfaceBorder, height: 24),
                   Text(
                     'DEVELOPER STACK',
@@ -153,28 +153,29 @@ class _OnboardingStep5PersonalizeState extends State<OnboardingStep5Personalize>
                   Wrap(
                     spacing: 6,
                     runSpacing: 6,
-                    children: [
-                      ...data.primaryLanguages,
-                      ...data.techStack,
-                    ].map((item) {
-                      return Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: AppTheme.surfaceElevated,
-                          borderRadius: BorderRadius.circular(6),
-                          border: Border.all(color: AppTheme.surfaceBorder),
-                        ),
-                        child: Text(
-                          item,
-                          style: GoogleFonts.spaceGrotesk(
-                            fontSize: 11,
-                            color: AppTheme.textSecondary,
-                            fontWeight: FontWeight.w500,
+                    children: [...data.primaryLanguages, ...data.techStack].map(
+                      (item) {
+                        return Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 4,
                           ),
-                        ),
-                      );
-                    }).toList(),
+                          decoration: BoxDecoration(
+                            color: AppTheme.surfaceElevated,
+                            borderRadius: BorderRadius.circular(6),
+                            border: Border.all(color: AppTheme.surfaceBorder),
+                          ),
+                          child: Text(
+                            item,
+                            style: GoogleFonts.spaceGrotesk(
+                              fontSize: 11,
+                              color: AppTheme.textSecondary,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        );
+                      },
+                    ).toList(),
                   ),
                 ],
               ],

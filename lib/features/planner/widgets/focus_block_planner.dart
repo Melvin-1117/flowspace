@@ -99,20 +99,24 @@ class FocusBlockPlanner extends ConsumerWidget {
       backgroundColor: AppTheme.surfaceCard,
       builder: (_) => FocusBlockOptionsMenu(
         onStartNow: () async {
+          if (!context.mounted) return;
           await ref
               .read(focusBlockNotifierProvider.notifier)
               .startFocusSession(block);
           if (context.mounted) context.go('/pomodoro');
         },
         onEdit: () async {
+          if (!context.mounted) return;
           await onOpenBlock(block);
         },
         onDelete: () async {
+          if (!context.mounted) return;
           await ref
               .read(focusBlockNotifierProvider.notifier)
               .deleteBlock(block.uuid);
         },
         onComplete: () async {
+          if (!context.mounted) return;
           await ref
               .read(focusBlockNotifierProvider.notifier)
               .completeBlock(block.uuid);

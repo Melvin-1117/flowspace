@@ -19,8 +19,7 @@ final dashboardTasksDueTodayProvider = Provider<int>((ref) {
   return tasks.where((t) {
     final d = t.dueDate;
     if (d == null) return false;
-    return DateFormat('yyyy-MM-dd').format(d) == todayStr &&
-        t.status != 'done';
+    return DateFormat('yyyy-MM-dd').format(d) == todayStr && t.status != 'done';
   }).length;
 });
 

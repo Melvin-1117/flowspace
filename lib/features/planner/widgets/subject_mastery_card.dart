@@ -58,9 +58,7 @@ class SubjectMasteryCard extends ConsumerWidget {
                     ),
                     child: Icon(
                       _iconForName(subject.iconName),
-                      color: index.isEven
-                          ? AppTheme.primary
-                          : AppTheme.accent,
+                      color: index.isEven ? AppTheme.primary : AppTheme.accent,
                       size: 16,
                     ),
                   ),
@@ -89,7 +87,10 @@ class SubjectMasteryCard extends ConsumerWidget {
                 module == null
                     ? 'All modules completed'
                     : 'Module ${module.moduleNumber}: ${module.name}',
-                style: const TextStyle(color: AppTheme.textSecondary, fontSize: 13),
+                style: const TextStyle(
+                  color: AppTheme.textSecondary,
+                  fontSize: 13,
+                ),
               ),
               const SizedBox(height: 10),
               Row(

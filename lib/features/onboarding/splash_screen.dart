@@ -109,7 +109,9 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
                   decoration: BoxDecoration(
                     color: Colors.red.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: Colors.red.withValues(alpha: 0.3)),
+                    border: Border.all(
+                      color: Colors.red.withValues(alpha: 0.3),
+                    ),
                   ),
                   child: SelectableText(
                     _error!,
@@ -129,7 +131,10 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
                     });
                     _checkAndNavigate();
                   },
-                  child: const Text('Retry', style: TextStyle(color: AppTheme.primary)),
+                  child: const Text(
+                    'Retry',
+                    style: TextStyle(color: AppTheme.primary),
+                  ),
                 ),
               ],
             ),
@@ -179,32 +184,29 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
 
                 // App logo
                 Container(
-                  width: 88,
-                  height: 88,
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [
-                        AppTheme.primary,
-                        AppTheme.accent,
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    borderRadius: BorderRadius.circular(24),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppTheme.primary.withValues(alpha: 0.4),
-                        blurRadius: 40,
-                        spreadRadius: 8,
+                      width: 88,
+                      height: 88,
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [AppTheme.primary, AppTheme.accent],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius: BorderRadius.circular(24),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppTheme.primary.withValues(alpha: 0.4),
+                            blurRadius: 40,
+                            spreadRadius: 8,
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                  child: const Icon(
-                    Icons.bolt_rounded,
-                    color: Colors.white,
-                    size: 52,
-                  ),
-                )
+                      child: const Icon(
+                        Icons.bolt_rounded,
+                        color: Colors.white,
+                        size: 52,
+                      ),
+                    )
                     .animate()
                     .scaleXY(
                       begin: 0.7,
@@ -218,19 +220,16 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
 
                 // App name
                 Text(
-                  'FlowSpace',
-                  style: GoogleFonts.spaceGrotesk(
-                    fontSize: 40,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.white,
-                    letterSpacing: -1.5,
-                  ),
-                )
-                    .animate()
-                    .fadeIn(
-                      delay: 300.ms,
-                      duration: 500.ms,
+                      'FlowSpace',
+                      style: GoogleFonts.spaceGrotesk(
+                        fontSize: 40,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                        letterSpacing: -1.5,
+                      ),
                     )
+                    .animate()
+                    .fadeIn(delay: 300.ms, duration: 500.ms)
                     .slideY(begin: 0.2, end: 0),
 
                 const SizedBox(height: 8),
@@ -243,9 +242,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
                     color: AppTheme.textSecondary,
                     letterSpacing: 0.2,
                   ),
-                )
-                    .animate()
-                    .fadeIn(delay: 500.ms, duration: 500.ms),
+                ).animate().fadeIn(delay: 500.ms, duration: 500.ms),
 
                 const Spacer(flex: 2),
 
@@ -281,52 +278,54 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
                       ),
                     ],
                   ),
-                )
-                    .animate()
-                    .fadeIn(delay: 700.ms, duration: 500.ms),
+                ).animate().fadeIn(delay: 700.ms, duration: 500.ms),
 
                 const SizedBox(height: 48),
 
                 // Get Started button
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () => context.go('/onboarding'),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppTheme.primary,
-                        padding: const EdgeInsets.symmetric(vertical: 18),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(14),
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () => context.go('/onboarding'),
+                          style:
+                              ElevatedButton.styleFrom(
+                                backgroundColor: AppTheme.primary,
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 18,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(14),
+                                ),
+                                elevation: 0,
+                              ).copyWith(
+                                overlayColor: WidgetStateProperty.all(
+                                  AppTheme.primaryLight.withValues(alpha: 0.2),
+                                ),
+                              ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Get Started',
+                                style: GoogleFonts.spaceGrotesk(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              const Icon(
+                                Icons.arrow_forward_rounded,
+                                color: Colors.white,
+                                size: 20,
+                              ),
+                            ],
+                          ),
                         ),
-                        elevation: 0,
-                      ).copyWith(
-                        overlayColor: WidgetStateProperty.all(
-                            AppTheme.primaryLight.withValues(alpha: 0.2)),
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Get Started',
-                            style: GoogleFonts.spaceGrotesk(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white,
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          const Icon(
-                            Icons.arrow_forward_rounded,
-                            color: Colors.white,
-                            size: 20,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                )
+                    )
                     .animate()
                     .fadeIn(delay: 900.ms, duration: 500.ms)
                     .slideY(begin: 0.3, end: 0),
@@ -340,9 +339,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
                     fontSize: 12,
                     color: AppTheme.textMuted,
                   ),
-                )
-                    .animate()
-                    .fadeIn(delay: 1000.ms),
+                ).animate().fadeIn(delay: 1000.ms),
 
                 const SizedBox(height: 32),
               ],
@@ -359,10 +356,7 @@ class _FeaturePill extends StatelessWidget {
   final IconData icon;
   final String label;
 
-  const _FeaturePill({
-    required this.icon,
-    required this.label,
-  });
+  const _FeaturePill({required this.icon, required this.label});
 
   @override
   Widget build(BuildContext context) {

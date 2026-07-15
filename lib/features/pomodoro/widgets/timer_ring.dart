@@ -68,99 +68,98 @@ class _TimerRingState extends ConsumerState<TimerRing>
     final settings = ref.watch(focusGoalSettingsProvider).value;
     final longBreakInterval = settings?.longBreakInterval ?? 4;
 
-    return Container(
-      width: 260,
-      height: 260,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        boxShadow: [
-          BoxShadow(
-            color: sessionColor.withValues(alpha: 0.12),
-            blurRadius: 60,
-            spreadRadius: 20,
-          ),
-        ],
-      ),
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          // Background track and progress ring in one painter
-          CustomPaint(
-            size: const Size(260, 260),
-            painter: TimerRingPainter(
-              progress: smoothProgress,
-              sessionColor: sessionColor,
-              strokeWidth: 8,
+    return RepaintBoundary(
+      child: Container(
+        width: 260,
+        height: 260,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          boxShadow: [
+            BoxShadow(
+              color: sessionColor.withValues(alpha: 0.12),
+              blurRadius: 60,
+              spreadRadius: 20,
             ),
-          ),
-
-          // Center content
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Session type label
-              Text(
-                sessionType.label.toUpperCase(),
-                style: GoogleFonts.spaceGrotesk(
-                  fontSize: 11,
-                  fontWeight: FontWeight.w700,
-                  color: AppTheme.textSecondary,
-                  letterSpacing: 1.2,
-                ),
+          ],
+        ),
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            // Background track and progress ring in one painter
+            CustomPaint(
+              size: const Size(260, 260),
+              painter: TimerRingPainter(
+                progress: smoothProgress,
+                sessionColor: sessionColor,
+                strokeWidth: 8,
               ),
+            ),
 
-              const SizedBox(height: 8),
-
-              // Main countdown
-              Text(
-                formattedTime,
-                style: GoogleFonts.spaceGrotesk(
-                  fontSize: 52,
-                  fontWeight: FontWeight.w700,
-                  color: AppTheme.textPrimary,
-                  letterSpacing: -2,
-                  fontFeatures: const [FontFeature.tabularFigures()],
-                ),
-              ),
-
-              const SizedBox(height: 8),
-
-              // Progress percentage
-              Text(
-                '$progressPercent%',
-                style: GoogleFonts.spaceGrotesk(
-                  fontSize: 14,
-                  color: AppTheme.textSecondary,
-                ),
-              ),
-
-              const SizedBox(height: 12),
-
-              // Session count badge
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 4,
-                ),
-                decoration: BoxDecoration(
-                  color: sessionColor.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(
-                    color: sessionColor.withValues(alpha: 0.3),
-                  ),
-                ),
-                child: Text(
-                  'Session $sessionCount of $longBreakInterval',
+            // Center content
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Session type label
+                Text(
+                  sessionType.label.toUpperCase(),
                   style: GoogleFonts.spaceGrotesk(
                     fontSize: 11,
-                    fontWeight: FontWeight.w600,
-                    color: sessionColor,
+                    fontWeight: FontWeight.w700,
+                    color: AppTheme.textSecondary,
+                    letterSpacing: 1.2,
                   ),
                 ),
-              ),
-            ],
-          ),
-        ],
+                const SizedBox(height: 6),
+
+                // Countdown time digits
+                Text(
+                  formattedTime,
+                  style: GoogleFonts.spaceGrotesk(
+                    fontSize: 48,
+                    fontWeight: FontWeight.w700,
+                    color: AppTheme.textPrimary,
+                    letterSpacing: -1,
+                  ),
+                ),
+                const SizedBox(height: 4),
+
+                // Progress percentage label
+                Text(
+                  '$progressPercent%',
+                  style: GoogleFonts.spaceGrotesk(
+                    fontSize: 12,
+                    color: AppTheme.textSecondary,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 12),
+
+                // Session counter pill
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    color: sessionColor.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: sessionColor.withValues(alpha: 0.25),
+                    ),
+                  ),
+                  child: Text(
+                    'Session $sessionCount of $longBreakInterval',
+                    style: GoogleFonts.spaceGrotesk(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                      color: sessionColor,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

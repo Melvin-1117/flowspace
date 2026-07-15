@@ -89,7 +89,7 @@ final subjectHoursProvider = FutureProvider.family<double, String>((
 ) async {
   final sessions = await _loadSessions(ref);
   final blocks = await ref.watch(focusBlockNotifierProvider.future);
-  
+
   // Find all focus block UUIDs that are linked to this subjectId
   final linkedBlockIds = blocks
       .where((block) => block.linkedSubjectId == subjectId)
@@ -99,8 +99,8 @@ final subjectHoursProvider = FutureProvider.family<double, String>((
   final totalSeconds = sessions
       .where((session) => session.isCompleted)
       .where((session) {
-        return session.linkedTaskId == subjectId || 
-               linkedBlockIds.contains(session.linkedTaskId);
+        return session.linkedTaskId == subjectId ||
+            linkedBlockIds.contains(session.linkedTaskId);
       })
       .fold<int>(0, (sum, session) => sum + session.actualDurationSeconds);
   return totalSeconds / 3600;
@@ -110,7 +110,8 @@ final subjectHoursProvider = FutureProvider.family<double, String>((
 final nextMilestoneProvider = FutureProvider<Milestone?>((ref) async {
   final milestones = await ref.watch(allMilestonesProvider.future);
   final now = DateTime.now();
-  final sortedMilestones = [...milestones]..sort((a, b) => a.dueDate.compareTo(b.dueDate));
+  final sortedMilestones = [...milestones]
+    ..sort((a, b) => a.dueDate.compareTo(b.dueDate));
   for (final milestone in sortedMilestones) {
     if (!milestone.isCompleted && milestone.dueDate.isAfter(now)) {
       return milestone;
@@ -184,7 +185,6 @@ final semesterHealthTrendProvider = FutureProvider<List<double>>((ref) async {
   }
   return values;
 });
-
 
 Future<List<PomodoroSession>> _loadSessions(Ref ref) async {
   if (kIsWeb) {

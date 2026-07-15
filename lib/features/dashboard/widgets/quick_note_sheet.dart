@@ -83,15 +83,14 @@ class _QuickNoteSheetState extends State<QuickNoteSheet> {
 
           Row(
             children: [
-              const Icon(Icons.book_rounded,
-                  color: AppTheme.accent, size: 22),
+              const Icon(Icons.book_rounded, color: AppTheme.accent, size: 22),
               const SizedBox(width: 10),
               Text(
                 'Add Journal Entry',
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: AppTheme.textPrimary,
-                      fontWeight: FontWeight.w600,
-                    ),
+                  color: AppTheme.textPrimary,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ],
           ),
@@ -132,10 +131,10 @@ class _QuickNoteSheetState extends State<QuickNoteSheet> {
                   onPressed: () => Navigator.of(context).pop(),
                   style: OutlinedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 14),
-                    side:
-                        const BorderSide(color: AppTheme.surfaceBorder),
+                    side: const BorderSide(color: AppTheme.surfaceBorder),
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12)),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
                   child: const Text(
                     'Cancel',
@@ -152,14 +151,17 @@ class _QuickNoteSheetState extends State<QuickNoteSheet> {
                     backgroundColor: AppTheme.accent,
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12)),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
                   child: _saving
                       ? const SizedBox(
                           width: 18,
                           height: 18,
                           child: CircularProgressIndicator(
-                              strokeWidth: 2, color: Colors.white),
+                            strokeWidth: 2,
+                            color: Colors.white,
+                          ),
                         )
                       : const Text(
                           'Save as Journal Entry',

@@ -19,8 +19,9 @@ class QuickStatsRow extends ConsumerWidget {
         Expanded(
           child: _StatCard(
             icon: Icons.check_circle_outline_rounded,
-            iconColor:
-                tasksDueToday > 0 ? AppTheme.primary : AppTheme.textSecondary,
+            iconColor: tasksDueToday > 0
+                ? AppTheme.primary
+                : AppTheme.textSecondary,
             value: '$tasksDueToday',
             label: 'Due Today',
             onTap: () => context.go('/tasks'),
@@ -30,8 +31,7 @@ class QuickStatsRow extends ConsumerWidget {
         Expanded(
           child: _StatCard(
             icon: Icons.local_fire_department_rounded,
-            iconColor:
-                streak > 0 ? AppTheme.warning : AppTheme.textSecondary,
+            iconColor: streak > 0 ? AppTheme.warning : AppTheme.textSecondary,
             value: '$streak',
             label: 'Day Streak',
             onTap: () => context.go('/analytics'),
@@ -86,17 +86,17 @@ class _StatCard extends StatelessWidget {
             Text(
               value,
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    color: AppTheme.textPrimary,
-                    fontWeight: FontWeight.w700,
-                  ),
+                color: AppTheme.textPrimary,
+                fontWeight: FontWeight.w700,
+              ),
             ),
             const SizedBox(height: 2),
             Text(
               label,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: AppTheme.textSecondary,
-                    fontSize: 11,
-                  ),
+                color: AppTheme.textSecondary,
+                fontSize: 11,
+              ),
             ),
           ],
         ),

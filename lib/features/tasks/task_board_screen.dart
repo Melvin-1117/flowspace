@@ -130,277 +130,328 @@ class _TaskBoardScreenState extends ConsumerState<TaskBoardScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
-                            children: [
-                              if (widget.embedInShell)
-                                IconButton(
-                                  padding: EdgeInsets.zero,
-                                  constraints: const BoxConstraints(
-                                    minWidth: 40,
-                                    minHeight: 40,
-                                  ),
-                                  icon: const Icon(Icons.menu_outlined),
-                                  onPressed: () =>
-                                      _scaffoldKey.currentState?.openDrawer(),
-                                  tooltip: 'Menu',
-                                ),
-                              Expanded(
-                                child: GestureDetector(
-                                  onTap: () => _renameProjectDialog(
-                                    context,
-                                    projectName,
-                                  ),
-                                  child: Text(
-                                    projectName,
-                                    style: const TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w700,
-                                      color: AppTheme.textPrimary,
-                                    ),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          )
-                              .animate()
-                              .fadeIn(duration: kPageEntryDuration, curve: kPageEntryCurve)
-                              .slideY(begin: 0.06, end: 0, duration: kPageEntryDuration, curve: kPageEntryCurve),
-                          const SizedBox(height: 10),
-                          Row(
-                            children: [
-                              GestureDetector(
-                                onTap: () => _showTeamSheet(context),
-                                child: const CircleAvatar(
-                                  radius: 14,
-                                  backgroundColor: AppTheme.surfaceElevated,
-                                  child: Text(
-                                    '+4',
-                                    style: TextStyle(fontSize: 10),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 12),
-                              GestureDetector(
-                                onTap: () {
-                                  showModalBottomSheet<void>(
-                                    context: context,
-                                    backgroundColor: AppTheme.surfaceCard,
-                                    builder: (_) => ProgressBreakdownSheet(
-                                      tasks: allTasks,
-                                      progress: progress,
-                                    ),
-                                  );
-                                },
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      width: 8,
-                                      height: 8,
-                                      decoration: const BoxDecoration(
-                                        color: AppTheme.accent,
-                                        shape: BoxShape.circle,
-                                      ),
-                                    ).animate().scale(
-                                      begin: const Offset(0.8, 0.8),
-                                      end: const Offset(1.15, 1.15),
-                                      duration: const Duration(
-                                        milliseconds: 450,
-                                      ),
-                                    ),
-                                    const SizedBox(width: 8),
-                                    Text(
-                                      '${(progress * 100).round()}% COMPLETE',
-                                      style: const TextStyle(
-                                        letterSpacing: 1.4,
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: 12,
-                                        color: AppTheme.textSecondary,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              const Spacer(),
-                              if (!online)
-                                const Text(
-                                  'OFFLINE',
-                                  style: TextStyle(
-                                    color: AppTheme.danger,
-                                    fontSize: 11,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                            ],
-                          )
-                              .animate()
-                              .fadeIn(duration: kPageEntryDuration, delay: kPageStaggerStep, curve: kPageEntryCurve)
-                              .slideY(begin: 0.06, end: 0, duration: kPageEntryDuration, delay: kPageStaggerStep, curve: kPageEntryCurve),
-                          const SizedBox(height: 14),
-                          LayoutBuilder(
-                            builder: (context, constraints) {
-                              final narrow = constraints.maxWidth < 460;
-                              final togglesRow = Row(
                                 children: [
-                                  Expanded(
-                                    child: _viewToggleButton(
-                                      icon: Icons.view_kanban_outlined,
-                                      title: 'Kanban',
-                                      active: viewMode == ViewMode.kanban,
-                                      onTap: () =>
-                                          ref
-                                              .read(viewModeProvider.notifier)
-                                              .state = ViewMode
-                                              .kanban,
+                                  if (widget.embedInShell)
+                                    IconButton(
+                                      padding: EdgeInsets.zero,
+                                      constraints: const BoxConstraints(
+                                        minWidth: 40,
+                                        minHeight: 40,
+                                      ),
+                                      icon: const Icon(Icons.menu_outlined),
+                                      onPressed: () => _scaffoldKey.currentState
+                                          ?.openDrawer(),
+                                      tooltip: 'Menu',
                                     ),
-                                  ),
-                                  const SizedBox(width: 8),
                                   Expanded(
-                                    child: _viewToggleButton(
-                                      icon: Icons.format_list_bulleted,
-                                      title: 'List',
-                                      active: viewMode == ViewMode.list,
-                                      onTap: () =>
-                                          ref
-                                              .read(viewModeProvider.notifier)
-                                              .state = ViewMode
-                                              .list,
+                                    child: GestureDetector(
+                                      onTap: () => _renameProjectDialog(
+                                        context,
+                                        projectName,
+                                      ),
+                                      child: Text(
+                                        projectName,
+                                        style: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w700,
+                                          color: AppTheme.textPrimary,
+                                        ),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
                                     ),
                                   ),
                                 ],
-                              );
-                              final filterBtn = IconButton(
-                                onPressed: () {
-                                  showModalBottomSheet<void>(
-                                    context: context,
-                                    isScrollControlled: true,
-                                    backgroundColor: AppTheme.surfaceCard,
-                                    builder: (_) => const FilterSheet(),
-                                  );
-                                },
-                                icon: Stack(
-                                  children: [
-                                    const Icon(Icons.filter_list),
-                                    if (filters.activeCount > 0)
-                                      Positioned(
-                                        right: 0,
-                                        top: 0,
-                                        child: CircleAvatar(
-                                          radius: 7,
-                                          backgroundColor: const Color(
-                                            0xFFFF3B5C,
-                                          ),
-                                          child: Text(
-                                            filters.activeCount.toString(),
-                                            style: const TextStyle(fontSize: 8),
-                                          ),
-                                        ),
-                                      ),
-                                  ],
-                                ),
-                              );
-                              final newBtn = ElevatedButton(
-                                onPressed: () => _openNewTaskSheet(context),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppTheme.primary,
-                                  foregroundColor: AppTheme.textPrimary,
-                                  textStyle: const TextStyle(
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(14),
-                                  ),
-                                ),
-                                child: const Text('New Task'),
-                              );
-                              if (narrow) {
-                                return Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
-                                  children: [
-                                    togglesRow,
-                                    const SizedBox(height: 8),
-                                    Row(
-                                      children: [
-                                        filterBtn,
-                                        const SizedBox(width: 4),
-                                        Expanded(child: newBtn),
-                                      ],
-                                    ),
-                                  ],
-                                );
-                              }
-                              return Row(
+                              )
+                              .animate()
+                              .fadeIn(
+                                duration: kPageEntryDuration,
+                                curve: kPageEntryCurve,
+                              )
+                              .slideY(
+                                begin: 0.06,
+                                end: 0,
+                                duration: kPageEntryDuration,
+                                curve: kPageEntryCurve,
+                              ),
+                          const SizedBox(height: 10),
+                          Row(
                                 children: [
-                                  Expanded(
-                                    flex: 2,
+                                  GestureDetector(
+                                    onTap: () => _showTeamSheet(context),
+                                    child: const CircleAvatar(
+                                      radius: 14,
+                                      backgroundColor: AppTheme.surfaceElevated,
+                                      child: Text(
+                                        '+4',
+                                        style: TextStyle(fontSize: 10),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  GestureDetector(
+                                    onTap: () {
+                                      showModalBottomSheet<void>(
+                                        context: context,
+                                        backgroundColor: AppTheme.surfaceCard,
+                                        builder: (_) => ProgressBreakdownSheet(
+                                          tasks: allTasks,
+                                          progress: progress,
+                                        ),
+                                      );
+                                    },
                                     child: Row(
                                       children: [
-                                        Expanded(
-                                          child: _viewToggleButton(
-                                            icon: Icons.view_kanban_outlined,
-                                            title: 'Kanban',
-                                            active: viewMode == ViewMode.kanban,
-                                            onTap: () =>
-                                                ref
-                                                    .read(
-                                                      viewModeProvider.notifier,
-                                                    )
-                                                    .state = ViewMode
-                                                    .kanban,
+                                        Container(
+                                          width: 8,
+                                          height: 8,
+                                          decoration: const BoxDecoration(
+                                            color: AppTheme.accent,
+                                            shape: BoxShape.circle,
+                                          ),
+                                        ).animate().scale(
+                                          begin: const Offset(0.8, 0.8),
+                                          end: const Offset(1.15, 1.15),
+                                          duration: const Duration(
+                                            milliseconds: 450,
                                           ),
                                         ),
                                         const SizedBox(width: 8),
-                                        Expanded(
-                                          child: _viewToggleButton(
-                                            icon: Icons.format_list_bulleted,
-                                            title: 'List',
-                                            active: viewMode == ViewMode.list,
-                                            onTap: () =>
-                                                ref
-                                                    .read(
-                                                      viewModeProvider.notifier,
-                                                    )
-                                                    .state = ViewMode
-                                                    .list,
+                                        Text(
+                                          '${(progress * 100).round()}% COMPLETE',
+                                          style: const TextStyle(
+                                            letterSpacing: 1.4,
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 12,
+                                            color: AppTheme.textSecondary,
                                           ),
                                         ),
                                       ],
                                     ),
                                   ),
-                                  const SizedBox(width: 10),
-                                  filterBtn,
-                                  const SizedBox(width: 4),
-                                  newBtn,
+                                  const Spacer(),
+                                  if (!online)
+                                    const Text(
+                                      'OFFLINE',
+                                      style: TextStyle(
+                                        color: AppTheme.danger,
+                                        fontSize: 11,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
                                 ],
-                              );
-                            },
-                          )
+                              )
                               .animate()
-                              .fadeIn(duration: kPageEntryDuration, delay: kPageStaggerStep * 2, curve: kPageEntryCurve)
-                              .slideY(begin: 0.06, end: 0, duration: kPageEntryDuration, delay: kPageStaggerStep * 2, curve: kPageEntryCurve),
+                              .fadeIn(
+                                duration: kPageEntryDuration,
+                                delay: kPageStaggerStep,
+                                curve: kPageEntryCurve,
+                              )
+                              .slideY(
+                                begin: 0.06,
+                                end: 0,
+                                duration: kPageEntryDuration,
+                                delay: kPageStaggerStep,
+                                curve: kPageEntryCurve,
+                              ),
+                          const SizedBox(height: 14),
+                          LayoutBuilder(
+                                builder: (context, constraints) {
+                                  final narrow = constraints.maxWidth < 460;
+                                  final togglesRow = Row(
+                                    children: [
+                                      Expanded(
+                                        child: _viewToggleButton(
+                                          icon: Icons.view_kanban_outlined,
+                                          title: 'Kanban',
+                                          active: viewMode == ViewMode.kanban,
+                                          onTap: () =>
+                                              ref
+                                                  .read(
+                                                    viewModeProvider.notifier,
+                                                  )
+                                                  .state = ViewMode
+                                                  .kanban,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Expanded(
+                                        child: _viewToggleButton(
+                                          icon: Icons.format_list_bulleted,
+                                          title: 'List',
+                                          active: viewMode == ViewMode.list,
+                                          onTap: () =>
+                                              ref
+                                                  .read(
+                                                    viewModeProvider.notifier,
+                                                  )
+                                                  .state = ViewMode
+                                                  .list,
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                  final filterBtn = IconButton(
+                                    onPressed: () {
+                                      showModalBottomSheet<void>(
+                                        context: context,
+                                        isScrollControlled: true,
+                                        backgroundColor: AppTheme.surfaceCard,
+                                        builder: (_) => const FilterSheet(),
+                                      );
+                                    },
+                                    icon: Stack(
+                                      children: [
+                                        const Icon(Icons.filter_list),
+                                        if (filters.activeCount > 0)
+                                          Positioned(
+                                            right: 0,
+                                            top: 0,
+                                            child: CircleAvatar(
+                                              radius: 7,
+                                              backgroundColor: const Color(
+                                                0xFFFF3B5C,
+                                              ),
+                                              child: Text(
+                                                filters.activeCount.toString(),
+                                                style: const TextStyle(
+                                                  fontSize: 8,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                      ],
+                                    ),
+                                  );
+                                  final newBtn = ElevatedButton(
+                                    onPressed: () => _openNewTaskSheet(context),
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: AppTheme.primary,
+                                      foregroundColor: AppTheme.textPrimary,
+                                      textStyle: const TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(14),
+                                      ),
+                                    ),
+                                    child: const Text('New Task'),
+                                  );
+                                  if (narrow) {
+                                    return Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.stretch,
+                                      children: [
+                                        togglesRow,
+                                        const SizedBox(height: 8),
+                                        Row(
+                                          children: [
+                                            filterBtn,
+                                            const SizedBox(width: 4),
+                                            Expanded(child: newBtn),
+                                          ],
+                                        ),
+                                      ],
+                                    );
+                                  }
+                                  return Row(
+                                    children: [
+                                      Expanded(
+                                        flex: 2,
+                                        child: Row(
+                                          children: [
+                                            Expanded(
+                                              child: _viewToggleButton(
+                                                icon:
+                                                    Icons.view_kanban_outlined,
+                                                title: 'Kanban',
+                                                active:
+                                                    viewMode == ViewMode.kanban,
+                                                onTap: () =>
+                                                    ref
+                                                            .read(
+                                                              viewModeProvider
+                                                                  .notifier,
+                                                            )
+                                                            .state =
+                                                        ViewMode.kanban,
+                                              ),
+                                            ),
+                                            const SizedBox(width: 8),
+                                            Expanded(
+                                              child: _viewToggleButton(
+                                                icon:
+                                                    Icons.format_list_bulleted,
+                                                title: 'List',
+                                                active:
+                                                    viewMode == ViewMode.list,
+                                                onTap: () =>
+                                                    ref
+                                                            .read(
+                                                              viewModeProvider
+                                                                  .notifier,
+                                                            )
+                                                            .state =
+                                                        ViewMode.list,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      const SizedBox(width: 10),
+                                      filterBtn,
+                                      const SizedBox(width: 4),
+                                      newBtn,
+                                    ],
+                                  );
+                                },
+                              )
+                              .animate()
+                              .fadeIn(
+                                duration: kPageEntryDuration,
+                                delay: kPageStaggerStep * 2,
+                                curve: kPageEntryCurve,
+                              )
+                              .slideY(
+                                begin: 0.06,
+                                end: 0,
+                                duration: kPageEntryDuration,
+                                delay: kPageStaggerStep * 2,
+                                curve: kPageEntryCurve,
+                              ),
                         ],
                       ),
                     ),
                   ),
                   SliverFillRemaining(
                     hasScrollBody: true,
-                    child: LayoutBuilder(
-                      builder: (context, constraints) {
-                        if (viewMode == ViewMode.kanban) {
-                          return KanbanBoard(
-                            tasks: searchedTasks,
-                            maxWidth: constraints.hasBoundedWidth
-                                ? constraints.maxWidth
-                                : null,
-                          );
-                        }
-                        return TaskListView(tasks: searchedTasks);
-                      },
-                    )
-                        .animate()
-                        .fadeIn(duration: kPageEntryDuration, delay: kPageStaggerStep * 3, curve: kPageEntryCurve)
-                        .slideY(begin: 0.06, end: 0, duration: kPageEntryDuration, delay: kPageStaggerStep * 3, curve: kPageEntryCurve),
+                    child:
+                        LayoutBuilder(
+                              builder: (context, constraints) {
+                                if (viewMode == ViewMode.kanban) {
+                                  return KanbanBoard(
+                                    tasks: searchedTasks,
+                                    maxWidth: constraints.hasBoundedWidth
+                                        ? constraints.maxWidth
+                                        : null,
+                                  );
+                                }
+                                return TaskListView(tasks: searchedTasks);
+                              },
+                            )
+                            .animate()
+                            .fadeIn(
+                              duration: kPageEntryDuration,
+                              delay: kPageStaggerStep * 3,
+                              curve: kPageEntryCurve,
+                            )
+                            .slideY(
+                              begin: 0.06,
+                              end: 0,
+                              duration: kPageEntryDuration,
+                              delay: kPageStaggerStep * 3,
+                              curve: kPageEntryCurve,
+                            ),
                   ),
                 ],
               ),

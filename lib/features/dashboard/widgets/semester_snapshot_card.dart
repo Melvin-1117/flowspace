@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -25,20 +25,19 @@ class SemesterSnapshotCard extends ConsumerWidget {
         }
 
         final topSubjects = [...subjects]
-          ..sort(
-              (a, b) => b.completionPercent.compareTo(a.completionPercent));
+          ..sort((a, b) => b.completionPercent.compareTo(a.completionPercent));
         final displaySubjects = topSubjects.take(2).toList();
 
         final statusLabel = health.score >= 70
             ? 'OPTIMAL'
             : health.score >= 40
-                ? 'AT RISK'
-                : 'CRITICAL';
+            ? 'AT RISK'
+            : 'CRITICAL';
         final statusColor = health.score >= 70
             ? AppTheme.success
             : health.score >= 40
-                ? AppTheme.warning
-                : AppTheme.danger;
+            ? AppTheme.warning
+            : AppTheme.danger;
 
         return GestureDetector(
           onTap: () => context.go('/planner'),
@@ -64,9 +63,9 @@ class SemesterSnapshotCard extends ConsumerWidget {
                     Text(
                       'View Planner â†’',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: AppTheme.primary,
-                            fontWeight: FontWeight.w600,
-                          ),
+                        color: AppTheme.primary,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ],
                 ),
@@ -85,14 +84,13 @@ class SemesterSnapshotCard extends ConsumerWidget {
                             value: (health.score / 100).clamp(0.0, 1.0),
                             strokeWidth: 5,
                             backgroundColor: AppTheme.surfaceBorder,
-                            valueColor:
-                                AlwaysStoppedAnimation<Color>(statusColor),
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              statusColor,
+                            ),
                           ),
                           Text(
                             '${health.score.round()}',
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleSmall
+                            style: Theme.of(context).textTheme.titleSmall
                                 ?.copyWith(
                                   fontWeight: FontWeight.w700,
                                   color: AppTheme.textPrimary,
@@ -107,7 +105,9 @@ class SemesterSnapshotCard extends ConsumerWidget {
                       children: [
                         Container(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 3),
+                            horizontal: 8,
+                            vertical: 3,
+                          ),
                           decoration: BoxDecoration(
                             color: statusColor.withValues(alpha: 0.15),
                             borderRadius: BorderRadius.circular(6),
@@ -125,10 +125,8 @@ class SemesterSnapshotCard extends ConsumerWidget {
                         const SizedBox(height: 4),
                         Text(
                           '${subjects.length} subject${subjects.length == 1 ? '' : 's'} tracked',
-                          style:
-                              Theme.of(context).textTheme.bodySmall?.copyWith(
-                                    color: AppTheme.textSecondary,
-                                  ),
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(color: AppTheme.textSecondary),
                         ),
                       ],
                     ),
@@ -149,9 +147,7 @@ class SemesterSnapshotCard extends ConsumerWidget {
                               Expanded(
                                 child: Text(
                                   subject.name,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodySmall
+                                  style: Theme.of(context).textTheme.bodySmall
                                       ?.copyWith(
                                         color: AppTheme.textPrimary,
                                         fontWeight: FontWeight.w500,
@@ -161,12 +157,8 @@ class SemesterSnapshotCard extends ConsumerWidget {
                               ),
                               Text(
                                 '${(subject.completionPercent * 100).round()}%',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodySmall
-                                    ?.copyWith(
-                                      color: AppTheme.textSecondary,
-                                    ),
+                                style: Theme.of(context).textTheme.bodySmall
+                                    ?.copyWith(color: AppTheme.textSecondary),
                               ),
                             ],
                           ),
@@ -178,7 +170,8 @@ class SemesterSnapshotCard extends ConsumerWidget {
                               minHeight: 4,
                               backgroundColor: AppTheme.surfaceBorder,
                               valueColor: const AlwaysStoppedAnimation<Color>(
-                                  AppTheme.primary),
+                                AppTheme.primary,
+                              ),
                             ),
                           ),
                         ],
@@ -212,14 +205,13 @@ class _EmptySubjectsCard extends StatelessWidget {
       ),
       child: Column(
         children: [
-          const Icon(Icons.school_rounded,
-              color: AppTheme.textMuted, size: 32),
+          const Icon(Icons.school_rounded, color: AppTheme.textMuted, size: 32),
           const SizedBox(height: 12),
           Text(
             'Add subjects to track your progress',
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: AppTheme.textSecondary,
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.bodyMedium?.copyWith(color: AppTheme.textSecondary),
           ),
           const SizedBox(height: 12),
           TextButton.icon(

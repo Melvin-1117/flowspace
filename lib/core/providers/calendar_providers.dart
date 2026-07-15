@@ -5,8 +5,9 @@ import '../models/task.dart';
 
 export 'calendar_sessions_providers.dart';
 
-final selectedDateProvider =
-    NotifierProvider<SelectedDateNotifier, DateTime>(SelectedDateNotifier.new);
+final selectedDateProvider = NotifierProvider<SelectedDateNotifier, DateTime>(
+  SelectedDateNotifier.new,
+);
 
 class SelectedDateNotifier extends Notifier<DateTime> {
   @override
@@ -20,8 +21,10 @@ class SelectedDateNotifier extends Notifier<DateTime> {
   }
 }
 
-final tasksByDateProvider =
-    Provider.family<AsyncValue<List<Task>>, DateTime>((ref, day) {
+final tasksByDateProvider = Provider.family<AsyncValue<List<Task>>, DateTime>((
+  ref,
+  day,
+) {
   final normalized = DateTime(day.year, day.month, day.day);
   final tasksAsync = ref.watch(taskNotifierProvider);
   return tasksAsync.when(
@@ -37,18 +40,18 @@ final tasksByDateProvider =
   );
 });
 
-final taskCompletionProvider =
-    NotifierProvider<TaskCompletionNotifier, int>(TaskCompletionNotifier.new);
+final taskCompletionProvider = NotifierProvider<TaskCompletionNotifier, int>(
+  TaskCompletionNotifier.new,
+);
 
 class TaskCompletionNotifier extends Notifier<int> {
   @override
   int build() => 0;
 
   Future<void> toggleTask(Task task, bool completed) async {
-    await ref.read(taskNotifierProvider.notifier).moveTask(
-          task.uuid,
-          completed ? 'done' : 'todo',
-        );
+    await ref
+        .read(taskNotifierProvider.notifier)
+        .moveTask(task.uuid, completed ? 'done' : 'todo');
     state++;
   }
 }

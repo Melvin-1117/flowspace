@@ -41,14 +41,14 @@ class _AllocationDonutChartState extends ConsumerState<AllocationDonutChart> {
       child: allocationData.when(
         data: (data) {
           if (_isEmpty(data)) {
-                return const SizedBox(
-                  height: 140,
-                  child: Center(
-                    child: AnalyticsEmptyState(
-                      message: 'Run focused sessions to see time allocation.',
-                      icon: Icons.pie_chart_outline_rounded,
-                    ),
-                  ),
+            return const SizedBox(
+              height: 140,
+              child: Center(
+                child: AnalyticsEmptyState(
+                  message: 'Run focused sessions to see time allocation.',
+                  icon: Icons.pie_chart_outline_rounded,
+                ),
+              ),
             );
           }
           final remaining =
@@ -100,9 +100,11 @@ class _AllocationDonutChartState extends ConsumerState<AllocationDonutChart> {
                               },
                             ),
                             sections: sections
-                                .map((section) => section.copyWith(
-                                      value: section.value * progress,
-                                    ))
+                                .map(
+                                  (section) => section.copyWith(
+                                    value: section.value * progress,
+                                  ),
+                                )
                                 .toList(),
                           ),
                         );

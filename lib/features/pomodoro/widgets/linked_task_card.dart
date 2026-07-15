@@ -71,7 +71,9 @@ class LinkedTaskCard extends ConsumerWidget {
                         : 'Tap to link a task to this session',
                     style: GoogleFonts.spaceGrotesk(
                       fontSize: 14,
-                      color: hasTask ? AppTheme.textPrimary : AppTheme.textMuted,
+                      color: hasTask
+                          ? AppTheme.textPrimary
+                          : AppTheme.textMuted,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,

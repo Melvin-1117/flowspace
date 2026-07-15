@@ -27,10 +27,15 @@ class _SubjectListScreenState extends ConsumerState<SubjectListScreen> {
       drawer: const AppDrawer(),
       appBar: AppBar(
         backgroundColor: AppTheme.background,
-        leading: IconButton(
-          onPressed: () => _scaffoldKey.currentState?.openDrawer(),
-          icon: const Icon(Icons.menu, color: Colors.white),
-        ),
+        leading: Navigator.of(context).canPop()
+            ? IconButton(
+                onPressed: () => Navigator.of(context).pop(),
+                icon: const Icon(Icons.arrow_back, color: Colors.white),
+              )
+            : IconButton(
+                onPressed: () => _scaffoldKey.currentState?.openDrawer(),
+                icon: const Icon(Icons.menu, color: Colors.white),
+              ),
         title: const Text('All Subjects'),
       ),
       body: subjects.when(

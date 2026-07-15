@@ -1,4 +1,4 @@
-﻿import 'package:fl_chart/fl_chart.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -91,18 +91,21 @@ class _LanguageDonutChartState extends ConsumerState<LanguageDonutChart> {
                       child: PieChart(
                         PieChartData(
                           pieTouchData: PieTouchData(
-                            touchCallback: (FlTouchEvent event, pieTouchResponse) {
-                              setState(() {
-                                if (!event.isInterestedForInteractions ||
-                                    pieTouchResponse == null ||
-                                    pieTouchResponse.touchedSection == null) {
-                                  _touchedIndex = -1;
-                                  return;
-                                }
-                                _touchedIndex = pieTouchResponse
-                                    .touchedSection!.touchedSectionIndex;
-                              });
-                            },
+                            touchCallback:
+                                (FlTouchEvent event, pieTouchResponse) {
+                                  setState(() {
+                                    if (!event.isInterestedForInteractions ||
+                                        pieTouchResponse == null ||
+                                        pieTouchResponse.touchedSection ==
+                                            null) {
+                                      _touchedIndex = -1;
+                                      return;
+                                    }
+                                    _touchedIndex = pieTouchResponse
+                                        .touchedSection!
+                                        .touchedSectionIndex;
+                                  });
+                                },
                           ),
                           borderData: FlBorderData(show: false),
                           sectionsSpace: 3,
@@ -116,7 +119,9 @@ class _LanguageDonutChartState extends ConsumerState<LanguageDonutChart> {
                             return PieChartSectionData(
                               color: _getColorForLanguage(e.key),
                               value: e.value,
-                              title: isTouched ? '${e.value.toStringAsFixed(1)}%' : '',
+                              title: isTouched
+                                  ? '${e.value.toStringAsFixed(1)}%'
+                                  : '',
                               radius: radius,
                               titleStyle: GoogleFonts.spaceGrotesk(
                                 fontSize: 11,
@@ -179,9 +184,7 @@ class _LanguageDonutChartState extends ConsumerState<LanguageDonutChart> {
             },
             loading: () => const SizedBox(
               height: 140,
-              child: Center(
-                child: CircularProgressIndicator(strokeWidth: 2),
-              ),
+              child: Center(child: CircularProgressIndicator(strokeWidth: 2)),
             ),
             error: (err, stack) => SizedBox(
               height: 140,

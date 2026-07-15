@@ -46,8 +46,10 @@ class EditableTimingCard extends ConsumerWidget {
                 onTap: () => ref.read(isEditingTimerProvider.notifier).state =
                     !isEditing,
                 child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: isEditing
                         ? AppTheme.primary.withValues(alpha: 0.15)
@@ -154,8 +156,11 @@ class EditableTimingCard extends ConsumerWidget {
                       ),
                       child: Row(
                         children: [
-                          const Icon(Icons.info_outline_rounded,
-                              color: AppTheme.warning, size: 14),
+                          const Icon(
+                            Icons.info_outline_rounded,
+                            color: AppTheme.warning,
+                            size: 14,
+                          ),
                           const SizedBox(width: 8),
                           Expanded(
                             child: Text(
@@ -173,9 +178,8 @@ class EditableTimingCard extends ConsumerWidget {
                 ],
               );
             },
-            loading: () => const Center(
-              child: CircularProgressIndicator(strokeWidth: 2),
-            ),
+            loading: () =>
+                const Center(child: CircularProgressIndicator(strokeWidth: 2)),
             error: (_, __) => Text(
               'Could not load settings',
               style: GoogleFonts.spaceGrotesk(
@@ -253,8 +257,11 @@ class _DurationTile extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                   border: Border.all(color: AppTheme.surfaceBorder),
                 ),
-                child: const Icon(Icons.remove_rounded,
-                    size: 14, color: AppTheme.textSecondary),
+                child: const Icon(
+                  Icons.remove_rounded,
+                  size: 14,
+                  color: AppTheme.textSecondary,
+                ),
               ),
             ),
             const SizedBox(width: 8),
@@ -288,8 +295,11 @@ class _DurationTile extends StatelessWidget {
                   color: AppTheme.primary,
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: const Icon(Icons.add_rounded,
-                    size: 14, color: Colors.white),
+                child: const Icon(
+                  Icons.add_rounded,
+                  size: 14,
+                  color: Colors.white,
+                ),
               ),
             ),
           ],

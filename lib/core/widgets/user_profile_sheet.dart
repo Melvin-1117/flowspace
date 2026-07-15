@@ -78,7 +78,9 @@ class UserProfileSheet extends ConsumerWidget {
                     border: Border.all(color: AppTheme.primary, width: 2),
                   ),
                   child: Center(
-                    child: profile.avatarEmoji.startsWith('assets/') || profile.avatarEmoji.endsWith('.svg')
+                    child:
+                        profile.avatarEmoji.startsWith('assets/') ||
+                            profile.avatarEmoji.endsWith('.svg')
                         ? SvgPicture.asset(
                             profile.avatarEmoji,
                             width: 80,
@@ -110,9 +112,10 @@ class UserProfileSheet extends ConsumerWidget {
                     profile.semesterName.isNotEmpty) ...[
                   const SizedBox(height: 4),
                   Text(
-                    [profile.courseName, profile.semesterName]
-                        .where((s) => s.isNotEmpty)
-                        .join(' — '),
+                    [
+                      profile.courseName,
+                      profile.semesterName,
+                    ].where((s) => s.isNotEmpty).join(' — '),
                     style: GoogleFonts.spaceGrotesk(
                       fontSize: 14,
                       color: AppTheme.textSecondary,
@@ -152,10 +155,7 @@ class UserProfileSheet extends ConsumerWidget {
                       label: 'Projects',
                     ),
                     const _StatDivider(),
-                    _StatItem(
-                      value: '$streak days',
-                      label: 'Streak',
-                    ),
+                    _StatItem(value: '$streak days', label: 'Streak'),
                   ],
                 ),
 
@@ -256,15 +256,13 @@ class UserProfileSheet extends ConsumerWidget {
                       ),
                       side: const BorderSide(color: AppTheme.primary),
                       shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(AppTheme.radiusMD),
+                        borderRadius: BorderRadius.circular(AppTheme.radiusMD),
                       ),
                     ),
                   ),
                 ),
 
-                SizedBox(
-                    height: MediaQuery.of(context).padding.bottom + 8),
+                SizedBox(height: MediaQuery.of(context).padding.bottom + 8),
               ],
             ),
           );
@@ -288,8 +286,7 @@ class _EditProfileSheet extends ConsumerStatefulWidget {
   const _EditProfileSheet();
 
   @override
-  ConsumerState<_EditProfileSheet> createState() =>
-      _EditProfileSheetState();
+  ConsumerState<_EditProfileSheet> createState() => _EditProfileSheetState();
 }
 
 class _EditProfileSheetState extends ConsumerState<_EditProfileSheet> {
@@ -316,8 +313,7 @@ class _EditProfileSheetState extends ConsumerState<_EditProfileSheet> {
   void initState() {
     super.initState();
     final profile = ref.read(userProfileProvider).value;
-    _nameController =
-        TextEditingController(text: profile?.displayName ?? '');
+    _nameController = TextEditingController(text: profile?.displayName ?? '');
     _bioController = TextEditingController(text: profile?.bio ?? '');
     _selectedEmoji = profile?.avatarEmoji ?? 'assets/avatars/cyberpunk.svg';
   }
@@ -392,10 +388,10 @@ class _EditProfileSheetState extends ConsumerState<_EditProfileSheet> {
                 itemBuilder: (context, index) {
                   final emoji = _avatarOptions[index];
                   final isSelected = _selectedEmoji == emoji;
-                  final isSvg = emoji.startsWith('assets/') || emoji.endsWith('.svg');
+                  final isSvg =
+                      emoji.startsWith('assets/') || emoji.endsWith('.svg');
                   return GestureDetector(
-                    onTap: () =>
-                        setState(() => _selectedEmoji = emoji),
+                    onTap: () => setState(() => _selectedEmoji = emoji),
                     child: Container(
                       width: 48,
                       height: 48,
@@ -404,8 +400,7 @@ class _EditProfileSheetState extends ConsumerState<_EditProfileSheet> {
                         color: isSelected
                             ? AppTheme.primarySubtle
                             : AppTheme.surfaceElevated,
-                        borderRadius:
-                            BorderRadius.circular(AppTheme.radiusSM),
+                        borderRadius: BorderRadius.circular(AppTheme.radiusSM),
                         border: Border.all(
                           color: isSelected
                               ? AppTheme.primary
@@ -418,7 +413,7 @@ class _EditProfileSheetState extends ConsumerState<_EditProfileSheet> {
                                   color: AppTheme.primaryGlow,
                                   blurRadius: 8,
                                   spreadRadius: 1,
-                                )
+                                ),
                               ]
                             : null,
                       ),
@@ -430,8 +425,7 @@ class _EditProfileSheetState extends ConsumerState<_EditProfileSheet> {
                                 height: 32,
                                 fit: BoxFit.contain,
                               )
-                            : Text(emoji,
-                                style: const TextStyle(fontSize: 22)),
+                            : Text(emoji, style: const TextStyle(fontSize: 22)),
                       ),
                     ),
                   );
@@ -471,8 +465,7 @@ class _EditProfileSheetState extends ConsumerState<_EditProfileSheet> {
                     color: AppTheme.textMuted,
                   ),
                   border: InputBorder.none,
-                  contentPadding:
-                      const EdgeInsets.all(AppTheme.spaceMD),
+                  contentPadding: const EdgeInsets.all(AppTheme.spaceMD),
                   counterText: '',
                 ),
               ),
@@ -511,8 +504,7 @@ class _EditProfileSheetState extends ConsumerState<_EditProfileSheet> {
                     color: AppTheme.textMuted,
                   ),
                   border: InputBorder.none,
-                  contentPadding:
-                      const EdgeInsets.all(AppTheme.spaceMD),
+                  contentPadding: const EdgeInsets.all(AppTheme.spaceMD),
                   counterText: '',
                 ),
               ),
@@ -541,9 +533,7 @@ class _EditProfileSheetState extends ConsumerState<_EditProfileSheet> {
               ),
             ),
 
-            SizedBox(
-                height:
-                    MediaQuery.of(context).padding.bottom + 8),
+            SizedBox(height: MediaQuery.of(context).padding.bottom + 8),
           ],
         ),
       ),
@@ -554,7 +544,9 @@ class _EditProfileSheetState extends ConsumerState<_EditProfileSheet> {
     final name = _nameController.text.trim();
     if (name.isEmpty) return;
 
-    await ref.read(userProfileProvider.notifier).updateProfile(
+    await ref
+        .read(userProfileProvider.notifier)
+        .updateProfile(
           displayName: name,
           avatarEmoji: _selectedEmoji,
           bio: _bioController.text.trim(),

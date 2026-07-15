@@ -7,10 +7,7 @@ import 'onboarding_widgets.dart';
 class OnboardingStep4Goals extends StatefulWidget {
   final OnboardingData data;
 
-  const OnboardingStep4Goals({
-    super.key,
-    required this.data,
-  });
+  const OnboardingStep4Goals({super.key, required this.data});
 
   @override
   State<OnboardingStep4Goals> createState() => _OnboardingStep4GoalsState();
@@ -66,11 +63,11 @@ class _OnboardingStep4GoalsState extends State<OnboardingStep4Goals> {
             children: [2, 4, 6, 8, 10, 12].map((count) {
               final isSelected = data.dailySessionGoal == count;
               final label = count <= 4
-                  ? ['Light', 'Moderate', 'Productive', 'Intense']
-                      [count ~/ 2 - 1]
+                  ? ['Light', 'Moderate', 'Productive', 'Intense'][count ~/ 2 -
+                        1]
                   : count <= 8
-                      ? 'Deep Work'
-                      : 'Extreme';
+                  ? 'Deep Work'
+                  : 'Extreme';
               return GestureDetector(
                 onTap: () => setState(() => data.dailySessionGoal = count),
                 child: AnimatedContainer(
@@ -96,9 +93,7 @@ class _OnboardingStep4GoalsState extends State<OnboardingStep4Goals> {
                         style: GoogleFonts.spaceGrotesk(
                           fontSize: 24,
                           fontWeight: FontWeight.w700,
-                          color: isSelected
-                              ? AppTheme.primary
-                              : Colors.white,
+                          color: isSelected ? AppTheme.primary : Colors.white,
                         ),
                       ),
                       Text(
@@ -139,8 +134,11 @@ class _OnboardingStep4GoalsState extends State<OnboardingStep4Goals> {
             ),
             child: Row(
               children: [
-                const Icon(Icons.laptop_rounded,
-                    color: AppTheme.accent, size: 20),
+                const Icon(
+                  Icons.laptop_rounded,
+                  color: AppTheme.accent,
+                  size: 20,
+                ),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
@@ -155,8 +153,10 @@ class _OnboardingStep4GoalsState extends State<OnboardingStep4Goals> {
                   value: data.dailyCodingHoursGoal,
                   min: 1,
                   max: 12,
-                  onDecrement: () => setState(() => data.dailyCodingHoursGoal--),
-                  onIncrement: () => setState(() => data.dailyCodingHoursGoal++),
+                  onDecrement: () =>
+                      setState(() => data.dailyCodingHoursGoal--),
+                  onIncrement: () =>
+                      setState(() => data.dailyCodingHoursGoal++),
                   suffix: 'h',
                   color: AppTheme.accent,
                 ),

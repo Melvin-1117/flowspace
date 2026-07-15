@@ -91,20 +91,31 @@ class _AddSkillSheetState extends ConsumerState<AddSkillSheet> {
                 return GestureDetector(
                   onTap: () => setState(() => _category = cat),
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
                     decoration: BoxDecoration(
-                      color: isSelected ? AppTheme.primarySubtle : AppTheme.surfaceElevated,
+                      color: isSelected
+                          ? AppTheme.primarySubtle
+                          : AppTheme.surfaceElevated,
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(
-                        color: isSelected ? AppTheme.primary : AppTheme.surfaceBorder,
+                        color: isSelected
+                            ? AppTheme.primary
+                            : AppTheme.surfaceBorder,
                       ),
                     ),
                     child: Text(
                       cat.toUpperCase(),
                       style: GoogleFonts.spaceGrotesk(
                         fontSize: 11,
-                        fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                        color: isSelected ? AppTheme.primary : AppTheme.textSecondary,
+                        fontWeight: isSelected
+                            ? FontWeight.w600
+                            : FontWeight.w400,
+                        color: isSelected
+                            ? AppTheme.primary
+                            : AppTheme.textSecondary,
                       ),
                     ),
                   ),
@@ -129,10 +140,14 @@ class _AddSkillSheetState extends ConsumerState<AddSkillSheet> {
                       width: 40,
                       height: 40,
                       decoration: BoxDecoration(
-                        color: isSelected ? AppTheme.primary : AppTheme.surfaceElevated,
+                        color: isSelected
+                            ? AppTheme.primary
+                            : AppTheme.surfaceElevated,
                         shape: BoxShape.circle,
                         border: Border.all(
-                          color: isSelected ? AppTheme.primaryLight : AppTheme.surfaceBorder,
+                          color: isSelected
+                              ? AppTheme.primaryLight
+                              : AppTheme.surfaceBorder,
                         ),
                       ),
                       child: Center(
@@ -141,7 +156,9 @@ class _AddSkillSheetState extends ConsumerState<AddSkillSheet> {
                           style: GoogleFonts.spaceGrotesk(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
-                            color: isSelected ? Colors.white : AppTheme.textSecondary,
+                            color: isSelected
+                                ? Colors.white
+                                : AppTheme.textSecondary,
                           ),
                         ),
                       ),
@@ -160,7 +177,10 @@ class _AddSkillSheetState extends ConsumerState<AddSkillSheet> {
               children: [
                 Expanded(
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: AppTheme.spaceMD, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppTheme.spaceMD,
+                      vertical: 12,
+                    ),
                     decoration: BoxDecoration(
                       color: AppTheme.surfaceElevated,
                       borderRadius: BorderRadius.circular(AppTheme.radiusMD),
@@ -188,14 +208,19 @@ class _AddSkillSheetState extends ConsumerState<AddSkillSheet> {
                     backgroundColor: AppTheme.surfaceElevated,
                     foregroundColor: AppTheme.textPrimary,
                     side: const BorderSide(color: AppTheme.surfaceBorder),
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 12,
+                    ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(AppTheme.radiusMD),
                     ),
                   ),
                   child: Text(
                     '-5 hrs',
-                    style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w600),
+                    style: GoogleFonts.spaceGrotesk(
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
                 const SizedBox(width: AppTheme.spaceSM),
@@ -209,14 +234,19 @@ class _AddSkillSheetState extends ConsumerState<AddSkillSheet> {
                     backgroundColor: AppTheme.surfaceElevated,
                     foregroundColor: AppTheme.textPrimary,
                     side: const BorderSide(color: AppTheme.surfaceBorder),
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 12,
+                    ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(AppTheme.radiusMD),
                     ),
                   ),
                   child: Text(
                     '+5 hrs',
-                    style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w600),
+                    style: GoogleFonts.spaceGrotesk(
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
               ],
@@ -227,7 +257,11 @@ class _AddSkillSheetState extends ConsumerState<AddSkillSheet> {
             // Notes
             _buildLabel('NOTES'),
             const SizedBox(height: 8),
-            _buildTextField(_notesController, 'Optional notes or resources', maxLines: 2),
+            _buildTextField(
+              _notesController,
+              'Optional notes or resources',
+              maxLines: 2,
+            ),
 
             const SizedBox(height: AppTheme.spaceXL),
 
@@ -271,7 +305,11 @@ class _AddSkillSheetState extends ConsumerState<AddSkillSheet> {
     );
   }
 
-  Widget _buildTextField(TextEditingController controller, String hint, {int maxLines = 1}) {
+  Widget _buildTextField(
+    TextEditingController controller,
+    String hint, {
+    int maxLines = 1,
+  }) {
     return Container(
       decoration: BoxDecoration(
         color: AppTheme.surfaceElevated,
@@ -281,7 +319,10 @@ class _AddSkillSheetState extends ConsumerState<AddSkillSheet> {
       child: TextField(
         controller: controller,
         maxLines: maxLines,
-        style: GoogleFonts.spaceGrotesk(color: AppTheme.textPrimary, fontSize: 14),
+        style: GoogleFonts.spaceGrotesk(
+          color: AppTheme.textPrimary,
+          fontSize: 14,
+        ),
         decoration: InputDecoration(
           hintText: hint,
           hintStyle: GoogleFonts.spaceGrotesk(color: AppTheme.textMuted),

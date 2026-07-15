@@ -16,37 +16,37 @@ class GreetingHeader extends ConsumerWidget {
     final greeting = hour < 12
         ? 'Good morning'
         : hour < 17
-            ? 'Good afternoon'
-            : 'Good evening';
+        ? 'Good afternoon'
+        : 'Good evening';
 
     final subtitle = hour < 12
         ? 'Ready to ship some code today?'
         : hour < 17
-            ? 'Keep the momentum going 🚀'
-            : 'Wrap up strong tonight 💪';
+        ? 'Keep the momentum going 🚀'
+        : 'Wrap up strong tonight 💪';
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           '$greeting, $name!',
-          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                color: AppTheme.textPrimary,
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.headlineSmall?.copyWith(color: AppTheme.textPrimary),
         ),
         const SizedBox(height: 4),
         Text(
           subtitle,
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: AppTheme.textSecondary,
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.bodyMedium?.copyWith(color: AppTheme.textSecondary),
         ),
         const SizedBox(height: 2),
         Text(
           DateFormat('EEEE, MMMM d').format(DateTime.now()),
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: AppTheme.textMuted,
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.bodySmall?.copyWith(color: AppTheme.textMuted),
         ),
       ],
     );

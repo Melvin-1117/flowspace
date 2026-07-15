@@ -11,11 +11,7 @@ class AmbientState {
   final double volume;
   final bool isPlaying;
 
-  AmbientState copyWith({
-    String? selected,
-    double? volume,
-    bool? isPlaying,
-  }) {
+  AmbientState copyWith({String? selected, double? volume, bool? isPlaying}) {
     return AmbientState(
       selected: selected ?? this.selected,
       volume: volume ?? this.volume,
@@ -28,10 +24,7 @@ class AmbientSoundNotifier extends StateNotifier<AmbientState> {
   AmbientSoundNotifier() : super(const AmbientState());
 
   void setSound(String? sound) {
-    state = state.copyWith(
-      selected: sound,
-      isPlaying: sound != null,
-    );
+    state = state.copyWith(selected: sound, isPlaying: sound != null);
   }
 
   void setVolume(double volume) {
@@ -45,9 +38,6 @@ class AmbientSoundNotifier extends StateNotifier<AmbientState> {
   }
 
   void stop() {
-    state = state.copyWith(
-      isPlaying: false,
-      selected: null,
-    );
+    state = state.copyWith(isPlaying: false, selected: null);
   }
 }

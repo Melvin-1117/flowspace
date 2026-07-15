@@ -135,7 +135,10 @@ class TaskCard extends ConsumerWidget {
                 task.description,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(color: AppTheme.textSecondary, fontSize: 13),
+                style: const TextStyle(
+                  color: AppTheme.textSecondary,
+                  fontSize: 13,
+                ),
               ),
             ],
             const SizedBox(height: 10),

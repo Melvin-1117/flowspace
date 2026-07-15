@@ -61,7 +61,11 @@ class TimerRingPainter extends CustomPainter {
     canvas.drawCircle(tipOffset, strokeWidth / 2 + 2, dotGlow);
 
     // Inner white dot
-    canvas.drawCircle(tipOffset, strokeWidth / 2, Paint()..color = Colors.white);
+    canvas.drawCircle(
+      tipOffset,
+      strokeWidth / 2,
+      Paint()..color = Colors.white,
+    );
   }
 
   @override

@@ -88,7 +88,10 @@ class _SkillDetailSheetState extends ConsumerState<SkillDetailSheet> {
                 ),
                 IconButton(
                   onPressed: _deleteSkill,
-                  icon: const Icon(Icons.delete_outline, color: AppTheme.danger),
+                  icon: const Icon(
+                    Icons.delete_outline,
+                    color: AppTheme.danger,
+                  ),
                 ),
               ],
             ),
@@ -108,7 +111,10 @@ class _SkillDetailSheetState extends ConsumerState<SkillDetailSheet> {
               children: [
                 Expanded(
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: AppTheme.spaceMD, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppTheme.spaceMD,
+                      vertical: 12,
+                    ),
                     decoration: BoxDecoration(
                       color: AppTheme.surfaceElevated,
                       borderRadius: BorderRadius.circular(AppTheme.radiusMD),
@@ -135,14 +141,19 @@ class _SkillDetailSheetState extends ConsumerState<SkillDetailSheet> {
                     backgroundColor: AppTheme.surfaceElevated,
                     foregroundColor: AppTheme.textPrimary,
                     side: const BorderSide(color: AppTheme.surfaceBorder),
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(AppTheme.radiusMD),
                     ),
                   ),
                   child: Text(
                     '+1 hr',
-                    style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w600),
+                    style: GoogleFonts.spaceGrotesk(
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
               ],
@@ -161,20 +172,31 @@ class _SkillDetailSheetState extends ConsumerState<SkillDetailSheet> {
                 return GestureDetector(
                   onTap: () => setState(() => _category = cat),
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
                     decoration: BoxDecoration(
-                      color: isSelected ? AppTheme.primarySubtle : AppTheme.surfaceElevated,
+                      color: isSelected
+                          ? AppTheme.primarySubtle
+                          : AppTheme.surfaceElevated,
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(
-                        color: isSelected ? AppTheme.primary : AppTheme.surfaceBorder,
+                        color: isSelected
+                            ? AppTheme.primary
+                            : AppTheme.surfaceBorder,
                       ),
                     ),
                     child: Text(
                       cat.toUpperCase(),
                       style: GoogleFonts.spaceGrotesk(
                         fontSize: 11,
-                        fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                        color: isSelected ? AppTheme.primary : AppTheme.textSecondary,
+                        fontWeight: isSelected
+                            ? FontWeight.w600
+                            : FontWeight.w400,
+                        color: isSelected
+                            ? AppTheme.primary
+                            : AppTheme.textSecondary,
                       ),
                     ),
                   ),
@@ -199,10 +221,14 @@ class _SkillDetailSheetState extends ConsumerState<SkillDetailSheet> {
                       width: 40,
                       height: 40,
                       decoration: BoxDecoration(
-                        color: isSelected ? AppTheme.primary : AppTheme.surfaceElevated,
+                        color: isSelected
+                            ? AppTheme.primary
+                            : AppTheme.surfaceElevated,
                         shape: BoxShape.circle,
                         border: Border.all(
-                          color: isSelected ? AppTheme.primaryLight : AppTheme.surfaceBorder,
+                          color: isSelected
+                              ? AppTheme.primaryLight
+                              : AppTheme.surfaceBorder,
                         ),
                       ),
                       child: Center(
@@ -211,7 +237,9 @@ class _SkillDetailSheetState extends ConsumerState<SkillDetailSheet> {
                           style: GoogleFonts.spaceGrotesk(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
-                            color: isSelected ? Colors.white : AppTheme.textSecondary,
+                            color: isSelected
+                                ? Colors.white
+                                : AppTheme.textSecondary,
                           ),
                         ),
                       ),
@@ -226,7 +254,11 @@ class _SkillDetailSheetState extends ConsumerState<SkillDetailSheet> {
             // Notes
             _buildLabel('NOTES'),
             const SizedBox(height: 8),
-            _buildTextField(_notesController, 'Optional notes or resources', maxLines: 2),
+            _buildTextField(
+              _notesController,
+              'Optional notes or resources',
+              maxLines: 2,
+            ),
 
             const SizedBox(height: AppTheme.spaceXL),
 
@@ -270,7 +302,11 @@ class _SkillDetailSheetState extends ConsumerState<SkillDetailSheet> {
     );
   }
 
-  Widget _buildTextField(TextEditingController controller, String hint, {int maxLines = 1}) {
+  Widget _buildTextField(
+    TextEditingController controller,
+    String hint, {
+    int maxLines = 1,
+  }) {
     return Container(
       decoration: BoxDecoration(
         color: AppTheme.surfaceElevated,
@@ -280,7 +316,10 @@ class _SkillDetailSheetState extends ConsumerState<SkillDetailSheet> {
       child: TextField(
         controller: controller,
         maxLines: maxLines,
-        style: GoogleFonts.spaceGrotesk(color: AppTheme.textPrimary, fontSize: 14),
+        style: GoogleFonts.spaceGrotesk(
+          color: AppTheme.textPrimary,
+          fontSize: 14,
+        ),
         decoration: InputDecoration(
           hintText: hint,
           hintStyle: GoogleFonts.spaceGrotesk(color: AppTheme.textMuted),
@@ -312,22 +351,32 @@ class _SkillDetailSheetState extends ConsumerState<SkillDetailSheet> {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Delete Skill'),
-        content: Text('Are you sure you want to delete "${widget.skill.skillName}"?'),
+        content: Text(
+          'Are you sure you want to delete "${widget.skill.skillName}"?',
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: Text('Cancel', style: GoogleFonts.spaceGrotesk(color: AppTheme.textSecondary)),
+            child: Text(
+              'Cancel',
+              style: GoogleFonts.spaceGrotesk(color: AppTheme.textSecondary),
+            ),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
-            child: Text('Delete', style: GoogleFonts.spaceGrotesk(color: AppTheme.danger)),
+            child: Text(
+              'Delete',
+              style: GoogleFonts.spaceGrotesk(color: AppTheme.danger),
+            ),
           ),
         ],
       ),
     );
 
     if (confirmed == true) {
-      await ref.read(skillNotifierProvider.notifier).deleteSkill(widget.skill.uuid);
+      await ref
+          .read(skillNotifierProvider.notifier)
+          .deleteSkill(widget.skill.uuid);
       if (mounted) {
         Navigator.pop(context); // close bottom sheet
       }

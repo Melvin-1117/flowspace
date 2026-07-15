@@ -42,10 +42,9 @@ class _CompletionCelebrationState
       timerNotifierProvider.select((s) => s.completionOverlay),
     );
     final perfectSession = trialsUsed == 0;
-    final actualMinutes =
-        completionOverlay != null
-            ? (completionOverlay.actualDurationSeconds / 60).round()
-            : 25;
+    final actualMinutes = completionOverlay != null
+        ? (completionOverlay.actualDurationSeconds / 60).round()
+        : 25;
 
     return Positioned.fill(
       child: Container(
@@ -68,14 +67,12 @@ class _CompletionCelebrationState
                   color: AppTheme.success,
                   size: 56,
                 ),
-              )
-                  .animate()
-                  .scaleXY(
-                    begin: 0.5,
-                    end: 1.0,
-                    duration: 500.ms,
-                    curve: Curves.easeOutBack,
-                  ),
+              ).animate().scaleXY(
+                begin: 0.5,
+                end: 1.0,
+                duration: 500.ms,
+                curve: Curves.easeOutBack,
+              ),
 
               const SizedBox(height: 32),
 
@@ -116,7 +113,9 @@ class _CompletionCelebrationState
                     icon: Icons.pause_circle_outline_rounded,
                     label: 'Pauses Used',
                     value: '$trialsUsed of 3',
-                    color: trialsUsed == 0 ? AppTheme.success : AppTheme.warning,
+                    color: trialsUsed == 0
+                        ? AppTheme.success
+                        : AppTheme.warning,
                   ),
                 ],
               ).animate().fadeIn(delay: 500.ms, duration: 400.ms),

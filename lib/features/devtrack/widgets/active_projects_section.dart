@@ -54,17 +54,17 @@ class ActiveProjectsSection extends ConsumerWidget {
           error: (_, __) => const SizedBox.shrink(),
           data: (projects) {
             if (projects.isEmpty) {
-              return _EmptyState(
-                onAdd: () => _showAddProjectSheet(context),
-              );
+              return _EmptyState(onAdd: () => _showAddProjectSheet(context));
             }
             return Column(
               children: projects
                   .take(3)
-                  .map((p) => Padding(
-                        padding: const EdgeInsets.only(bottom: 10),
-                        child: ProjectCard(project: p),
-                      ))
+                  .map(
+                    (p) => Padding(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: ProjectCard(project: p),
+                    ),
+                  )
                   .toList(),
             );
           },

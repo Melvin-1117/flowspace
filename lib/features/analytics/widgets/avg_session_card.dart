@@ -135,7 +135,6 @@ class AvgSessionCard extends ConsumerWidget {
     );
   }
 
-
   Future<void> _showMonthlyBreakdown(
     BuildContext context,
     WidgetRef ref,

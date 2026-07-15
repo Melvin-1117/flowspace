@@ -41,22 +41,25 @@ Future<void> main() async {
     return true;
   };
 
-  runZonedGuarded(() async {
-    WidgetsFlutterBinding.ensureInitialized();
-    try {
-      await NotificationService.initialize();
-    } catch (e) {
-      debugPrint('NotificationService init error: $e');
-    }
-    try {
-      await ForegroundTimerService.initialize();
-    } catch (e) {
-      debugPrint('ForegroundTimerService init error: $e');
-    }
-    runApp(const ProviderScope(child: FlowSpaceApp()));
-  }, (error, stack) {
-    debugPrint('ZONE ERROR: $error\n$stack');
-  });
+  runZonedGuarded(
+    () async {
+      WidgetsFlutterBinding.ensureInitialized();
+      try {
+        await NotificationService.initialize();
+      } catch (e) {
+        debugPrint('NotificationService init error: $e');
+      }
+      try {
+        await ForegroundTimerService.initialize();
+      } catch (e) {
+        debugPrint('ForegroundTimerService init error: $e');
+      }
+      runApp(const ProviderScope(child: FlowSpaceApp()));
+    },
+    (error, stack) {
+      debugPrint('ZONE ERROR: $error\n$stack');
+    },
+  );
 }
 
 class FlowSpaceApp extends ConsumerStatefulWidget {
@@ -69,42 +72,123 @@ class FlowSpaceApp extends ConsumerStatefulWidget {
 class _FlowSpaceAppState extends ConsumerState<FlowSpaceApp> {
   bool _restored = false;
 
+  static Page<dynamic> _customPageTransition({
+    required LocalKey key,
+    required Widget child,
+  }) {
+    return CustomTransitionPage<dynamic>(
+      key: key,
+      child: child,
+      transitionDuration: const Duration(milliseconds: 280),
+      reverseTransitionDuration: const Duration(milliseconds: 220),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        return FadeTransition(
+          opacity: CurveTween(curve: Curves.easeInOut).animate(animation),
+          child: SlideTransition(
+            position: Tween<Offset>(
+              begin: const Offset(0.0, 0.03),
+              end: Offset.zero,
+            ).chain(CurveTween(curve: Curves.easeOutCubic)).animate(animation),
+            child: child,
+          ),
+        );
+      },
+    );
+  }
+
   late final GoRouter _router = GoRouter(
     initialLocation: '/splash',
     routes: [
-      GoRoute(path: '/splash', builder: (_, __) => const SplashScreen()),
+      GoRoute(
+        path: '/splash',
+        pageBuilder: (context, state) => _customPageTransition(
+          key: state.pageKey,
+          child: const SplashScreen(),
+        ),
+      ),
       GoRoute(
         path: '/onboarding',
-        builder: (_, __) => const OnboardingScreen(),
+        pageBuilder: (context, state) => _customPageTransition(
+          key: state.pageKey,
+          child: const OnboardingScreen(),
+        ),
       ),
-      GoRoute(path: '/dashboard', builder: (_, __) => const DashboardScreen()),
-      GoRoute(path: '/focus', builder: (_, __) => const DashboardScreen()),
-      GoRoute(path: '/tasks', builder: (_, __) => const TaskBoardScreen()),
-      GoRoute(path: '/pomodoro', builder: (_, __) => const PomodoroPage()),
+      GoRoute(
+        path: '/dashboard',
+        pageBuilder: (context, state) => _customPageTransition(
+          key: state.pageKey,
+          child: const DashboardScreen(),
+        ),
+      ),
+      GoRoute(
+        path: '/focus',
+        pageBuilder: (context, state) => _customPageTransition(
+          key: state.pageKey,
+          child: const DashboardScreen(),
+        ),
+      ),
+      GoRoute(
+        path: '/tasks',
+        pageBuilder: (context, state) => _customPageTransition(
+          key: state.pageKey,
+          child: const TaskBoardScreen(),
+        ),
+      ),
+      GoRoute(
+        path: '/pomodoro',
+        pageBuilder: (context, state) => _customPageTransition(
+          key: state.pageKey,
+          child: const PomodoroPage(),
+        ),
+      ),
       GoRoute(
         path: '/tasks/:taskId',
-        builder: (_, state) =>
-            TaskDetailScreen(taskId: state.pathParameters['taskId']!),
+        pageBuilder: (context, state) => _customPageTransition(
+          key: state.pageKey,
+          child: TaskDetailScreen(taskId: state.pathParameters['taskId']!),
+        ),
       ),
       GoRoute(
         path: '/analytics',
-        builder: (context, state) =>
-            AnalyticsScreen(payload: state.extra as AnalyticsPayload?),
+        pageBuilder: (context, state) => _customPageTransition(
+          key: state.pageKey,
+          child: AnalyticsScreen(payload: state.extra as AnalyticsPayload?),
+        ),
       ),
-      GoRoute(path: '/planner', builder: (_, __) => const PlannerScreen()),
+      GoRoute(
+        path: '/planner',
+        pageBuilder: (context, state) => _customPageTransition(
+          key: state.pageKey,
+          child: const PlannerScreen(),
+        ),
+      ),
       GoRoute(
         path: '/planner/subjects',
-        builder: (_, __) => const SubjectListScreen(),
+        pageBuilder: (context, state) => _customPageTransition(
+          key: state.pageKey,
+          child: const SubjectListScreen(),
+        ),
       ),
       GoRoute(
         path: '/planner/subjects/:subjectId',
-        builder: (_, state) =>
-            SubjectDetailScreen(subjectId: state.pathParameters['subjectId']!),
+        pageBuilder: (context, state) => _customPageTransition(
+          key: state.pageKey,
+          child: SubjectDetailScreen(subjectId: state.pathParameters['subjectId']!),
+        ),
       ),
-      GoRoute(path: '/devtrack', builder: (_, __) => const DevTrackScreen()),
+      GoRoute(
+        path: '/devtrack',
+        pageBuilder: (context, state) => _customPageTransition(
+          key: state.pageKey,
+          child: const DevTrackScreen(),
+        ),
+      ),
       GoRoute(
         path: '/settings',
-        builder: (_, __) => _PlaceholderScreen(title: 'Settings'),
+        pageBuilder: (context, state) => _customPageTransition(
+          key: state.pageKey,
+          child: _PlaceholderScreen(title: 'Settings'),
+        ),
       ),
     ],
     redirect: (context, state) async {
@@ -134,7 +218,9 @@ class _FlowSpaceAppState extends ConsumerState<FlowSpaceApp> {
   Future<void> _restoreAppState() async {
     final settings = kIsWeb
         ? PomodoroWebStore.instance.ensureSettings()
-        : await (await ref.read(isarProvider.future)).collection<FocusGoalSettings>().get(1);
+        : await (await ref.read(
+            isarProvider.future,
+          )).collection<FocusGoalSettings>().get(1);
     if (settings != null) {
       if (settings.wasTimerRunning && settings.killTimestamp != null) {
         final elapsed = DateTime.now()

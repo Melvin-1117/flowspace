@@ -34,9 +34,9 @@ class QuickActionSheet extends ConsumerWidget {
           Text(
             'Quick Actions',
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: AppTheme.textPrimary,
-                  fontWeight: FontWeight.w600,
-                ),
+              color: AppTheme.textPrimary,
+              fontWeight: FontWeight.w600,
+            ),
           ),
           const SizedBox(height: 20),
 
@@ -126,13 +126,16 @@ class _QuickActionTile extends StatelessWidget {
             Text(
               label,
               style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                    color: AppTheme.textPrimary,
-                    fontWeight: FontWeight.w500,
-                  ),
+                color: AppTheme.textPrimary,
+                fontWeight: FontWeight.w500,
+              ),
             ),
             const Spacer(),
-            const Icon(Icons.chevron_right_rounded,
-                color: AppTheme.textMuted, size: 20),
+            const Icon(
+              Icons.chevron_right_rounded,
+              color: AppTheme.textMuted,
+              size: 20,
+            ),
           ],
         ),
       ),

@@ -29,8 +29,9 @@ PreferredSizeWidget buildFlowSpaceAppBar({
   bool useTransparentBackground = false,
 }) {
   return AppBar(
-    backgroundColor:
-        useTransparentBackground ? Colors.transparent : kAppBarBackground,
+    backgroundColor: useTransparentBackground
+        ? Colors.transparent
+        : kAppBarBackground,
     elevation: 0,
     scrolledUnderElevation: 0,
     leading: _MenuButton(scaffoldKey: scaffoldKey),

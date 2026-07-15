@@ -77,27 +77,37 @@ class _PlannerScreenState extends ConsumerState<PlannerScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      key: _healthSectionKey,
-                      alignment: Alignment.center,
-                      child: health.when(
-                        loading: () => const _PlannerSkeletonBox(height: 200),
-                        error: (_, __) => const _ErrorCard(
-                          message: 'Failed to load semester health',
-                        ),
-                        data: (value) => SemesterHealthRing(
-                          health: value,
-                          onTap: () => showModalBottomSheet<void>(
-                            context: context,
-                            isScrollControlled: true,
-                            backgroundColor: AppTheme.surfaceCard,
-                            builder: (_) => SemesterHealthSheet(health: value),
+                          key: _healthSectionKey,
+                          alignment: Alignment.center,
+                          child: health.when(
+                            loading: () =>
+                                const _PlannerSkeletonBox(height: 200),
+                            error: (_, __) => const _ErrorCard(
+                              message: 'Failed to load semester health',
+                            ),
+                            data: (value) => SemesterHealthRing(
+                              health: value,
+                              onTap: () => showModalBottomSheet<void>(
+                                context: context,
+                                isScrollControlled: true,
+                                backgroundColor: AppTheme.surfaceCard,
+                                builder: (_) =>
+                                    SemesterHealthSheet(health: value),
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                    )
+                        )
                         .animate()
-                        .fadeIn(duration: kPageEntryDuration, curve: kPageEntryCurve)
-                        .slideY(begin: 0.06, end: 0, duration: kPageEntryDuration, curve: kPageEntryCurve),
+                        .fadeIn(
+                          duration: kPageEntryDuration,
+                          curve: kPageEntryCurve,
+                        )
+                        .slideY(
+                          begin: 0.06,
+                          end: 0,
+                          duration: kPageEntryDuration,
+                          curve: kPageEntryCurve,
+                        ),
                     const SizedBox(height: 20),
                     Container(
                           key: _milestoneSectionKey,
@@ -118,8 +128,18 @@ class _PlannerScreenState extends ConsumerState<PlannerScreen> {
                           ),
                         )
                         .animate()
-                        .fadeIn(duration: kPageEntryDuration, delay: kPageStaggerStep, curve: kPageEntryCurve)
-                        .slideY(begin: 0.06, end: 0, duration: kPageEntryDuration, delay: kPageStaggerStep, curve: kPageEntryCurve),
+                        .fadeIn(
+                          duration: kPageEntryDuration,
+                          delay: kPageStaggerStep,
+                          curve: kPageEntryCurve,
+                        )
+                        .slideY(
+                          begin: 0.06,
+                          end: 0,
+                          duration: kPageEntryDuration,
+                          delay: kPageStaggerStep,
+                          curve: kPageEntryCurve,
+                        ),
                     const SizedBox(height: 24),
                     Row(
                       key: _subjectsSectionKey,
@@ -258,10 +278,15 @@ class _PlannerScreenState extends ConsumerState<PlannerScreen> {
 
   Future<void> _openSearchOverlay() async {
     final controller = TextEditingController();
-    final allSubjects = await ref.read(allSubjectsProvider.future);
-    final allMilestones = await ref.read(allMilestonesProvider.future);
-    final allBlocks = await ref.read(todayFocusBlocksProvider.future);
+    final results = await Future.wait([
+      ref.read(allSubjectsProvider.future),
+      ref.read(allMilestonesProvider.future),
+      ref.read(todayFocusBlocksProvider.future),
+    ]);
     if (!mounted) return;
+    final allSubjects = results[0] as List<Subject>;
+    final allMilestones = results[1] as List<Milestone>;
+    final allBlocks = results[2] as List<FocusBlock>;
     await showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
@@ -472,8 +497,9 @@ class _PlannerScreenState extends ConsumerState<PlannerScreen> {
       backgroundColor: AppTheme.surfaceCard,
       builder: (_) => AddMilestoneSheet(
         subjects: subjects,
-        onSubmit: (milestone) =>
-            ref.read(milestoneNotifierProvider.notifier).addMilestone(milestone),
+        onSubmit: (milestone) => ref
+            .read(milestoneNotifierProvider.notifier)
+            .addMilestone(milestone),
       ),
     );
   }

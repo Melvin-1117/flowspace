@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -22,9 +22,13 @@ class WeeklyVelocitySnapshot extends ConsumerWidget {
       data: (velocity) {
         final change = changeAsync.valueOrNull ?? double.nan;
         final maxMinutes = velocity.fold<int>(
-            0, (m, d) => d.totalMinutes > m ? d.totalMinutes : m);
-        final totalMinutes =
-            velocity.fold<int>(0, (sum, d) => sum + d.totalMinutes);
+          0,
+          (m, d) => d.totalMinutes > m ? d.totalMinutes : m,
+        );
+        final totalMinutes = velocity.fold<int>(
+          0,
+          (sum, d) => sum + d.totalMinutes,
+        );
         final hours = totalMinutes ~/ 60;
         final mins = totalMinutes % 60;
 
@@ -49,8 +53,7 @@ class WeeklyVelocitySnapshot extends ConsumerWidget {
                       'THIS WEEK',
                       style: Theme.of(context).textTheme.labelMedium,
                     ),
-                    if (!change.isNaN)
-                      _ChangeBadge(changePercent: change),
+                    if (!change.isNaN) _ChangeBadge(changePercent: change),
                   ],
                 ),
                 const SizedBox(height: 16),
@@ -75,8 +78,7 @@ class WeeklyVelocitySnapshot extends ConsumerWidget {
                               duration: const Duration(milliseconds: 400),
                               curve: Curves.easeOutCubic,
                               height: barHeight,
-                              margin:
-                                  const EdgeInsets.symmetric(horizontal: 3),
+                              margin: const EdgeInsets.symmetric(horizontal: 3),
                               decoration: BoxDecoration(
                                 color: isToday
                                     ? AppTheme.primary
@@ -111,15 +113,15 @@ class WeeklyVelocitySnapshot extends ConsumerWidget {
                     Text(
                       '${hours}h ${mins}m total focus',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: AppTheme.textSecondary,
-                          ),
+                        color: AppTheme.textSecondary,
+                      ),
                     ),
                     Text(
                       'View Analytics â†’',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: AppTheme.primary,
-                            fontWeight: FontWeight.w600,
-                          ),
+                        color: AppTheme.primary,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ],
                 ),

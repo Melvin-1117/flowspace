@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -79,7 +79,8 @@ class _ActivityHeatmapState extends ConsumerState<ActivityHeatmap> {
               // To align weekdays, let's pad the start so the first day matches its weekday.
               // weekday: 1 (Mon) - 7 (Sun). Let's align rows so Monday is Row 0.
               final firstDate = data.first.date;
-              final paddingCount = firstDate.weekday - 1; // 0 for Mon, 6 for Sun
+              final paddingCount =
+                  firstDate.weekday - 1; // 0 for Mon, 6 for Sun
               final totalCells = data.length + paddingCount;
 
               return Column(
@@ -89,11 +90,12 @@ class _ActivityHeatmapState extends ConsumerState<ActivityHeatmap> {
                     child: GridView.builder(
                       scrollDirection: Axis.horizontal,
                       physics: const BouncingScrollPhysics(),
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 7,
-                        mainAxisSpacing: 3,
-                        crossAxisSpacing: 3,
-                      ),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 7,
+                            mainAxisSpacing: 3,
+                            crossAxisSpacing: 3,
+                          ),
                       itemCount: totalCells,
                       itemBuilder: (context, index) {
                         if (index < paddingCount) {
@@ -101,7 +103,8 @@ class _ActivityHeatmapState extends ConsumerState<ActivityHeatmap> {
                         }
 
                         final dayData = data[index - paddingCount];
-                        final isSelected = _selectedDay?.date.year == dayData.date.year &&
+                        final isSelected =
+                            _selectedDay?.date.year == dayData.date.year &&
                             _selectedDay?.date.month == dayData.date.month &&
                             _selectedDay?.date.day == dayData.date.day;
 
@@ -161,9 +164,7 @@ class _ActivityHeatmapState extends ConsumerState<ActivityHeatmap> {
             },
             loading: () => const SizedBox(
               height: 120,
-              child: Center(
-                child: CircularProgressIndicator(strokeWidth: 2),
-              ),
+              child: Center(child: CircularProgressIndicator(strokeWidth: 2)),
             ),
             error: (err, stack) => SizedBox(
               height: 120,

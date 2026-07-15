@@ -30,9 +30,15 @@ class ProjectNotifier extends AsyncNotifier<List<DevProject>> {
           ..primaryLanguage = map['primaryLanguage'] ?? ''
           ..techStack = List<String>.from(map['techStack'] ?? [])
           ..completionPercent = map['completionPercent'] ?? 0
-          ..startedAt = DateTime.parse(map['startedAt'] ?? DateTime.now().toIso8601String())
-          ..completedAt = map['completedAt'] != null ? DateTime.parse(map['completedAt']) : null
-          ..lastActiveAt = DateTime.parse(map['lastActiveAt'] ?? DateTime.now().toIso8601String())
+          ..startedAt = DateTime.parse(
+            map['startedAt'] ?? DateTime.now().toIso8601String(),
+          )
+          ..completedAt = map['completedAt'] != null
+              ? DateTime.parse(map['completedAt'])
+              : null
+          ..lastActiveAt = DateTime.parse(
+            map['lastActiveAt'] ?? DateTime.now().toIso8601String(),
+          )
           ..linkedTaskIds = List<String>.from(map['linkedTaskIds'] ?? [])
           ..totalCodingMinutes = map['totalCodingMinutes'] ?? 0
           ..colorHex = map['colorHex'] ?? '#006EE6'
@@ -45,23 +51,27 @@ class ProjectNotifier extends AsyncNotifier<List<DevProject>> {
 
   Future<void> _saveProjects(List<DevProject> projects) async {
     final prefs = await SharedPreferences.getInstance();
-    final list = projects.map((p) => {
-      'id': p.id,
-      'uuid': p.uuid,
-      'name': p.name,
-      'description': p.description,
-      'status': p.status,
-      'primaryLanguage': p.primaryLanguage,
-      'techStack': p.techStack,
-      'completionPercent': p.completionPercent,
-      'startedAt': p.startedAt.toIso8601String(),
-      'completedAt': p.completedAt?.toIso8601String(),
-      'lastActiveAt': p.lastActiveAt.toIso8601String(),
-      'linkedTaskIds': p.linkedTaskIds,
-      'totalCodingMinutes': p.totalCodingMinutes,
-      'colorHex': p.colorHex,
-      'iconName': p.iconName,
-    }).toList();
+    final list = projects
+        .map(
+          (p) => {
+            'id': p.id,
+            'uuid': p.uuid,
+            'name': p.name,
+            'description': p.description,
+            'status': p.status,
+            'primaryLanguage': p.primaryLanguage,
+            'techStack': p.techStack,
+            'completionPercent': p.completionPercent,
+            'startedAt': p.startedAt.toIso8601String(),
+            'completedAt': p.completedAt?.toIso8601String(),
+            'lastActiveAt': p.lastActiveAt.toIso8601String(),
+            'linkedTaskIds': p.linkedTaskIds,
+            'totalCodingMinutes': p.totalCodingMinutes,
+            'colorHex': p.colorHex,
+            'iconName': p.iconName,
+          },
+        )
+        .toList();
     await prefs.setString('devtrack_projects', jsonEncode(list));
   }
 
@@ -131,8 +141,12 @@ class ProjectNotifier extends AsyncNotifier<List<DevProject>> {
             ..uuid = map['uuid'] ?? ''
             ..projectId = map['projectId'] ?? ''
             ..language = map['language'] ?? ''
-            ..startTime = DateTime.parse(map['startTime'] ?? DateTime.now().toIso8601String())
-            ..endTime = DateTime.parse(map['endTime'] ?? DateTime.now().toIso8601String())
+            ..startTime = DateTime.parse(
+              map['startTime'] ?? DateTime.now().toIso8601String(),
+            )
+            ..endTime = DateTime.parse(
+              map['endTime'] ?? DateTime.now().toIso8601String(),
+            )
             ..durationMinutes = map['durationMinutes'] ?? 0
             ..sessionType = map['sessionType'] ?? 'focus'
             ..notes = map['notes'] ?? ''
@@ -144,19 +158,23 @@ class ProjectNotifier extends AsyncNotifier<List<DevProject>> {
       }
     }
     sessions.insert(0, s);
-    final list = sessions.map((cs) => {
-      'id': cs.id,
-      'uuid': cs.uuid,
-      'projectId': cs.projectId,
-      'language': cs.language,
-      'startTime': cs.startTime.toIso8601String(),
-      'endTime': cs.endTime.toIso8601String(),
-      'durationMinutes': cs.durationMinutes,
-      'sessionType': cs.sessionType,
-      'notes': cs.notes,
-      'linkedToPomodoro': cs.linkedToPomodoro,
-      'linkedPomodoroId': cs.linkedPomodoroId,
-    }).toList();
+    final list = sessions
+        .map(
+          (cs) => {
+            'id': cs.id,
+            'uuid': cs.uuid,
+            'projectId': cs.projectId,
+            'language': cs.language,
+            'startTime': cs.startTime.toIso8601String(),
+            'endTime': cs.endTime.toIso8601String(),
+            'durationMinutes': cs.durationMinutes,
+            'sessionType': cs.sessionType,
+            'notes': cs.notes,
+            'linkedToPomodoro': cs.linkedToPomodoro,
+            'linkedPomodoroId': cs.linkedPomodoroId,
+          },
+        )
+        .toList();
     await prefs.setString('devtrack_sessions', jsonEncode(list));
 
     if (s.projectId.isNotEmpty) {
@@ -183,5 +201,5 @@ class ProjectNotifier extends AsyncNotifier<List<DevProject>> {
 
 final projectNotifierProvider =
     AsyncNotifierProvider<ProjectNotifier, List<DevProject>>(
-  ProjectNotifier.new,
-);
+      ProjectNotifier.new,
+    );

@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../app/theme.dart';
@@ -10,11 +10,7 @@ class SessionRow extends StatelessWidget {
   final CodingSession session;
   final DevProject? project;
 
-  const SessionRow({
-    super.key,
-    required this.session,
-    this.project,
-  });
+  const SessionRow({super.key, required this.session, this.project});
 
   IconData _getSessionIcon(String type) {
     return switch (type.toLowerCase()) {

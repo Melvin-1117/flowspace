@@ -136,7 +136,8 @@ class _WeeklyVelocityChartState extends ConsumerState<WeeklyVelocityChart>
                               showTitles: true,
                               getTitlesWidget: (value, meta) {
                                 final index = value.toInt();
-                                if (index < 0 || index >= _weekdayLabels.length) {
+                                if (index < 0 ||
+                                    index >= _weekdayLabels.length) {
                                   return const SizedBox.shrink();
                                 }
                                 return Padding(
@@ -182,7 +183,8 @@ class _WeeklyVelocityChartState extends ConsumerState<WeeklyVelocityChart>
                                   response.spot == null) {
                                 _touchedIndex = -1;
                               } else {
-                                _touchedIndex = response.spot!.touchedBarGroupIndex;
+                                _touchedIndex =
+                                    response.spot!.touchedBarGroupIndex;
                               }
                             });
                           },

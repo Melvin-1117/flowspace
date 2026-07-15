@@ -31,88 +31,227 @@ class DashboardContent extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // ── 1. Greeting Header ──────────────────────────────────────
-          const GreetingHeader()
-              .animate()
-              .fadeIn(duration: kPageEntryDuration, curve: kPageEntryCurve)
-              .slideY(begin: 0.06, end: 0, duration: kPageEntryDuration, curve: kPageEntryCurve),
+          RepaintBoundary(
+            child: const GreetingHeader()
+                .animate()
+                .fadeIn(duration: kPageEntryDuration, curve: kPageEntryCurve)
+                .slideY(
+                  begin: 0.06,
+                  end: 0,
+                  duration: kPageEntryDuration,
+                  curve: kPageEntryCurve,
+                ),
+          ),
           const SizedBox(height: 20),
 
           // ── Welcome card for new users ──────────────────────────────
           if (isNewUser) ...[
-            const WelcomeCard()
-                .animate()
-                .fadeIn(duration: kPageEntryDuration, delay: kPageStaggerStep, curve: kPageEntryCurve)
-                .slideY(begin: 0.06, end: 0, duration: kPageEntryDuration, delay: kPageStaggerStep, curve: kPageEntryCurve),
+            RepaintBoundary(
+              child: const WelcomeCard()
+                  .animate()
+                  .fadeIn(
+                    duration: kPageEntryDuration,
+                    delay: kPageStaggerStep,
+                    curve: kPageEntryCurve,
+                  )
+                  .slideY(
+                    begin: 0.06,
+                    end: 0,
+                    duration: kPageEntryDuration,
+                    delay: kPageStaggerStep,
+                    curve: kPageEntryCurve,
+                  ),
+            ),
             const SizedBox(height: 20),
           ],
 
           // ── 2. Quick Stats Row ──────────────────────────────────────
-          const QuickStatsRow()
-              .animate()
-              .fadeIn(duration: kPageEntryDuration, delay: kPageStaggerStep * 2, curve: kPageEntryCurve)
-              .slideY(begin: 0.06, end: 0, duration: kPageEntryDuration, delay: kPageStaggerStep * 2, curve: kPageEntryCurve),
+          RepaintBoundary(
+            child: const QuickStatsRow()
+                .animate()
+                .fadeIn(
+                  duration: kPageEntryDuration,
+                  delay: kPageStaggerStep * 2,
+                  curve: kPageEntryCurve,
+                )
+                .slideY(
+                  begin: 0.06,
+                  end: 0,
+                  duration: kPageEntryDuration,
+                  delay: kPageStaggerStep * 2,
+                  curve: kPageEntryCurve,
+                ),
+          ),
           const SizedBox(height: 20),
 
           // ── 3. Active Focus Session Card ────────────────────────────
-          const ActiveFocusSessionCard()
-              .animate()
-              .fadeIn(duration: kPageEntryDuration, delay: kPageStaggerStep * 3, curve: kPageEntryCurve)
-              .slideY(begin: 0.06, end: 0, duration: kPageEntryDuration, delay: kPageStaggerStep * 3, curve: kPageEntryCurve),
+          RepaintBoundary(
+            child: const ActiveFocusSessionCard()
+                .animate()
+                .fadeIn(
+                  duration: kPageEntryDuration,
+                  delay: kPageStaggerStep * 3,
+                  curve: kPageEntryCurve,
+                )
+                .slideY(
+                  begin: 0.06,
+                  end: 0,
+                  duration: kPageEntryDuration,
+                  delay: kPageStaggerStep * 3,
+                  curve: kPageEntryCurve,
+                ),
+          ),
 
           // ── 4. Daily Goal Card ──────────────────────────────────────
-          const DailyGoalCard()
-              .animate()
-              .fadeIn(duration: kPageEntryDuration, delay: kPageStaggerStep * 4, curve: kPageEntryCurve)
-              .slideY(begin: 0.06, end: 0, duration: kPageEntryDuration, delay: kPageStaggerStep * 4, curve: kPageEntryCurve),
+          RepaintBoundary(
+            child: const DailyGoalCard()
+                .animate()
+                .fadeIn(
+                  duration: kPageEntryDuration,
+                  delay: kPageStaggerStep * 4,
+                  curve: kPageEntryCurve,
+                )
+                .slideY(
+                  begin: 0.06,
+                  end: 0,
+                  duration: kPageEntryDuration,
+                  delay: kPageStaggerStep * 4,
+                  curve: kPageEntryCurve,
+                ),
+          ),
           const SizedBox(height: 20),
 
           // ── 5. Calendar ─────────────────────────────────────────────
-          const DashboardCalendarWidget()
-              .animate()
-              .fadeIn(duration: kPageEntryDuration, delay: kPageStaggerStep * 5, curve: kPageEntryCurve)
-              .slideY(begin: 0.06, end: 0, duration: kPageEntryDuration, delay: kPageStaggerStep * 5, curve: kPageEntryCurve),
+          RepaintBoundary(
+            child: const DashboardCalendarWidget()
+                .animate()
+                .fadeIn(
+                  duration: kPageEntryDuration,
+                  delay: kPageStaggerStep * 5,
+                  curve: kPageEntryCurve,
+                )
+                .slideY(
+                  begin: 0.06,
+                  end: 0,
+                  duration: kPageEntryDuration,
+                  delay: kPageStaggerStep * 5,
+                  curve: kPageEntryCurve,
+                ),
+          ),
           const SizedBox(height: 20),
 
           // ── 6. Next Milestone ───────────────────────────────────────
-          const MilestoneCard()
-              .animate()
-              .fadeIn(duration: kPageEntryDuration, delay: kPageStaggerStep * 6, curve: kPageEntryCurve)
-              .slideY(begin: 0.06, end: 0, duration: kPageEntryDuration, delay: kPageStaggerStep * 6, curve: kPageEntryCurve),
+          RepaintBoundary(
+            child: const MilestoneCard()
+                .animate()
+                .fadeIn(
+                  duration: kPageEntryDuration,
+                  delay: kPageStaggerStep * 6,
+                  curve: kPageEntryCurve,
+                )
+                .slideY(
+                  begin: 0.06,
+                  end: 0,
+                  duration: kPageEntryDuration,
+                  delay: kPageStaggerStep * 6,
+                  curve: kPageEntryCurve,
+                ),
+          ),
           const SizedBox(height: 20),
 
           // ── 7. Task Summary ─────────────────────────────────────────
-          const TaskSummaryCard()
-              .animate()
-              .fadeIn(duration: kPageEntryDuration, delay: kPageStaggerStep * 7, curve: kPageEntryCurve)
-              .slideY(begin: 0.06, end: 0, duration: kPageEntryDuration, delay: kPageStaggerStep * 7, curve: kPageEntryCurve),
+          RepaintBoundary(
+            child: const TaskSummaryCard()
+                .animate()
+                .fadeIn(
+                  duration: kPageEntryDuration,
+                  delay: kPageStaggerStep * 7,
+                  curve: kPageEntryCurve,
+                )
+                .slideY(
+                  begin: 0.06,
+                  end: 0,
+                  duration: kPageEntryDuration,
+                  delay: kPageStaggerStep * 7,
+                  curve: kPageEntryCurve,
+                ),
+          ),
           const SizedBox(height: 20),
 
           // ── 8. Semester Health ───────────────────────────────────────
-          const SemesterSnapshotCard()
-              .animate()
-              .fadeIn(duration: kPageEntryDuration, delay: kPageStaggerStep * 8, curve: kPageEntryCurve)
-              .slideY(begin: 0.06, end: 0, duration: kPageEntryDuration, delay: kPageStaggerStep * 8, curve: kPageEntryCurve),
+          RepaintBoundary(
+            child: const SemesterSnapshotCard()
+                .animate()
+                .fadeIn(
+                  duration: kPageEntryDuration,
+                  delay: kPageStaggerStep * 8,
+                  curve: kPageEntryCurve,
+                )
+                .slideY(
+                  begin: 0.06,
+                  end: 0,
+                  duration: kPageEntryDuration,
+                  delay: kPageStaggerStep * 8,
+                  curve: kPageEntryCurve,
+                ),
+          ),
           const SizedBox(height: 20),
 
           // ── 9. Weekly Velocity ──────────────────────────────────────
-          const WeeklyVelocitySnapshot()
-              .animate()
-              .fadeIn(duration: kPageEntryDuration, delay: kPageStaggerStep * 9, curve: kPageEntryCurve)
-              .slideY(begin: 0.06, end: 0, duration: kPageEntryDuration, delay: kPageStaggerStep * 9, curve: kPageEntryCurve),
+          RepaintBoundary(
+            child: const WeeklyVelocitySnapshot()
+                .animate()
+                .fadeIn(
+                  duration: kPageEntryDuration,
+                  delay: kPageStaggerStep * 9,
+                  curve: kPageEntryCurve,
+                )
+                .slideY(
+                  begin: 0.06,
+                  end: 0,
+                  duration: kPageEntryDuration,
+                  delay: kPageStaggerStep * 9,
+                  curve: kPageEntryCurve,
+                ),
+          ),
           const SizedBox(height: 20),
 
           // ── 10. DevTrack Snapshot ───────────────────────────────────
-          const DevTrackSnapshotCard()
-              .animate()
-              .fadeIn(duration: kPageEntryDuration, delay: kPageStaggerStep * 10, curve: kPageEntryCurve)
-              .slideY(begin: 0.06, end: 0, duration: kPageEntryDuration, delay: kPageStaggerStep * 10, curve: kPageEntryCurve),
+          RepaintBoundary(
+            child: const DevTrackSnapshotCard()
+                .animate()
+                .fadeIn(
+                  duration: kPageEntryDuration,
+                  delay: kPageStaggerStep * 10,
+                  curve: kPageEntryCurve,
+                )
+                .slideY(
+                  begin: 0.06,
+                  end: 0,
+                  duration: kPageEntryDuration,
+                  delay: kPageStaggerStep * 10,
+                  curve: kPageEntryCurve,
+                ),
+          ),
           const SizedBox(height: 20),
 
           // ── 11. Upcoming Focus Blocks ───────────────────────────────
-          const UpcomingBlocksCard()
-              .animate()
-              .fadeIn(duration: kPageEntryDuration, delay: kPageStaggerStep * 11, curve: kPageEntryCurve)
-              .slideY(begin: 0.06, end: 0, duration: kPageEntryDuration, delay: kPageStaggerStep * 11, curve: kPageEntryCurve),
+          RepaintBoundary(
+            child: const UpcomingBlocksCard()
+                .animate()
+                .fadeIn(
+                  duration: kPageEntryDuration,
+                  delay: kPageStaggerStep * 11,
+                  curve: kPageEntryCurve,
+                )
+                .slideY(
+                  begin: 0.06,
+                  end: 0,
+                  duration: kPageEntryDuration,
+                  delay: kPageStaggerStep * 11,
+                  curve: kPageEntryCurve,
+                ),
+          ),
         ],
       ),
     );

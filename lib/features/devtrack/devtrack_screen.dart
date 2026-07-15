@@ -26,10 +26,7 @@ class DevTrackScreen extends ConsumerWidget {
       key: scaffoldKey,
       backgroundColor: AppTheme.background,
       drawer: const AppDrawer(),
-      appBar: buildFlowSpaceAppBar(
-        scaffoldKey: scaffoldKey,
-        title: 'DevTrack',
-      ),
+      appBar: buildFlowSpaceAppBar(scaffoldKey: scaffoldKey, title: 'DevTrack'),
       body: SafeArea(
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
@@ -43,32 +40,87 @@ class DevTrackScreen extends ConsumerWidget {
               const CodingStatsRow()
                   .animate()
                   .fadeIn(duration: kPageEntryDuration, curve: kPageEntryCurve)
-                  .slideY(begin: 0.06, end: 0, duration: kPageEntryDuration, curve: kPageEntryCurve),
+                  .slideY(
+                    begin: 0.06,
+                    end: 0,
+                    duration: kPageEntryDuration,
+                    curve: kPageEntryCurve,
+                  ),
               const SizedBox(height: AppTheme.spaceLG),
               const ActivityHeatmap()
                   .animate()
-                  .fadeIn(duration: kPageEntryDuration, curve: kPageEntryCurve, delay: kPageStaggerStep)
-                  .slideY(begin: 0.06, end: 0, duration: kPageEntryDuration, curve: kPageEntryCurve, delay: kPageStaggerStep),
+                  .fadeIn(
+                    duration: kPageEntryDuration,
+                    curve: kPageEntryCurve,
+                    delay: kPageStaggerStep,
+                  )
+                  .slideY(
+                    begin: 0.06,
+                    end: 0,
+                    duration: kPageEntryDuration,
+                    curve: kPageEntryCurve,
+                    delay: kPageStaggerStep,
+                  ),
               const SizedBox(height: AppTheme.spaceLG),
               const LanguageDonutChart()
                   .animate()
-                  .fadeIn(duration: kPageEntryDuration, curve: kPageEntryCurve, delay: kPageStaggerStep * 2)
-                  .slideY(begin: 0.06, end: 0, duration: kPageEntryDuration, curve: kPageEntryCurve, delay: kPageStaggerStep * 2),
+                  .fadeIn(
+                    duration: kPageEntryDuration,
+                    curve: kPageEntryCurve,
+                    delay: kPageStaggerStep * 2,
+                  )
+                  .slideY(
+                    begin: 0.06,
+                    end: 0,
+                    duration: kPageEntryDuration,
+                    curve: kPageEntryCurve,
+                    delay: kPageStaggerStep * 2,
+                  ),
               const SizedBox(height: AppTheme.spaceLG),
               const ActiveProjectsSection()
                   .animate()
-                  .fadeIn(duration: kPageEntryDuration, curve: kPageEntryCurve, delay: kPageStaggerStep * 3)
-                  .slideY(begin: 0.06, end: 0, duration: kPageEntryDuration, curve: kPageEntryCurve, delay: kPageStaggerStep * 3),
+                  .fadeIn(
+                    duration: kPageEntryDuration,
+                    curve: kPageEntryCurve,
+                    delay: kPageStaggerStep * 3,
+                  )
+                  .slideY(
+                    begin: 0.06,
+                    end: 0,
+                    duration: kPageEntryDuration,
+                    curve: kPageEntryCurve,
+                    delay: kPageStaggerStep * 3,
+                  ),
               const SizedBox(height: AppTheme.spaceLG),
               const SkillTrackerSection()
                   .animate()
-                  .fadeIn(duration: kPageEntryDuration, curve: kPageEntryCurve, delay: kPageStaggerStep * 4)
-                  .slideY(begin: 0.06, end: 0, duration: kPageEntryDuration, curve: kPageEntryCurve, delay: kPageStaggerStep * 4),
+                  .fadeIn(
+                    duration: kPageEntryDuration,
+                    curve: kPageEntryCurve,
+                    delay: kPageStaggerStep * 4,
+                  )
+                  .slideY(
+                    begin: 0.06,
+                    end: 0,
+                    duration: kPageEntryDuration,
+                    curve: kPageEntryCurve,
+                    delay: kPageStaggerStep * 4,
+                  ),
               const SizedBox(height: AppTheme.spaceLG),
               const RecentSessionsSection()
                   .animate()
-                  .fadeIn(duration: kPageEntryDuration, curve: kPageEntryCurve, delay: kPageStaggerStep * 5)
-                  .slideY(begin: 0.06, end: 0, duration: kPageEntryDuration, curve: kPageEntryCurve, delay: kPageStaggerStep * 5),
+                  .fadeIn(
+                    duration: kPageEntryDuration,
+                    curve: kPageEntryCurve,
+                    delay: kPageStaggerStep * 5,
+                  )
+                  .slideY(
+                    begin: 0.06,
+                    end: 0,
+                    duration: kPageEntryDuration,
+                    curve: kPageEntryCurve,
+                    delay: kPageStaggerStep * 5,
+                  ),
               const SizedBox(height: 80), // spacer for FAB
             ],
           ),
@@ -84,10 +136,7 @@ class DevTrackScreen extends ConsumerWidget {
         },
         label: const Text(
           'Log Session',
-          style: TextStyle(
-            fontWeight: FontWeight.w700,
-            color: Colors.white,
-          ),
+          style: TextStyle(fontWeight: FontWeight.w700, color: Colors.white),
         ),
         icon: const Icon(Icons.add_rounded, color: Colors.white),
         backgroundColor: AppTheme.primary,

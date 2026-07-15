@@ -16,7 +16,8 @@ class CodingStatsRow extends ConsumerWidget {
     final totalAsync = ref.watch(totalCodingHoursProvider);
     final streakAsync = ref.watch(codingStreakProvider);
 
-    final todayMinutes = todayAsync.valueOrNull?.fold(0, (s, e) => s + e.durationMinutes) ?? 0;
+    final todayMinutes =
+        todayAsync.valueOrNull?.fold(0, (s, e) => s + e.durationMinutes) ?? 0;
     final totalHours = totalAsync.valueOrNull ?? 0.0;
     final streak = streakAsync.valueOrNull ?? 0;
 
@@ -51,7 +52,6 @@ class CodingStatsRow extends ConsumerWidget {
       ],
     );
   }
-
 }
 
 class _StatCard extends StatelessWidget {

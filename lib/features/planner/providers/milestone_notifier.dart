@@ -118,7 +118,8 @@ class MilestoneNotifier extends AsyncNotifier<List<Milestone>> {
 
   Future<List<Milestone>> _load() async {
     if (kIsWeb) {
-      return [..._webMilestones]..sort((a, b) => a.dueDate.compareTo(b.dueDate));
+      return [..._webMilestones]
+        ..sort((a, b) => a.dueDate.compareTo(b.dueDate));
     }
     final isar = await ref.read(isarProvider.future);
     final tasks = await isar.collection<Task>().where().findAll();

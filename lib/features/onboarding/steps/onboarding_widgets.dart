@@ -6,11 +6,7 @@ class StepLabel extends StatelessWidget {
   final String number;
   final String label;
 
-  const StepLabel({
-    super.key,
-    required this.number,
-    required this.label,
-  });
+  const StepLabel({super.key, required this.number, required this.label});
 
   @override
   Widget build(BuildContext context) {
@@ -26,11 +22,7 @@ class StepLabel extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 8),
-        Container(
-          width: 12,
-          height: 1,
-          color: AppTheme.surfaceBorder,
-        ),
+        Container(width: 12, height: 1, color: AppTheme.surfaceBorder),
         const SizedBox(width: 8),
         Text(
           label.toUpperCase(),
@@ -49,10 +41,7 @@ class StepLabel extends StatelessWidget {
 class FieldLabel extends StatelessWidget {
   final String label;
 
-  const FieldLabel({
-    super.key,
-    required this.label,
-  });
+  const FieldLabel({super.key, required this.label});
 
   @override
   Widget build(BuildContext context) {
@@ -116,9 +105,7 @@ class _OnboardingTextFieldState extends State<OnboardingTextField> {
           color: AppTheme.surfaceCard,
           borderRadius: BorderRadius.circular(AppTheme.radiusMD),
           border: Border.all(
-            color: _isFocused
-                ? AppTheme.primary
-                : AppTheme.surfaceBorder,
+            color: _isFocused ? AppTheme.primary : AppTheme.surfaceBorder,
             width: _isFocused ? 1.5 : 1.0,
           ),
         ),
@@ -131,7 +118,13 @@ class _OnboardingTextFieldState extends State<OnboardingTextField> {
             color: AppTheme.textPrimary,
             fontSize: 14,
           ),
-          buildCounter: (context, {required currentLength, required isFocused, maxLength}) => null,
+          buildCounter:
+              (
+                context, {
+                required currentLength,
+                required isFocused,
+                maxLength,
+              }) => null,
           decoration: InputDecoration(
             hintText: widget.hintText,
             hintStyle: GoogleFonts.spaceGrotesk(

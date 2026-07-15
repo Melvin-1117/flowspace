@@ -52,7 +52,9 @@ class DailyGoalCard extends ConsumerWidget {
                         child: CustomPaint(
                           painter: GoalRingPainter(
                             progress: percent,
-                            color: isGoalMet ? AppTheme.success : AppTheme.primary,
+                            color: isGoalMet
+                                ? AppTheme.success
+                                : AppTheme.primary,
                           ),
                           child: Center(
                             child: Text(
@@ -60,7 +62,9 @@ class DailyGoalCard extends ConsumerWidget {
                               style: GoogleFonts.spaceGrotesk(
                                 fontSize: 11,
                                 fontWeight: FontWeight.w700,
-                                color: isGoalMet ? AppTheme.success : AppTheme.primary,
+                                color: isGoalMet
+                                    ? AppTheme.success
+                                    : AppTheme.primary,
                               ),
                             ),
                           ),
@@ -90,7 +94,9 @@ class DailyGoalCard extends ConsumerWidget {
                               style: GoogleFonts.spaceGrotesk(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
-                                color: isGoalMet ? AppTheme.success : AppTheme.textPrimary,
+                                color: isGoalMet
+                                    ? AppTheme.success
+                                    : AppTheme.textPrimary,
                               ),
                             ),
                           ],
@@ -117,7 +123,9 @@ class DailyGoalCard extends ConsumerWidget {
                           height: 4,
                           decoration: BoxDecoration(
                             color: isComplete
-                                ? (isGoalMet ? AppTheme.success : AppTheme.primary)
+                                ? (isGoalMet
+                                      ? AppTheme.success
+                                      : AppTheme.primary)
                                 : AppTheme.surfaceBorder,
                             borderRadius: BorderRadius.circular(2),
                           ),
@@ -266,8 +274,11 @@ class DailyGoalCard extends ConsumerWidget {
                         streak.when(
                           data: (val) => Row(
                             children: [
-                              const Icon(Icons.local_fire_department_rounded,
-                                  color: AppTheme.warning, size: 20),
+                              const Icon(
+                                Icons.local_fire_department_rounded,
+                                color: AppTheme.warning,
+                                size: 20,
+                              ),
                               const SizedBox(width: 6),
                               Text(
                                 '$val day streak',
@@ -305,7 +316,9 @@ class DailyGoalCard extends ConsumerWidget {
                             onPressed: () => Navigator.pop(context),
                             style: OutlinedButton.styleFrom(
                               foregroundColor: AppTheme.textSecondary,
-                              side: const BorderSide(color: AppTheme.surfaceBorder),
+                              side: const BorderSide(
+                                color: AppTheme.surfaceBorder,
+                              ),
                               padding: const EdgeInsets.symmetric(vertical: 16),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
@@ -318,12 +331,16 @@ class DailyGoalCard extends ConsumerWidget {
                         Expanded(
                           child: FilledButton(
                             onPressed: () async {
-                              final existing = await ref
-                                  .read(focusGoalSettingsProvider.future);
-                              existing.dailySessionGoal =
-                                  sliderValue.round().clamp(1, 12);
+                              final existing = await ref.read(
+                                focusGoalSettingsProvider.future,
+                              );
+                              existing.dailySessionGoal = sliderValue
+                                  .round()
+                                  .clamp(1, 12);
                               await ref
-                                  .read(focusGoalSettingsUpdaterProvider.notifier)
+                                  .read(
+                                    focusGoalSettingsUpdaterProvider.notifier,
+                                  )
                                   .updateSettings(existing);
                               ref.invalidate(dailyGoalProvider);
                               ref.invalidate(weeklyHeatmapProvider);
@@ -378,8 +395,13 @@ class GoalRingPainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeWidth = 3
       ..strokeCap = StrokeCap.round;
-    canvas.drawArc(rect, -math.pi / 2, 2 * math.pi * progress.clamp(0.0, 1.0),
-        false, progressPaint);
+    canvas.drawArc(
+      rect,
+      -math.pi / 2,
+      2 * math.pi * progress.clamp(0.0, 1.0),
+      false,
+      progressPaint,
+    );
   }
 
   @override

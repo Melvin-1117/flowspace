@@ -109,10 +109,14 @@ class _SessionTab extends StatelessWidget {
           duration: const Duration(milliseconds: 250),
           padding: const EdgeInsets.symmetric(vertical: 10),
           decoration: BoxDecoration(
-            color: isActive ? color.withValues(alpha: 0.15) : Colors.transparent,
+            color: isActive
+                ? color.withValues(alpha: 0.15)
+                : Colors.transparent,
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
-              color: isActive ? color.withValues(alpha: 0.4) : Colors.transparent,
+              color: isActive
+                  ? color.withValues(alpha: 0.4)
+                  : Colors.transparent,
             ),
           ),
           child: Column(
@@ -136,7 +140,9 @@ class _SessionTab extends StatelessWidget {
                 '${duration ~/ 60}m',
                 style: GoogleFonts.spaceGrotesk(
                   fontSize: 10,
-                  color: isActive ? color.withValues(alpha: 0.7) : AppTheme.textMuted,
+                  color: isActive
+                      ? color.withValues(alpha: 0.7)
+                      : AppTheme.textMuted,
                 ),
               ),
             ],
@@ -169,20 +175,19 @@ class _SwitchConfirmDialog extends StatelessWidget {
       ),
       content: Text(
         'Current session progress will be lost.',
-        style: GoogleFonts.spaceGrotesk(
-          color: AppTheme.textSecondary,
-        ),
+        style: GoogleFonts.spaceGrotesk(color: AppTheme.textSecondary),
       ),
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(false),
-          child: const Text('Cancel', style: TextStyle(color: AppTheme.textSecondary)),
+          child: const Text(
+            'Cancel',
+            style: TextStyle(color: AppTheme.textSecondary),
+          ),
         ),
         FilledButton(
           onPressed: () => Navigator.of(context).pop(true),
-          style: FilledButton.styleFrom(
-            backgroundColor: AppTheme.primary,
-          ),
+          style: FilledButton.styleFrom(backgroundColor: AppTheme.primary),
           child: const Text('Confirm'),
         ),
       ],

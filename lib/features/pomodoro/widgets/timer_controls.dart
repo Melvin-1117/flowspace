@@ -13,7 +13,8 @@ class TimerControls extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final timerState = ref.watch(timerNotifierProvider);
     final sessionColor = timerState.sessionType.color;
-    final isLocked = timerState.sessionType == SessionType.focus &&
+    final isLocked =
+        timerState.sessionType == SessionType.focus &&
         timerState.trialsRemaining <= 0 &&
         timerState.isRunning;
 
@@ -52,38 +53,35 @@ class TimerControls extends ConsumerWidget {
               ref.read(timerNotifierProvider.notifier).start();
             }
           },
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 200),
-            width: 72,
-            height: 72,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: isLocked ? AppTheme.dangerSubtle : sessionColor,
-              boxShadow: [
-                BoxShadow(
-                  color: (isLocked ? AppTheme.danger : sessionColor)
-                      .withValues(alpha: 0.4),
-                  blurRadius: 24,
-                  spreadRadius: 4,
-                ),
-              ],
-            ),
-            child: Icon(
-              isLocked
-                  ? Icons.lock_rounded
-                  : timerState.isRunning
-                      ? Icons.pause_rounded
-                      : Icons.play_arrow_rounded,
-              color: Colors.white,
-              size: 32,
-            ),
-          )
-              .animate(target: timerState.isRunning ? 1 : 0)
-              .scaleXY(
-                begin: 1.0,
-                end: 0.95,
-                duration: 100.ms,
-              ),
+          child:
+              AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    width: 72,
+                    height: 72,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: isLocked ? AppTheme.dangerSubtle : sessionColor,
+                      boxShadow: [
+                        BoxShadow(
+                          color: (isLocked ? AppTheme.danger : sessionColor)
+                              .withValues(alpha: 0.4),
+                          blurRadius: 24,
+                          spreadRadius: 4,
+                        ),
+                      ],
+                    ),
+                    child: Icon(
+                      isLocked
+                          ? Icons.lock_rounded
+                          : timerState.isRunning
+                          ? Icons.pause_rounded
+                          : Icons.play_arrow_rounded,
+                      color: Colors.white,
+                      size: 32,
+                    ),
+                  )
+                  .animate(target: timerState.isRunning ? 1 : 0)
+                  .scaleXY(begin: 1.0, end: 0.95, duration: 100.ms),
         ),
 
         const SizedBox(width: 16),
@@ -120,23 +118,22 @@ class TimerControls extends ConsumerWidget {
         ),
         content: Text(
           'Current session progress will be reset to the beginning.',
-          style: GoogleFonts.spaceGrotesk(
-            color: AppTheme.textSecondary,
-          ),
+          style: GoogleFonts.spaceGrotesk(color: AppTheme.textSecondary),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel', style: TextStyle(color: AppTheme.textSecondary)),
+            child: const Text(
+              'Cancel',
+              style: TextStyle(color: AppTheme.textSecondary),
+            ),
           ),
           ElevatedButton(
             onPressed: () {
               ref.read(timerNotifierProvider.notifier).reset();
               Navigator.pop(context);
             },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppTheme.primary,
-            ),
+            style: ElevatedButton.styleFrom(backgroundColor: AppTheme.primary),
             child: const Text('Restart'),
           ),
         ],
@@ -164,14 +161,15 @@ class TimerControls extends ConsumerWidget {
           ),
           content: Text(
             'This session will be marked as incomplete.',
-            style: GoogleFonts.spaceGrotesk(
-              color: AppTheme.textSecondary,
-            ),
+            style: GoogleFonts.spaceGrotesk(color: AppTheme.textSecondary),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context, false),
-              child: const Text('Cancel', style: TextStyle(color: AppTheme.textSecondary)),
+              child: const Text(
+                'Cancel',
+                style: TextStyle(color: AppTheme.textSecondary),
+              ),
             ),
             ElevatedButton(
               onPressed: () => Navigator.pop(context, true),
@@ -193,18 +191,13 @@ class TimerControls extends ConsumerWidget {
       SnackBar(
         content: Text(
           '🔒  No pauses remaining — stay focused!',
-          style: GoogleFonts.spaceGrotesk(
-            color: Colors.white,
-            fontSize: 13,
-          ),
+          style: GoogleFonts.spaceGrotesk(color: Colors.white, fontSize: 13),
         ),
         backgroundColor: AppTheme.danger,
         duration: const Duration(seconds: 2),
         behavior: SnackBarBehavior.floating,
         margin: const EdgeInsets.all(16),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
     );
   }
@@ -244,13 +237,7 @@ class _ControlButton extends StatelessWidget {
             border: Border.all(color: borderColor),
           ),
           child: Icon(icon, color: iconColor, size: 20),
-        )
-            .animate()
-            .scaleXY(
-              begin: 1.0,
-              end: 0.94,
-              duration: 100.ms,
-            ),
+        ).animate().scaleXY(begin: 1.0, end: 0.94, duration: 100.ms),
       ),
     );
   }

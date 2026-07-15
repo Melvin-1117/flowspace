@@ -331,9 +331,7 @@ class _LanguageCard extends StatelessWidget {
                 child: CircularProgressIndicator(
                   value: 1,
                   strokeWidth: 16,
-                  valueColor: AlwaysStoppedAnimation(
-                    AppTheme.surfaceBorder,
-                  ),
+                  valueColor: AlwaysStoppedAnimation(AppTheme.surfaceBorder),
                   backgroundColor: Colors.transparent,
                 ),
               ),

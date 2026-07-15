@@ -252,8 +252,7 @@ class _DismissButtonState extends ConsumerState<_DismissButton> {
           style: GoogleFonts.spaceGrotesk(
             fontSize: 13,
             color: _dismissed ? AppTheme.primary : AppTheme.textMuted,
-            fontWeight:
-                _dismissed ? FontWeight.w600 : FontWeight.w400,
+            fontWeight: _dismissed ? FontWeight.w600 : FontWeight.w400,
           ),
         ),
       ),
@@ -279,9 +278,10 @@ class _PulsingAlarmIconState extends State<_PulsingAlarmIcon>
       vsync: this,
       duration: const Duration(milliseconds: 600),
     )..repeat(reverse: true);
-    _scaleAnim = Tween<double>(begin: 1.0, end: 1.2).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
-    );
+    _scaleAnim = Tween<double>(
+      begin: 1.0,
+      end: 1.2,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
   }
 
   @override
@@ -297,11 +297,7 @@ class _PulsingAlarmIconState extends State<_PulsingAlarmIcon>
       builder: (context, child) {
         return Transform.scale(scale: _scaleAnim.value, child: child);
       },
-      child: const Icon(
-        Icons.alarm_rounded,
-        color: AppTheme.primary,
-        size: 80,
-      ),
+      child: const Icon(Icons.alarm_rounded, color: AppTheme.primary, size: 80),
     );
   }
 }

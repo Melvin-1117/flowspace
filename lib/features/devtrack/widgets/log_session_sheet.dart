@@ -22,7 +22,12 @@ class _LogSessionSheetState extends ConsumerState<LogSessionSheet> {
   String _sessionType = 'feature';
   final _notesController = TextEditingController();
 
-  static const List<String> _sessionTypes = ['feature', 'bugfix', 'learning', 'review'];
+  static const List<String> _sessionTypes = [
+    'feature',
+    'bugfix',
+    'learning',
+    'review',
+  ];
 
   @override
   void dispose() {
@@ -34,7 +39,8 @@ class _LogSessionSheetState extends ConsumerState<LogSessionSheet> {
   Widget build(BuildContext context) {
     final projectsAsync = ref.watch(allProjectsProvider);
     final profile = ref.watch(userProfileProvider).value;
-    final languages = profile?.primaryLanguages ?? ['Dart', 'Python', 'JavaScript'];
+    final languages =
+        profile?.primaryLanguages ?? ['Dart', 'Python', 'JavaScript'];
 
     return Container(
       constraints: BoxConstraints(
@@ -95,7 +101,10 @@ class _LogSessionSheetState extends ConsumerState<LogSessionSheet> {
                     ),
                     child: Text(
                       'No projects found. Create a project first to link sessions.',
-                      style: GoogleFonts.spaceGrotesk(color: AppTheme.textMuted, fontSize: 13),
+                      style: GoogleFonts.spaceGrotesk(
+                        color: AppTheme.textMuted,
+                        fontSize: 13,
+                      ),
                     ),
                   );
                 }
@@ -106,7 +115,9 @@ class _LogSessionSheetState extends ConsumerState<LogSessionSheet> {
                 }
 
                 return Container(
-                  padding: const EdgeInsets.symmetric(horizontal: AppTheme.spaceMD),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppTheme.spaceMD,
+                  ),
                   decoration: BoxDecoration(
                     color: AppTheme.surfaceElevated,
                     borderRadius: BorderRadius.circular(AppTheme.radiusMD),
@@ -117,13 +128,21 @@ class _LogSessionSheetState extends ConsumerState<LogSessionSheet> {
                       value: _selectedProjectId,
                       dropdownColor: AppTheme.surfaceElevated,
                       isExpanded: true,
-                      style: GoogleFonts.spaceGrotesk(color: AppTheme.textPrimary, fontSize: 14),
-                      icon: const Icon(Icons.arrow_drop_down, color: AppTheme.textSecondary),
+                      style: GoogleFonts.spaceGrotesk(
+                        color: AppTheme.textPrimary,
+                        fontSize: 14,
+                      ),
+                      icon: const Icon(
+                        Icons.arrow_drop_down,
+                        color: AppTheme.textSecondary,
+                      ),
                       onChanged: (value) {
                         setState(() {
                           _selectedProjectId = value;
                           // Automatically set language to project primary language if possible
-                          final proj = projects.firstWhere((p) => p.uuid == value);
+                          final proj = projects.firstWhere(
+                            (p) => p.uuid == value,
+                          );
                           _language = proj.primaryLanguage;
                         });
                       },
@@ -137,8 +156,13 @@ class _LogSessionSheetState extends ConsumerState<LogSessionSheet> {
                   ),
                 );
               },
-              loading: () => const Center(child: CircularProgressIndicator(strokeWidth: 2)),
-              error: (err, stack) => Text('Error loading projects', style: GoogleFonts.spaceGrotesk(color: AppTheme.danger)),
+              loading: () => const Center(
+                child: CircularProgressIndicator(strokeWidth: 2),
+              ),
+              error: (err, stack) => Text(
+                'Error loading projects',
+                style: GoogleFonts.spaceGrotesk(color: AppTheme.danger),
+              ),
             ),
 
             const SizedBox(height: AppTheme.spaceMD),
@@ -154,20 +178,31 @@ class _LogSessionSheetState extends ConsumerState<LogSessionSheet> {
                 return GestureDetector(
                   onTap: () => setState(() => _language = lang),
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
                     decoration: BoxDecoration(
-                      color: isSelected ? AppTheme.primarySubtle : AppTheme.surfaceElevated,
+                      color: isSelected
+                          ? AppTheme.primarySubtle
+                          : AppTheme.surfaceElevated,
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(
-                        color: isSelected ? AppTheme.primary : AppTheme.surfaceBorder,
+                        color: isSelected
+                            ? AppTheme.primary
+                            : AppTheme.surfaceBorder,
                       ),
                     ),
                     child: Text(
                       lang,
                       style: GoogleFonts.spaceGrotesk(
                         fontSize: 12,
-                        fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                        color: isSelected ? AppTheme.primary : AppTheme.textSecondary,
+                        fontWeight: isSelected
+                            ? FontWeight.w600
+                            : FontWeight.w400,
+                        color: isSelected
+                            ? AppTheme.primary
+                            : AppTheme.textSecondary,
                       ),
                     ),
                   ),
@@ -184,7 +219,10 @@ class _LogSessionSheetState extends ConsumerState<LogSessionSheet> {
               children: [
                 Expanded(
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: AppTheme.spaceMD, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppTheme.spaceMD,
+                      vertical: 12,
+                    ),
                     decoration: BoxDecoration(
                       color: AppTheme.surfaceElevated,
                       borderRadius: BorderRadius.circular(AppTheme.radiusMD),
@@ -222,20 +260,31 @@ class _LogSessionSheetState extends ConsumerState<LogSessionSheet> {
                   child: GestureDetector(
                     onTap: () => setState(() => _sessionType = type),
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 8,
+                      ),
                       decoration: BoxDecoration(
-                        color: isSelected ? AppTheme.primarySubtle : AppTheme.surfaceElevated,
+                        color: isSelected
+                            ? AppTheme.primarySubtle
+                            : AppTheme.surfaceElevated,
                         borderRadius: BorderRadius.circular(8),
                         border: Border.all(
-                          color: isSelected ? AppTheme.primary : AppTheme.surfaceBorder,
+                          color: isSelected
+                              ? AppTheme.primary
+                              : AppTheme.surfaceBorder,
                         ),
                       ),
                       child: Text(
                         type[0].toUpperCase() + type.substring(1),
                         style: GoogleFonts.spaceGrotesk(
                           fontSize: 13,
-                          fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                          color: isSelected ? AppTheme.primary : AppTheme.textSecondary,
+                          fontWeight: isSelected
+                              ? FontWeight.w600
+                              : FontWeight.w400,
+                          color: isSelected
+                              ? AppTheme.primary
+                              : AppTheme.textSecondary,
                         ),
                       ),
                     ),
@@ -249,7 +298,11 @@ class _LogSessionSheetState extends ConsumerState<LogSessionSheet> {
             // Notes
             _buildLabel('WHAT DID YOU WORK ON?'),
             const SizedBox(height: 8),
-            _buildTextField(_notesController, 'e.g., refactored database module, fixed auth state bug', maxLines: 2),
+            _buildTextField(
+              _notesController,
+              'e.g., refactored database module, fixed auth state bug',
+              maxLines: 2,
+            ),
 
             const SizedBox(height: AppTheme.spaceXL),
 
@@ -299,7 +352,10 @@ class _LogSessionSheetState extends ConsumerState<LogSessionSheet> {
       ),
       child: Text(
         label,
-        style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w600, fontSize: 12),
+        style: GoogleFonts.spaceGrotesk(
+          fontWeight: FontWeight.w600,
+          fontSize: 12,
+        ),
       ),
     );
   }
@@ -316,7 +372,11 @@ class _LogSessionSheetState extends ConsumerState<LogSessionSheet> {
     );
   }
 
-  Widget _buildTextField(TextEditingController controller, String hint, {int maxLines = 1}) {
+  Widget _buildTextField(
+    TextEditingController controller,
+    String hint, {
+    int maxLines = 1,
+  }) {
     return Container(
       decoration: BoxDecoration(
         color: AppTheme.surfaceElevated,
@@ -326,7 +386,10 @@ class _LogSessionSheetState extends ConsumerState<LogSessionSheet> {
       child: TextField(
         controller: controller,
         maxLines: maxLines,
-        style: GoogleFonts.spaceGrotesk(color: AppTheme.textPrimary, fontSize: 14),
+        style: GoogleFonts.spaceGrotesk(
+          color: AppTheme.textPrimary,
+          fontSize: 14,
+        ),
         decoration: InputDecoration(
           hintText: hint,
           hintStyle: GoogleFonts.spaceGrotesk(color: AppTheme.textMuted),

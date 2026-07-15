@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -22,14 +22,17 @@ class TaskSummaryCard extends ConsumerWidget {
         }
 
         final todo = allTasks.where((t) => t.status == 'todo').length;
-        final inProgress =
-            allTasks.where((t) => t.status == 'inprogress').length;
+        final inProgress = allTasks
+            .where((t) => t.status == 'inprogress')
+            .length;
         final done = allTasks.where((t) => t.status == 'done').length;
         final overdue = allTasks
-            .where((t) =>
-                t.dueDate != null &&
-                t.dueDate!.isBefore(DateTime.now()) &&
-                t.status != 'done')
+            .where(
+              (t) =>
+                  t.dueDate != null &&
+                  t.dueDate!.isBefore(DateTime.now()) &&
+                  t.status != 'done',
+            )
             .length;
         final total = allTasks.length;
         final progress = total == 0 ? 0.0 : done / total;
@@ -60,9 +63,9 @@ class TaskSummaryCard extends ConsumerWidget {
                     Text(
                       'View All â†’',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: AppTheme.primary,
-                            fontWeight: FontWeight.w600,
-                          ),
+                        color: AppTheme.primary,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ],
                 ),
@@ -75,8 +78,9 @@ class TaskSummaryCard extends ConsumerWidget {
                     value: progress,
                     minHeight: 6,
                     backgroundColor: AppTheme.surfaceBorder,
-                    valueColor:
-                        const AlwaysStoppedAnimation<Color>(AppTheme.primary),
+                    valueColor: const AlwaysStoppedAnimation<Color>(
+                      AppTheme.primary,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 14),
@@ -115,15 +119,18 @@ class TaskSummaryCard extends ConsumerWidget {
                   const SizedBox(height: 12),
                   Row(
                     children: [
-                      const Icon(Icons.warning_rounded,
-                          color: AppTheme.danger, size: 16),
+                      const Icon(
+                        Icons.warning_rounded,
+                        color: AppTheme.danger,
+                        size: 16,
+                      ),
                       const SizedBox(width: 6),
                       Text(
                         '$overdue task${overdue > 1 ? 's' : ''} overdue',
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: AppTheme.danger,
-                              fontWeight: FontWeight.w600,
-                            ),
+                          color: AppTheme.danger,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ],
                   ),
@@ -162,19 +169,16 @@ class _StatusChip extends StatelessWidget {
           Container(
             width: 8,
             height: 8,
-            decoration: BoxDecoration(
-              color: color,
-              shape: BoxShape.circle,
-            ),
+            decoration: BoxDecoration(color: color, shape: BoxShape.circle),
           ),
           const SizedBox(width: 6),
           Text(
             '$count $label',
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: color,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 11,
-                ),
+              color: color,
+              fontWeight: FontWeight.w600,
+              fontSize: 11,
+            ),
           ),
         ],
       ),
@@ -199,14 +203,17 @@ class _EmptyTaskCard extends StatelessWidget {
       ),
       child: Column(
         children: [
-          const Icon(Icons.check_circle_outline_rounded,
-              color: AppTheme.textMuted, size: 32),
+          const Icon(
+            Icons.check_circle_outline_rounded,
+            color: AppTheme.textMuted,
+            size: 32,
+          ),
           const SizedBox(height: 12),
           Text(
             'No tasks yet â€” add your first task',
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: AppTheme.textSecondary,
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.bodyMedium?.copyWith(color: AppTheme.textSecondary),
           ),
           const SizedBox(height: 12),
           TextButton.icon(

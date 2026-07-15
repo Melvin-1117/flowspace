@@ -63,13 +63,16 @@ class LinkTaskSheet extends ConsumerWidget {
                 children: [
                   // Focus Blocks Tab
                   focusBlocksAsync.when(
-                    loading: () => const Center(child: CircularProgressIndicator()),
+                    loading: () =>
+                        const Center(child: CircularProgressIndicator()),
                     error: (err, _) => ErrorCard(
                       message: 'Could not load focus blocks',
                       onRetry: () => ref.invalidate(todayFocusBlocksProvider),
                     ),
                     data: (blocks) {
-                      final pending = blocks.where((b) => !b.isCompleted).toList();
+                      final pending = blocks
+                          .where((b) => !b.isCompleted)
+                          .toList();
                       if (pending.isEmpty) {
                         return const _EmptyListPlaceholder(
                           icon: Icons.grid_view_rounded,
@@ -84,19 +87,24 @@ class LinkTaskSheet extends ConsumerWidget {
                           final block = pending[index];
                           return _ListItem(
                             title: block.title,
-                            subtitle: '${block.durationMinutes} min • ${block.sessionType}',
+                            subtitle:
+                                '${block.durationMinutes} min • ${block.sessionType}',
                             icon: Icons.calendar_today_outlined,
                             iconColor: AppTheme.primary,
                             onLink: () {
-                              ref.read(timerNotifierProvider.notifier).setLinkedTask(block.uuid, block.title);
+                              ref
+                                  .read(timerNotifierProvider.notifier)
+                                  .setLinkedTask(block.uuid, block.title);
                               Navigator.pop(context);
                             },
                             onStart: () {
-                              ref.read(timerNotifierProvider.notifier).startFocusWithDuration(
-                                durationSeconds: block.durationMinutes * 60,
-                                linkedTaskId: block.uuid,
-                                linkedTaskTitle: block.title,
-                              );
+                              ref
+                                  .read(timerNotifierProvider.notifier)
+                                  .startFocusWithDuration(
+                                    durationSeconds: block.durationMinutes * 60,
+                                    linkedTaskId: block.uuid,
+                                    linkedTaskTitle: block.title,
+                                  );
                               Navigator.pop(context);
                             },
                           );
@@ -107,7 +115,8 @@ class LinkTaskSheet extends ConsumerWidget {
 
                   // Subjects Tab
                   subjectsAsync.when(
-                    loading: () => const Center(child: CircularProgressIndicator()),
+                    loading: () =>
+                        const Center(child: CircularProgressIndicator()),
                     error: (err, _) => ErrorCard(
                       message: 'Could not load subjects',
                       onRetry: () => ref.invalidate(allSubjectsProvider),
@@ -117,7 +126,8 @@ class LinkTaskSheet extends ConsumerWidget {
                         return const _EmptyListPlaceholder(
                           icon: Icons.school_rounded,
                           title: 'No subjects',
-                          subtitle: 'Create subjects in the Planner page first.',
+                          subtitle:
+                              'Create subjects in the Planner page first.',
                         );
                       }
                       return ListView.separated(
@@ -128,18 +138,23 @@ class LinkTaskSheet extends ConsumerWidget {
                           final color = _colorFromHex(subject.colorHex);
                           return _ListItem(
                             title: subject.name,
-                            subtitle: '${(subject.completionPercent * 100).round()}% completed',
+                            subtitle:
+                                '${(subject.completionPercent * 100).round()}% completed',
                             icon: Icons.menu_book_rounded,
                             iconColor: color,
                             onLink: () {
-                              ref.read(timerNotifierProvider.notifier).setLinkedTask(subject.uuid, subject.name);
+                              ref
+                                  .read(timerNotifierProvider.notifier)
+                                  .setLinkedTask(subject.uuid, subject.name);
                               Navigator.pop(context);
                             },
                             onStart: () {
-                              ref.read(timerNotifierProvider.notifier).start(
-                                linkedTaskId: subject.uuid,
-                                linkedTaskTitle: subject.name,
-                              );
+                              ref
+                                  .read(timerNotifierProvider.notifier)
+                                  .start(
+                                    linkedTaskId: subject.uuid,
+                                    linkedTaskTitle: subject.name,
+                                  );
                               Navigator.pop(context);
                             },
                           );
@@ -150,13 +165,16 @@ class LinkTaskSheet extends ConsumerWidget {
 
                   // Tasks Tab
                   tasksAsync.when(
-                    loading: () => const Center(child: CircularProgressIndicator()),
+                    loading: () =>
+                        const Center(child: CircularProgressIndicator()),
                     error: (err, _) => ErrorCard(
                       message: 'Could not load tasks',
                       onRetry: () => ref.invalidate(allTasksProvider),
                     ),
                     data: (tasks) {
-                      final pendingTasks = tasks.where((t) => t.status != 'done').toList();
+                      final pendingTasks = tasks
+                          .where((t) => t.status != 'done')
+                          .toList();
                       if (pendingTasks.isEmpty) {
                         return const _EmptyListPlaceholder(
                           icon: Icons.check_circle_outline,
@@ -171,18 +189,23 @@ class LinkTaskSheet extends ConsumerWidget {
                           final task = pendingTasks[index];
                           return _ListItem(
                             title: task.title,
-                            subtitle: 'Priority: ${task.priority.toUpperCase()}',
+                            subtitle:
+                                'Priority: ${task.priority.toUpperCase()}',
                             icon: Icons.assignment_outlined,
                             iconColor: AppTheme.accent,
                             onLink: () {
-                              ref.read(timerNotifierProvider.notifier).setLinkedTask(task.uuid, task.title);
+                              ref
+                                  .read(timerNotifierProvider.notifier)
+                                  .setLinkedTask(task.uuid, task.title);
                               Navigator.pop(context);
                             },
                             onStart: () {
-                              ref.read(timerNotifierProvider.notifier).start(
-                                linkedTaskId: task.uuid,
-                                linkedTaskTitle: task.title,
-                              );
+                              ref
+                                  .read(timerNotifierProvider.notifier)
+                                  .start(
+                                    linkedTaskId: task.uuid,
+                                    linkedTaskTitle: task.title,
+                                  );
                               Navigator.pop(context);
                             },
                           );
@@ -326,10 +349,7 @@ class _EmptyListPlaceholder extends StatelessWidget {
           child: Text(
             subtitle,
             textAlign: TextAlign.center,
-            style: const TextStyle(
-              color: AppTheme.textSecondary,
-              fontSize: 13,
-            ),
+            style: const TextStyle(color: AppTheme.textSecondary, fontSize: 13),
           ),
         ),
       ],

@@ -11,7 +11,11 @@ import '../models/skill_entry_isar.dart';
 // ── All projects ────────────────────────────────────────────────────────────
 final allProjectsProvider = FutureProvider<List<DevProject>>((ref) async {
   final isar = await ref.watch(isarProvider.future);
-  return isar.collection<DevProject>().where().sortByLastActiveAtDesc().findAll();
+  return isar
+      .collection<DevProject>()
+      .where()
+      .sortByLastActiveAtDesc()
+      .findAll();
 });
 
 // ── Active projects only ────────────────────────────────────────────────────
@@ -25,8 +29,9 @@ final activeProjectsProvider = FutureProvider<List<DevProject>>((ref) async {
 });
 
 // ── All coding sessions ─────────────────────────────────────────────────────
-final allCodingSessionsProvider =
-    FutureProvider<List<CodingSession>>((ref) async {
+final allCodingSessionsProvider = FutureProvider<List<CodingSession>>((
+  ref,
+) async {
   final isar = await ref.watch(isarProvider.future);
   return isar
       .collection<CodingSession>()
@@ -36,8 +41,9 @@ final allCodingSessionsProvider =
 });
 
 // ── Today's coding sessions ─────────────────────────────────────────────────
-final todayCodingSessionsProvider =
-    FutureProvider<List<CodingSession>>((ref) async {
+final todayCodingSessionsProvider = FutureProvider<List<CodingSession>>((
+  ref,
+) async {
   final isar = await ref.watch(isarProvider.future);
   final now = DateTime.now();
   final start = DateTime(now.year, now.month, now.day);
@@ -52,19 +58,20 @@ final todayCodingSessionsProvider =
 // ── Language distribution from coding sessions ──────────────────────────────
 final devtrackLanguageDistributionProvider =
     FutureProvider<Map<String, double>>((ref) async {
-  final sessions = await ref.watch(allCodingSessionsProvider.future);
-  final Map<String, int> totals = {};
-  for (final s in sessions) {
-    totals[s.language] = (totals[s.language] ?? 0) + s.durationMinutes;
-  }
-  final total = totals.values.fold(0, (a, b) => a + b);
-  if (total == 0) return {};
-  return totals.map((k, v) => MapEntry(k, v / total * 100));
-});
+      final sessions = await ref.watch(allCodingSessionsProvider.future);
+      final Map<String, int> totals = {};
+      for (final s in sessions) {
+        totals[s.language] = (totals[s.language] ?? 0) + s.durationMinutes;
+      }
+      final total = totals.values.fold(0, (a, b) => a + b);
+      if (total == 0) return {};
+      return totals.map((k, v) => MapEntry(k, v / total * 100));
+    });
 
 // ── 90-day activity heatmap ─────────────────────────────────────────────────
-final activityHeatmapProvider =
-    FutureProvider<List<DayActivityData>>((ref) async {
+final activityHeatmapProvider = FutureProvider<List<DayActivityData>>((
+  ref,
+) async {
   final isar = await ref.watch(isarProvider.future);
   final now = DateTime.now();
   final List<DayActivityData> result = [];
@@ -83,12 +90,14 @@ final activityHeatmapProvider =
         .startTimeBetween(start, end)
         .isCompletedEqualTo(true)
         .findAll();
-    result.add(DayActivityData(
-      date: day,
-      codingMinutes: sessions.fold(0, (s, e) => s + e.durationMinutes),
-      pomodoroCount: pomodoros.length,
-      sessionCount: sessions.length,
-    ));
+    result.add(
+      DayActivityData(
+        date: day,
+        codingMinutes: sessions.fold(0, (s, e) => s + e.durationMinutes),
+        pomodoroCount: pomodoros.length,
+        sessionCount: sessions.length,
+      ),
+    );
   }
   return result;
 });

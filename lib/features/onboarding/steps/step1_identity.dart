@@ -16,7 +16,8 @@ class OnboardingStep1Identity extends StatefulWidget {
   });
 
   @override
-  State<OnboardingStep1Identity> createState() => _OnboardingStep1IdentityState();
+  State<OnboardingStep1Identity> createState() =>
+      _OnboardingStep1IdentityState();
 }
 
 class _OnboardingStep1IdentityState extends State<OnboardingStep1Identity> {
@@ -65,10 +66,9 @@ class _OnboardingStep1IdentityState extends State<OnboardingStep1Identity> {
               });
               widget.onValidationChanged();
             },
-            validator: (val) =>
-                val != null && val.trim().length >= 2
-                    ? null
-                    : 'Name must be at least 2 characters',
+            validator: (val) => val != null && val.trim().length >= 2
+                ? null
+                : 'Name must be at least 2 characters',
           ),
           const SizedBox(height: 32),
           const FieldLabel(label: 'CHOOSE YOUR AVATAR'),
@@ -87,44 +87,58 @@ class _OnboardingStep1IdentityState extends State<OnboardingStep1Identity> {
             crossAxisCount: 4,
             mainAxisSpacing: 12,
             crossAxisSpacing: 12,
-            children: [
-              '👨‍💻', '👩‍💻', '🧑‍💻', '👾',
-              '🤖', '🦊', '🐼', '🦁',
-              '🐉', '🚀', '⚡', '🎯',
-              '🔥', '💎', '🌊', '🎮',
-            ].map((emoji) {
-              final isSelected = data.avatarEmoji == emoji;
-              return GestureDetector(
-                onTap: () {
-                  setState(() {
-                    data.avatarEmoji = emoji;
-                  });
-                },
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  decoration: BoxDecoration(
-                    color: isSelected
-                        ? AppTheme.primary.withValues(alpha: 0.15)
-                        : AppTheme.surfaceCard,
-                    borderRadius: BorderRadius.circular(14),
-                    border: Border.all(
-                      color: isSelected
-                          ? AppTheme.primary
-                          : AppTheme.surfaceBorder,
-                      width: isSelected ? 2 : 1,
-                    ),
-                  ),
-                  child: Center(
-                    child: Text(
-                      emoji,
-                      style: const TextStyle(fontSize: 32),
-                    ),
-                  ),
-                )
-                .animate(target: isSelected ? 1 : 0)
-                .scaleXY(end: 1.05, duration: 200.ms),
-              );
-            }).toList(),
+            children:
+                [
+                  '👨‍💻',
+                  '👩‍💻',
+                  '🧑‍💻',
+                  '👾',
+                  '🤖',
+                  '🦊',
+                  '🐼',
+                  '🦁',
+                  '🐉',
+                  '🚀',
+                  '⚡',
+                  '🎯',
+                  '🔥',
+                  '💎',
+                  '🌊',
+                  '🎮',
+                ].map((emoji) {
+                  final isSelected = data.avatarEmoji == emoji;
+                  return GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        data.avatarEmoji = emoji;
+                      });
+                    },
+                    child:
+                        AnimatedContainer(
+                              duration: const Duration(milliseconds: 200),
+                              decoration: BoxDecoration(
+                                color: isSelected
+                                    ? AppTheme.primary.withValues(alpha: 0.15)
+                                    : AppTheme.surfaceCard,
+                                borderRadius: BorderRadius.circular(14),
+                                border: Border.all(
+                                  color: isSelected
+                                      ? AppTheme.primary
+                                      : AppTheme.surfaceBorder,
+                                  width: isSelected ? 2 : 1,
+                                ),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  emoji,
+                                  style: const TextStyle(fontSize: 32),
+                                ),
+                              ),
+                            )
+                            .animate(target: isSelected ? 1 : 0)
+                            .scaleXY(end: 1.05, duration: 200.ms),
+                  );
+                }).toList(),
           ),
           const SizedBox(height: 40),
           AnimatedContainer(
@@ -181,12 +195,15 @@ class _OnboardingStep1IdentityState extends State<OnboardingStep1Identity> {
                 const Spacer(),
                 Container(
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 8, vertical: 4),
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: AppTheme.primary.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(6),
                     border: Border.all(
-                        color: AppTheme.primary.withValues(alpha: 0.3)),
+                      color: AppTheme.primary.withValues(alpha: 0.3),
+                    ),
                   ),
                   child: Text(
                     'PREVIEW',

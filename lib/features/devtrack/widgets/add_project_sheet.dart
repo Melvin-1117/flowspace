@@ -25,7 +25,12 @@ class _AddProjectSheetState extends ConsumerState<AddProjectSheet> {
   int _completionPercent = 0;
 
   static const _projectColors = [
-    '#006EE6', '#00B4FF', '#00D4AA', '#FFB800', '#FF3B5C', '#FF6B35',
+    '#006EE6',
+    '#00B4FF',
+    '#00D4AA',
+    '#FFB800',
+    '#FF3B5C',
+    '#FF6B35',
   ];
 
   @override
@@ -38,7 +43,8 @@ class _AddProjectSheetState extends ConsumerState<AddProjectSheet> {
   @override
   Widget build(BuildContext context) {
     final profile = ref.watch(userProfileProvider).value;
-    final languages = profile?.primaryLanguages ?? ['Dart', 'Python', 'JavaScript'];
+    final languages =
+        profile?.primaryLanguages ?? ['Dart', 'Python', 'JavaScript'];
 
     return Container(
       constraints: BoxConstraints(
@@ -94,7 +100,11 @@ class _AddProjectSheetState extends ConsumerState<AddProjectSheet> {
             // Description
             _buildLabel('DESCRIPTION'),
             const SizedBox(height: 8),
-            _buildTextField(_descController, 'Optional description', maxLines: 2),
+            _buildTextField(
+              _descController,
+              'Optional description',
+              maxLines: 2,
+            ),
 
             const SizedBox(height: AppTheme.spaceMD),
 
@@ -109,20 +119,31 @@ class _AddProjectSheetState extends ConsumerState<AddProjectSheet> {
                 return GestureDetector(
                   onTap: () => setState(() => _primaryLanguage = lang),
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
                     decoration: BoxDecoration(
-                      color: isSelected ? AppTheme.primarySubtle : AppTheme.surfaceElevated,
+                      color: isSelected
+                          ? AppTheme.primarySubtle
+                          : AppTheme.surfaceElevated,
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(
-                        color: isSelected ? AppTheme.primary : AppTheme.surfaceBorder,
+                        color: isSelected
+                            ? AppTheme.primary
+                            : AppTheme.surfaceBorder,
                       ),
                     ),
                     child: Text(
                       lang,
                       style: GoogleFonts.spaceGrotesk(
                         fontSize: 12,
-                        fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                        color: isSelected ? AppTheme.primary : AppTheme.textSecondary,
+                        fontWeight: isSelected
+                            ? FontWeight.w600
+                            : FontWeight.w400,
+                        color: isSelected
+                            ? AppTheme.primary
+                            : AppTheme.textSecondary,
                       ),
                     ),
                   ),
@@ -143,20 +164,31 @@ class _AddProjectSheetState extends ConsumerState<AddProjectSheet> {
                   child: GestureDetector(
                     onTap: () => setState(() => _status = s),
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 8,
+                      ),
                       decoration: BoxDecoration(
-                        color: isSelected ? AppTheme.primarySubtle : AppTheme.surfaceElevated,
+                        color: isSelected
+                            ? AppTheme.primarySubtle
+                            : AppTheme.surfaceElevated,
                         borderRadius: BorderRadius.circular(8),
                         border: Border.all(
-                          color: isSelected ? AppTheme.primary : AppTheme.surfaceBorder,
+                          color: isSelected
+                              ? AppTheme.primary
+                              : AppTheme.surfaceBorder,
                         ),
                       ),
                       child: Text(
                         s[0].toUpperCase() + s.substring(1),
                         style: GoogleFonts.spaceGrotesk(
                           fontSize: 13,
-                          fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                          color: isSelected ? AppTheme.primary : AppTheme.textSecondary,
+                          fontWeight: isSelected
+                              ? FontWeight.w600
+                              : FontWeight.w400,
+                          color: isSelected
+                              ? AppTheme.primary
+                              : AppTheme.textSecondary,
                         ),
                       ),
                     ),
@@ -173,7 +205,9 @@ class _AddProjectSheetState extends ConsumerState<AddProjectSheet> {
             Row(
               children: _projectColors.map((hex) {
                 final isSelected = _colorHex == hex;
-                final color = Color(int.parse('FF${hex.replaceFirst('#', '')}', radix: 16));
+                final color = Color(
+                  int.parse('FF${hex.replaceFirst('#', '')}', radix: 16),
+                );
                 return GestureDetector(
                   onTap: () => setState(() => _colorHex = hex),
                   child: Container(
@@ -184,7 +218,9 @@ class _AddProjectSheetState extends ConsumerState<AddProjectSheet> {
                       color: color,
                       shape: BoxShape.circle,
                       border: Border.all(
-                        color: isSelected ? AppTheme.textPrimary : Colors.transparent,
+                        color: isSelected
+                            ? AppTheme.textPrimary
+                            : Colors.transparent,
                         width: 3,
                       ),
                     ),
@@ -235,7 +271,11 @@ class _AddProjectSheetState extends ConsumerState<AddProjectSheet> {
     );
   }
 
-  Widget _buildTextField(TextEditingController controller, String hint, {int maxLines = 1}) {
+  Widget _buildTextField(
+    TextEditingController controller,
+    String hint, {
+    int maxLines = 1,
+  }) {
     return Container(
       decoration: BoxDecoration(
         color: AppTheme.surfaceElevated,
@@ -245,7 +285,10 @@ class _AddProjectSheetState extends ConsumerState<AddProjectSheet> {
       child: TextField(
         controller: controller,
         maxLines: maxLines,
-        style: GoogleFonts.spaceGrotesk(color: AppTheme.textPrimary, fontSize: 14),
+        style: GoogleFonts.spaceGrotesk(
+          color: AppTheme.textPrimary,
+          fontSize: 14,
+        ),
         decoration: InputDecoration(
           hintText: hint,
           hintStyle: GoogleFonts.spaceGrotesk(color: AppTheme.textMuted),

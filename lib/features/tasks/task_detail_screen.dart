@@ -136,6 +136,7 @@ class TaskDetailScreen extends ConsumerWidget {
                 final settings = await ref.read(
                   focusGoalSettingsProvider.future,
                 );
+                if (!context.mounted) return;
                 final session = PomodoroSession()
                   ..uuid = ''
                   ..sessionType = 'focus'
@@ -178,9 +179,7 @@ class TaskDetailScreen extends ConsumerWidget {
               ),
             const SizedBox(height: 16),
             ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppTheme.danger,
-              ),
+              style: ElevatedButton.styleFrom(backgroundColor: AppTheme.danger),
               onPressed: () async {
                 await ref
                     .read(taskNotifierProvider.notifier)

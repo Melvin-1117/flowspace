@@ -27,8 +27,12 @@ class SkillNotifier extends AsyncNotifier<List<SkillEntry>> {
           ..category = map['category'] ?? ''
           ..proficiencyLevel = map['proficiencyLevel'] ?? 1
           ..hoursInvested = map['hoursInvested'] ?? 0
-          ..firstLearnedAt = DateTime.parse(map['firstLearnedAt'] ?? DateTime.now().toIso8601String())
-          ..lastPracticedAt = DateTime.parse(map['lastPracticedAt'] ?? DateTime.now().toIso8601String())
+          ..firstLearnedAt = DateTime.parse(
+            map['firstLearnedAt'] ?? DateTime.now().toIso8601String(),
+          )
+          ..lastPracticedAt = DateTime.parse(
+            map['lastPracticedAt'] ?? DateTime.now().toIso8601String(),
+          )
           ..linkedProjectIds = List<String>.from(map['linkedProjectIds'] ?? [])
           ..notes = map['notes'] ?? '';
       }).toList();
@@ -39,18 +43,22 @@ class SkillNotifier extends AsyncNotifier<List<SkillEntry>> {
 
   Future<void> _saveSkills(List<SkillEntry> skills) async {
     final prefs = await SharedPreferences.getInstance();
-    final list = skills.map((s) => {
-      'id': s.id,
-      'uuid': s.uuid,
-      'skillName': s.skillName,
-      'category': s.category,
-      'proficiencyLevel': s.proficiencyLevel,
-      'hoursInvested': s.hoursInvested,
-      'firstLearnedAt': s.firstLearnedAt.toIso8601String(),
-      'lastPracticedAt': s.lastPracticedAt.toIso8601String(),
-      'linkedProjectIds': s.linkedProjectIds,
-      'notes': s.notes,
-    }).toList();
+    final list = skills
+        .map(
+          (s) => {
+            'id': s.id,
+            'uuid': s.uuid,
+            'skillName': s.skillName,
+            'category': s.category,
+            'proficiencyLevel': s.proficiencyLevel,
+            'hoursInvested': s.hoursInvested,
+            'firstLearnedAt': s.firstLearnedAt.toIso8601String(),
+            'lastPracticedAt': s.lastPracticedAt.toIso8601String(),
+            'linkedProjectIds': s.linkedProjectIds,
+            'notes': s.notes,
+          },
+        )
+        .toList();
     await prefs.setString('devtrack_skills', jsonEncode(list));
   }
 
@@ -102,6 +110,4 @@ class SkillNotifier extends AsyncNotifier<List<SkillEntry>> {
 }
 
 final skillNotifierProvider =
-    AsyncNotifierProvider<SkillNotifier, List<SkillEntry>>(
-  SkillNotifier.new,
-);
+    AsyncNotifierProvider<SkillNotifier, List<SkillEntry>>(SkillNotifier.new);

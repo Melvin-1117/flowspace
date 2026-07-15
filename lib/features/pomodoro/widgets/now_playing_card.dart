@@ -40,7 +40,7 @@ class NowPlayingCard extends ConsumerWidget {
 
   Widget _buildMusicPlayer(BuildContext context, WidgetRef ref, musicState) {
     final notifier = ref.read(musicPlayerProvider.notifier);
-    
+
     return Column(
       children: [
         Row(
@@ -75,10 +75,7 @@ class NowPlayingCard extends ConsumerWidget {
                   ),
                   Text(
                     'Focus Music',
-                    style: TextStyle(
-                      color: Colors.grey[400],
-                      fontSize: 12,
-                    ),
+                    style: TextStyle(color: Colors.grey[400], fontSize: 12),
                   ),
                 ],
               ),
@@ -115,9 +112,13 @@ class NowPlayingCard extends ConsumerWidget {
     );
   }
 
-  Widget _buildAmbientPlayer(BuildContext context, WidgetRef ref, ambientState) {
+  Widget _buildAmbientPlayer(
+    BuildContext context,
+    WidgetRef ref,
+    ambientState,
+  ) {
     final notifier = ref.read(ambientSoundProvider.notifier);
-    
+
     return Column(
       children: [
         Row(
@@ -126,8 +127,8 @@ class NowPlayingCard extends ConsumerWidget {
               width: 48,
               height: 48,
               decoration: BoxDecoration(
-                color: ambientState.selected != null 
-                    ? AppTheme.primary 
+                color: ambientState.selected != null
+                    ? AppTheme.primary
                     : AppTheme.surfaceBorder,
                 borderRadius: BorderRadius.circular(8),
               ),
@@ -143,7 +144,7 @@ class NowPlayingCard extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    ambientState.selected != null 
+                    ambientState.selected != null
                         ? '${ambientState.selected!.toUpperCase()} Ambient'
                         : 'No Ambient Sound',
                     style: const TextStyle(
@@ -153,13 +154,10 @@ class NowPlayingCard extends ConsumerWidget {
                     ),
                   ),
                   Text(
-                    ambientState.selected != null 
+                    ambientState.selected != null
                         ? 'Background sounds'
                         : 'Select ambient sound',
-                    style: TextStyle(
-                      color: Colors.grey[400],
-                      fontSize: 12,
-                    ),
+                    style: TextStyle(color: Colors.grey[400], fontSize: 12),
                   ),
                 ],
               ),
@@ -167,11 +165,7 @@ class NowPlayingCard extends ConsumerWidget {
             if (ambientState.selected != null)
               IconButton(
                 onPressed: () => notifier.setVolume(0.0),
-                icon: const Icon(
-                  Icons.stop,
-                  color: Colors.white,
-                  size: 24,
-                ),
+                icon: const Icon(Icons.stop, color: Colors.white, size: 24),
               ),
           ],
         ),
@@ -179,11 +173,7 @@ class NowPlayingCard extends ConsumerWidget {
           const SizedBox(height: 8),
           Row(
             children: [
-              Icon(
-                Icons.volume_down,
-                color: Colors.grey[400],
-                size: 16,
-              ),
+              Icon(Icons.volume_down, color: Colors.grey[400], size: 16),
               Expanded(
                 child: Slider(
                   value: ambientState.volume,
@@ -192,11 +182,7 @@ class NowPlayingCard extends ConsumerWidget {
                   inactiveColor: AppTheme.surfaceBorder,
                 ),
               ),
-              Icon(
-                Icons.volume_up,
-                color: Colors.grey[400],
-                size: 16,
-              ),
+              Icon(Icons.volume_up, color: Colors.grey[400], size: 16),
             ],
           ),
         ],

@@ -4,11 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 /// A styled error card shown when an async provider fails.
 /// Displays a message and an optional retry button.
 class ErrorCard extends StatelessWidget {
-  const ErrorCard({
-    required this.message,
-    required this.onRetry,
-    super.key,
-  });
+  const ErrorCard({required this.message, required this.onRetry, super.key});
 
   final String message;
   final VoidCallback onRetry;

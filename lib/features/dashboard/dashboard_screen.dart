@@ -91,9 +91,15 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
 
               await Future.wait([
                 ref.read(allTasksProvider.future).catchError((_) => <Task>[]),
-                ref.read(todaySessionsProvider.future).catchError((_) => <PomodoroSession>[]),
-                ref.read(streakDaysProvider.future).catchError((_) => <DateTime>[]),
-                ref.read(allSubjectsProvider.future).catchError((_) => <Subject>[]),
+                ref
+                    .read(todaySessionsProvider.future)
+                    .catchError((_) => <PomodoroSession>[]),
+                ref
+                    .read(streakDaysProvider.future)
+                    .catchError((_) => <DateTime>[]),
+                ref
+                    .read(allSubjectsProvider.future)
+                    .catchError((_) => <Subject>[]),
                 ref.read(nextMilestoneProvider.future).catchError((_) => null),
               ]);
             },

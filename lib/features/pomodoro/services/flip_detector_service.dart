@@ -28,26 +28,27 @@ class FlipDetectorService {
     _isActive = true;
     _isFlipped = false;
 
-    _subscription = accelerometerEventStream(
-      samplingPeriod: const Duration(milliseconds: 500),
-    ).listen((AccelerometerEvent event) {
-      if (!_isActive) return;
+    _subscription =
+        accelerometerEventStream(
+          samplingPeriod: const Duration(milliseconds: 500),
+        ).listen((AccelerometerEvent event) {
+          if (!_isActive) return;
 
-      // Z axis:
-      //   Positive (> +5) → screen facing UP   → normal
-      //   Negative (< -5) → screen facing DOWN  → flipped
-      final bool nowFlipped = event.z < -5.0;
+          // Z axis:
+          //   Positive (> +5) → screen facing UP   → normal
+          //   Negative (< -5) → screen facing DOWN  → flipped
+          final bool nowFlipped = event.z < -5.0;
 
-      if (nowFlipped && !_isFlipped) {
-        // Phone just flipped face down → pause
-        _isFlipped = true;
-        _ref.read(timerNotifierProvider.notifier).pauseFromFlip();
-      } else if (!nowFlipped && _isFlipped) {
-        // Phone just flipped back up → resume
-        _isFlipped = false;
-        _ref.read(timerNotifierProvider.notifier).resumeFromFlip();
-      }
-    });
+          if (nowFlipped && !_isFlipped) {
+            // Phone just flipped face down → pause
+            _isFlipped = true;
+            _ref.read(timerNotifierProvider.notifier).pauseFromFlip();
+          } else if (!nowFlipped && _isFlipped) {
+            // Phone just flipped back up → resume
+            _isFlipped = false;
+            _ref.read(timerNotifierProvider.notifier).resumeFromFlip();
+          }
+        });
   }
 
   /// Stop monitoring. Call when the timer stops or the screen disposes.

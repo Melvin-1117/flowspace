@@ -226,15 +226,17 @@ class SubjectNotifier extends AsyncNotifier<List<Subject>> {
         nextNumber = m.moduleNumber + 1;
       }
     }
-    modules.add(SubjectModule(
-      uuid: const Uuid().v4(),
-      subjectId: subject.uuid,
-      name: moduleName,
-      moduleNumber: nextNumber,
-      isCompleted: false,
-      completedAt: null,
-      linkedNoteIds: const <String>[],
-    ));
+    modules.add(
+      SubjectModule(
+        uuid: const Uuid().v4(),
+        subjectId: subject.uuid,
+        name: moduleName,
+        moduleNumber: nextNumber,
+        isCompleted: false,
+        completedAt: null,
+        linkedNoteIds: const <String>[],
+      ),
+    );
 
     final updated = Subject(
       id: subject.id,

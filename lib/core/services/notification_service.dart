@@ -31,7 +31,8 @@ class NotificationService {
     if (Platform.isAndroid) {
       final androidPlugin = _plugin
           .resolvePlatformSpecificImplementation<
-              AndroidFlutterLocalNotificationsPlugin>();
+            AndroidFlutterLocalNotificationsPlugin
+          >();
       if (androidPlugin == null) return true;
       final granted =
           await androidPlugin.requestNotificationsPermission() ?? false;
@@ -40,7 +41,8 @@ class NotificationService {
     if (Platform.isIOS) {
       final iosPlugin = _plugin
           .resolvePlatformSpecificImplementation<
-              IOSFlutterLocalNotificationsPlugin>();
+            IOSFlutterLocalNotificationsPlugin
+          >();
       if (iosPlugin == null) return true;
       final granted = await iosPlugin.requestPermissions(
         alert: true,

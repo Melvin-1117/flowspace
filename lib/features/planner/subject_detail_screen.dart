@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:isar/isar.dart';
@@ -7,6 +8,7 @@ import '../../core/providers/isar_provider.dart';
 import '../../core/widgets/error_card.dart';
 import 'providers/planner_providers.dart';
 import 'widgets/add_subject_sheet.dart';
+import '../pomodoro/providers/pomodoro_web_store.dart';
 import '../../app/theme.dart';
 
 class SubjectDetailScreen extends ConsumerWidget {
@@ -71,7 +73,11 @@ class SubjectDetailScreen extends ConsumerWidget {
                         if (val != null) {
                           ref
                               .read(subjectNotifierProvider.notifier)
-                              .toggleModuleCompletion(subject.uuid, module.uuid, val);
+                              .toggleModuleCompletion(
+                                subject.uuid,
+                                module.uuid,
+                                val,
+                              );
                         }
                       },
                       title: const Text('Completed'),
@@ -90,7 +96,8 @@ class SubjectDetailScreen extends ConsumerWidget {
                 loading: () => const CircularProgressIndicator(),
                 error: (_, __) => ErrorCard(
                   message: 'Failed to load session data',
-                  onRetry: () => ref.invalidate(_subjectSessionsProvider(subjectId)),
+                  onRetry: () =>
+                      ref.invalidate(_subjectSessionsProvider(subjectId)),
                 ),
                 data: (sessions) => Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -137,7 +144,10 @@ class SubjectDetailScreen extends ConsumerWidget {
                           child: const Text('Cancel'),
                         ),
                         FilledButton(
-                          onPressed: () => Navigator.pop(context, textController.text.trim()),
+                          onPressed: () => Navigator.pop(
+                            context,
+                            textController.text.trim(),
+                          ),
                           style: FilledButton.styleFrom(
                             backgroundColor: AppTheme.primary,
                           ),
@@ -195,8 +205,13 @@ final _subjectSessionsProvider =
       ref,
       subjectId,
     ) async {
-      final isar = await ref.read(isarProvider.future);
-      final all = await isar.collection<PomodoroSession>().where().findAll();
+      List<PomodoroSession> all;
+      if (kIsWeb) {
+        all = PomodoroWebStore.instance.sessions;
+      } else {
+        final isar = await ref.read(isarProvider.future);
+        all = await isar.collection<PomodoroSession>().where().findAll();
+      }
       // Handle sessions linked directly or linked through focus blocks that target this subject
       final blocks = await ref.watch(focusBlockNotifierProvider.future);
       final linkedBlockIds = blocks
@@ -205,9 +220,11 @@ final _subjectSessionsProvider =
           .toSet();
 
       return all
-          .where((session) =>
-              session.linkedTaskId == subjectId ||
-              linkedBlockIds.contains(session.linkedTaskId))
+          .where(
+            (session) =>
+                session.linkedTaskId == subjectId ||
+                linkedBlockIds.contains(session.linkedTaskId),
+          )
           .toList()
         ..sort((a, b) => b.startTime.compareTo(a.startTime));
     });

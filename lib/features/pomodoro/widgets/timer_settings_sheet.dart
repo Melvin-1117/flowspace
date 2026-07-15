@@ -77,7 +77,9 @@ class TimerSettingsSheet extends ConsumerWidget {
             child: settingsAsync.when(
               data: (settings) => ListView(
                 padding: const EdgeInsets.symmetric(
-                    horizontal: 20, vertical: 16),
+                  horizontal: 20,
+                  vertical: 16,
+                ),
                 shrinkWrap: true,
                 children: [
                   // Long break interval
@@ -160,7 +162,8 @@ class TimerSettingsSheet extends ConsumerWidget {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20),
                             side: const BorderSide(
-                                color: AppTheme.surfaceBorder),
+                              color: AppTheme.surfaceBorder,
+                            ),
                           ),
                           title: Text(
                             'Reset All Settings?',
@@ -179,17 +182,14 @@ class TimerSettingsSheet extends ConsumerWidget {
                           ),
                           actions: [
                             TextButton(
-                              onPressed: () =>
-                                  Navigator.pop(context, false),
+                              onPressed: () => Navigator.pop(context, false),
                               child: const Text(
                                 'Cancel',
-                                style: TextStyle(
-                                    color: AppTheme.textSecondary),
+                                style: TextStyle(color: AppTheme.textSecondary),
                               ),
                             ),
                             ElevatedButton(
-                              onPressed: () =>
-                                  Navigator.pop(context, true),
+                              onPressed: () => Navigator.pop(context, true),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: AppTheme.danger,
                               ),
@@ -214,7 +214,9 @@ class TimerSettingsSheet extends ConsumerWidget {
                     },
                     child: Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 14),
+                        horizontal: 16,
+                        vertical: 14,
+                      ),
                       decoration: BoxDecoration(
                         color: AppTheme.danger.withValues(alpha: 0.08),
                         borderRadius: BorderRadius.circular(12),
@@ -225,8 +227,11 @@ class TimerSettingsSheet extends ConsumerWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Icon(Icons.restart_alt_rounded,
-                              color: AppTheme.danger, size: 18),
+                          const Icon(
+                            Icons.restart_alt_rounded,
+                            color: AppTheme.danger,
+                            size: 18,
+                          ),
                           const SizedBox(width: 8),
                           Text(
                             'Reset All to Defaults',
@@ -245,9 +250,7 @@ class TimerSettingsSheet extends ConsumerWidget {
               ),
               loading: () => const Padding(
                 padding: EdgeInsets.all(40),
-                child: Center(
-                  child: CircularProgressIndicator(strokeWidth: 2),
-                ),
+                child: Center(child: CircularProgressIndicator(strokeWidth: 2)),
               ),
               error: (_, __) => Padding(
                 padding: const EdgeInsets.all(20),
@@ -340,7 +343,9 @@ class _StepperSetting extends StatelessWidget {
               child: Icon(
                 Icons.remove_rounded,
                 size: 14,
-                color: value > min ? AppTheme.textSecondary : AppTheme.textMuted,
+                color: value > min
+                    ? AppTheme.textSecondary
+                    : AppTheme.textMuted,
               ),
             ),
           ),

@@ -20,7 +20,9 @@ class FocusStatsRow extends ConsumerWidget {
             child: _StatMiniCard(
               icon: Icons.timer_outlined,
               label: 'Today',
-              value: ref.watch(todayFocusMinutesProvider).when(
+              value: ref
+                  .watch(todayFocusMinutesProvider)
+                  .when(
                     data: (mins) => _formatMinutes(mins),
                     loading: () => '--',
                     error: (_, __) => '--',
@@ -35,7 +37,9 @@ class FocusStatsRow extends ConsumerWidget {
             child: _StatMiniCard(
               icon: Icons.local_fire_department_rounded,
               label: 'Streak',
-              value: ref.watch(goalStreakProvider).when(
+              value: ref
+                  .watch(goalStreakProvider)
+                  .when(
                     data: (days) => '${days}d',
                     loading: () => '--',
                     error: (_, __) => '--',
@@ -50,10 +54,11 @@ class FocusStatsRow extends ConsumerWidget {
             child: _StatMiniCard(
               icon: Icons.check_circle_outline_rounded,
               label: 'Sessions',
-              value: ref.watch(todaySessionsProvider).when(
+              value: ref
+                  .watch(todaySessionsProvider)
+                  .when(
                     data: (sessions) => sessions
-                        .where(
-                            (s) => s.isCompleted && s.sessionType == 'focus')
+                        .where((s) => s.isCompleted && s.sessionType == 'focus')
                         .length
                         .toString(),
                     loading: () => '--',

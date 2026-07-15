@@ -73,26 +73,31 @@ class TrialIndicator extends ConsumerWidget {
               final isAvailable = i < trialsRemaining;
               return Padding(
                 padding: const EdgeInsets.only(left: 8),
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 300),
-                  width: 12,
-                  height: 12,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: isAvailable ? AppTheme.primary : AppTheme.surfaceBorder,
-                    boxShadow: isAvailable
-                        ? [
-                            BoxShadow(
-                              color: AppTheme.primary.withValues(alpha: 0.5),
-                              blurRadius: 8,
-                              spreadRadius: 1,
-                            )
-                          ]
-                        : null,
-                  ),
-                )
-                    .animate(target: isAvailable ? 0 : 1)
-                    .scaleXY(end: 0.7, duration: 300.ms),
+                child:
+                    AnimatedContainer(
+                          duration: const Duration(milliseconds: 300),
+                          width: 12,
+                          height: 12,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: isAvailable
+                                ? AppTheme.primary
+                                : AppTheme.surfaceBorder,
+                            boxShadow: isAvailable
+                                ? [
+                                    BoxShadow(
+                                      color: AppTheme.primary.withValues(
+                                        alpha: 0.5,
+                                      ),
+                                      blurRadius: 8,
+                                      spreadRadius: 1,
+                                    ),
+                                  ]
+                                : null,
+                          ),
+                        )
+                        .animate(target: isAvailable ? 0 : 1)
+                        .scaleXY(end: 0.7, duration: 300.ms),
               );
             }),
           ),

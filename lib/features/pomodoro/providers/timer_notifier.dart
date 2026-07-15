@@ -284,7 +284,10 @@ class TimerNotifier extends Notifier<TimerState> {
     await start(linkedTaskId: linkedTaskId, linkedTaskTitle: linkedTaskTitle);
   }
 
-  Future<void> setLinkedTask(String? linkedTaskId, String? linkedTaskTitle) async {
+  Future<void> setLinkedTask(
+    String? linkedTaskId,
+    String? linkedTaskTitle,
+  ) async {
     state = state.copyWith(
       linkedTaskId: linkedTaskId,
       linkedTaskTitle: linkedTaskTitle,
@@ -787,7 +790,8 @@ class TimerNotifier extends Notifier<TimerState> {
           for (final status in const ['todo', 'inprogress', 'done']) {
             ref.invalidate(tasksByStatusProvider(status));
           }
-          if (task.tag == 'planner_focus_block' || task.tag == 'planner_subject') {
+          if (task.tag == 'planner_focus_block' ||
+              task.tag == 'planner_subject') {
             ref.invalidate(todayFocusBlocksProvider);
             ref.invalidate(focusBlockNotifierProvider);
             ref.invalidate(allSubjectsProvider);

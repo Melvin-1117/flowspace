@@ -26,12 +26,12 @@ class DevTrackSnapshotCard extends ConsumerWidget {
 
     // Show empty state when there is genuinely no devtrack data yet
     final heatmapEmpty = heatmapAsync.valueOrNull?.isEmpty ?? true;
-    final sessionsEmpty =
-        todaySessionsAsync.valueOrNull?.isEmpty ?? true;
+    final sessionsEmpty = todaySessionsAsync.valueOrNull?.isEmpty ?? true;
     final streakZero = (streakAsync.valueOrNull ?? 0) == 0;
     final projectsEmpty = projectsAsync.valueOrNull?.isEmpty ?? true;
 
-    final isLoading = heatmapAsync.isLoading ||
+    final isLoading =
+        heatmapAsync.isLoading ||
         todaySessionsAsync.isLoading ||
         streakAsync.isLoading ||
         projectsAsync.isLoading;
@@ -110,7 +110,12 @@ class DevTrackSnapshotCard extends ConsumerWidget {
                         if (data.isEmpty) {
                           return const SizedBox(
                             height: 60,
-                            child: Center(child: Text('-', style: TextStyle(color: AppTheme.textMuted))),
+                            child: Center(
+                              child: Text(
+                                '-',
+                                style: TextStyle(color: AppTheme.textMuted),
+                              ),
+                            ),
                           );
                         }
 
@@ -125,11 +130,12 @@ class DevTrackSnapshotCard extends ConsumerWidget {
                           child: GridView.builder(
                             scrollDirection: Axis.horizontal,
                             physics: const NeverScrollableScrollPhysics(),
-                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 7,
-                              mainAxisSpacing: 2,
-                              crossAxisSpacing: 2,
-                            ),
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 7,
+                                  mainAxisSpacing: 2,
+                                  crossAxisSpacing: 2,
+                                ),
                             itemCount: miniData.length,
                             itemBuilder: (context, index) {
                               final dayData = miniData[index];
@@ -145,9 +151,19 @@ class DevTrackSnapshotCard extends ConsumerWidget {
                       },
                       loading: () => const SizedBox(
                         height: 55,
-                        child: Center(child: SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 1.5))),
+                        child: Center(
+                          child: SizedBox(
+                            width: 16,
+                            height: 16,
+                            child: CircularProgressIndicator(strokeWidth: 1.5),
+                          ),
+                        ),
                       ),
-                      error: (err, stack) => const Icon(Icons.error_outline, color: AppTheme.danger, size: 20),
+                      error: (err, stack) => const Icon(
+                        Icons.error_outline,
+                        color: AppTheme.danger,
+                        size: 20,
+                      ),
                     ),
                   ],
                 ),
@@ -176,7 +192,10 @@ class DevTrackSnapshotCard extends ConsumerWidget {
                             const SizedBox(height: 2),
                             todaySessionsAsync.when(
                               data: (sessions) {
-                                final totalMinutes = sessions.fold(0, (sum, s) => sum + s.durationMinutes);
+                                final totalMinutes = sessions.fold(
+                                  0,
+                                  (sum, s) => sum + s.durationMinutes,
+                                );
                                 if (totalMinutes < 60) {
                                   return Text(
                                     '${totalMinutes}m',
@@ -197,8 +216,20 @@ class DevTrackSnapshotCard extends ConsumerWidget {
                                   ),
                                 );
                               },
-                              loading: () => const Text('...', style: TextStyle(fontSize: 16, color: Colors.white)),
-                              error: (e, s) => const Text('0m', style: TextStyle(fontSize: 16, color: Colors.white)),
+                              loading: () => const Text(
+                                '...',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              error: (e, s) => const Text(
+                                '0m',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.white,
+                                ),
+                              ),
                             ),
                           ],
                         ),
@@ -223,8 +254,20 @@ class DevTrackSnapshotCard extends ConsumerWidget {
                                   color: AppTheme.textPrimary,
                                 ),
                               ),
-                              loading: () => const Text('...', style: TextStyle(fontSize: 16, color: Colors.white)),
-                              error: (e, s) => const Text('0 days', style: TextStyle(fontSize: 16, color: Colors.white)),
+                              loading: () => const Text(
+                                '...',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              error: (e, s) => const Text(
+                                '0 days',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.white,
+                                ),
+                              ),
                             ),
                           ],
                         ),
@@ -263,8 +306,14 @@ class DevTrackSnapshotCard extends ConsumerWidget {
                           overflow: TextOverflow.ellipsis,
                         );
                       },
-                      loading: () => const Text('...', style: TextStyle(fontSize: 12, color: Colors.white)),
-                      error: (e, s) => const Text('-', style: TextStyle(fontSize: 12, color: Colors.white)),
+                      loading: () => const Text(
+                        '...',
+                        style: TextStyle(fontSize: 12, color: Colors.white),
+                      ),
+                      error: (e, s) => const Text(
+                        '-',
+                        style: TextStyle(fontSize: 12, color: Colors.white),
+                      ),
                     ),
                   ],
                 ),

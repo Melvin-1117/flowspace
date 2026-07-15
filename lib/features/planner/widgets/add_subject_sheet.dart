@@ -15,7 +15,8 @@ class AddSubjectSheet extends StatefulWidget {
     super.key,
   });
 
-  final Future<void> Function(Subject subject, Milestone? examMilestone) onSubmit;
+  final Future<void> Function(Subject subject, Milestone? examMilestone)
+  onSubmit;
   final Subject? initialSubject;
 
   @override
@@ -92,7 +93,9 @@ class _AddSubjectSheetState extends State<AddSubjectSheet> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  widget.initialSubject == null ? 'Add New Subject' : 'Edit Subject',
+                  widget.initialSubject == null
+                      ? 'Add New Subject'
+                      : 'Edit Subject',
                   style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -233,7 +236,11 @@ class _AddSubjectSheetState extends State<AddSubjectSheet> {
                           backgroundColor: AppTheme.primary,
                         ),
                         onPressed: _save,
-                        child: Text(widget.initialSubject == null ? 'Add Subject' : 'Save Changes'),
+                        child: Text(
+                          widget.initialSubject == null
+                              ? 'Add Subject'
+                              : 'Save Changes',
+                        ),
                       ),
                     ),
                   ],
@@ -249,32 +256,36 @@ class _AddSubjectSheetState extends State<AddSubjectSheet> {
   Future<void> _save() async {
     if (!_formKey.currentState!.validate()) return;
     final subjectId = widget.initialSubject?.uuid ?? const Uuid().v4();
-    final modules = widget.initialSubject?.modules ?? List<SubjectModule>.generate(
-      _modules,
-      (index) => SubjectModule(
-        uuid: const Uuid().v4(),
-        subjectId: subjectId,
-        name: 'Module ${index + 1}',
-        moduleNumber: index + 1,
-        isCompleted: false,
-        completedAt: null,
-        linkedNoteIds: const <String>[],
-      ),
-    );
+    final modules =
+        widget.initialSubject?.modules ??
+        List<SubjectModule>.generate(
+          _modules,
+          (index) => SubjectModule(
+            uuid: const Uuid().v4(),
+            subjectId: subjectId,
+            name: 'Module ${index + 1}',
+            moduleNumber: index + 1,
+            isCompleted: false,
+            completedAt: null,
+            linkedNoteIds: const <String>[],
+          ),
+        );
 
     var finalModules = [...modules];
     if (widget.initialSubject != null) {
       if (_modules > finalModules.length) {
         for (var i = finalModules.length; i < _modules; i++) {
-          finalModules.add(SubjectModule(
-            uuid: const Uuid().v4(),
-            subjectId: subjectId,
-            name: 'Module ${i + 1}',
-            moduleNumber: i + 1,
-            isCompleted: false,
-            completedAt: null,
-            linkedNoteIds: const <String>[],
-          ));
+          finalModules.add(
+            SubjectModule(
+              uuid: const Uuid().v4(),
+              subjectId: subjectId,
+              name: 'Module ${i + 1}',
+              moduleNumber: i + 1,
+              isCompleted: false,
+              completedAt: null,
+              linkedNoteIds: const <String>[],
+            ),
+          );
         }
       } else if (_modules < finalModules.length) {
         finalModules = finalModules.take(_modules).toList();

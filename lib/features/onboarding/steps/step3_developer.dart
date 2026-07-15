@@ -7,13 +7,11 @@ import 'onboarding_widgets.dart';
 class OnboardingStep3Developer extends StatefulWidget {
   final OnboardingData data;
 
-  const OnboardingStep3Developer({
-    super.key,
-    required this.data,
-  });
+  const OnboardingStep3Developer({super.key, required this.data});
 
   @override
-  State<OnboardingStep3Developer> createState() => _OnboardingStep3DeveloperState();
+  State<OnboardingStep3Developer> createState() =>
+      _OnboardingStep3DeveloperState();
 }
 
 class _OnboardingStep3DeveloperState extends State<OnboardingStep3Developer> {
@@ -69,7 +67,8 @@ class _OnboardingStep3DeveloperState extends State<OnboardingStep3Developer> {
                 subtitle: '1–3 years',
                 value: 'intermediate',
                 selected: data.experienceLevel,
-                onTap: () => setState(() => data.experienceLevel = 'intermediate'),
+                onTap: () =>
+                    setState(() => data.experienceLevel = 'intermediate'),
               ),
               const SizedBox(width: 8),
               _ExperienceCard(
@@ -98,62 +97,75 @@ class _OnboardingStep3DeveloperState extends State<OnboardingStep3Developer> {
           Wrap(
             spacing: 8,
             runSpacing: 8,
-            children: [
-              'Dart', 'Python', 'JavaScript',
-              'TypeScript', 'Java', 'Kotlin',
-              'C++', 'C', 'Rust', 'Go',
-              'Swift', 'Ruby', 'PHP', 'Other',
-            ].map((lang) {
-              final isSelected = data.primaryLanguages.contains(lang);
-              return GestureDetector(
-                onTap: () => setState(() {
-                  if (isSelected) {
-                    data.primaryLanguages.remove(lang);
-                  } else {
-                    data.primaryLanguages.add(lang);
-                  }
-                }),
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 14, vertical: 8),
-                  decoration: BoxDecoration(
-                    color: isSelected
-                        ? AppTheme.primary.withValues(alpha: 0.15)
-                        : AppTheme.surfaceCard,
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(
-                      color: isSelected
-                          ? AppTheme.primary
-                          : AppTheme.surfaceBorder,
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      if (isSelected) ...[
-                        const Icon(
-                          Icons.check_rounded,
-                          size: 12,
-                          color: AppTheme.primary,
-                        ),
-                        const SizedBox(width: 4),
-                      ],
-                      Text(
-                        lang,
-                        style: GoogleFonts.spaceGrotesk(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500,
+            children:
+                [
+                  'Dart',
+                  'Python',
+                  'JavaScript',
+                  'TypeScript',
+                  'Java',
+                  'Kotlin',
+                  'C++',
+                  'C',
+                  'Rust',
+                  'Go',
+                  'Swift',
+                  'Ruby',
+                  'PHP',
+                  'Other',
+                ].map((lang) {
+                  final isSelected = data.primaryLanguages.contains(lang);
+                  return GestureDetector(
+                    onTap: () => setState(() {
+                      if (isSelected) {
+                        data.primaryLanguages.remove(lang);
+                      } else {
+                        data.primaryLanguages.add(lang);
+                      }
+                    }),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 8,
+                      ),
+                      decoration: BoxDecoration(
+                        color: isSelected
+                            ? AppTheme.primary.withValues(alpha: 0.15)
+                            : AppTheme.surfaceCard,
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(
                           color: isSelected
                               ? AppTheme.primary
-                              : AppTheme.textSecondary,
+                              : AppTheme.surfaceBorder,
                         ),
                       ),
-                    ],
-                  ),
-                ),
-              );
-            }).toList(),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          if (isSelected) ...[
+                            const Icon(
+                              Icons.check_rounded,
+                              size: 12,
+                              color: AppTheme.primary,
+                            ),
+                            const SizedBox(width: 4),
+                          ],
+                          Text(
+                            lang,
+                            style: GoogleFonts.spaceGrotesk(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w500,
+                              color: isSelected
+                                  ? AppTheme.primary
+                                  : AppTheme.textSecondary,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }).toList(),
           ),
           const SizedBox(height: 28),
 
@@ -171,50 +183,63 @@ class _OnboardingStep3DeveloperState extends State<OnboardingStep3Developer> {
           Wrap(
             spacing: 8,
             runSpacing: 8,
-            children: [
-              'Flutter', 'React', 'Next.js',
-              'Node.js', 'Django', 'FastAPI',
-              'Spring Boot', 'Android', 'iOS',
-              'Docker', 'Firebase', 'AWS',
-              'PostgreSQL', 'MongoDB', 'Other',
-            ].map((tech) {
-              final isSelected = data.techStack.contains(tech);
-              return GestureDetector(
-                onTap: () => setState(() {
-                  if (isSelected) {
-                    data.techStack.remove(tech);
-                  } else {
-                    data.techStack.add(tech);
-                  }
-                }),
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 14, vertical: 8),
-                  decoration: BoxDecoration(
-                    color: isSelected
-                        ? AppTheme.accent.withValues(alpha: 0.1)
-                        : AppTheme.surfaceCard,
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(
-                      color: isSelected
-                          ? AppTheme.accent
-                          : AppTheme.surfaceBorder,
+            children:
+                [
+                  'Flutter',
+                  'React',
+                  'Next.js',
+                  'Node.js',
+                  'Django',
+                  'FastAPI',
+                  'Spring Boot',
+                  'Android',
+                  'iOS',
+                  'Docker',
+                  'Firebase',
+                  'AWS',
+                  'PostgreSQL',
+                  'MongoDB',
+                  'Other',
+                ].map((tech) {
+                  final isSelected = data.techStack.contains(tech);
+                  return GestureDetector(
+                    onTap: () => setState(() {
+                      if (isSelected) {
+                        data.techStack.remove(tech);
+                      } else {
+                        data.techStack.add(tech);
+                      }
+                    }),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 8,
+                      ),
+                      decoration: BoxDecoration(
+                        color: isSelected
+                            ? AppTheme.accent.withValues(alpha: 0.1)
+                            : AppTheme.surfaceCard,
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(
+                          color: isSelected
+                              ? AppTheme.accent
+                              : AppTheme.surfaceBorder,
+                        ),
+                      ),
+                      child: Text(
+                        tech,
+                        style: GoogleFonts.spaceGrotesk(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500,
+                          color: isSelected
+                              ? AppTheme.accent
+                              : AppTheme.textSecondary,
+                        ),
+                      ),
                     ),
-                  ),
-                  child: Text(
-                    tech,
-                    style: GoogleFonts.spaceGrotesk(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w500,
-                      color: isSelected
-                          ? AppTheme.accent
-                          : AppTheme.textSecondary,
-                    ),
-                  ),
-                ),
-              );
-            }).toList(),
+                  );
+                }).toList(),
           ),
           const SizedBox(height: 120),
         ],
@@ -248,17 +273,14 @@ class _ExperienceCard extends StatelessWidget {
         onTap: onTap,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
-          padding: const EdgeInsets.symmetric(
-              vertical: 16, horizontal: 8),
+          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
           decoration: BoxDecoration(
             color: isSelected
                 ? AppTheme.primary.withValues(alpha: 0.12)
                 : AppTheme.surfaceCard,
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: isSelected
-                  ? AppTheme.primary
-                  : AppTheme.surfaceBorder,
+              color: isSelected ? AppTheme.primary : AppTheme.surfaceBorder,
               width: isSelected ? 2 : 1,
             ),
           ),
@@ -271,9 +293,7 @@ class _ExperienceCard extends StatelessWidget {
                 style: GoogleFonts.spaceGrotesk(
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
-                  color: isSelected
-                      ? AppTheme.primary
-                      : Colors.white,
+                  color: isSelected ? AppTheme.primary : Colors.white,
                 ),
                 textAlign: TextAlign.center,
               ),

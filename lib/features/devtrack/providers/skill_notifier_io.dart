@@ -64,6 +64,4 @@ class SkillNotifier extends AsyncNotifier<List<SkillEntry>> {
 }
 
 final skillNotifierProvider =
-    AsyncNotifierProvider<SkillNotifier, List<SkillEntry>>(
-  SkillNotifier.new,
-);
+    AsyncNotifierProvider<SkillNotifier, List<SkillEntry>>(SkillNotifier.new);

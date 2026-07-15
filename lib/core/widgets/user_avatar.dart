@@ -16,7 +16,8 @@ class UserAvatar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final avatarData = ref.watch(avatarEmojiProvider);
-    final isSvg = avatarData.startsWith('assets/') || avatarData.endsWith('.svg');
+    final isSvg =
+        avatarData.startsWith('assets/') || avatarData.endsWith('.svg');
 
     return GestureDetector(
       onTap: onTap ?? () => _showProfileSheet(context),
@@ -40,10 +41,7 @@ class UserAvatar extends ConsumerWidget {
                   height: size,
                   fit: BoxFit.cover,
                 )
-              : Text(
-                  avatarData,
-                  style: TextStyle(fontSize: size * 0.5),
-                ),
+              : Text(avatarData, style: TextStyle(fontSize: size * 0.5)),
         ),
       ),
     );

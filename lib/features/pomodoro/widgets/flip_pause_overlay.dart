@@ -26,10 +26,7 @@ class FlipPauseOverlay extends ConsumerWidget {
                 duration: const Duration(milliseconds: 900),
                 curve: Curves.easeInOut,
                 builder: (context, scale, child) {
-                  return Transform.scale(
-                    scale: scale,
-                    child: child,
-                  );
+                  return Transform.scale(scale: scale, child: child);
                 },
                 child: Transform.rotate(
                   angle: pi,
@@ -94,9 +91,10 @@ class _PulsingArrowState extends State<_PulsingArrow>
       vsync: this,
       duration: const Duration(milliseconds: 700),
     )..repeat(reverse: true);
-    _slideAnim = Tween<double>(begin: 0, end: -12).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
-    );
+    _slideAnim = Tween<double>(
+      begin: 0,
+      end: -12,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
   }
 
   @override

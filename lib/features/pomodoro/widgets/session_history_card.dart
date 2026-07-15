@@ -50,10 +50,15 @@ class SessionHistoryCard extends ConsumerWidget {
                               sourceScreen: 'pomodoro',
                               focusDate: DateTime.now(),
                               totalFocusMinutes: todaySessions
-                                  .where((s) => s.sessionType == 'focus' && s.isCompleted)
+                                  .where(
+                                    (s) =>
+                                        s.sessionType == 'focus' &&
+                                        s.isCompleted,
+                                  )
                                   .fold(
                                     0,
-                                    (sum, s) => sum + (s.actualDurationSeconds ~/ 60),
+                                    (sum, s) =>
+                                        sum + (s.actualDurationSeconds ~/ 60),
                                   ),
                               completedSessions: todaySessions
                                   .where((s) => s.isCompleted)
@@ -136,17 +141,13 @@ class SessionHistoryCard extends ConsumerWidget {
             },
             loading: () => const Padding(
               padding: EdgeInsets.all(24),
-              child: Center(
-                child: CircularProgressIndicator(strokeWidth: 2),
-              ),
+              child: Center(child: CircularProgressIndicator(strokeWidth: 2)),
             ),
             error: (_, __) => Padding(
               padding: const EdgeInsets.all(24),
               child: Text(
                 'Could not load history',
-                style: GoogleFonts.spaceGrotesk(
-                  color: AppTheme.textSecondary,
-                ),
+                style: GoogleFonts.spaceGrotesk(color: AppTheme.textSecondary),
               ),
             ),
           ),
@@ -169,23 +170,25 @@ class _SessionHistoryRow extends StatelessWidget {
     final barColor = isAbandoned
         ? const Color(0xFF1A2640)
         : isFocus
-            ? const Color(0xFF006EE6)
-            : session.sessionType == 'shortbreak'
-                ? const Color(0xFF00B4FF)
-                : const Color(0xFF00D4AA);
+        ? const Color(0xFF006EE6)
+        : session.sessionType == 'shortbreak'
+        ? const Color(0xFF00B4FF)
+        : const Color(0xFF00D4AA);
 
     final start = DateFormat('h:mm a').format(session.startTime);
-    final effectiveEnd = session.endTime ??
+    final effectiveEnd =
+        session.endTime ??
         session.startTime.add(Duration(seconds: session.actualDurationSeconds));
     final end = DateFormat('h:mm a').format(effectiveEnd);
     final durationMinutes = (session.actualDurationSeconds / 60).round();
 
-    final title = (session.linkedTaskTitle == null || session.linkedTaskTitle!.isEmpty)
+    final title =
+        (session.linkedTaskTitle == null || session.linkedTaskTitle!.isEmpty)
         ? (isFocus
-            ? 'Focus Session'
-            : session.sessionType == 'shortbreak'
-                ? 'Short Break'
-                : 'Long Break')
+              ? 'Focus Session'
+              : session.sessionType == 'shortbreak'
+              ? 'Short Break'
+              : 'Long Break')
         : session.linkedTaskTitle!;
 
     return Opacity(
@@ -216,8 +219,12 @@ class _SessionHistoryRow extends StatelessWidget {
                     style: GoogleFonts.spaceGrotesk(
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
-                      color: isAbandoned ? AppTheme.textSecondary : AppTheme.textPrimary,
-                      fontStyle: isAbandoned ? FontStyle.italic : FontStyle.normal,
+                      color: isAbandoned
+                          ? AppTheme.textSecondary
+                          : AppTheme.textPrimary,
+                      fontStyle: isAbandoned
+                          ? FontStyle.italic
+                          : FontStyle.normal,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,

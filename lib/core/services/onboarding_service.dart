@@ -61,7 +61,5 @@ class OnboardingService {
 final onboardingServiceProvider = Provider<OnboardingService>((ref) {
   // Use .valueOrNull so we don't throw if Isar hasn't resolved yet.
   // OnboardingService handles null isar by returning false (not complete).
-  return OnboardingService(
-    kIsWeb ? null : ref.watch(isarProvider).valueOrNull,
-  );
+  return OnboardingService(kIsWeb ? null : ref.watch(isarProvider).valueOrNull);
 });

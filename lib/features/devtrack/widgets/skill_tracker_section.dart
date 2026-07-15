@@ -38,7 +38,11 @@ class SkillTrackerSection extends ConsumerWidget {
                   builder: (context) => const AddSkillSheet(),
                 );
               },
-              icon: const Icon(Icons.add_circle_outline, color: AppTheme.primary, size: 20),
+              icon: const Icon(
+                Icons.add_circle_outline,
+                color: AppTheme.primary,
+                size: 20,
+              ),
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),
             ),
@@ -89,7 +93,8 @@ class SkillTrackerSection extends ConsumerWidget {
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               itemCount: skills.length,
-              separatorBuilder: (context, index) => const SizedBox(height: AppTheme.spaceSM),
+              separatorBuilder: (context, index) =>
+                  const SizedBox(height: AppTheme.spaceSM),
               itemBuilder: (context, index) {
                 return SkillCard(skill: skills[index]);
               },

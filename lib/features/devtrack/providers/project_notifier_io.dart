@@ -43,7 +43,9 @@ class ProjectNotifier extends AsyncNotifier<List<DevProject>> {
         .uuidEqualTo(uuid)
         .findFirst();
     if (project != null) {
-      await isar.writeTxn(() => isar.collection<DevProject>().delete(project.id));
+      await isar.writeTxn(
+        () => isar.collection<DevProject>().delete(project.id),
+      );
     }
     ref.invalidate(allProjectsProvider);
     ref.invalidate(activeProjectsProvider);
@@ -104,5 +106,5 @@ class ProjectNotifier extends AsyncNotifier<List<DevProject>> {
 
 final projectNotifierProvider =
     AsyncNotifierProvider<ProjectNotifier, List<DevProject>>(
-  ProjectNotifier.new,
-);
+      ProjectNotifier.new,
+    );

@@ -54,9 +54,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
     if (_isLoading) {
       return const Scaffold(
         backgroundColor: Colors.black,
-        body: Center(
-          child: CircularProgressIndicator(color: AppTheme.primary),
-        ),
+        body: Center(child: CircularProgressIndicator(color: AppTheme.primary)),
       );
     }
 
@@ -88,7 +86,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
               children: [
                 // Top bar
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 16,
+                  ),
                   child: Row(
                     children: [
                       // Back button
@@ -132,7 +133,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                         GestureDetector(
                           onTap: _goNext,
                           child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 8,
+                            ),
                             child: Text(
                               'Skip',
                               style: GoogleFonts.spaceGrotesk(
@@ -158,7 +162,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                       return Expanded(
                         child: Container(
                           margin: EdgeInsets.only(
-                              right: i < _totalSteps - 1 ? 4 : 0),
+                            right: i < _totalSteps - 1 ? 4 : 0,
+                          ),
                           height: 3,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(2),
@@ -204,7 +209,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                       onPressed: _isCurrentStepValid() ? _goNext : null,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppTheme.primary,
-                        disabledBackgroundColor: AppTheme.primary.withValues(alpha: 0.3),
+                        disabledBackgroundColor: AppTheme.primary.withValues(
+                          alpha: 0.3,
+                        ),
                         padding: const EdgeInsets.symmetric(vertical: 18),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(14),
@@ -251,13 +258,13 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
   }
 
   bool _isCurrentStepValid() => switch (_currentStep) {
-        0 => _data.displayName.trim().length >= 2,
-        1 => _data.courseName.trim().isNotEmpty && _data.semesterName.isNotEmpty,
-        2 => true, // optional step
-        3 => true, // optional step
-        4 => true, // optional step
-        _ => false,
-      };
+    0 => _data.displayName.trim().length >= 2,
+    1 => _data.courseName.trim().isNotEmpty && _data.semesterName.isNotEmpty,
+    2 => true, // optional step
+    3 => true, // optional step
+    4 => true, // optional step
+    _ => false,
+  };
 
   bool _isLastStep() => _currentStep == _totalSteps - 1;
 
@@ -287,11 +294,16 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
 
     try {
       // Save UserProfile
-      await ref.read(userProfileProvider.notifier).saveProfile(_data.toUserProfile());
+      await ref
+          .read(userProfileProvider.notifier)
+          .saveProfile(_data.toUserProfile());
+
+      if (!mounted) return;
 
       // Update timer settings
       if (!kIsWeb) {
         final settings = await ref.read(focusGoalSettingsProvider.future);
+        if (!mounted) return;
         final updatedSettings = FocusGoalSettings()
           ..id = settings.id
           ..focusDuration = settings.focusDuration
@@ -308,7 +320,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
           ..remainingSecondsOnKill = settings.remainingSecondsOnKill
           ..sessionTypeOnKill = settings.sessionTypeOnKill
           ..killTimestamp = settings.killTimestamp;
-        await ref.read(focusGoalSettingsUpdaterProvider.notifier).updateSettings(updatedSettings);
+        await ref
+            .read(focusGoalSettingsUpdaterProvider.notifier)
+            .updateSettings(updatedSettings);
       } else {
         final settings = PomodoroWebStore.instance.ensureSettings();
         final updatedSettings = FocusGoalSettings()
@@ -330,13 +344,15 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
         ref.invalidate(focusGoalSettingsProvider);
       }
 
+      if (!mounted) return;
+
       // Mark onboarding complete
       await ref.read(onboardingServiceProvider).markOnboardingComplete();
 
       if (!mounted) return;
       context.go('/dashboard');
     } catch (e) {
-      setState(() => _isLoading = false);
+      if (mounted) setState(() => _isLoading = false);
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

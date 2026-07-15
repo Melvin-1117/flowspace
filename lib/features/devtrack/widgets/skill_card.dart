@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../app/theme.dart';
@@ -45,11 +45,16 @@ class SkillCard extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 3,
+                  ),
                   decoration: BoxDecoration(
                     color: AppTheme.primarySubtle,
                     borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: AppTheme.primary.withValues(alpha: 0.3)),
+                    border: Border.all(
+                      color: AppTheme.primary.withValues(alpha: 0.3),
+                    ),
                   ),
                   child: Text(
                     skill.category.toUpperCase(),
@@ -82,7 +87,9 @@ class SkillCard extends StatelessWidget {
                       height: 6,
                       margin: const EdgeInsets.only(left: 3),
                       decoration: BoxDecoration(
-                        color: isActive ? AppTheme.primary : AppTheme.surfaceBorder,
+                        color: isActive
+                            ? AppTheme.primary
+                            : AppTheme.surfaceBorder,
                         shape: BoxShape.circle,
                       ),
                     );

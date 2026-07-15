@@ -28,9 +28,15 @@ Future<List<DevProject>> _loadProjectsFromPrefs() async {
         ..primaryLanguage = map['primaryLanguage'] ?? ''
         ..techStack = List<String>.from(map['techStack'] ?? [])
         ..completionPercent = map['completionPercent'] ?? 0
-        ..startedAt = DateTime.parse(map['startedAt'] ?? DateTime.now().toIso8601String())
-        ..completedAt = map['completedAt'] != null ? DateTime.parse(map['completedAt']) : null
-        ..lastActiveAt = DateTime.parse(map['lastActiveAt'] ?? DateTime.now().toIso8601String())
+        ..startedAt = DateTime.parse(
+          map['startedAt'] ?? DateTime.now().toIso8601String(),
+        )
+        ..completedAt = map['completedAt'] != null
+            ? DateTime.parse(map['completedAt'])
+            : null
+        ..lastActiveAt = DateTime.parse(
+          map['lastActiveAt'] ?? DateTime.now().toIso8601String(),
+        )
         ..linkedTaskIds = List<String>.from(map['linkedTaskIds'] ?? [])
         ..totalCodingMinutes = map['totalCodingMinutes'] ?? 0
         ..colorHex = map['colorHex'] ?? '#006EE6'
@@ -54,8 +60,12 @@ Future<List<CodingSession>> _loadCodingSessionsFromPrefs() async {
         ..uuid = map['uuid'] ?? ''
         ..projectId = map['projectId'] ?? ''
         ..language = map['language'] ?? ''
-        ..startTime = DateTime.parse(map['startTime'] ?? DateTime.now().toIso8601String())
-        ..endTime = DateTime.parse(map['endTime'] ?? DateTime.now().toIso8601String())
+        ..startTime = DateTime.parse(
+          map['startTime'] ?? DateTime.now().toIso8601String(),
+        )
+        ..endTime = DateTime.parse(
+          map['endTime'] ?? DateTime.now().toIso8601String(),
+        )
         ..durationMinutes = map['durationMinutes'] ?? 0
         ..sessionType = map['sessionType'] ?? 'focus'
         ..notes = map['notes'] ?? ''
@@ -82,8 +92,12 @@ Future<List<SkillEntry>> _loadSkillsFromPrefs() async {
         ..category = map['category'] ?? ''
         ..proficiencyLevel = map['proficiencyLevel'] ?? 1
         ..hoursInvested = map['hoursInvested'] ?? 0
-        ..firstLearnedAt = DateTime.parse(map['firstLearnedAt'] ?? DateTime.now().toIso8601String())
-        ..lastPracticedAt = DateTime.parse(map['lastPracticedAt'] ?? DateTime.now().toIso8601String())
+        ..firstLearnedAt = DateTime.parse(
+          map['firstLearnedAt'] ?? DateTime.now().toIso8601String(),
+        )
+        ..lastPracticedAt = DateTime.parse(
+          map['lastPracticedAt'] ?? DateTime.now().toIso8601String(),
+        )
         ..linkedProjectIds = List<String>.from(map['linkedProjectIds'] ?? [])
         ..notes = map['notes'] ?? '';
     }).toList();
@@ -104,35 +118,49 @@ final activeProjectsProvider = FutureProvider<List<DevProject>>((ref) async {
   return projects.where((p) => p.status == 'active').toList();
 });
 
-final allCodingSessionsProvider = FutureProvider<List<CodingSession>>((ref) async {
+final allCodingSessionsProvider = FutureProvider<List<CodingSession>>((
+  ref,
+) async {
   ref.watch(projectNotifierProvider);
   final sessions = await _loadCodingSessionsFromPrefs();
   sessions.sort((a, b) => b.startTime.compareTo(a.startTime));
   return sessions;
 });
 
-final todayCodingSessionsProvider = FutureProvider<List<CodingSession>>((ref) async {
+final todayCodingSessionsProvider = FutureProvider<List<CodingSession>>((
+  ref,
+) async {
   final sessions = await ref.watch(allCodingSessionsProvider.future);
   final now = DateTime.now();
   final todayStart = DateTime(now.year, now.month, now.day);
   final todayEnd = todayStart.add(const Duration(days: 1));
-  return sessions.where((s) => s.startTime.isAfter(todayStart) && s.startTime.isBefore(todayEnd)).toList();
+  return sessions
+      .where(
+        (s) =>
+            s.startTime.isAfter(todayStart) && s.startTime.isBefore(todayEnd),
+      )
+      .toList();
 });
 
-final devtrackLanguageDistributionProvider = FutureProvider<Map<String, double>>((ref) async {
-  final sessions = await ref.watch(allCodingSessionsProvider.future);
-  final Map<String, int> totals = {};
-  for (final s in sessions) {
-    totals[s.language] = (totals[s.language] ?? 0) + s.durationMinutes;
-  }
-  final total = totals.values.fold(0, (a, b) => a + b);
-  if (total == 0) return {};
-  return totals.map((k, v) => MapEntry(k, v / total * 100));
-});
+final devtrackLanguageDistributionProvider =
+    FutureProvider<Map<String, double>>((ref) async {
+      final sessions = await ref.watch(allCodingSessionsProvider.future);
+      final Map<String, int> totals = {};
+      for (final s in sessions) {
+        totals[s.language] = (totals[s.language] ?? 0) + s.durationMinutes;
+      }
+      final total = totals.values.fold(0, (a, b) => a + b);
+      if (total == 0) return {};
+      return totals.map((k, v) => MapEntry(k, v / total * 100));
+    });
 
-final activityHeatmapProvider = FutureProvider<List<DayActivityData>>((ref) async {
+final activityHeatmapProvider = FutureProvider<List<DayActivityData>>((
+  ref,
+) async {
   final sessions = await ref.watch(allCodingSessionsProvider.future);
-  final pomodoros = PomodoroWebStore.instance.sessions.where((s) => s.isCompleted).toList();
+  final pomodoros = PomodoroWebStore.instance.sessions
+      .where((s) => s.isCompleted)
+      .toList();
 
   final now = DateTime.now();
   final List<DayActivityData> result = [];
@@ -140,16 +168,22 @@ final activityHeatmapProvider = FutureProvider<List<DayActivityData>>((ref) asyn
     final day = now.subtract(Duration(days: i));
     final start = DateTime(day.year, day.month, day.day);
     final end = start.add(const Duration(days: 1));
-    
-    final daySessions = sessions.where((s) => s.startTime.isAfter(start) && s.startTime.isBefore(end)).toList();
-    final dayPomodoros = pomodoros.where((s) => s.startTime.isAfter(start) && s.startTime.isBefore(end)).toList();
-    
-    result.add(DayActivityData(
-      date: day,
-      codingMinutes: daySessions.fold(0, (s, e) => s + e.durationMinutes),
-      pomodoroCount: dayPomodoros.length,
-      sessionCount: daySessions.length,
-    ));
+
+    final daySessions = sessions
+        .where((s) => s.startTime.isAfter(start) && s.startTime.isBefore(end))
+        .toList();
+    final dayPomodoros = pomodoros
+        .where((s) => s.startTime.isAfter(start) && s.startTime.isBefore(end))
+        .toList();
+
+    result.add(
+      DayActivityData(
+        date: day,
+        codingMinutes: daySessions.fold(0, (s, e) => s + e.durationMinutes),
+        pomodoroCount: dayPomodoros.length,
+        sessionCount: daySessions.length,
+      ),
+    );
   }
   return result;
 });
@@ -165,13 +199,15 @@ final allSkillsProvider = FutureProvider<List<SkillEntry>>((ref) async {
 final codingStreakProvider = FutureProvider<int>((ref) async {
   final sessions = await ref.watch(allCodingSessionsProvider.future);
   if (sessions.isEmpty) return 0;
-  
+
   int streak = 0;
   DateTime day = DateTime.now();
   while (true) {
     final start = DateTime(day.year, day.month, day.day);
     final end = start.add(const Duration(days: 1));
-    final daySessions = sessions.where((s) => s.startTime.isAfter(start) && s.startTime.isBefore(end)).toList();
+    final daySessions = sessions
+        .where((s) => s.startTime.isAfter(start) && s.startTime.isBefore(end))
+        .toList();
     if (daySessions.isEmpty) break;
     streak++;
     day = day.subtract(const Duration(days: 1));

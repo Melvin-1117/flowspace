@@ -137,20 +137,22 @@ class _PomodoroScreenState extends ConsumerState<PomodoroScreen>
                   ),
                   actions: [
                     // WakeLock indicator (visible when running)
-                    Consumer(builder: (context, ref, _) {
-                      final isRunning = ref.watch(
-                        timerNotifierProvider.select((s) => s.isRunning),
-                      );
-                      if (!isRunning) return const SizedBox.shrink();
-                      return const Tooltip(
-                        message: 'Screen staying on during session',
-                        child: Icon(
-                          Icons.screen_lock_rotation_rounded,
-                          color: AppTheme.primary,
-                          size: 20,
-                        ),
-                      );
-                    }),
+                    Consumer(
+                      builder: (context, ref, _) {
+                        final isRunning = ref.watch(
+                          timerNotifierProvider.select((s) => s.isRunning),
+                        );
+                        if (!isRunning) return const SizedBox.shrink();
+                        return const Tooltip(
+                          message: 'Screen staying on during session',
+                          child: Icon(
+                            Icons.screen_lock_rotation_rounded,
+                            color: AppTheme.primary,
+                            size: 20,
+                          ),
+                        );
+                      },
+                    ),
 
                     const SizedBox(width: 8),
 
@@ -183,57 +185,145 @@ class _PomodoroScreenState extends ConsumerState<PomodoroScreen>
                       const SizedBox(height: 12),
                       const SessionTypeToggle()
                           .animate()
-                          .fadeIn(duration: kPageEntryDuration, curve: kPageEntryCurve)
-                          .slideY(begin: 0.06, end: 0, duration: kPageEntryDuration, curve: kPageEntryCurve),
+                          .fadeIn(
+                            duration: kPageEntryDuration,
+                            curve: kPageEntryCurve,
+                          )
+                          .slideY(
+                            begin: 0.06,
+                            end: 0,
+                            duration: kPageEntryDuration,
+                            curve: kPageEntryCurve,
+                          ),
                       const SizedBox(height: 24),
                       const TimerRing()
                           .animate()
-                          .fadeIn(duration: kPageEntryDuration, delay: kPageStaggerStep, curve: kPageEntryCurve)
-                          .slideY(begin: 0.06, end: 0, duration: kPageEntryDuration, delay: kPageStaggerStep, curve: kPageEntryCurve),
+                          .fadeIn(
+                            duration: kPageEntryDuration,
+                            delay: kPageStaggerStep,
+                            curve: kPageEntryCurve,
+                          )
+                          .slideY(
+                            begin: 0.06,
+                            end: 0,
+                            duration: kPageEntryDuration,
+                            delay: kPageStaggerStep,
+                            curve: kPageEntryCurve,
+                          ),
                       const SizedBox(height: 20),
                       const TrialIndicator()
                           .animate()
-                          .fadeIn(duration: kPageEntryDuration, delay: kPageStaggerStep * 2, curve: kPageEntryCurve)
-                          .slideY(begin: 0.06, end: 0, duration: kPageEntryDuration, delay: kPageStaggerStep * 2, curve: kPageEntryCurve),
+                          .fadeIn(
+                            duration: kPageEntryDuration,
+                            delay: kPageStaggerStep * 2,
+                            curve: kPageEntryCurve,
+                          )
+                          .slideY(
+                            begin: 0.06,
+                            end: 0,
+                            duration: kPageEntryDuration,
+                            delay: kPageStaggerStep * 2,
+                            curve: kPageEntryCurve,
+                          ),
                       const SizedBox(height: 20),
                       const TimerControls()
                           .animate()
-                          .fadeIn(duration: kPageEntryDuration, delay: kPageStaggerStep * 3, curve: kPageEntryCurve)
-                          .slideY(begin: 0.06, end: 0, duration: kPageEntryDuration, delay: kPageStaggerStep * 3, curve: kPageEntryCurve),
+                          .fadeIn(
+                            duration: kPageEntryDuration,
+                            delay: kPageStaggerStep * 3,
+                            curve: kPageEntryCurve,
+                          )
+                          .slideY(
+                            begin: 0.06,
+                            end: 0,
+                            duration: kPageEntryDuration,
+                            delay: kPageStaggerStep * 3,
+                            curve: kPageEntryCurve,
+                          ),
                       const SizedBox(height: 24),
                       LinkedTaskCard(
-                        onTap: () {
-                          showModalBottomSheet<void>(
-                            context: context,
-                            isScrollControlled: true,
-                            backgroundColor: Colors.transparent,
-                            builder: (_) => const LinkTaskSheet(),
-                          );
-                        },
-                      )
+                            onTap: () {
+                              showModalBottomSheet<void>(
+                                context: context,
+                                isScrollControlled: true,
+                                backgroundColor: Colors.transparent,
+                                builder: (_) => const LinkTaskSheet(),
+                              );
+                            },
+                          )
                           .animate()
-                          .fadeIn(duration: kPageEntryDuration, delay: kPageStaggerStep * 4, curve: kPageEntryCurve)
-                          .slideY(begin: 0.06, end: 0, duration: kPageEntryDuration, delay: kPageStaggerStep * 4, curve: kPageEntryCurve),
+                          .fadeIn(
+                            duration: kPageEntryDuration,
+                            delay: kPageStaggerStep * 4,
+                            curve: kPageEntryCurve,
+                          )
+                          .slideY(
+                            begin: 0.06,
+                            end: 0,
+                            duration: kPageEntryDuration,
+                            delay: kPageStaggerStep * 4,
+                            curve: kPageEntryCurve,
+                          ),
                       const SizedBox(height: 16),
                       const EditableTimingCard()
                           .animate()
-                          .fadeIn(duration: kPageEntryDuration, delay: kPageStaggerStep * 4, curve: kPageEntryCurve)
-                          .slideY(begin: 0.06, end: 0, duration: kPageEntryDuration, delay: kPageStaggerStep * 4, curve: kPageEntryCurve),
+                          .fadeIn(
+                            duration: kPageEntryDuration,
+                            delay: kPageStaggerStep * 4,
+                            curve: kPageEntryCurve,
+                          )
+                          .slideY(
+                            begin: 0.06,
+                            end: 0,
+                            duration: kPageEntryDuration,
+                            delay: kPageStaggerStep * 4,
+                            curve: kPageEntryCurve,
+                          ),
                       const SizedBox(height: 16),
                       const FocusStatsRow()
                           .animate()
-                          .fadeIn(duration: kPageEntryDuration, delay: kPageStaggerStep * 4, curve: kPageEntryCurve)
-                          .slideY(begin: 0.06, end: 0, duration: kPageEntryDuration, delay: kPageStaggerStep * 4, curve: kPageEntryCurve),
+                          .fadeIn(
+                            duration: kPageEntryDuration,
+                            delay: kPageStaggerStep * 4,
+                            curve: kPageEntryCurve,
+                          )
+                          .slideY(
+                            begin: 0.06,
+                            end: 0,
+                            duration: kPageEntryDuration,
+                            delay: kPageStaggerStep * 4,
+                            curve: kPageEntryCurve,
+                          ),
                       const SizedBox(height: 16),
                       const DailyGoalCard()
                           .animate()
-                          .fadeIn(duration: kPageEntryDuration, delay: kPageStaggerStep * 4, curve: kPageEntryCurve)
-                          .slideY(begin: 0.06, end: 0, duration: kPageEntryDuration, delay: kPageStaggerStep * 4, curve: kPageEntryCurve),
+                          .fadeIn(
+                            duration: kPageEntryDuration,
+                            delay: kPageStaggerStep * 4,
+                            curve: kPageEntryCurve,
+                          )
+                          .slideY(
+                            begin: 0.06,
+                            end: 0,
+                            duration: kPageEntryDuration,
+                            delay: kPageStaggerStep * 4,
+                            curve: kPageEntryCurve,
+                          ),
                       const SizedBox(height: 16),
                       const SessionHistoryCard()
                           .animate()
-                          .fadeIn(duration: kPageEntryDuration, delay: kPageStaggerStep * 5, curve: kPageEntryCurve)
-                          .slideY(begin: 0.06, end: 0, duration: kPageEntryDuration, delay: kPageStaggerStep * 5, curve: kPageEntryCurve),
+                          .fadeIn(
+                            duration: kPageEntryDuration,
+                            delay: kPageStaggerStep * 5,
+                            curve: kPageEntryCurve,
+                          )
+                          .slideY(
+                            begin: 0.06,
+                            end: 0,
+                            duration: kPageEntryDuration,
+                            delay: kPageStaggerStep * 5,
+                            curve: kPageEntryCurve,
+                          ),
                       const SizedBox(height: 100),
                     ],
                   ),
@@ -258,7 +348,9 @@ class _PomodoroScreenState extends ConsumerState<PomodoroScreen>
                     ),
                     child: Text(
                       'Pomodoro: 25 min focus → 5 min break → repeat. Tap to dismiss.',
-                      style: GoogleFonts.spaceGrotesk(color: AppTheme.textPrimary),
+                      style: GoogleFonts.spaceGrotesk(
+                        color: AppTheme.textPrimary,
+                      ),
                     ),
                   ),
                 ),

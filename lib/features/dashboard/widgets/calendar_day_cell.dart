@@ -75,9 +75,7 @@ class CalendarDayCell extends ConsumerWidget {
           } else if (isSameDay(dueDate, now)) {
             dotColors.add(AppTheme.primary); // Due today
           } else {
-            dotColors.add(
-              AppTheme.accent,
-            ); // Due this week or future logic
+            dotColors.add(AppTheme.accent); // Due this week or future logic
           }
         }
       }
@@ -156,7 +154,10 @@ class CalendarDayCell extends ConsumerWidget {
                 if (dotColors.length > 3)
                   Text(
                     '3+',
-                    style: GoogleFonts.spaceGrotesk(color: Colors.white, fontSize: 8),
+                    style: GoogleFonts.spaceGrotesk(
+                      color: Colors.white,
+                      fontSize: 8,
+                    ),
                   )
                 else
                   ...dotColors

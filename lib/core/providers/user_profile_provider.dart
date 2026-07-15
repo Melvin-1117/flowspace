@@ -27,11 +27,15 @@ class UserProfileNotifier extends AsyncNotifier<UserProfile?> {
     final bio = prefs.getString('profile_bio') ?? 'CS Student & Developer';
     final sem = prefs.getString('profile_semesterName') ?? 'Semester 5';
     final course = prefs.getString('profile_courseName') ?? 'B.Tech CSE';
-    final langs = prefs.getStringList('profile_primaryLanguages') ?? ['Dart', 'Python', 'JavaScript'];
+    final langs =
+        prefs.getStringList('profile_primaryLanguages') ??
+        ['Dart', 'Python', 'JavaScript'];
     final sessionGoal = prefs.getInt('profile_dailySessionGoal') ?? 4;
     final hoursGoal = prefs.getInt('profile_dailyCodingHoursGoal') ?? 3;
     final createdStr = prefs.getString('profile_createdAt');
-    final created = createdStr != null ? DateTime.parse(createdStr) : DateTime.now();
+    final created = createdStr != null
+        ? DateTime.parse(createdStr)
+        : DateTime.now();
 
     return UserProfile()
       ..displayName = name
@@ -53,10 +57,19 @@ class UserProfileNotifier extends AsyncNotifier<UserProfile?> {
     await prefs.setString('profile_bio', profile.bio);
     await prefs.setString('profile_semesterName', profile.semesterName);
     await prefs.setString('profile_courseName', profile.courseName);
-    await prefs.setStringList('profile_primaryLanguages', profile.primaryLanguages);
+    await prefs.setStringList(
+      'profile_primaryLanguages',
+      profile.primaryLanguages,
+    );
     await prefs.setInt('profile_dailySessionGoal', profile.dailySessionGoal);
-    await prefs.setInt('profile_dailyCodingHoursGoal', profile.dailyCodingHoursGoal);
-    await prefs.setString('profile_createdAt', profile.createdAt.toIso8601String());
+    await prefs.setInt(
+      'profile_dailyCodingHoursGoal',
+      profile.dailyCodingHoursGoal,
+    );
+    await prefs.setString(
+      'profile_createdAt',
+      profile.createdAt.toIso8601String(),
+    );
   }
 
   /// Load cached profile on app start.
@@ -113,8 +126,8 @@ class UserProfileNotifier extends AsyncNotifier<UserProfile?> {
 
 final userProfileProvider =
     AsyncNotifierProvider<UserProfileNotifier, UserProfile?>(
-  UserProfileNotifier.new,
-);
+      UserProfileNotifier.new,
+    );
 
 // Quick access selectors
 final avatarEmojiProvider = Provider<String>((ref) {
