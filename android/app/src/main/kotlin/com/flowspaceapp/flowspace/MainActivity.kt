@@ -1,4 +1,4 @@
-package com.example.flowspace
+package com.flowspaceapp.flowspace
 
 import io.flutter.embedding.android.FlutterActivity
 
