@@ -88,6 +88,17 @@ class QuickActionSheet extends ConsumerWidget {
               context.go('/planner');
             },
           ),
+          const SizedBox(height: 8),
+
+          _QuickActionTile(
+            icon: Icons.screen_lock_portrait_rounded,
+            label: 'Focus Lock',
+            color: AppTheme.primary,
+            onTap: () {
+              Navigator.pop(context);
+              context.go('/focus-lock');
+            },
+          ),
         ],
       ),
     );

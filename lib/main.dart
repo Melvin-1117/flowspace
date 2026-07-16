@@ -24,6 +24,8 @@ import 'features/pomodoro/pomodoro_page.dart';
 import 'features/pomodoro/providers/pomodoro_providers.dart';
 import 'features/pomodoro/providers/pomodoro_web_store.dart';
 import 'features/devtrack/devtrack_screen.dart';
+import 'features/focus_lock/focus_lock_screen.dart';
+import 'features/focus_lock/focus_lock_active_screen.dart';
 import 'features/tasks/task_board_screen.dart';
 import 'features/tasks/task_detail_screen.dart';
 import 'features/dashboard/dashboard_screen.dart';
@@ -184,6 +186,22 @@ class _FlowSpaceAppState extends ConsumerState<FlowSpaceApp> {
         ),
       ),
       GoRoute(
+        path: '/focus-lock',
+        pageBuilder: (context, state) => _customPageTransition(
+          key: state.pageKey,
+          child: const FocusLockScreen(),
+        ),
+      ),
+      GoRoute(
+        path: '/focus-lock/active',
+        pageBuilder: (context, state) => _customPageTransition(
+          key: state.pageKey,
+          child: FocusLockActiveScreen(
+            durationMinutes: state.extra as int? ?? 25,
+          ),
+        ),
+      ),
+      GoRoute(
         path: '/settings',
         pageBuilder: (context, state) => _customPageTransition(
           key: state.pageKey,
@@ -216,35 +234,40 @@ class _FlowSpaceAppState extends ConsumerState<FlowSpaceApp> {
   }
 
   Future<void> _restoreAppState() async {
-    final settings = kIsWeb
-        ? PomodoroWebStore.instance.ensureSettings()
-        : await (await ref.read(
-            isarProvider.future,
-          )).collection<FocusGoalSettings>().get(1);
-    if (settings != null) {
-      if (settings.wasTimerRunning && settings.killTimestamp != null) {
-        final elapsed = DateTime.now()
-            .difference(settings.killTimestamp!)
-            .inSeconds;
-        final correctedRemaining = settings.remainingSecondsOnKill - elapsed;
-        if (correctedRemaining > 0) {
-          await ref
-              .read(timerNotifierProvider.notifier)
-              .restoreSession(
-                remainingSeconds: correctedRemaining,
-                sessionType: SessionTypeFromName.fromName(
-                  settings.sessionTypeOnKill,
-                ),
-              );
-        } else {
-          await ref
-              .read(timerNotifierProvider.notifier)
-              .handleExpiredWhileKilled();
+    try {
+      final settings = kIsWeb
+          ? PomodoroWebStore.instance.ensureSettings()
+          : await (await ref.read(
+              isarProvider.future,
+            )).collection<FocusGoalSettings>().get(1);
+      if (settings != null) {
+        if (settings.wasTimerRunning && settings.killTimestamp != null) {
+          final elapsed = DateTime.now()
+              .difference(settings.killTimestamp!)
+              .inSeconds;
+          final correctedRemaining = settings.remainingSecondsOnKill - elapsed;
+          if (correctedRemaining > 0) {
+            await ref
+                .read(timerNotifierProvider.notifier)
+                .restoreSession(
+                  remainingSeconds: correctedRemaining,
+                  sessionType: SessionTypeFromName.fromName(
+                    settings.sessionTypeOnKill,
+                  ),
+                );
+          } else {
+            await ref
+                .read(timerNotifierProvider.notifier)
+                .handleExpiredWhileKilled();
+          }
         }
       }
-    }
-    if (mounted) {
-      setState(() => _restored = true);
+    } catch (e, stack) {
+      debugPrint('Error restoring app state: $e\n$stack');
+    } finally {
+      if (mounted) {
+        setState(() => _restored = true);
+      }
     }
   }
 

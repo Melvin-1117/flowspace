@@ -1,7 +1,7 @@
 <div align="center">
   # 🌌 FlowSpace
   
-  **The ultimate developer-focused workspace, pomodoro scheduler, and activity tracker.**
+  **The ultimate developer-focused workspace, pomodoro scheduler, and distraction-free focus lock.**
   
   <p>
     <a href="https://flutter.dev"><img src="https://img.shields.io/badge/Flutter-3.9.2-02569B?style=for-the-badge&logo=flutter&logoColor=white" alt="Flutter"></a>
@@ -23,7 +23,7 @@
 
 **FlowSpace** is a unified dashboard designed to maximize developer focus, catalog project tasks, map academic plans, and analyze coding habits. It bridges the gap between structured focus sessions and developer activity logs.
 
-With beautiful dark-mode acoustics, responsive transitions, and a feature-first clean architecture, FlowSpace helps developers enter and sustain their optimal flow state.
+With beautiful dark-mode aesthetics, responsive transitions, and a feature-first clean architecture, FlowSpace helps developers enter and sustain their optimal flow state.
 
 ---
 
@@ -36,28 +36,38 @@ With beautiful dark-mode acoustics, responsive transitions, and a feature-first 
       <p>Your central command center. Instantly track daily focus statistics, current streak counts, upcoming deadlines, and overall productivity levels. Features responsive widgets and rapid-access shortcuts.</p>
     </td>
     <td width="50%" valign="top">
-      <h3>🚀 DevTrack Analytics</h3>
-      <p>A Git-inspired developer scoreboard right inside the app. Features an interactive contribution heatmap, language breakdowns, active workspace directories, and visual skill progression charts.</p>
+      <h3>🔒 Focus Lock Mode</h3>
+      <p>A physical <b>flip-to-focus</b> dedicated screen. Utilizes device accelerometer sensors with consecutive-sample debouncing to detect when the phone is flipped face-down. Automatically activates Android's native Lock Task Mode (Screen Pinning) to block app switching and notification drawer pulldown during sessions.</p>
     </td>
   </tr>
   <tr>
+    <td width="50%" valign="top">
+      <h3>🚀 DevTrack Analytics</h3>
+      <p>A Git-inspired developer scoreboard right inside the app. Features an interactive contribution heatmap, language breakdowns, active workspace directories, and visual skill progression charts.</p>
+    </td>
     <td width="50%" valign="top">
       <h3>⏱️ Pomodoro Engine</h3>
       <p>Maintain focus with customizable work-and-break cycles. Features foreground notifications (via <code>flutter_foreground_task</code>) for active background session tracking and custom alarm tones.</p>
     </td>
+  </tr>
+  <tr>
     <td width="50%" valign="top">
       <h3>📋 Kanban Task Board</h3>
       <p>Organize your project backlogs. Easily drag and drop tasks between <b>To Do</b>, <b>In Progress</b>, <b>Review</b>, and <b>Done</b> columns to keep your board current.</p>
     </td>
-  </tr>
-  <tr>
     <td width="50%" valign="top">
       <h3>📅 Subject & Focus Planner</h3>
       <p>Plan your syllabus or project categories. Schedule dedicated daily blocks for specific focus areas, manage target criteria, and monitor milestones with precise countdown clocks.</p>
     </td>
+  </tr>
+  <tr>
     <td width="50%" valign="top">
       <h3>📊 Data-Driven Insights</h3>
       <p>Detailed chart feedback on your habits. View visual weekly task velocity graphs, time allocation breakdowns, and session distribution stats powered by <code>fl_chart</code>.</p>
+    </td>
+    <td width="50%" valign="top">
+      <h3>🎨 Premium Design Tokens</h3>
+      <p>Vibrant glassmorphic interfaces, tailored Outfitters and Space Grotesk typography, smooth micro-animations, and dynamic cards styled entirely around modern dark-theme acoustics.</p>
     </td>
   </tr>
 </table>
@@ -75,7 +85,9 @@ FlowSpace utilizes a highly modular and modern stack for optimal mobile, web, an
 *   **Visualizations**: [FL Chart](https://pub.dev/packages/fl_chart) (highly custom bar, line, and donut charts)
 *   **Animations**: [Flutter Animate](https://pub.dev/packages/flutter_animate) (clean, duration-tokenized transitions)
 *   **Background Tasks**: [Flutter Foreground Task](https://pub.dev/packages/flutter_foreground_task) (ensures Pomodoro timers aren't killed by OS battery savers)
-*   **Notifications**: [Flutter Local Notifications](https://pub.dev/packages/flutter_local_notifications) (for timely alarms and alarms overlay warnings)
+*   **Hardware Sensors**: [Sensors Plus](https://pub.dev/packages/sensors_plus) (accelerometer monitoring for flip-detection)
+*   **Device Locking**: Native Android Lock Task integration (Kiosk/Pinning) via a custom `MethodChannel` handler.
+*   **Notifications**: [Flutter Local Notifications](https://pub.dev/packages/flutter_local_notifications) (for timely alarms and background status alerts)
 
 ---
 
@@ -85,7 +97,7 @@ The codebase follows a **Feature-First Architecture** with a clear separation of
 
 ```text
 lib/
-├── app/                  # Theme configuration and app initialization
+├── app/                  # Theme configuration and app routing/initialization
 ├── core/                 # Shared widgets, services, and constant design tokens
 │   ├── constants/        # Unified animation and layout tokens
 │   ├── providers/        # Shared Riverpod providers (Calendar, etc.)
@@ -96,6 +108,7 @@ lib/
 │   ├── analytics/        # Weekly statistics, chart components, and history
 │   ├── dashboard/        # Main landing widgets, active focus session widgets
 │   ├── devtrack/         # Contribution heatmaps, skill levels, session logs
+│   ├── focus_lock/       # Focus Lock Mode (models, notifier, flip-detection, screens)
 │   ├── onboarding/       # Interactive user onboarding flows
 │   ├── planner/          # Milestone tracking, subjects, focus blocks
 │   ├── pomodoro/         # State machines for timers, alarm services, ring UI

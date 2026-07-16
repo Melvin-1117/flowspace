@@ -1,3 +1,5 @@
+import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
@@ -13,33 +15,68 @@ import '../../features/devtrack/models/coding_session.dart';
 import '../../features/devtrack/models/dev_project.dart';
 import '../../features/devtrack/models/skill_entry.dart';
 import '../../features/devtrack/models/daily_dev_log.dart';
+import '../../features/focus_lock/models/focus_lock_session.dart';
 
 const _isarName = 'flowspace';
-const _isarSchemaVersion = 4;
+const _isarSchemaVersion = 5;
 
 final isarProvider = FutureProvider<Isar>((ref) async {
   final existing = Isar.getInstance(_isarName);
   if (existing != null) return existing;
 
   final directory = await getApplicationDocumentsDirectory();
-  final isar = await Isar.open(
-    [
-      TaskSchema,
-      ProjectSchema,
-      TaskActivitySchema,
-      PomodoroSessionSchema,
-      FocusGoalSettingsSchema,
-      StudyEventSchema,
-      UserProfileSchema,
-      CodingSessionSchema,
-      DevProjectSchema,
-      SkillEntrySchema,
-      DailyDevLogSchema,
-    ],
-    name: _isarName,
-    directory: directory.path,
-    inspector: false,
-  );
+  final schemas = [
+    TaskSchema,
+    ProjectSchema,
+    TaskActivitySchema,
+    PomodoroSessionSchema,
+    FocusGoalSettingsSchema,
+    StudyEventSchema,
+    UserProfileSchema,
+    CodingSessionSchema,
+    DevProjectSchema,
+    SkillEntrySchema,
+    DailyDevLogSchema,
+    FocusLockSessionSchema,
+  ];
+
+  Isar isar;
+  try {
+    isar = await Isar.open(
+      schemas,
+      name: _isarName,
+      directory: directory.path,
+      inspector: false,
+    );
+  } catch (e) {
+    debugPrint('Isar open failed: $e. Recreating database...');
+    // Close existing if open
+    final existingInstance = Isar.getInstance(_isarName);
+    if (existingInstance != null) {
+      await existingInstance.close();
+    }
+    // Delete files in directory to solve schema conflicts
+    try {
+      final file = File('${directory.path}/$_isarName.isar');
+      if (await file.exists()) {
+        await file.delete();
+      }
+      final lockFile = File('${directory.path}/$_isarName.isar.lock');
+      if (await lockFile.exists()) {
+        await lockFile.delete();
+      }
+    } catch (err) {
+      debugPrint('Failed to delete old Isar database files: $err');
+    }
+    // Attempt to open again
+    isar = await Isar.open(
+      schemas,
+      name: _isarName,
+      directory: directory.path,
+      inspector: false,
+    );
+  }
+
   await _ensureFocusSettings(isar);
   await _runSchemaMigrations(isar, _isarSchemaVersion);
   return isar;

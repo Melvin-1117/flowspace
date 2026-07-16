@@ -113,6 +113,17 @@ class AppDrawer extends ConsumerWidget {
                         GoRouterState.of(context).uri.toString() == '/devtrack',
                   ),
 
+                  // Focus Lock
+                  _buildDrawerItem(
+                    context,
+                    icon: Icons.screen_lock_portrait_rounded,
+                    title: 'Focus Lock',
+                    subtitle: 'Flip-to-focus sessions',
+                    route: '/focus-lock',
+                    isSelected:
+                        GoRouterState.of(context).uri.toString() == '/focus-lock',
+                  ),
+
                   // Analytics
                   _buildDrawerItem(
                     context,

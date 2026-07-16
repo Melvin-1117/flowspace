@@ -41,11 +41,13 @@ class _PomodoroScreenState extends ConsumerState<PomodoroScreen>
     with WidgetsBindingObserver {
   bool _showOnboarding = false;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  late final FlipDetectorService _flipDetector;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    _flipDetector = ref.read(flipDetectorProvider);
     _loadOnboarding();
   }
 
@@ -74,7 +76,7 @@ class _PomodoroScreenState extends ConsumerState<PomodoroScreen>
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     // Ensure flip detection is stopped when screen disposes
-    ref.read(flipDetectorProvider).stopListening();
+    _flipDetector.stopListening();
     super.dispose();
   }
 
